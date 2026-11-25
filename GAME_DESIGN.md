@@ -259,3 +259,11 @@ Two briefs from the creative director extend this document: *Career, Player DNA,
 ### Create a Player as a flagship (direction, Nov 25; foundation built, the rest planned)
 
 Create a Player is meant to be one of the game's flagship features: NBA Live '98 creation, NBA 2K-style customization and Player DNA, premium late-1990s 32-bit art, and real beer league people. Players should be able to recreate themselves and their teammates, imperfections included: every age, questionable haircuts, beer bellies, mismatched gear. Appearance is stored as data and drawn in layers; nationality, appearance and ethnicity never affect hockey attributes or limit choices; team identity is never baked into a character. Three card families: gold Hockey Influences, ice-blue Play Styles, green Beer League Archetypes, with no bonuses, rarity tiers, packs or pay-to-win. Status, art audit and plan: `CREATOR_PLAN.md`; registries: `REGISTRIES.md`.
+
+### Reference hierarchy (Decision 46, approved Nov 25)
+
+On-ice gameplay: Tape to Tape and NHL '94. On-ice visuals: Tape to Tape first, with the approved Beer League Hockey artwork. Career and dynasty: NBA 2K and NBA Live '98. Off-ice adventure: The Adventures of Willy Beamish and Day of the Tentacle. Character art and humor: Arch Rivals and Slap Shot. Action cinematics: Neo Turf Masters and Baseball Stars. The target on the ice is NHL '94's accessibility with Tape to Tape's responsiveness, personality and polish, without its roguelike mechanics, supernatural abilities or power-ups. The career and lifestyle systems remain what sets the game apart. Everything stays original.
+
+### Identity systems (Decisions 43 to 45, approved Nov 25)
+
+Five separate systems describe a player: **Hockey Influence** (who they grew up watching), **Play Style** (how they play; chosen, inside the attribute budget, can evolve), **Background** (permanent history), **Archetype** (an evolving identity in beer league culture, with its history kept) and **Personality** (behaviour in dialogue, relationships and decisions). Registries and proposed rules: `REGISTRIES.md`.

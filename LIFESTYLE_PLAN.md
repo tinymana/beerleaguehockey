@@ -84,16 +84,16 @@ Every major off-ice location is an illustrated scene you explore with a cursor, 
 
 ## 3. Batch 18 art specifications
 
-These depend on the presentation resolution (question 1 in `CREATOR_PLAN.md`). They are written for my recommendation, **960x640**; if you choose another, every size scales with it.
+Written for the approved off-ice design space, **960x540** (Decision 38).
 
 | Item | Specification |
 | --- | --- |
-| Scene size | **960x640 px**, one screen, no scrolling. Wider rooms can be two screens joined by an exit |
-| Background | One opaque PNG, 960x640. Nothing in it that should animate, be picked up, or change with the career |
+| Scene size | **960x540 px**, one screen, no scrolling. Wider rooms can be two screens joined by an exit |
+| Background | One opaque PNG, 960x540. Nothing in it that should animate, be picked up, or change with the career |
 | Midground objects | Separate transparent PNGs for anything that changes, moves or can be clicked: doors, the sharpening machine, stock on shelves, a till. Each with its position in scene pixels |
 | Foreground | Separate transparent PNGs for whatever stands in front of characters (a counter, a rack, a railing) |
 | Layer order | Background, back objects, characters, front objects, foreground, then interface. The manifest gives each piece a layer and an order number |
-| NPC sprites | Frame **96x160 px** (a standing adult is about 140 px tall, a little under a quarter of the screen). Seated or behind-the-counter characters use the same frame, cropped by a foreground piece. Anchor at the feet, bottom centre |
+| NPC sprites | Frame **96x160 px** (a standing adult is about 140 px tall, about a quarter of the screen). Seated or behind-the-counter characters use the same frame, cropped by a foreground piece. Anchor at the feet, bottom centre |
 | NPC animations | One horizontal strip per animation, equal frames, listed in the manifest with a duration per frame: idle (4 to 8 frames, loops), talk (4 frames, loops), one or two gestures, and any location-specific action (sharpening a skate, ringing a sale) |
 | Object animations | Same strip format; state pairs (door open and closed, light on and off) as separate frames |
 | Hotspots | Not painted. Supplied in the manifest as rectangles `[x, y, width, height]` or polygons in scene pixels, with a suggested name; I can also derive them from each object's outline |
