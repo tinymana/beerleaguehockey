@@ -36,6 +36,7 @@ The creative DNA is NHL '94 (arcade feel), NBA 2K dynasty (franchise depth and p
 - **One-timers:** pass, then shoot before the puck arrives. This is the signature goal and gets the most tuning time.
 - **Puck:** a free physics object with possession pickup, board and post rebounds, and a simulated height for lifted shots.
 - **Goalies:** AI-controlled by default with positioning, save types and rebounds; manual goalie is an option.
+- **Overtime (Decision 30, approved Nov 25):** a tied game plays one 5-minute overtime period, then a shootout if still tied.
 - **Game rules:** line changes, per-shift fatigue, penalties and power plays, offsides and icing as toggles. Period length and difficulty are configurable.
 - **Attributes:** speed, acceleration, agility, shot power, shot accuracy, passing, puck control, checking, defensive awareness, endurance, and a goalie set. Ratings run 1 to 99 but beer leaguers cluster low: a 40 in Puck League is a star.
 - **Styles:** archetypes drive AI behavior and comedy, for example Sniper, Grinder, Dangler, Stay-at-home D, Ex-junior ringer, and Guy Who Never Passes.
@@ -207,6 +208,8 @@ Two briefs from the creative director extend this document: *Career, Player DNA,
 - **After a goal (Decision 28, approved):** once the goal is confirmed, the user controlling the scoring team has 2 seconds to pick one of four equipped celebrations by direction (keyboard or gamepad), whichever skater scored. No pick plays the default. The celebration animation that follows can be skipped.
 - **Ownership (Decision 28, approved):** one master profile holds every unlock and the loadout, across all careers and created players. Offline play unlocks celebrations; online-exclusive ones may come later.
 - **Two formats:** an on-ice overhead sprite animation, and a full-screen 32-bit cinematic that shows the created player's appearance, jersey colours, number and team. Each celebration supports both where practical.
+- **AI celebrations (Decision 29, approved):** AI skaters pick from their personality, preferences and the situation (rival, former team, hat trick, overtime winner, championship, well behind) and keep persistent signature celebrations, so familiar opponents are recognisable. No selection window for AI. Seeing an NPC's celebration does not unlock it.
+- **Early pick (Decision 29, approved):** two seconds is a maximum. A valid pick closes the window and the animation starts immediately; automatic celebration mode skips the window.
 - **Monthly packs:** released by Tiny Mana Studios on real-world dates, independent of the in-game calendar. Each pack has an ID, name, release date, preview art, celebration IDs, animation assets, unlock requirements, a compatibility version and a manifest. Installing a pack never needs a code change and never invalidates a save.
 - **Unlocks:** configurable, from career goals, assists, games played, hat tricks, overtime winners, league championships, tournament wins, monthly challenges, milestones and special events. Once unlocked, a celebration stays with the profile for good, including after its event ends.
 - **Loadout and collection:** four active slots; a collection screen with locked and unlocked states, previews, unlock progress, equipped slots and pack history.

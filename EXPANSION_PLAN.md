@@ -128,10 +128,12 @@ In rough order of how much work they block.
 15. **History depth.** Is it acceptable to keep full game detail for the player's own games and recent seasons, and summaries for the rest?
 
 17. **Celly ownership.** *Answered Nov 25 (Decision 28):* one master profile across all careers and created players.
-18. **Who picks.** *Answered Nov 25 (Decision 28):* the user controlling the scoring team picks, whichever skater scores. Open: what plays when a team nobody controls scores (the default, or a celebration chosen by that skater's personality).
+18. **Who picks.** *Answered Nov 25 (Decisions 28 and 29):* the user controlling the scoring team picks, whichever skater scores. AI skaters pick by personality and situation and keep signature celebrations; no selection window for AI.
 19. **Offline unlocks.** *Answered Nov 25 (Decision 28):* offline unlocks are allowed. Online-exclusive celebrations can be introduced later.
-20. **Pick window.** *Answered Nov 25 (Decision 28):* a 2-second window, then a skippable celebration animation. Open: whether choosing early ends the window at once.
+20. **Pick window.** *Answered Nov 25 (Decisions 28 and 29):* up to 2 seconds; a pick closes the window and starts the animation at once; no pick plays the default; automatic mode skips the window; the animation is skippable.
 21. **Pack size and cadence.** You have reserved these for your approval; they also set the monthly art workload (two formats per celebration).
+
+22. **Overtime details (Decision 30).** One 5-minute overtime, then a shootout, is approved. Still to settle: sudden death or full period, skaters a side, shootout rounds, and whether playoffs use the same rule.
 
 ## 7. What I would not do without your ruling
 
