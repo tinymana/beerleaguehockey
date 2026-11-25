@@ -79,3 +79,7 @@ Batch 11 supplies a bottle on each crossbar with a knock-off animation, and a di
 ## Intermission resurfacing, stick breaks, rafters (raised by art batch 14)
 
 Batch 14 supplies a resurfacer and garage, debris for broken sticks, championship banners, retired jerseys and a four-state scoreboard. Possible homes: resurfacer pass at intermissions once periods exist (Milestone 2 or 3); stick breaks as an arcade event; banners and retired jerseys driven by dynasty history (dynasty milestones); scoreboard fed by the match clock. Proposed homes only. Not designed, not authorized.
+
+## Nov 25 expansion briefs
+
+Career, player DNA, dynasty, presentation and fighting: see `EXPANSION_PLAN.md` for the proposed phases. Proposed homes only. Not authorized.

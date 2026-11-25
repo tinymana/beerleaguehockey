@@ -27,4 +27,6 @@ The roadmap follows your nine milestones in order, with a short setup step in fr
 
 **Current authorization: Milestone 0 and the skating prototype only.** Work stops at that playable checkpoint for your approval.
 
+**Nov 25 expansion briefs.** A proposed re-phasing that adds a career track (menu, Hockey Influences, attributes, four-season calendar, aging, recruitment, collectibles, Pick-Up, leaderboards, cinematics, fighting) beside Milestones 1 to 3 is in `EXPANSION_PLAN.md` section 4. It is a proposal: the table above stays the approved roadmap until the creative director rules.
+
 See `BACKLOG.md` for where later systems are proposed to land.

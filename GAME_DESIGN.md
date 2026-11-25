@@ -184,3 +184,19 @@ The target is late-1990s 32-bit pixel art in the Saturn and PlayStation 2D tradi
 - **Art ownership:** you provide and approve artwork. Anything I generate in code is a labeled temporary stand-in.
 
 All teams, players, sponsors and brands are original and fictional. No real leagues, teams, players or beer brands appear.
+
+### Expansion direction received Nov 25 (not yet reconciled)
+
+Two briefs from the creative director extend this document: *Career, Player DNA, Dynasty & Presentation Expansion* (verbatim in `docs/briefs/`) and *Arcade Fighting System* (below). Where they differ from the sections above (season structure, career length, career paths, attributes, team membership, menus), the briefs are the newer direction; the differences and the open questions are listed in `EXPANSION_PLAN.md`. This document will be rewritten section by section as those questions are answered.
+
+### Arcade fighting system (direction, Nov 25; nothing built)
+
+- **What it is:** when a fight starts during play, the match hands off to a full-screen fighting scene in original 32-bit pixel art: Punch-Out!! timing and pattern-reading with Baseball Stars 2 presentation. It is played, not watched.
+- **Triggers:** excessive checking, rivalries, retaliation, protecting a teammate, repeated aggression, personality conflicts, deliberate challenges. Challenges can be accepted or declined where it makes sense.
+- **Sequence:** confrontation, gloves drop, cinematic transition, the fight (attacks, blocks, dodges, counters), one fighter loses balance, tires or is beaten, officials step in, penalties and possible ejections, back to hockey.
+- **Mechanics:** directional dodge, block, duck, quick and heavy punches, jersey grab, button combinations, counter windows, stamina, balance, knockdowns. Accessible first; rewards timing and learning an opponent. Keyboard, gamepad and multiplayer.
+- **Attributes:** strength, balance, endurance, composure, aggression, durability, fighting experience, reaction speed, tied to player DNA. Fighting has its own experience track and must not become the main way to improve at hockey.
+- **Opponent personalities:** Brawler, Counterpuncher, Heavyweight, Grappler, Speedster, Veteran, Hothead, Opportunist. Each telegraphs its attacks with readable animation cues.
+- **Consequences:** reputation, teammate relationships, captain approval, rivalries, penalty minutes, suspensions, ejections, injury risk, recruitment, chemistry. Fighting is not always good for you: some captains want protection, others see a liability. Fighting stats are tracked apart from hockey stats.
+- **Technical:** an independent game state. The match state is preserved on entry and resumed on exit; penalties and injuries are applied exactly once. Fighters are built from layers (created appearance, skin tone, hair, facial hair, body type, jersey colours and number, opponent identity) over reusable backgrounds, animation atlases, effects and HUD. Difficulty is configurable and fights can be auto-simulated.
+- **Needs approval before it is final:** combat balance, penalty rules, injury probabilities.

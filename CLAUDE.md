@@ -11,7 +11,8 @@ Read this first. It lets a new session resume without losing creative direction 
 
 - **Authorized:** Milestone 0, the initial skating prototype, and the modular arena asset integration. Delivered through v0.2.5.
 - **Waiting on:** the creative director's review of the playable checkpoint. Do not start Milestone 1 until approved.
-- **Not started and not authorized:** dynasty, lifestyle, league economy, characters, franchises, prestige, careers, tournaments, multiplayer.
+- **Not started and not authorized:** dynasty, lifestyle, league economy, characters, franchises, prestige, careers, tournaments, multiplayer, Hockey Influences, cinematics, the fighting mini-game.
+- **Expansion briefs (Nov 25):** career, player DNA, dynasty, presentation and fighting. Audited in `EXPANSION_PLAN.md`; waiting on the creative director's answers to its questions. No implementation.
 
 ## Priorities
 
@@ -25,6 +26,7 @@ Gameplay first. Dynasty second. Lifestyle third. The first objective is addictiv
 | `ARCHITECTURE.md` | Modules, rules, data model, risks |
 | `ROADMAP.md` | Milestones and exit criteria |
 | `DECISIONS.md` | Every decision with status: Approved, Proposed or Open |
+| `EXPANSION_PLAN.md` | Audit, conflicts, proposed roadmap, asset inventory and open questions for the Nov 25 expansion briefs; the briefs themselves are in `docs/briefs/` |
 | `BACKLOG.md` | Ideas with a proposed home. Never a work order |
 | `ASSET_MANIFEST.md` | Supplied art, temporary assets, what is needed |
 | `ARENA.md` | Modular rink renderer, arena asset pipeline, Arena Asset Lab, open arena questions |
