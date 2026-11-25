@@ -2,16 +2,53 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.1.1",
+      "date": "2026-11-25",
+      "title": "The classic camera",
+      "items": [
+        {
+          "tag": "improved",
+          "text": "Angled overhead camera in the style of 16-bit console hockey: the ice is foreshortened, and the boards and nets stand up off it."
+        },
+        {
+          "tag": "improved",
+          "text": "The skater is now an upright figure instead of a top-down marker, and passes behind the near boards and nets."
+        },
+        {
+          "tag": "new",
+          "text": "Camera tilt slider in the tuning panel, from straight-down to a flat broadcast angle."
+        }
+      ]
+    },
+    {
       "version": "0.1.0",
       "date": "2026-11-25",
       "title": "First skate",
       "items": [
-        { "tag": "new", "text": "Title screen with the Beer League Hockey key art and a working main menu. Modes that are not built yet say Coming Soon." },
-        { "tag": "new", "text": "Skating prototype (choose Exhibition): one skater, one puck, a full vertical rink with a scrolling camera." },
-        { "tag": "new", "text": "Eight-way skating with acceleration, momentum, braking, gliding and carving turns." },
-        { "tag": "new", "text": "Puck pickup, wind-up shots, board rebounds and two nets to shoot at." },
-        { "tag": "new", "text": "Keyboard and controller support." },
-        { "tag": "new", "text": "Live tuning panel (backquote key) for speed, friction, turning, shot power, board bounce and camera." }
+        {
+          "tag": "new",
+          "text": "Title screen with the Beer League Hockey key art and a working main menu. Modes that are not built yet say Coming Soon."
+        },
+        {
+          "tag": "new",
+          "text": "Skating prototype (choose Exhibition): one skater, one puck, a full vertical rink with a scrolling camera."
+        },
+        {
+          "tag": "new",
+          "text": "Eight-way skating with acceleration, momentum, braking, gliding and carving turns."
+        },
+        {
+          "tag": "new",
+          "text": "Puck pickup, wind-up shots, board rebounds and two nets to shoot at."
+        },
+        {
+          "tag": "new",
+          "text": "Keyboard and controller support."
+        },
+        {
+          "tag": "new",
+          "text": "Live tuning panel (backquote key) for speed, friction, turning, shot power, board bounce and camera."
+        }
       ]
     }
   ]

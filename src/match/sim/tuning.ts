@@ -18,6 +18,8 @@ export interface Tuning {
   boardRestitution: number;
   cameraFollow: number;
   cameraLookahead: number;
+  /** View only: vertical foreshortening of the ice. 1 = straight down. */
+  cameraTilt: number;
 }
 
 export const DEFAULT_TUNING: Readonly<Tuning> = Object.freeze({
@@ -32,6 +34,7 @@ export const DEFAULT_TUNING: Readonly<Tuning> = Object.freeze({
   boardRestitution: 0.65,
   cameraFollow: 6,
   cameraLookahead: 0.35,
+  cameraTilt: 0.78,
 });
 
 export interface TuningSpec {
@@ -56,6 +59,7 @@ export const TUNING_SPECS: readonly TuningSpec[] = [
   { key: 'boardRestitution', label: 'Board restitution', unit: '0-1', min: 0, max: 1, step: 0.05, help: 'Share of speed the puck keeps bouncing off the boards.' },
   { key: 'cameraFollow', label: 'Camera follow', unit: '1/s', min: 1, max: 20, step: 0.5, help: 'How tightly the camera tracks the play.' },
   { key: 'cameraLookahead', label: 'Camera look-ahead', unit: 's', min: 0, max: 1, step: 0.05, help: 'How far the camera leads in the direction of travel.' },
+  { key: 'cameraTilt', label: 'Camera tilt', unit: '0.6-1', min: 0.6, max: 1, step: 0.02, help: 'Angle of the overhead camera. 1 looks straight down; lower flattens the view and raises boards and nets. Redraws the rink.' },
 ];
 
 /**

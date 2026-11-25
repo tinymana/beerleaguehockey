@@ -10,9 +10,12 @@ import type { SimInput } from '../match/sim/input';
 import { SIM_DT, SkatingSim } from '../match/sim/skatingSim';
 import type { SimEvent } from '../match/sim/skatingSim';
 import { cameraTargetY, stepCamera } from '../match/view/cameraModel';
-import { SKATER_CELL, TEX } from '../match/view/textures';
+import { projectY, worldScreenHeight } from '../match/view/projection';
+import { SKATER_CELL, SKATER_FEET, TEX, buildTemporaryTextures, netLayout, netScreenAnchor, texturesTilt } from '../match/view/textures';
 
 const STRIDE_LENGTH = 9;
+const DEPTH_FRONT_BOARDS = 5000;
+const DEPTH_HUD = 9000;
 
 /**
  * Skating prototype view. Reads input, steps the simulation at a fixed
@@ -23,6 +26,8 @@ export class SkatingScene extends Phaser.Scene {
   private accumulator = 0;
   private prev = { sx: 0, sy: 0, px: 0, py: 0 };
   private camY = 0;
+  private tilt = 1;
+  private worldHeight = 0;
 
   private skater!: Phaser.GameObjects.Image;
   private shadow!: Phaser.GameObjects.Image;
@@ -49,17 +54,33 @@ export class SkatingScene extends Phaser.Scene {
     this.bannerTimer = 0;
     const rink = this.sim.rink;
 
-    this.add.image(0, 0, TEX.rink).setOrigin(0, 0);
-    this.shadow = this.add.image(0, 0, TEX.shadow).setAlpha(0.35).setDepth(1);
-    this.puck = this.add.image(0, 0, TEX.puck).setDepth(2);
-    this.skater = this.add.image(0, 0, TEX.skater, 6).setDepth(3);
+    // The camera tilt is view-only: the simulation never knows about it.
+    this.tilt = tuning.cameraTilt;
+    if (texturesTilt() !== this.tilt) buildTemporaryTextures(this, rink, this.tilt);
+    this.worldHeight = worldScreenHeight(rink.worldHeight, this.tilt);
 
-    this.cameras.main.setBounds(0, 0, rink.worldWidth, rink.worldHeight);
-    this.camY = this.sim.skater.y;
+    // Depth is screen y, so nearer things cover farther ones.
+    this.add.image(0, 0, TEX.rink).setOrigin(0, 0).setDepth(-10);
+    this.add.image(0, 0, TEX.rinkFront).setOrigin(0, 0).setDepth(DEPTH_FRONT_BOARDS);
+    for (const end of ['top', 'bottom'] as const) {
+      const anchor = netScreenAnchor(rink, end, this.tilt);
+      const layout = netLayout(rink, end, this.tilt);
+      const nearEdge = anchor.y - layout.goalLineRow + layout.height;
+      this.add
+        .image(anchor.x, anchor.y - layout.goalLineRow, end === 'top' ? TEX.netTop : TEX.netBottom)
+        .setOrigin(0, 0)
+        .setDepth(end === 'top' ? anchor.y : nearEdge);
+    }
+    this.shadow = this.add.image(0, 0, TEX.shadow).setAlpha(0.35).setDepth(-1);
+    this.puck = this.add.image(0, 0, TEX.puck);
+    this.skater = this.add.image(0, 0, TEX.skater, 6).setOrigin(SKATER_FEET.x / SKATER_CELL, SKATER_FEET.y / SKATER_CELL);
+
+    this.cameras.main.setBounds(0, 0, rink.worldWidth, this.worldHeight);
+    this.camY = projectY(this.sim.skater.y, this.tilt);
     this.capturePrev();
 
     // HUD: fixed to the screen.
-    const hud = this.add.graphics().setScrollFactor(0).setDepth(20);
+    const hud = this.add.graphics().setScrollFactor(0).setDepth(DEPTH_HUD);
     hud.fillStyle(UI.navy, 0.8);
     hud.fillRect(0, 0, GAME_WIDTH, 12);
     hud.fillRect(0, GAME_HEIGHT - 12, GAME_WIDTH, 12);
@@ -71,7 +92,7 @@ export class SkatingScene extends Phaser.Scene {
       addText(this, GAME_WIDTH - 4, GAME_HEIGHT - 9, 'Move:arrows  Shoot:space  R:puck  `:tuning  Esc:menu', UI.ice).setOrigin(1, 0),
     );
     this.banner = this.fixed(addText(this, GAME_WIDTH / 2, 120, '', UI.gold, 3).setOrigin(0.5, 0.5)).setVisible(false);
-    this.chargeBar = this.add.graphics().setDepth(4);
+    this.chargeBar = this.add.graphics().setDepth(DEPTH_FRONT_BOARDS + 1);
 
     const kb = this.input.keyboard;
     if (!kb) throw new Error('Keyboard input unavailable');
@@ -107,6 +128,12 @@ export class SkatingScene extends Phaser.Scene {
       return;
     }
 
+    if (tuning.cameraTilt !== this.tilt) {
+      // The tilt slider redraws the rink; restart the scene on the new projection.
+      this.scene.restart();
+      return;
+    }
+
     const input = this.readInput(pad.x, pad.y, pad.action);
     // Clamp long frames (tab switches) so the sim never spirals.
     this.accumulator += Math.min(deltaMs, 100) / 1000;
@@ -119,7 +146,7 @@ export class SkatingScene extends Phaser.Scene {
   }
 
   private fixed<T extends Phaser.GameObjects.BitmapText>(obj: T): T {
-    obj.setScrollFactor(0).setDepth(21);
+    obj.setScrollFactor(0).setDepth(DEPTH_HUD + 1);
     return obj;
   }
 
@@ -163,29 +190,41 @@ export class SkatingScene extends Phaser.Scene {
     const px = jumped ? puck.x : lerp(this.prev.px, puck.x, alpha);
     const py = jumped ? puck.y : lerp(this.prev.py, puck.y, alpha);
 
+    const k = this.tilt;
+    const skaterX = Math.round(sx);
+    const skaterY = Math.round(projectY(sy, k));
+    const puckX = Math.round(px);
+    const puckY = Math.round(projectY(py, k));
+
     const moving = Math.hypot(skater.vx, skater.vy) > 25;
     const frame = moving ? Math.floor(skater.stride / STRIDE_LENGTH) % 2 : 0;
     this.skater.setFrame(directionIndex8(skater.facing) + frame * 8);
-    this.skater.setPosition(Math.round(sx), Math.round(sy));
-    this.shadow.setPosition(Math.round(sx), Math.round(sy) + 5);
-    this.puck.setPosition(Math.round(px), Math.round(py));
-    this.puck.setDepth(py > sy ? 3.5 : 2);
+    this.skater.setPosition(skaterX, skaterY).setDepth(skaterY);
+    this.shadow.setPosition(skaterX, skaterY);
+    // A carried puck sits on the blade; draw it just in front of or behind the body as the stick points.
+    this.puck.setPosition(puckX, puckY).setDepth(puck.state === 'carried' ? skaterY + (puckY >= skaterY ? 0.5 : -0.5) : puckY - 0.5);
 
     // Wind-up meter under the skater.
     this.chargeBar.clear();
     if (skater.hasPuck && skater.charge > 0) {
-      const w = SKATER_CELL - 16;
-      const bx = Math.round(sx) - w / 2;
-      const by = Math.round(sy) + 14;
+      const w = 20;
+      const bx = skaterX - w / 2;
+      const by = skaterY + 6;
       this.chargeBar.fillStyle(UI.navy, 1).fillRect(bx - 1, by - 1, w + 2, 4);
       this.chargeBar.fillStyle(this.sim.chargeLevel() >= 1 ? UI.red : UI.gold, 1).fillRect(bx, by, Math.round(w * this.sim.chargeLevel()), 2);
     }
 
     const target = cameraTargetY(
-      { skaterY: skater.y, skaterVy: skater.vy, puckY: puck.y, puckVy: puck.vy, hasPuck: skater.hasPuck },
+      {
+        skaterY: projectY(skater.y, k),
+        skaterVy: skater.vy * k,
+        puckY: projectY(puck.y, k),
+        puckVy: puck.vy * k,
+        hasPuck: skater.hasPuck,
+      },
       tuning.cameraLookahead,
       GAME_HEIGHT,
-      this.sim.rink.worldHeight,
+      this.worldHeight,
     );
     this.camY = stepCamera(this.camY, target, tuning.cameraFollow, dt);
     this.cameras.main.setScroll(0, Math.round(this.camY - GAME_HEIGHT / 2));

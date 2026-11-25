@@ -1,10 +1,8 @@
 import Phaser from 'phaser';
-import { RINK } from '../match/sim/rink';
-import { buildTemporaryTextures } from '../match/view/textures';
 import { SCENES } from './config';
 import { registerPixelFont } from './pixelFont';
 
-/** Builds code-drawn assets, then hands over to the title screen. */
+/** Builds the font, then hands over to the title screen. Gameplay textures are built by the scene that needs them. */
 export class BootScene extends Phaser.Scene {
   constructor() {
     super(SCENES.boot);
@@ -12,7 +10,6 @@ export class BootScene extends Phaser.Scene {
 
   create(): void {
     registerPixelFont(this);
-    buildTemporaryTextures(this, RINK);
     this.scene.start(SCENES.title);
   }
 }

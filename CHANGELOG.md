@@ -2,6 +2,24 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.1.1 - 2026-11-25 - Angled overhead camera
+
+Requested by the creative director after playing v0.1.0. View-only change: the skating simulation and its tests are untouched.
+
+### Changed
+- Camera is now an angled overhead (three-quarter) view. The ice is foreshortened vertically; boards and nets have height; the near boards and nets draw in front of the skater.
+- Temporary skater is an upright figure (48x48 cell, feet-anchored) in eight directions, replacing the top-down marker.
+- Depth sorting by screen position.
+
+### Added
+- `cameraTilt` tuning value and slider (0.6 to 1.0, default 0.78). 1.0 is the old straight-down view. Changing it redraws the rink and restarts the prototype scene.
+- `src/match/view/projection.ts` and projection tests (47 tests total).
+- Rink layout templates regenerated for the tilted view; `ART_BRIEF.md` updated to match.
+
+### Known issues
+- Moving the tilt slider resets the skater and puck to centre ice.
+- The puck has no height yet, so shots stay on the ice.
+
 ## 0.1.0 - 2026-11-25 - Milestone 0 and skating prototype
 
 Checkpoint: awaiting creative approval. Nothing beyond this is authorized.

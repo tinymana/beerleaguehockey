@@ -1,99 +1,75 @@
 /**
- * TEMPORARY ART: code-drawn rink and skater for the style test.
+ * TEMPORARY ART: code-drawn rink, nets and skater for the style test.
  *
  * Everything here is a stand-in, drawn pixel by pixel on the gameplay grid,
- * so the creative director can judge readability and palette. It is replaced
- * by approved artwork; nothing here is a final asset.
+ * so the creative director can judge camera angle, readability and palette.
+ * It is replaced by approved artwork; nothing here is a final asset.
+ *
+ * All of it is drawn through the angled overhead projection in
+ * `projection.ts`: the ice is foreshortened, and boards, nets and players
+ * stand up off it.
  */
 import Phaser from 'phaser';
 import { Rng } from '../../core/rng';
 import { goalLineY, netBox } from '../sim/rink';
 import type { RinkGeometry } from '../sim/rink';
+import { FEEL } from '../sim/tuning';
+import { HEIGHTS, projectY, riseOf, worldScreenHeight } from './projection';
 
 export const TEX = {
   rink: 'tmp-rink',
+  rinkFront: 'tmp-rink-front',
+  netTop: 'tmp-net-top',
+  netBottom: 'tmp-net-bottom',
   skater: 'tmp-skater',
   puck: 'tmp-puck',
   shadow: 'tmp-shadow',
 } as const;
 
-export const SKATER_CELL = 36;
-/** Sprite scale relative to the base drawing; keeps the blade at FEEL.stickReach. */
-const K = 1.3;
+export const SKATER_CELL = 48;
 export const SKATER_FRAMES = 2;
+/** Where the skates touch the ice inside a skater cell. */
+export const SKATER_FEET = { x: 24, y: 34 };
 
 const PAL = {
   outside: '#0b1030',
   crowd: ['#141b44', '#1b2450', '#232d63', '#2a1f4d', '#33203f'],
-  boardShadow: '#060a1e',
+  boardBase: '#060a1e',
   boardCap: '#1c3fa0',
-  boardFace: '#e8edf7',
+  boardFace: '#cfd8ee',
+  boardFaceShade: '#b4c0de',
+  boardOutside: '#7d8bb8',
   kickplate: '#f2c230',
   ice: '#eaf2fb',
   iceDark: '#d7e5f6',
   iceLight: '#f8fcff',
   red: '#d8263c',
+  redDark: '#9c1626',
   blue: '#2b5fd9',
   crease: '#a9d4fb',
-  netMesh: '#c9d2e0',
-  netMeshDark: '#9aa6ba',
+  netMesh: '#e6ebf5',
+  netMeshDark: '#aab4cc',
   outline: '#141a3a',
   jersey: '#f4f6fb',
   jerseyShade: '#cfd7ea',
   trim: '#d8263c',
   pants: '#2038a8',
-  helmet: '#2a4fd0',
+  helmet: '#2b5fd9',
   helmetShine: '#7fa0ff',
-  glove: '#2a4fd0',
-  skate: '#1a1a22',
+  glove: '#2038a8',
+  skin: '#f2c9a0',
+  skate: '#14141c',
   stick: '#c9944a',
   blade: '#20202a',
   puck: '#14141c',
   puckShine: '#4a4a5c',
 };
 
-type Ctx = CanvasRenderingContext2D;
+type Rgb = [number, number, number];
 
-function rect(ctx: Ctx, x: number, y: number, w: number, h: number, color: string): void {
-  ctx.fillStyle = color;
-  ctx.fillRect(Math.round(x), Math.round(y), Math.round(w), Math.round(h));
-}
-
-/** Crisp scanline rounded rectangle (no anti-aliasing). */
-function fillRoundRect(ctx: Ctx, x: number, y: number, w: number, h: number, r: number, color: string): void {
-  ctx.fillStyle = color;
-  for (let row = 0; row < h; row++) {
-    let inset = 0;
-    const fromTop = row + 0.5;
-    const fromBottom = h - row - 0.5;
-    const d = Math.min(fromTop, fromBottom);
-    if (d < r) inset = r - Math.sqrt(Math.max(0, r * r - (r - d) * (r - d)));
-    const x0 = Math.round(x + inset);
-    const x1 = Math.round(x + w - inset);
-    ctx.fillRect(x0, Math.round(y + row), x1 - x0, 1);
-  }
-}
-
-function disc(ctx: Ctx, cx: number, cy: number, r: number, color: string): void {
-  ctx.fillStyle = color;
-  for (let y = Math.floor(cy - r); y <= Math.ceil(cy + r); y++) {
-    for (let x = Math.floor(cx - r); x <= Math.ceil(cx + r); x++) {
-      if ((x + 0.5 - cx) ** 2 + (y + 0.5 - cy) ** 2 <= r * r) ctx.fillRect(x, y, 1, 1);
-    }
-  }
-}
-
-/** One-pixel ring; `half` limits it to the upper or lower semicircle. */
-function ring(ctx: Ctx, cx: number, cy: number, r: number, color: string, half?: 'upper' | 'lower'): void {
-  ctx.fillStyle = color;
-  const steps = Math.ceil(r * 8);
-  for (let i = 0; i < steps; i++) {
-    const a = (i / steps) * Math.PI * 2;
-    const sy = Math.sin(a);
-    if (half === 'upper' && sy > 0) continue;
-    if (half === 'lower' && sy < 0) continue;
-    ctx.fillRect(Math.round(cx + Math.cos(a) * r - 0.5), Math.round(cy + sy * r - 0.5), 1, 1);
-  }
+function rgb(hex: string): Rgb {
+  const n = parseInt(hex.slice(1), 16);
+  return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
 }
 
 function makeCanvas(scene: Phaser.Scene, key: string, w: number, h: number): Phaser.Textures.CanvasTexture {
@@ -103,112 +79,232 @@ function makeCanvas(scene: Phaser.Scene, key: string, w: number, h: number): Pha
   return tex;
 }
 
-function drawRink(scene: Phaser.Scene, rink: RinkGeometry): void {
-  const tex = makeCanvas(scene, TEX.rink, rink.worldWidth, rink.worldHeight);
-  const ctx = tex.getContext();
+/** Raw pixel buffer with hard-edged plotting. */
+class Buffer {
+  readonly image: ImageData;
+  constructor(
+    ctx: CanvasRenderingContext2D,
+    readonly w: number,
+    readonly h: number,
+  ) {
+    this.image = ctx.createImageData(w, h);
+  }
+  set(x: number, y: number, color: Rgb): void {
+    if (x < 0 || y < 0 || x >= this.w || y >= this.h) return;
+    const i = (y * this.w + x) * 4;
+    this.image.data[i] = color[0];
+    this.image.data[i + 1] = color[1];
+    this.image.data[i + 2] = color[2];
+    this.image.data[i + 3] = 255;
+  }
+}
+
+/** Signed distance from a point on the ice to the boards (negative = on the ice). */
+function boardDistance(x: number, y: number, rink: RinkGeometry): number {
+  const hw = (rink.right - rink.left) / 2;
+  const hh = (rink.bottom - rink.top) / 2;
+  const qx = Math.abs(x - rink.centerX) - (hw - rink.cornerRadius);
+  const qy = Math.abs(y - rink.centerY) - (hh - rink.cornerRadius);
+  return Math.hypot(Math.max(qx, 0), Math.max(qy, 0)) + Math.min(Math.max(qx, qy), 0) - rink.cornerRadius;
+}
+
+const BOARD_THICKNESS = 3;
+
+/**
+ * Paints the rink in two layers: everything behind the players, and the near
+ * boards, which stand between the camera and the ice and are drawn in front.
+ */
+function drawRink(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
+  const w = rink.worldWidth;
+  const h = worldScreenHeight(rink.worldHeight, tilt);
+  const backTex = makeCanvas(scene, TEX.rink, w, h);
+  const frontTex = makeCanvas(scene, TEX.rinkFront, w, h);
+  const back = new Buffer(backTex.getContext(), w, h);
+  const front = new Buffer(frontTex.getContext(), w, h);
   const rng = new Rng(1994).fork('rink-art');
-  const { left, top, right, bottom, cornerRadius: cr, centerX: cx, centerY: cy } = rink;
-  const w = right - left;
-  const h = bottom - top;
 
-  // Dark stands: a dim mosaic so the ice reads as the brightest thing on screen.
-  rect(ctx, 0, 0, rink.worldWidth, rink.worldHeight, PAL.outside);
-  for (let y = 0; y < rink.worldHeight; y += 4) {
-    for (let x = 0; x < rink.worldWidth; x += 4) {
-      if (rng.next() < 0.55) rect(ctx, x, y, 3, 3, rng.pick(PAL.crowd));
-    }
-  }
-
-  // Boards, outside in.
-  fillRoundRect(ctx, left - 8, top - 8, w + 16, h + 16, cr + 8, PAL.boardShadow);
-  fillRoundRect(ctx, left - 6, top - 6, w + 12, h + 12, cr + 6, PAL.boardCap);
-  fillRoundRect(ctx, left - 4, top - 4, w + 8, h + 8, cr + 4, PAL.boardFace);
-  fillRoundRect(ctx, left - 1, top - 1, w + 2, h + 2, cr + 1, PAL.kickplate);
-  fillRoundRect(ctx, left, top, w, h, cr, PAL.ice);
-
-  // Everything below is clipped to the ice surface.
-  const onIce = (x: number, y: number): boolean => {
-    if (x < left || x >= right || y < top || y >= bottom) return false;
-    const cornerX = x < left + cr ? left + cr : x >= right - cr ? right - cr : null;
-    const cornerY = y < top + cr ? top + cr : y >= bottom - cr ? bottom - cr : null;
-    if (cornerX === null || cornerY === null) return true;
-    return (x + 0.5 - cornerX) ** 2 + (y + 0.5 - cornerY) ** 2 <= cr * cr;
-  };
-  const icePx = (x: number, y: number, color: string): void => {
-    if (onIce(x, y)) rect(ctx, x, y, 1, 1, color);
-  };
-  const hLine = (y: number, thickness: number, color: string): void => {
-    for (let t = 0; t < thickness; t++) for (let x = left; x < right; x++) icePx(x, y + t, color);
+  const C = {
+    outside: rgb(PAL.outside),
+    crowd: PAL.crowd.map(rgb),
+    boardBase: rgb(PAL.boardBase),
+    boardCap: rgb(PAL.boardCap),
+    boardFace: rgb(PAL.boardFace),
+    boardFaceShade: rgb(PAL.boardFaceShade),
+    boardOutside: rgb(PAL.boardOutside),
+    kickplate: rgb(PAL.kickplate),
+    ice: rgb(PAL.ice),
+    iceDark: rgb(PAL.iceDark),
+    iceLight: rgb(PAL.iceLight),
+    red: rgb(PAL.red),
+    blue: rgb(PAL.blue),
+    crease: rgb(PAL.crease),
   };
 
-  // Ice texture: speckle and a few skate scratches.
-  for (let i = 0; i < 5200; i++) {
-    icePx(left + rng.int(w), top + rng.int(h), rng.next() < 0.75 ? PAL.iceDark : PAL.iceLight);
-  }
-  for (let i = 0; i < 90; i++) {
-    let x = left + rng.int(w);
-    let y = top + rng.int(h);
-    const dx = rng.range(-1, 1);
-    const dy = rng.range(-1, 1);
-    const len = 6 + rng.int(18);
-    for (let s = 0; s < len; s++) {
-      icePx(Math.round(x), Math.round(y), PAL.iceDark);
-      x += dx;
-      y += dy;
-    }
-  }
-
-  // Lines.
+  const { centerX: cx, centerY: cy } = rink;
   const topGoal = goalLineY(rink, 'top');
   const bottomGoal = goalLineY(rink, 'bottom');
-  hLine(topGoal, 1, PAL.red);
-  hLine(bottomGoal, 1, PAL.red);
-  hLine(cy - rink.blueLineOffset - 1, 3, PAL.blue);
-  hLine(cy + rink.blueLineOffset - 1, 3, PAL.blue);
-  hLine(cy - 1, 3, PAL.red);
-
-  // Centre circle and dot.
-  ring(ctx, cx, cy, 60, PAL.blue);
-  disc(ctx, cx, cy, 2.5, PAL.blue);
-
-  // End-zone faceoff circles and neutral-zone dots.
+  // Lines are specified by their thickness on screen, so they stay crisp at any tilt.
+  const thin = 0.5 / tilt;
+  const thick = 1.5 / tilt;
+  const ringHalf = Math.max(0.75, 0.7 / tilt);
+  const circles: Array<[number, number, Rgb]> = [[cx, cy, C.blue]];
+  const dots: Array<[number, number, Rgb]> = [[cx, cy, C.blue]];
   for (const gy of [topGoal + 80, bottomGoal - 80]) {
     for (const fx of [cx - 88, cx + 88]) {
-      ring(ctx, fx, gy, 60, PAL.red);
-      disc(ctx, fx, gy, 2.5, PAL.red);
+      circles.push([fx, gy, C.red]);
+      dots.push([fx, gy, C.red]);
     }
   }
   for (const ny of [cy - rink.blueLineOffset + 20, cy + rink.blueLineOffset - 20]) {
-    for (const fx of [cx - 88, cx + 88]) disc(ctx, fx, ny, 2.5, PAL.red);
+    for (const fx of [cx - 88, cx + 88]) dots.push([fx, ny, C.red]);
   }
 
-  // Creases and nets.
-  for (const end of ['top', 'bottom'] as const) {
-    const line = goalLineY(rink, end);
-    const dir = end === 'top' ? 1 : -1;
-    for (let dy = 1; dy <= 24; dy++) {
-      const halfWidth = Math.floor(Math.sqrt(24 * 24 - dy * dy));
-      const y = end === 'top' ? line + dy : line - dy;
-      for (let x = cx - halfWidth; x < cx + halfWidth; x++) icePx(x, y, PAL.crease);
+  const iceColor = (x: number, y: number): Rgb => {
+    for (const [dx, dy, color] of dots) {
+      if (Math.hypot(x - dx, y - dy) <= 2.6) return color;
     }
-    ring(ctx, cx, line + dir * 0.5, 24, PAL.red, end === 'top' ? 'lower' : 'upper');
+    if (Math.abs(y - cy) <= thick) return C.red;
+    if (Math.abs(y - (cy - rink.blueLineOffset)) <= thick || Math.abs(y - (cy + rink.blueLineOffset)) <= thick) return C.blue;
+    for (const [ox, oy, color] of circles) {
+      if (Math.abs(Math.hypot(x - ox, y - oy) - 60) <= ringHalf) return color;
+    }
+    for (const line of [topGoal, bottomGoal]) {
+      const inFront = line === topGoal ? y - line : line - y;
+      const r = Math.hypot(x - cx, y - line);
+      if (inFront > 0 && Math.abs(r - 24) <= ringHalf) return C.red;
+      if (Math.abs(y - line) <= thin) return C.red;
+      if (inFront > 0 && r < 24) return C.crease;
+    }
+    const roll = rng.next();
+    return roll < 0.035 ? C.iceDark : roll < 0.045 ? C.iceLight : C.ice;
+  };
 
-    const box = netBox(rink, end);
-    const bw = box.right - box.left;
-    const bh = box.bottom - box.top;
-    rect(ctx, box.left, box.top, bw, bh, PAL.netMesh);
-    for (let y = box.top; y < box.bottom; y++) {
-      for (let x = box.left; x < box.right; x++) {
-        if ((x + y) % 2 === 0) rect(ctx, x, y, 1, 1, PAL.netMeshDark);
+  // Pass 1: the flat ground. Remember where the boards stand.
+  const footprint: Array<{ x: number; sy: number; d: number; ny: number }> = [];
+  const crowdCols = Math.ceil(w / 4);
+  const crowd: Array<Rgb | null> = [];
+  for (let i = 0; i < crowdCols * Math.ceil(h / 4); i++) crowd.push(rng.next() < 0.55 ? rng.pick(C.crowd) : null);
+
+  for (let sy = 0; sy < h; sy++) {
+    const y = (sy + 0.5) / tilt;
+    for (let x = 0; x < w; x++) {
+      const px = x + 0.5;
+      const d = boardDistance(px, y, rink);
+      if (d <= 0) {
+        back.set(x, sy, iceColor(px, y));
+      } else if (d <= BOARD_THICKNESS) {
+        back.set(x, sy, C.boardBase);
+        const ny = boardDistance(px, y + 0.5, rink) - boardDistance(px, y - 0.5, rink);
+        footprint.push({ x, sy, d, ny });
+      } else {
+        const tile = x % 4 < 3 && sy % 4 < 3 ? crowd[Math.floor(sy / 4) * crowdCols + Math.floor(x / 4)] : null;
+        back.set(x, sy, tile ?? C.outside);
       }
     }
-    // Red frame on the back and sides; the mouth on the goal line stays open.
-    rect(ctx, box.left - 1, box.top - (end === 'top' ? 1 : 0), 1, bh + 1, PAL.red);
-    rect(ctx, box.right, box.top - (end === 'top' ? 1 : 0), 1, bh + 1, PAL.red);
-    rect(ctx, box.left - 1, end === 'top' ? box.top - 1 : box.bottom, bw + 2, 1, PAL.red);
   }
 
-  tex.refresh();
+  // Pass 2: stand the boards up. Painted far-to-near so nearer walls cover farther ones.
+  const wall = Math.round(riseOf(HEIGHTS.boards, tilt));
+  for (const p of footprint) {
+    const near = p.ny > 0.35;
+    const far = p.ny < -0.35;
+    const layer = near ? front : back;
+    for (let r = 0; r <= wall; r++) {
+      const sy = p.sy - r;
+      let color: Rgb;
+      if (r >= wall - 1 && wall > 1) color = C.boardCap;
+      else if (near) color = C.boardOutside;
+      else if (far && r <= 1) color = C.kickplate;
+      else color = far ? C.boardFace : C.boardFaceShade;
+      layer.set(p.x, sy, color);
+    }
+    if (wall <= 1) layer.set(p.x, p.sy, p.d <= 1 ? C.kickplate : C.boardCap);
+  }
+
+  backTex.getContext().putImageData(back.image, 0, 0);
+  frontTex.getContext().putImageData(front.image, 0, 0);
+  backTex.refresh();
+  frontTex.refresh();
+}
+
+export interface NetLayout {
+  /** Texture size. */
+  width: number;
+  height: number;
+  /** Row inside the texture that sits on the goal line. */
+  goalLineRow: number;
+}
+
+/** Sizes of the standing net sprites for a given tilt. */
+export function netLayout(rink: RinkGeometry, end: 'top' | 'bottom', tilt: number): NetLayout {
+  const depth = Math.round(rink.netDepth * tilt);
+  const front = Math.round(riseOf(HEIGHTS.netFront, tilt));
+  const backRise = Math.round(riseOf(HEIGHTS.netBack, tilt));
+  const width = rink.netHalfWidth * 2 + 2;
+  if (end === 'top') {
+    // Mouth faces the camera. Rows: back bar, top netting, crossbar, open mouth, goal line.
+    const above = Math.max(front, depth + backRise);
+    return { width, height: above + 1, goalLineRow: above };
+  }
+  // Mouth faces away. Rows: crossbar, top netting, back netting, back base.
+  return { width, height: front + depth + 1, goalLineRow: front };
+}
+
+function drawNets(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
+  const depth = Math.round(rink.netDepth * tilt);
+  const frontRise = Math.round(riseOf(HEIGHTS.netFront, tilt));
+  const backRise = Math.round(riseOf(HEIGHTS.netBack, tilt));
+  const red = rgb(PAL.red);
+  const redDark = rgb(PAL.redDark);
+  const mesh = rgb(PAL.netMesh);
+  const meshDark = rgb(PAL.netMeshDark);
+
+  for (const end of ['top', 'bottom'] as const) {
+    const layout = netLayout(rink, end, tilt);
+    const tex = makeCanvas(scene, end === 'top' ? TEX.netTop : TEX.netBottom, layout.width, layout.height);
+    const buf = new Buffer(tex.getContext(), layout.width, layout.height);
+    const line = layout.goalLineRow;
+    const last = layout.width - 1;
+    // Netting is a see-through checker so a puck in the net still shows.
+    const netting = (row0: number, row1: number, color: Rgb): void => {
+      for (let y = row0; y <= row1; y++) {
+        for (let x = 1; x < last; x++) if ((x + y) % 2 === 0) buf.set(x, y, color);
+      }
+    };
+    const bar = (y: number, color: Rgb): void => {
+      for (let x = 0; x <= last; x++) buf.set(x, y, color);
+    };
+    const posts = (row0: number, row1: number, color: Rgb): void => {
+      for (let y = row0; y <= row1; y++) {
+        buf.set(0, y, color);
+        buf.set(last, y, color);
+      }
+    };
+
+    if (end === 'top') {
+      const crossbar = line - frontRise;
+      const backTop = line - depth - backRise;
+      if (backTop < crossbar) {
+        netting(backTop, crossbar, mesh);
+        posts(backTop, crossbar, redDark);
+        bar(backTop, redDark);
+      }
+      posts(crossbar, line, red);
+      bar(crossbar, red);
+    } else {
+      const crossbar = line - frontRise;
+      const backTop = line + depth - backRise;
+      const base = line + depth;
+      netting(crossbar, backTop, mesh);
+      netting(backTop, base, meshDark);
+      posts(crossbar, base, redDark);
+      bar(backTop, redDark);
+      bar(base, redDark);
+      bar(crossbar, red);
+    }
+    tex.getContext().putImageData(buf.image, 0, 0);
+    tex.refresh();
+  }
 }
 
 /** Tiny pixel grid with an outline pass, used to build each skater frame. */
@@ -223,6 +319,11 @@ class Sprite {
     if (px < 0 || py < 0 || px >= this.size || py >= this.size) return;
     this.cells[py * this.size + px] = color;
   }
+  box(x0: number, y0: number, x1: number, y1: number, color: string): void {
+    for (let y = Math.round(Math.min(y0, y1)); y <= Math.round(Math.max(y0, y1)); y++) {
+      for (let x = Math.round(Math.min(x0, x1)); x <= Math.round(Math.max(x0, x1)); x++) this.set(x, y, color);
+    }
+  }
   disc(cx: number, cy: number, r: number, color: string): void {
     for (let y = Math.floor(cy - r); y <= Math.ceil(cy + r); y++) {
       for (let x = Math.floor(cx - r); x <= Math.ceil(cx + r); x++) {
@@ -230,11 +331,14 @@ class Sprite {
       }
     }
   }
-  line(x0: number, y0: number, x1: number, y1: number, color: string): void {
+  line(x0: number, y0: number, x1: number, y1: number, color: string, thick = false): void {
     const steps = Math.ceil(Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0))) * 2 + 1;
     for (let i = 0; i <= steps; i++) {
       const t = i / steps;
-      this.set(x0 + (x1 - x0) * t, y0 + (y1 - y0) * t, color);
+      const x = x0 + (x1 - x0) * t;
+      const y = y0 + (y1 - y0) * t;
+      this.set(x, y, color);
+      if (thick) this.set(x + 1, y, color);
     }
   }
   outline(color: string): void {
@@ -248,7 +352,7 @@ class Sprite {
       }
     }
   }
-  blit(ctx: Ctx, ox: number, oy: number): void {
+  blit(ctx: CanvasRenderingContext2D, ox: number, oy: number): void {
     for (let y = 0; y < this.size; y++) {
       for (let x = 0; x < this.size; x++) {
         const c = this.cells[y * this.size + x];
@@ -262,98 +366,143 @@ class Sprite {
 }
 
 /**
- * Skater seen from above, facing one of eight directions, right-handed shot.
- * White jersey with red hem trim, blue helmet, gloves and pants: the title
- * art's palette, readable against white ice thanks to the dark outline.
+ * Upright skater seen from the angled camera, facing one of eight directions.
+ * Feet are at SKATER_FEET; the body rises up the screen from there.
+ * White jersey, red hem, blue helmet, yoke, gloves and pants.
  */
-function drawSkaterFrame(direction: number, frame: number): Sprite {
+function drawSkaterFrame(direction: number, frame: number, tilt: number): Sprite {
   const s = new Sprite(SKATER_CELL);
-  const c = SKATER_CELL / 2;
   const a = direction * (Math.PI / 4);
   const fx = Math.cos(a);
   const fy = Math.sin(a);
-  const rx = -fy;
-  const ry = fx;
-  const at = (forward: number, side: number): [number, number] => [
-    c + (fx * forward + rx * side) * K,
-    c + (fy * forward + ry * side) * K,
+  const ox = SKATER_FEET.x;
+  const oy = SKATER_FEET.y;
+  // A point on or above the ice: `forward`/`side` along the ice, `up` off it.
+  const at = (forward: number, side: number, up: number): [number, number] => [
+    ox + fx * forward - fy * side,
+    oy + (fy * forward + fx * side) * tilt - up,
   ];
+  const away = fy < -0.3;
+  const sideOn = Math.abs(fx) > 0.9;
+  const stride = frame === 0 ? 2.5 : -2.5;
+  const lean = 2;
 
-  // Stick: from the hands to the blade in front.
-  const [hx, hy] = at(2.5, 3);
-  const [bx, by] = at(10, 0.5);
-  s.line(hx, hy, bx, by, PAL.stick);
-  const [b2x, b2y] = at(10, -1.5);
-  s.line(bx, by, b2x, b2y, PAL.blade);
+  // Stick first, so the body covers the shaft where they overlap.
+  const hands = at(4, 1.5, 9);
+  const blade = at(FEEL.stickReach, 0, 0);
+  const heel = at(FEEL.stickReach - 0.5, -3, 0);
+  s.line(hands[0], hands[1], blade[0], blade[1], PAL.stick);
+  s.line(blade[0], blade[1], heel[0], heel[1], PAL.blade);
 
-  // Skates alternate with the stride.
-  const stride = frame === 0 ? 2 : -2;
-  const [lsx, lsy] = at(stride - 1, -2.5);
-  const [rsx, rsy] = at(-stride - 1, 2.5);
-  s.disc(lsx, lsy, 1.3 * K, PAL.skate);
-  s.disc(rsx, rsy, 1.3 * K, PAL.skate);
-
-  // Pants, then jersey across the shoulders.
-  const [px, py] = at(-1.2, 0);
-  s.disc(px, py, 3.3 * K, PAL.pants);
-  for (let t = -4; t <= 4; t += 0.25) {
-    const [jx, jy] = at(0.6, t);
-    s.disc(jx, jy, 2.7 * K, Math.abs(t) > 3 ? PAL.jerseyShade : PAL.jersey);
+  // Legs: skate, sock with trim, pants. The far leg is drawn first.
+  const legs: Array<[number, number]> = [
+    [stride, -2.5],
+    [-stride, 2.5],
+  ];
+  legs.sort((l, r) => at(l[0], l[1], 0)[1] - at(r[0], r[1], 0)[1]);
+  for (const [forward, side] of legs) {
+    const foot = at(forward, side, 0);
+    const toe = at(forward + 2, side, 0);
+    const knee = at(forward * 0.5, side, 5);
+    const hip = at(0, side * 0.8, 10);
+    s.line(foot[0], foot[1], toe[0], toe[1], PAL.skate, true);
+    s.line(foot[0], foot[1] - 1, knee[0], knee[1], PAL.jersey, true);
+    s.set(foot[0], foot[1] - 3, PAL.trim);
+    s.set(foot[0] + 1, foot[1] - 3, PAL.trim);
+    s.line(knee[0], knee[1], hip[0], hip[1], PAL.pants, true);
   }
-  for (let t = -4.5; t <= 4.5; t += 0.25) {
-    const [tx, ty] = at(-2.2, t);
-    s.set(tx, ty, PAL.trim);
+
+  // Torso, leaning into the stride. Narrower when seen side-on.
+  const half = sideOn ? 3 : 4.5;
+  const hipC = at(0, 0, 10);
+  const chest = at(lean, 0, 19);
+  for (let i = 0; i <= 9; i++) {
+    const t = i / 9;
+    const cxr = hipC[0] + (chest[0] - hipC[0]) * t;
+    const cyr = hipC[1] + (chest[1] - hipC[1]) * t;
+    const color = i === 0 ? PAL.trim : i >= 7 ? PAL.helmet : PAL.jersey;
+    s.box(cxr - half, cyr, cxr + half, cyr, color);
+    if (i > 0 && i < 7) s.set(cxr + (fx >= 0 ? -half : half), cyr, PAL.jerseyShade);
+  }
+  if (away && !sideOn) {
+    // A blank number patch on the back.
+    s.box(chest[0] - 1, chest[1] + 4, chest[0] + 1, chest[1] + 6, PAL.trim);
   }
 
-  // Gloves and helmet.
-  const [g1x, g1y] = at(2.2, -4.6);
-  const [g2x, g2y] = at(2.2, 4.6);
-  s.disc(g1x, g1y, 1.4 * K, PAL.glove);
-  s.disc(g2x, g2y, 1.4 * K, PAL.glove);
-  const [hdx, hdy] = at(1.4, 0);
-  s.disc(hdx, hdy, 2.5 * K, PAL.helmet);
-  const [shx, shy] = at(0.8, -0.9);
-  s.set(shx, shy, PAL.helmetShine);
+  // Arms reach from the shoulders to the stick.
+  for (const side of [-1, 1]) {
+    const shoulder: [number, number] = [chest[0] + side * half, chest[1] + 2];
+    s.line(shoulder[0], shoulder[1], hands[0] + side, hands[1], PAL.jerseyShade, true);
+  }
+  s.disc(hands[0], hands[1], 1.6, PAL.glove);
+
+  // Head: helmet, with a face when not skating away from the camera.
+  const head = at(lean + 1, 0, 23);
+  s.disc(head[0], head[1], 3.2, PAL.helmet);
+  s.set(head[0] - 1, head[1] - 2, PAL.helmetShine);
+  if (!away) {
+    const faceX = head[0] + fx * 1.6;
+    s.box(faceX - 1, head[1] + 1, faceX + 1, head[1] + 2, PAL.skin);
+  }
 
   s.outline(PAL.outline);
   return s;
 }
 
-function drawSkater(scene: Phaser.Scene): void {
+function drawSkater(scene: Phaser.Scene, tilt: number): void {
   const tex = makeCanvas(scene, TEX.skater, SKATER_CELL * 8, SKATER_CELL * SKATER_FRAMES);
   const ctx = tex.getContext();
   for (let d = 0; d < 8; d++) {
     for (let f = 0; f < SKATER_FRAMES; f++) {
-      drawSkaterFrame(d, f).blit(ctx, d * SKATER_CELL, f * SKATER_CELL);
+      drawSkaterFrame(d, f, tilt).blit(ctx, d * SKATER_CELL, f * SKATER_CELL);
       tex.add(d + f * 8, 0, d * SKATER_CELL, f * SKATER_CELL, SKATER_CELL, SKATER_CELL);
     }
   }
   tex.refresh();
 }
 
-function drawPuckAndShadow(scene: Phaser.Scene): void {
-  const puck = makeCanvas(scene, TEX.puck, 6, 5);
+function drawPuckAndShadow(scene: Phaser.Scene, tilt: number): void {
+  const ph = tilt < 0.9 ? 4 : 5;
+  const puck = makeCanvas(scene, TEX.puck, 6, ph);
   const pctx = puck.getContext();
-  rect(pctx, 1, 0, 4, 1, PAL.outline);
-  rect(pctx, 0, 1, 6, 3, PAL.puck);
-  rect(pctx, 1, 4, 4, 1, PAL.puck);
-  rect(pctx, 1, 1, 3, 1, PAL.puckShine);
+  pctx.fillStyle = PAL.puck;
+  pctx.fillRect(1, 0, 4, ph);
+  pctx.fillRect(0, 1, 6, ph - 2);
+  pctx.fillStyle = PAL.puckShine;
+  pctx.fillRect(1, 1, 3, 1);
   puck.refresh();
 
-  const shadow = makeCanvas(scene, TEX.shadow, 16, 8);
+  const sw = 18;
+  const sh = Math.max(4, Math.round(10 * tilt));
+  const shadow = makeCanvas(scene, TEX.shadow, sw, sh);
   const sctx = shadow.getContext();
   sctx.fillStyle = '#1b2a5a';
-  for (let y = 0; y < 8; y++) {
-    for (let x = 0; x < 16; x++) {
-      if (((x + 0.5 - 8) / 8) ** 2 + ((y + 0.5 - 4) / 4) ** 2 <= 1) sctx.fillRect(x, y, 1, 1);
+  for (let y = 0; y < sh; y++) {
+    for (let x = 0; x < sw; x++) {
+      if (((x + 0.5 - sw / 2) / (sw / 2)) ** 2 + ((y + 0.5 - sh / 2) / (sh / 2)) ** 2 <= 1) sctx.fillRect(x, y, 1, 1);
     }
   }
   shadow.refresh();
 }
 
-/** Build every temporary gameplay texture. Safe to call more than once. */
-export function buildTemporaryTextures(scene: Phaser.Scene, rink: RinkGeometry): void {
-  drawRink(scene, rink);
-  drawSkater(scene);
-  drawPuckAndShadow(scene);
+let builtTilt: number | null = null;
+
+/** The tilt the current textures were drawn for, or null before the first build. */
+export function texturesTilt(): number | null {
+  return builtTilt;
+}
+
+/** Build every temporary gameplay texture for a camera tilt. Safe to call again. */
+export function buildTemporaryTextures(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
+  drawRink(scene, rink, tilt);
+  drawNets(scene, rink, tilt);
+  drawSkater(scene, tilt);
+  drawPuckAndShadow(scene, tilt);
+  builtTilt = tilt;
+}
+
+/** Screen-space box of a net's goal mouth, for placing its sprite. */
+export function netScreenAnchor(rink: RinkGeometry, end: 'top' | 'bottom', tilt: number): { x: number; y: number } {
+  const box = netBox(rink, end);
+  return { x: box.left - 1, y: Math.round(projectY(goalLineY(rink, end), tilt)) };
 }

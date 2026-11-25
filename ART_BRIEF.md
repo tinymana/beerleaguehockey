@@ -2,7 +2,7 @@
 
 Tiny Mana Studios. Hand this whole file to the image model (GPT) at the start of an art session, then ask for one asset at a time using the prompts in section 6.
 
-**Status:** this is a request list, not approved art. Sizes are provisional until the creative director rules on resolution and skater size (`DECISIONS.md` P1 and P2). Every delivered image is reviewed and approved by the creative director before it goes in the game.
+**Status:** this is a request list, not approved art. Sizes match game version 0.1.1 and are provisional until the creative director rules on resolution, skater size and camera tilt (`DECISIONS.md` P1, P2, P9). **Do not commission the rink until the tilt is settled**; sprites are safe to start. Every delivered image is reviewed and approved by the creative director before it goes in the game.
 
 ---
 
@@ -57,10 +57,13 @@ Do not blend these zones into each other or into skin, stick or skate colors.
 ## 4. Camera and scale
 
 - **Gameplay grid:** 480 x 320 pixels, 3:2. The rink is vertical: goals at the top and bottom of the screen, play scrolls up and down.
-- **Scale:** 4 art pixels = 1 foot of ice. The ice sheet is 340 wide x 800 tall inside a 480 x 880 world.
-- **Camera:** high three-quarter overhead, like 16-bit console hockey. We look down on the players from above and slightly behind: we see the top of the helmet, shoulders and a foreshortened body, legs and skates. Not a flat side view, and not a pure top-down dot.
-- **Directions:** "N" means skating up the screen, "S" down the screen. Draw five directions (S, SE, E, NE, N); the game mirrors them for SW, W and NW.
-- **Skater size:** about 22 to 26 art pixels tall standing, inside a 32 x 32 cell.
+- **Camera:** angled overhead (three-quarter, oblique) view in the style of 16-bit console hockey. The camera sits high behind the bottom goal looking up the ice.
+  - The ice is foreshortened: circles are drawn as wide ellipses. Up-and-down distances are 78% of side-to-side distances.
+  - Things with height stand up the screen. The far (top) boards show their inside face; the near (bottom) boards show their outside face and cover the ice just behind them; nets are 3D frames.
+  - Players are **upright figures**, drawn as you would see a person from a high seat behind the goal: full body, head above shoulders, skates on the ice. Not a top-down dot and not a flat side view.
+- **Scale:** 4 art pixels = 1 foot across the rink. The ice is 340 wide; on screen the whole rink image is 480 x 687.
+- **Directions:** "N" means skating up the screen (we see the player's back), "S" down the screen (we see the face). Draw five directions (S, SE, E, NE, N); the game mirrors them for SW, W and NW.
+- **Skater size:** about 26 to 28 art pixels tall, in a 48 x 48 cell. **The skates must touch the ice at the same point in every cell: 24 pixels from the left, 34 from the top.** The cell leaves room around the body for the stick, which reaches about 13 pixels from the feet along the ice.
 
 ## 5. Templates supplied with this brief
 
@@ -68,12 +71,13 @@ Upload these with the request so the model paints to the right layout. They are 
 
 | File | Use |
 | --- | --- |
-| `rink-endzone-template-3x-1440x1020.png` | Exact layout of one end of the rink (boards, corner curve, goal line, net, crease, faceoff circles) at 3x |
-| `rink-neutral-template-3x-1440x600.png` | Exact layout of centre ice (blue lines, red line, centre circle) at 3x |
-| `rink-template-480x880.png` | Whole rink at native size, for reference |
-| `skater-sheet-grid-4x-1280x640.png` | Labeled 10 x 5 grid for the skater sheet at 4x |
-| `goalie-sheet-grid-4x-1440x288.png` | Labeled 10 x 2 grid for the goalie sheet at 4x |
-| `skater-temp-reference-8x.png` | The current temporary skater, only to show facing and stick side. Do not copy its style |
+| `rink-top-end-template-3x-1440x798.png` | Exact layout of the far end of the rink at 3x: boards with visible inside face, corner curves, goal line, net, crease, faceoff circles |
+| `rink-centre-template-3x-1440x465.png` | Exact layout of centre ice at 3x: blue lines, red line, centre circle |
+| `rink-bottom-end-template-3x-1440x798.png` | Exact layout of the near end at 3x. Not a mirror of the far end: the near boards and net are seen from behind |
+| `rink-template-480x687.png` | Whole rink at native size, for reference |
+| `skater-sheet-grid-3x-1440x720.png` | Labeled 10 x 5 grid for the skater sheet at 3x, with the feet point marked in each cell |
+| `goalie-sheet-grid-3x-1440x288.png` | Labeled 10 x 2 grid for the goalie sheet at 3x |
+| `skater-temp-reference-4x.png` | The current temporary skater, only to show size, facing and stick. Do not copy its style |
 
 ---
 
@@ -83,50 +87,51 @@ Upload these with the request so the model paints to the right layout. They are 
 
 #### 1.1 Skater sprite sheet (most important asset)
 
-- **Canvas:** 1280 x 640. Grid of 10 columns x 5 rows. Each cell is 128 x 128 = a 32 x 32 sprite at 4x.
+- **Canvas:** 1440 x 720. Grid of 10 columns x 5 rows. Each cell is 144 x 144 = a 48 x 48 sprite at 3x.
 - **Rows (direction):** S, SE, E, NE, N.
 - **Columns (pose):** skate 1, skate 2, skate 3, skate 4 (a full stride loop), glide (both feet down, coasting), brake (hockey stop, skates sideways), shot wind-up (stick drawn back), shot follow-through, pass (short push), body check (shoulder lowered).
 - **Character:** adult rec player, helmet, gloves, right-handed stick held low on the ice in front. Colors per section 3 zones.
-- **Must hold:** same body size and baseline in all 50 cells. Stick blade stays on the ice and clearly visible.
+- **Must hold:** same body size in all 50 cells, with the skates on the marked feet point. Stick blade stays on the ice and clearly visible.
 
 Prompt:
 
-> Pixel art sprite sheet for a 16-bit style hockey game, strict pixel grid, each art pixel is exactly 4x4 screen pixels, canvas exactly 1280x640, transparent background. 10 columns by 5 rows of 128x128 cells following the attached grid template. One adult recreational hockey player seen from a high three-quarter overhead camera. Rows are facing directions: south, south-east, east, north-east, north. Columns are poses: four-frame skating stride, glide, hockey stop, shot wind-up, shot follow-through, pass, body check. White jersey (#F4F6FB), royal blue helmet, gloves, shoulder stripe and pants (#2B5FD9, #2038A8), red hem and sock trim (#D8263C), tan stick, dark navy outline (#141A3A). Flat color steps only, no anti-aliasing, no gradients, no shadows, no text. Identical character size, proportions and palette in every cell, centered, feet on the same baseline.
+> Pixel art sprite sheet for a 16-bit style hockey game, strict pixel grid, each art pixel is exactly 3x3 screen pixels, canvas exactly 1440x720, transparent background. 10 columns by 5 rows of 144x144 cells following the attached grid template. One adult recreational hockey player, an upright full-body figure about 27 art pixels tall, seen from a high angled camera behind him, as in classic 16-bit console hockey, with his skates on the marked point in each cell. Rows are facing directions: south, south-east, east, north-east, north. Columns are poses: four-frame skating stride, glide, hockey stop, shot wind-up, shot follow-through, pass, body check. White jersey (#F4F6FB), royal blue helmet, gloves, shoulder stripe and pants (#2B5FD9, #2038A8), red hem and sock trim (#D8263C), tan stick, dark navy outline (#141A3A). Flat color steps only, no anti-aliasing, no gradients, no shadows, no text. Identical character size, proportions and palette in every cell, centered, feet on the same baseline.
 
 #### 1.2 Skater extras sheet
 
-- **Canvas:** 768 x 128. 6 cells of 128 x 128 (32 x 32 at 4x). Direction-independent poses.
+- **Canvas:** 864 x 144. 6 cells of 144 x 144 (48 x 48 at 3x). Direction-independent poses.
 - **Cells:** knocked down 1 (falling), knocked down 2 (flat on ice), getting up, goal celebration 1 (arms up), goal celebration 2 (fist pump), gassed (bent over, stick across knees).
 
 #### 1.3 Goalie sprite sheet
 
-- **Canvas:** 1440 x 288. 10 columns x 2 rows of 144 x 144 cells = 36 x 36 sprites at 4x.
+- **Canvas:** 1440 x 288. 10 columns x 2 rows of 144 x 144 cells = 48 x 48 sprites at 3x. Same feet point as the skater.
 - **Rows:** facing south (defending the top net), facing north (defending the bottom net).
 - **Columns:** ready stance, shuffle left, shuffle right, butterfly, glove save, blocker save, kick save left, kick save right, poke check, down on the ice.
 - Bulky pads, blocker, trapper, cage mask. Same three color zones as the skater.
 
-#### 1.4 Rink, in three pieces
+#### 1.4 Rink, in three pieces (wait for the camera tilt to be approved)
 
-The game assembles the rink from an end-zone image (used twice, flipped) and a centre-ice image. **Paint over the attached templates and keep every line, circle, net and board edge exactly where the template has it.**
+The game stacks three images: far end, centre ice, near end. **Paint over the attached templates and keep every line, ellipse, net position and board edge exactly where the template has it.**
 
-- **End zone:** 1440 x 1020 (480 x 340 at 3x). Ice, rounded corner boards with yellow kick plate, glass, goal line, crease, two faceoff circles, and the area outside the boards: a few rows of mostly empty stands, a scorer's bench, beer-league touches (a cooler, a few bundled-up spectators). Leave the net out; it is a separate sprite.
-- **Centre ice:** 1440 x 600 (480 x 200 at 3x). Blue lines, red line, centre circle, player benches on one side and penalty boxes on the other, outside the boards. Leave the centre circle interior clean for a team logo.
+- **Far end:** 1440 x 798 (480 x 266 at 3x). Ice, rounded corner boards showing their inside face with a yellow kick plate, glass above, goal line, crease, two faceoff circles (drawn as ellipses), and beyond the boards a few rows of mostly empty stands with beer-league touches (a cooler, a few bundled-up spectators). Leave the net out; it is a separate sprite.
+- **Centre ice:** 1440 x 465 (480 x 155 at 3x). Blue lines, red line, centre circle, player benches on one side and penalty boxes on the other, outside the boards. Leave the centre circle interior clean for a team logo.
+- **Near end:** 1440 x 798. Same markings, but the near boards are seen from outside and from above: their outer face and top rail curve across the bottom of the image. Deliver the near boards as a **separate transparent layer** (`rink_near_boards_3x.png`, same canvas) as well, because players skate behind them.
 - **Ice surface:** nearly flat `#EAF2FB` with light scuffs and skate marks in `#D7E5F6`. It must stay the brightest, calmest thing on screen so players read clearly.
 - **Outside the boards:** dark and low-contrast (navy range), so it never competes with the ice.
 
-Prompt (end zone; attach the template):
+Prompt (far end; attach the template):
 
-> Pixel art top-down hockey rink end zone for a 16-bit style game, strict pixel grid, each art pixel exactly 3x3 screen pixels, canvas exactly 1440x1020. Paint over the attached template and keep the boards, rounded corners, goal line, crease and faceoff circles in exactly the same positions. Clean pale ice (#EAF2FB) with subtle scuffs, white boards with a yellow kick plate and blue cap, glass, red lines. Outside the boards: a dim small-town community arena at night, a few rows of mostly empty stands, a scorer's table, a cooler, two or three bundled-up spectators, all in dark navy tones so the ice stays the brightest area. No net, no players, no text, no logos, no anti-aliasing, no gradients.
+> Pixel art hockey rink end zone for a 16-bit style game, seen from a high angled overhead camera so circles appear as wide ellipses. Strict pixel grid, each art pixel exactly 3x3 screen pixels, canvas exactly 1440x798. Paint over the attached template and keep the boards, rounded corners, goal line, crease and faceoff circles in exactly the same positions. Clean pale ice (#EAF2FB) with subtle scuffs, white boards whose inside face is visible with a yellow kick plate and blue top rail, glass above, red lines. Beyond the boards: a dim small-town community arena at night, a few rows of mostly empty stands, a cooler, two or three bundled-up spectators, all in dark navy tones so the ice stays the brightest area. No net, no players, no text, no logos, no anti-aliasing, no gradients.
 
 #### 1.5 Net, puck and shadows
 
-- **Net:** 2 images, each 288 x 192 (24 x 16 at 12x). One for the top goal (mouth facing down the screen), one for the bottom goal (mouth facing up). Red posts and crossbar, white mesh, seen from the same overhead camera.
-- **Puck:** 96 x 80 (6 x 5 at 16x). Black disc with one highlight step.
-- **Shadow:** one flat, hard-edged ellipse, 256 x 128 (16 x 8 at 16x), single color `#1B2A5A`. No soft edge; the game sets its transparency.
+- **Net:** 2 images, standing 3D frames seen from the angled camera, both 26 art pixels wide. Far goal (we look into the mouth): 312 x 216 (26 x 18 at 12x). Near goal (we see the back and top netting): 312 x 264 (26 x 22 at 12x). Red posts and crossbar, white mesh with see-through gaps so a puck inside still shows.
+- **Puck:** 96 x 64 (6 x 4 at 16x). Black disc seen at an angle, with one highlight step.
+- **Shadow:** one flat, hard-edged ellipse, 288 x 128 (18 x 8 at 16x), single color `#1B2A5A`. No soft edge; the game sets its transparency.
 
 #### 1.6 On-ice effects
 
-One sheet, 1024 x 256, 8 cells of 128 x 128 (32 x 32 at 4x) per row, 2 rows:
+One sheet, 1024 x 256, 8 cells of 128 x 128 (32 x 32 at 4x) per row, 2 rows, all drawn for the same angled camera:
 
 - Row 1: ice spray from a hockey stop, 4 frames; skate-mark dash, 1 frame; puck speed streak, 3 frames.
 - Row 2: body-check impact star, 3 frames; board-hit dust puff, 3 frames; controlled-player marker (a ring or arrow that sits under the active skater), 2 frames in gold `#FFC83A`.
@@ -153,7 +158,7 @@ Fonts are hard for image models. If the result is uneven, send it anyway; it can
 - **"GOAL!" splash lettering:** 960 x 320 (240 x 80 at 4x), bold italic, red and gold with dark outline, transparent.
 - **Three stars card, period summary card, final score card:** 960 x 640 each (480 x 320 at 2x), empty framed layouts with clear blank areas for names and numbers.
 - **Face-off and penalty banners:** 960 x 96 each, blank.
-- **Referee and linesman sheet:** same layout as the skater sheet rows S, E, N only (10 x 3 cells), black-and-white stripes, no stick; poses: skate x4, glide, stop, arm up (penalty), point, drop puck, whistle.
+- **Referee and linesman sheet:** same cell size and feet point as the skater sheet, rows S, E, N only (10 x 3 cells, 1440 x 432), black-and-white stripes, no stick; poses: skate x4, glide, stop, arm up (penalty), point, drop puck, whistle.
 - **Two placeholder team crests** for exhibition play, 256 x 256 (64 x 64 at 4x). Names are not approved yet, so make them wordless: for example a moose head and a frothy mug, professional sports-crest style.
 
 ### Priority 3: do not make yet
@@ -165,8 +170,8 @@ These need creative decisions first (`DECISIONS.md`). Listed only so the art ses
 ## 7. How to deliver
 
 - PNG, exact canvas size, one asset per file.
-- File names: `skater_base_4x.png`, `skater_extras_4x.png`, `goalie_base_4x.png`, `rink_endzone_3x.png`, `rink_centre_3x.png`, `net_top_12x.png`, `net_bottom_12x.png`, `puck_16x.png`, `shadow_16x.png`, `fx_ice_4x.png`, `hud_scorebug_2x.png`, `ui_panel_4x.png`, `ui_cursor_4x.png`, `ui_meter_4x.png`, `font_small_4x.png`, `font_headline_4x.png`.
-- Send them in any order. Section 1.1 (skater) and 1.4 (rink) change the game the most.
+- File names: `skater_base_3x.png`, `skater_extras_3x.png`, `goalie_base_3x.png`, `rink_far_end_3x.png`, `rink_centre_3x.png`, `rink_near_end_3x.png`, `rink_near_boards_3x.png`, `net_top_12x.png`, `net_bottom_12x.png`, `puck_16x.png`, `shadow_16x.png`, `fx_ice_4x.png`, `hud_scorebug_2x.png`, `ui_panel_4x.png`, `ui_cursor_4x.png`, `ui_meter_4x.png`, `font_small_4x.png`, `font_headline_4x.png`.
+- Send them in any order. Section 1.1 (skater) changes the game the most and can start now; 1.4 (rink) waits for the tilt decision.
 
 ## 8. What to expect
 
