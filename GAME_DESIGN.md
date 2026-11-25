@@ -178,6 +178,8 @@ Friends managing rival franchises in one shared universe is a future requirement
 
 ### Tone and art direction
 
+**Humor (Decision 37, approved Nov 25): really over the top.** Push the absurdity, the running jokes and the characters well past realistic. Still character-driven and non-explicit.
+
 The three attached pieces set the look: a red, white and royal-blue palette, the crossed-sticks-and-mug crest, snowy night exteriors, and The Penalty Box in neon. Gameplay sprites follow the same palette on a strict pixel grid. The title screen uses the locker-room scene; the sunset rink splash suits loading and season-start screens; the crest is the logo for the menu, favicon and save files.
 
 The target is late-1990s 32-bit pixel art in the Saturn and PlayStation 2D tradition, with NHL '94 readability on the ice: rich environments, expressive portraits, bold retro sports type, snowy nights, warm locker rooms and neon bars. Menus, scoreboards, stat screens and dialogue boxes must look like a commercial retro sports game.
@@ -246,4 +248,6 @@ Two briefs from the creative director extend this document: *Career, Player DNA,
 - Once a calendar year (every four seasons) you have to renew your national hockey membership.
 - It is a running joke as much as a rule: rink staff ask you about it constantly, whether or not it is due.
 - How it fits what exists: a yearly fee in the personal finances (integer cents) on the calendar-year clock that also drives aging; nagging lines for rink staff in the dialogue system and group chat; a natural errand for a point-and-click front desk screen.
-- To settle before it is built: what the organisation is called (the real one is a real brand, so it needs a fictional name unless you approve an exception), the fee, and what happens if you let it lapse (cannot register for a season, cannot play, or just more nagging).
+- **Name (Decision 36, approved):** a mock name close enough to the real governing body that players get the joke. Candidates, for the creative director to choose from: **United Skates of Hockey**, **USA Hokey**, **Hockey of America, Probably**, **U.S. Amateur Puck Authority (USAPA)**.
+- **Lapse (Decision 36, approved):** more nagging. Nothing stops you playing; everyone at the rink just gets worse about it.
+- Still to set: the fee.
