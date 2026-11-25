@@ -13,6 +13,7 @@ Read this first. It lets a new session resume without losing creative direction 
 - **Track B: authorized and under way.** Authorized so far: revised main menu, Hockey Influences registry, Player DNA architecture, attribute generation, player creator foundation, automated generation and balance tests. Delivered in v0.3.0. Anything else in Track B (league, calendar, saves, aging, recruitment, collectibles, cinematics, fighting, Celly Packs, online play) still needs its own go-ahead.
 - **Track A: gated.** Do not begin on-ice match development (Milestone 1) until the creative director explicitly approves the hands-on skating checkpoint.
 - **All supplied art so far is base graphics (Decision 35).** Higher-fidelity art starts with batch 16, and batches 09 to 15 will be re-issued. Treat no current art as final; keep sizes and anchors coming from manifests.
+- **Batch 16 (character creator art) is audited, not integrated.** It is kept in `art/character_packages/`, outside the pipeline. See `CREATOR_PLAN.md`. The creator beyond the v0.3.0 foundation needs a go-ahead and a ruling on presentation resolution.
 - **Art integration:** delivered through batch 15 (v0.3.1). Batch 15 is locker room art, shown only in a developer fit test; the locker room is not a game location yet. Goal art is being redrawn to the gameplay size (`ART_BRIEF.md` section 10). All supplied art so far is base art that will be re-supplied at higher fidelity (Decision 35).
 - **Settled decisions are not reopened** unless a new technical conflict is found. The register is `DECISIONS.md`; open items are listed at its end.
 
@@ -29,6 +30,9 @@ Gameplay first. Dynasty second. Lifestyle third. The first objective is addictiv
 | `ROADMAP.md` | Milestones and exit criteria |
 | `DECISIONS.md` | Every decision with status: Approved, Proposed or Open |
 | `EXPANSION_PLAN.md` | Audit, conflicts, proposed roadmap, asset inventory and open questions for the Nov 25 expansion briefs; the briefs themselves are in `docs/briefs/` |
+| `CREATOR_PLAN.md` | Batch 16 audit, art deficiency report, modular character architecture, batch 17 (Create a Team) art specifications, creator sequence and open questions |
+| `REGISTRIES.md` | Hockey Influences (implemented), play styles and archetypes (proposed), backgrounds (implemented), personality traits (designed), and their overlaps |
+| `LIFESTYLE_PLAN.md` | Equipment lifecycle proposal, point-and-click location framework, batch 18 art specifications |
 | `BACKLOG.md` | Ideas with a proposed home. Never a work order |
 | `ASSET_MANIFEST.md` | Supplied art, temporary assets, what is needed |
 | `ARENA.md` | Modular rink renderer, arena asset pipeline, Arena Asset Lab, open arena questions |

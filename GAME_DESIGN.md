@@ -228,20 +228,24 @@ Two briefs from the creative director extend this document: *Career, Player DNA,
 - Starting attributes are randomized inside ranges set by those choices. An influence is an inspiration: picking a great playmaker gives a beginner who leans toward passing, not a great playmaker.
 - The rolled DNA (seed, choices, starting ratings, potential) is permanent and goes into the player's save.
 
-### Equipment life and skate sharpening (direction, Nov 25; nothing built)
+### Equipment lifecycle and skate sharpness (direction, Nov 25; nothing built)
 
-- Every player has an **equipment life meter** and a **skate sharpening meter** that run down with use.
-- When either is low, the player has to visit the **pro shop** for new gear or a sharpening.
-- Ignoring it has a cost: **reduced attributes until it is fixed**, and possibly **injury**.
-- How it fits what exists: the debuff is a temporary attribute modifier (already a separate layer in `src/dynasty/attributes.ts`), removed when the gear is fixed; the pro shop is already on the list of side activities and has a sign in art batch 14; gear and sharpening cost money, in integer cents.
-- Needs approval before it is built: wear rates, prices, the size of the debuff, and any injury odds.
+- Every piece of equipment has its own **condition**, which wears down through games, use, collisions and career events. **Skate sharpness** is tracked separately from the skates' condition.
+- Low condition means **temporary attribute penalties**, **equipment failure** and a **higher injury risk**. Maintenance removes the penalties.
+- Sharpening, repairs and replacements happen at **Top Shelf Hockey**, the pro shop.
+- Equipment belongs to the **player**, not the franchise, and persists across seasons, tournaments, team memberships and saves.
+- Condition meters and warnings are shown before games. Permanent attributes and equipment modifiers are always shown apart.
+- Possible extensions: secondhand gear, clearance items, repairs, premium equipment.
+- Proposed numbers (wear rates, warning thresholds, costs, quality tiers, injury modifier) are in `LIFESTYLE_PLAN.md` for approval.
 
-### Point-and-click interaction screens (direction, Nov 25; nothing built)
+### Point-and-click adventure locations (direction, Nov 25; nothing built)
 
-- Interaction screens (pro shop, locker room, the bar and the other Puck Falls locations) should play like a **1990s point-and-click adventure**, in the spirit of The Adventures of Willy Beamish and Day of the Tentacle: a full-screen illustrated scene, a cursor, hotspots on people and objects, and conversations and small jokes that come from clicking around.
-- The references are for feel and structure only. All scenes, characters and writing stay original.
-- How it fits what exists: this is the presentation for the lifestyle layer and side missions. The batch 15 locker room is drawn top-down for the fit test; an adventure-style screen is a different kind of art (a staged, side-on scene with larger characters).
-- Needs design before it is built: which locations get screens, the verb set (a single smart cursor or several verbs), mouse plus gamepad control, and the art format.
+- All major off-ice locations use an immersive **1990s point-and-click adventure** presentation. References for feel: The Adventures of Willy Beamish, Day of the Tentacle, Arch Rivals, and the approved Beer League Hockey artwork. Original 32-bit pixel-art environments, exaggerated rec-hockey personalities, funny interactions. Never a static menu background.
+- Supports hotspots, animated NPCs, idle environment animation, context-sensitive cursors, dialogue trees, inspectable objects, hidden interactions and Easter eggs, location side missions, career-dependent dialogue, persistent NPC relationships, and keyboard, mouse and gamepad.
+- Clicking something can trigger dialogue, an animation, a transaction, a career decision or another interaction.
+- A reusable, data-driven scene framework, separate from the on-ice simulation. No real-time walking engine or pathfinding unless approved.
+- Batch 18 expands to layered adventure environments, animated NPCs, clickable objects, cursors, dialogue panels and interaction animations. Framework proposal and art specifications are in `LIFESTYLE_PLAN.md`.
+- The aim: a complete recreational hockey life simulator, not a hockey game with management menus.
 
 ### Annual membership renewal (storyline direction, Nov 25; nothing built)
 
@@ -251,3 +255,7 @@ Two briefs from the creative director extend this document: *Career, Player DNA,
 - **Name (Decision 36, approved):** a mock name close enough to the real governing body that players get the joke. Candidates, for the creative director to choose from: **United Skates of Hockey**, **USA Hokey**, **Hockey of America, Probably**, **U.S. Amateur Puck Authority (USAPA)**.
 - **Lapse (Decision 36, approved):** more nagging. Nothing stops you playing; everyone at the rink just gets worse about it.
 - Still to set: the fee.
+
+### Create a Player as a flagship (direction, Nov 25; foundation built, the rest planned)
+
+Create a Player is meant to be one of the game's flagship features: NBA Live '98 creation, NBA 2K-style customization and Player DNA, premium late-1990s 32-bit art, and real beer league people. Players should be able to recreate themselves and their teammates, imperfections included: every age, questionable haircuts, beer bellies, mismatched gear. Appearance is stored as data and drawn in layers; nationality, appearance and ethnicity never affect hockey attributes or limit choices; team identity is never baked into a character. Three card families: gold Hockey Influences, ice-blue Play Styles, green Beer League Archetypes, with no bonuses, rarity tiers, packs or pay-to-win. Status, art audit and plan: `CREATOR_PLAN.md`; registries: `REGISTRIES.md`.
