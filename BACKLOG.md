@@ -83,3 +83,7 @@ Batch 14 supplies a resurfacer and garage, debris for broken sticks, championshi
 ## Nov 25 expansion briefs
 
 Career, player DNA, dynasty, presentation and fighting: see `EXPANSION_PLAN.md` for the proposed phases. Proposed homes only. Not authorized.
+
+## Equipment wear, skate sharpening, adventure-style screens (direction, Nov 25)
+
+Equipment life and skate sharpening meters with pro shop visits; point-and-click adventure presentation for interaction screens. Proposed home: the lifestyle track, with the pro shop as the first adventure-style screen because the equipment meters give it a job in the weekly loop. Proposed home only. Not authorized.

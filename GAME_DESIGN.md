@@ -225,3 +225,18 @@ Two briefs from the creative director extend this document: *Career, Player DNA,
 - **Hockey background and influences are separate.** Background decides starting experience and general starting ability. Influences decide how ability is distributed, playing tendencies, natural strengths and weaknesses, and development potential.
 - Starting attributes are randomized inside ranges set by those choices. An influence is an inspiration: picking a great playmaker gives a beginner who leans toward passing, not a great playmaker.
 - The rolled DNA (seed, choices, starting ratings, potential) is permanent and goes into the player's save.
+
+### Equipment life and skate sharpening (direction, Nov 25; nothing built)
+
+- Every player has an **equipment life meter** and a **skate sharpening meter** that run down with use.
+- When either is low, the player has to visit the **pro shop** for new gear or a sharpening.
+- Ignoring it has a cost: **reduced attributes until it is fixed**, and possibly **injury**.
+- How it fits what exists: the debuff is a temporary attribute modifier (already a separate layer in `src/dynasty/attributes.ts`), removed when the gear is fixed; the pro shop is already on the list of side activities and has a sign in art batch 14; gear and sharpening cost money, in integer cents.
+- Needs approval before it is built: wear rates, prices, the size of the debuff, and any injury odds.
+
+### Point-and-click interaction screens (direction, Nov 25; nothing built)
+
+- Interaction screens (pro shop, locker room, the bar and the other Puck Falls locations) should play like a **1990s point-and-click adventure**, in the spirit of The Adventures of Willy Beamish and Day of the Tentacle: a full-screen illustrated scene, a cursor, hotspots on people and objects, and conversations and small jokes that come from clicking around.
+- The references are for feel and structure only. All scenes, characters and writing stay original.
+- How it fits what exists: this is the presentation for the lifestyle layer and side missions. The batch 15 locker room is drawn top-down for the fit test; an adventure-style screen is a different kind of art (a staged, side-on scene with larger characters).
+- Needs design before it is built: which locations get screens, the verb set (a single smart cursor or several verbs), mouse plus gamepad control, and the art format.
