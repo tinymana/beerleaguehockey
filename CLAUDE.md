@@ -27,6 +27,7 @@ Gameplay first. Dynasty second. Lifestyle third. The first objective is addictiv
 | `DECISIONS.md` | Every decision with status: Approved, Proposed or Open |
 | `BACKLOG.md` | Ideas with a proposed home. Never a work order |
 | `ASSET_MANIFEST.md` | Supplied art, temporary assets, what is needed |
+| `ART_BRIEF.md` | Art request for image generation: specs, prompts, templates in `art/templates/` |
 | `CHANGELOG.md` | What shipped, known issues |
 | `site/devnotes.json` | Player-facing release notes shown on the website |
 

@@ -42,6 +42,10 @@ Three pieces of approved art exist today; everything else is either a code-drawn
 | `site/assets/*` | Web-sized copies and crops of the supplied art, plus real prototype screenshots | Derived; for the website |
 | `site/fonts/*` | Tiny5 and Jersey 15 web fonts (SIL Open Font License), carried over from the Ryan's Road site | Third-party, open license |
 
+## Art request
+
+`ART_BRIEF.md` is the brief to hand to an image model: rules, palette, camera, exact canvas sizes, prompts and file names. `art/templates/` holds the layout templates it refers to.
+
 ## Code-drawn temporary assets
 
 These are generated at boot by code and are **not** final art. Each is labeled temporary in the source.
