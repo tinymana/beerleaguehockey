@@ -42,6 +42,12 @@ Three pieces of approved art exist today; everything else is either a code-drawn
 | `site/assets/*` | Web-sized copies and crops of the supplied art, plus real prototype screenshots | Derived; for the website |
 | `site/fonts/*` | Tiny5 and Jersey 15 web fonts (SIL Open Font License), carried over from the Ryan's Road site | Third-party, open license |
 
+## Arena art (batches 09 and 10)
+
+Modular rink tiles arrive as `BLH_Batch_*.zip` packages in `art/packages/` and are ingested into `public/assets/arena/`. The full inventory, validation notes and missing slots live in the generated registry (`public/assets/arena/manifests/registry.json`) and are browsable in the Arena Asset Lab. See `ARENA.md`.
+
+As of v0.2.0: 201 assets from 14 packages, 0 errors; 14 slots supplied, 12 missing (east, end and corner boards, glass, nets, benches, penalty boxes, stadium, spectators, equipment).
+
 ## Art batch 01 (received Nov 25): review
 
 21 unique files in `art/source/generated-batch-01/` (11 duplicate uploads were dropped). None of the files is on a true pixel grid: they are high-resolution images with soft edges, so each needs the downscale-and-clean pass that the skater got.
@@ -66,7 +72,7 @@ Three pieces of approved art exist today; everything else is either a code-drawn
 
 ### Still needed
 
-1. **Rink painted over the three templates**, plus the near-boards layer. Wait for the camera tilt decision (P9).
+1. ~~Rink painted over the three templates.~~ Superseded: the rink now arrives as modular tile batches 09 to 14 (see above).
 2. **Nets** as two separate sprites, **puck**, and a flat **shadow**.
 3. **Controlled-player marker**, **shot-power and fatigue meters**, a **menu panel frame** and **menu cursor**.
 4. **Referee back view** (north row).
@@ -85,5 +91,5 @@ These are generated at boot by code and are **not** final art. Each is labeled t
 | Asset | Source file | Replace with |
 | --- | --- | --- |
 | 5x7 pixel font | `src/app/pixelFont.ts` | Approved retro sports typography |
-| Rink (ice, lines, boards, nets, stands) | `src/match/view/textures.ts` | Approved rink art |
+| End and corner boards, stands, nets (stand-ins) | `src/match/view/textures.ts` | Arena batches 10, 11 and 13 |
 | Puck and shadow | `src/match/view/textures.ts` | Approved sprites |

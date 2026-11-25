@@ -1,0 +1,191 @@
+import Phaser from 'phaser';
+import { clamp } from '../core/math';
+import { RINK, goalLineY } from '../match/sim/rink';
+import { ArenaRenderer } from '../match/view/arena/ArenaRenderer';
+import { arenaConfig } from '../match/view/arena/config';
+import { ARENA_LAYERS, goalAlignment } from '../match/view/arena/layout';
+import type { ArenaLayerId } from '../match/view/arena/layout';
+import { REGISTRY_KEY, assetById } from '../match/view/arena/registry';
+import type { ArenaRegistry } from '../match/view/arena/registry';
+import { projectY } from '../match/view/projection';
+import { ArenaLabPanel } from './arenaLabPanel';
+import { GAME_HEIGHT, GAME_WIDTH, SCENES, UI } from './config';
+import { addText } from './pixelFont';
+import { arenaChoice, tuning, tuningPanel } from './session';
+import { setTitleArtVisible } from './stage';
+
+const SCROLL_SPEED = 240;
+const AUTO_SPEED = 90;
+
+/**
+ * Arena Asset Lab: a developer-only screen for approving arena art before it
+ * goes into the game. Shows the assembled rink with every layer switchable,
+ * plus overlays, alignment tests and the asset browser (in the side panel).
+ */
+export class ArenaLabScene extends Phaser.Scene {
+  private arenaRegistry!: ArenaRegistry;
+  private arena!: ArenaRenderer;
+  private panel!: ArenaLabPanel;
+  private configId = arenaChoice.id;
+  private camY = 0;
+  private auto = false;
+  private autoDir = 1;
+  private guides: Phaser.GameObjects.Graphics | null = null;
+  private guidesOn = false;
+  private gridOn = false;
+  private collisionOn = false;
+  private wearLevel = 0;
+  private keys!: Record<'up' | 'down' | 'pageUp' | 'pageDown' | 'w' | 's', Phaser.Input.Keyboard.Key>;
+
+  constructor() {
+    super(SCENES.arenaLab);
+  }
+
+  create(): void {
+    setTitleArtVisible(false);
+    tuningPanel().hide();
+    this.arenaRegistry = this.cache.json.get(REGISTRY_KEY) as ArenaRegistry;
+    this.configId = arenaChoice.id;
+    this.auto = false;
+    this.guidesOn = false;
+    this.gridOn = false;
+    this.collisionOn = false;
+    this.wearLevel = 0;
+
+    const banner = this.add.graphics().setScrollFactor(0).setDepth(9000);
+    banner.fillStyle(UI.navy, 0.85);
+    banner.fillRect(0, 0, GAME_WIDTH, 12);
+    addText(this, 4, 3, 'Arena asset lab - developer only', UI.gold).setScrollFactor(0).setDepth(9001);
+    addText(this, GAME_WIDTH - 4, 3, 'Esc: menu', UI.ice).setOrigin(1, 0).setScrollFactor(0).setDepth(9001);
+
+    this.panel = new ArenaLabPanel(
+      this.arenaRegistry,
+      {
+        setConfig: (id) => this.rebuild(id),
+        setLayer: (id, on) => this.arena.setLayerVisible(id, on),
+        setStandIns: (on) => this.arena.setStandIns(on),
+        setGrid: (on) => {
+          this.gridOn = on;
+          this.arena.setGridVisible(on);
+        },
+        setCollision: (on) => {
+          this.collisionOn = on;
+          this.arena.setCollisionVisible(on);
+        },
+        setAutoScroll: (on) => (this.auto = on),
+        goTo: (where) => this.goTo(where),
+        setGuides: (on) => {
+          this.guidesOn = on;
+          this.drawGuides();
+        },
+        setLogo: (choice) => {
+          const supplied = arenaConfig(this.configId).centerLogo ?? arenaConfig('standard').centerLogo;
+          if (choice === 'none') this.arena.setCenterLogo(null);
+          else if (choice === 'test') this.arena.setCenterLogo('test', supplied?.scale);
+          else if (supplied) this.arena.setCenterLogo(supplied.asset, supplied.scale);
+        },
+        setWear: (level) => {
+          this.wearLevel = level;
+          this.arena.previewWear(level);
+        },
+        useInGame: (id) => {
+          arenaChoice.id = id;
+        },
+        exit: () => this.scene.start(SCENES.title),
+      },
+      this.configId,
+    );
+
+    const kb = this.input.keyboard;
+    if (!kb) throw new Error('Keyboard input unavailable');
+    this.keys = kb.addKeys({ up: 'UP', down: 'DOWN', pageUp: 'PAGE_UP', pageDown: 'PAGE_DOWN', w: 'W', s: 'S' }) as typeof this.keys;
+    kb.on('keydown-ESC', () => this.scene.start(SCENES.title));
+    this.input.on('wheel', (_p: unknown, _o: unknown, _dx: number, dy: number) => {
+      this.camY += dy * 0.5;
+    });
+
+    this.build();
+    this.camY = projectY(RINK.centerY, tuning.cameraTilt);
+
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
+      kb.removeAllListeners();
+      this.input.removeAllListeners();
+      this.panel.destroy();
+      this.arena.destroy();
+      this.guides?.destroy();
+      this.guides = null;
+    });
+  }
+
+  private build(): void {
+    this.arena = new ArenaRenderer(this, this.arenaRegistry, arenaConfig(this.configId), RINK, tuning.cameraTilt);
+    this.cameras.main.setBounds(0, 0, RINK.worldWidth, this.arena.worldHeight);
+    this.arena.setGridVisible(this.gridOn);
+    this.arena.setCollisionVisible(this.collisionOn);
+    if (this.wearLevel > 0) this.arena.previewWear(this.wearLevel);
+
+    this.panel.setConfigNote(this.configId);
+    this.panel.setLayers(
+      ARENA_LAYERS.map((l) => ({ id: l.id as ArenaLayerId, ...this.arena.layerContents(l.id) })),
+      this.arena.config.standIns,
+      this.arena.missing,
+    );
+    const lookup = (id: string) => assetById(this.arenaRegistry, id);
+    const mirrored = this.arenaRegistry.issues.some((i) => i.message === 'North and south creases are exact vertical mirrors');
+    this.panel.setAlignment(goalAlignment(RINK, tuning.cameraTilt, this.arena.layout, lookup), mirrored);
+    this.drawGuides();
+  }
+
+  private rebuild(id: string): void {
+    this.arena.destroy();
+    this.configId = id;
+    this.build();
+  }
+
+  private goTo(where: 'north' | 'centre' | 'south'): void {
+    const tilt = tuning.cameraTilt;
+    const y = where === 'north' ? goalLineY(RINK, 'top') : where === 'south' ? goalLineY(RINK, 'bottom') : RINK.centerY;
+    this.camY = projectY(y, tilt) + (where === 'north' ? 40 : where === 'south' ? -40 : 0);
+    this.auto = false;
+  }
+
+  /** Centre line of the rink and both goal lines, to judge alignment by eye. */
+  private drawGuides(): void {
+    this.guides?.destroy();
+    this.guides = null;
+    if (!this.guidesOn) return;
+    const tilt = tuning.cameraTilt;
+    const g = this.add.graphics().setDepth(8002);
+    g.lineStyle(1, 0xff2fd0, 0.9);
+    g.lineBetween(RINK.centerX + 0.5, 0, RINK.centerX + 0.5, this.arena.worldHeight);
+    for (const end of ['top', 'bottom'] as const) {
+      const y = Math.round(projectY(goalLineY(RINK, end), tilt)) + 0.5;
+      g.lineBetween(RINK.left, y, RINK.right, y);
+      g.lineStyle(1, 0x00e5ff, 0.9);
+      g.lineBetween(RINK.centerX - RINK.netHalfWidth + 0.5, y - 24, RINK.centerX - RINK.netHalfWidth + 0.5, y + 24);
+      g.lineBetween(RINK.centerX + RINK.netHalfWidth + 0.5, y - 24, RINK.centerX + RINK.netHalfWidth + 0.5, y + 24);
+      g.lineStyle(1, 0xff2fd0, 0.9);
+    }
+    const cy = Math.round(projectY(RINK.centerY, tilt)) + 0.5;
+    g.lineBetween(RINK.left, cy, RINK.right, cy);
+    this.guides = g;
+  }
+
+  update(_time: number, deltaMs: number): void {
+    const dt = deltaMs / 1000;
+    const k = this.keys;
+    const manual = (k.down.isDown || k.s.isDown || k.pageDown.isDown ? 1 : 0) - (k.up.isDown || k.w.isDown || k.pageUp.isDown ? 1 : 0);
+    const min = GAME_HEIGHT / 2;
+    const max = this.arena.worldHeight - GAME_HEIGHT / 2;
+    if (manual !== 0) {
+      this.auto = false;
+      this.camY += manual * SCROLL_SPEED * dt * (k.pageDown.isDown || k.pageUp.isDown ? 3 : 1);
+    } else if (this.auto) {
+      this.camY += this.autoDir * AUTO_SPEED * dt;
+      if (this.camY >= max) this.autoDir = -1;
+      if (this.camY <= min) this.autoDir = 1;
+    }
+    this.camY = clamp(this.camY, min, max);
+    this.cameras.main.setScroll(0, Math.round(this.camY - GAME_HEIGHT / 2));
+  }
+}

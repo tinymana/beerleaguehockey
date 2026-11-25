@@ -1,0 +1,86 @@
+{
+  "batch": "09.11",
+  "tileSize": [
+    8,
+    8
+  ],
+  "atlas": "south_crease_atlas.png",
+  "rows": 2,
+  "columns": 4,
+  "tiles": [
+    {
+      "index": 0,
+      "file": "south_crease_0_0.png",
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "index": 1,
+      "file": "south_crease_0_1.png",
+      "offset": [
+        8,
+        0
+      ]
+    },
+    {
+      "index": 2,
+      "file": "south_crease_0_2.png",
+      "offset": [
+        16,
+        0
+      ]
+    },
+    {
+      "index": 3,
+      "file": "south_crease_0_3.png",
+      "offset": [
+        24,
+        0
+      ]
+    },
+    {
+      "index": 4,
+      "file": "south_crease_1_0.png",
+      "offset": [
+        0,
+        8
+      ]
+    },
+    {
+      "index": 5,
+      "file": "south_crease_1_1.png",
+      "offset": [
+        8,
+        8
+      ]
+    },
+    {
+      "index": 6,
+      "file": "south_crease_1_2.png",
+      "offset": [
+        16,
+        8
+      ]
+    },
+    {
+      "index": 7,
+      "file": "south_crease_1_3.png",
+      "offset": [
+        24,
+        8
+      ]
+    }
+  ],
+  "composite": "crease_south.png",
+  "anchor": [
+    16,
+    16
+  ],
+  "layer": "rink_markings",
+  "orientation": "south goal; extends north toward center ice",
+  "outlinePixels": 2,
+  "goalLineIncluded": false,
+  "source": "Exact vertical mirror of Batch 09.10"
+}

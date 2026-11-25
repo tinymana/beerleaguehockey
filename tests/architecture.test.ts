@@ -38,6 +38,11 @@ describe('module boundaries', () => {
     expect(offenders('match', /\/(dynasty|lifestyle|app)\//)).toEqual([]);
   });
 
+  it('arena layout, wear, registry and config stay free of Phaser so they can be tested headless', () => {
+    const pure = ['layout.ts', 'iceWear.ts', 'registry.ts', 'config.ts'].map((f) => join(SRC, 'match', 'view', 'arena', f));
+    expect(pure.filter((f) => /from 'phaser'/.test(readFileSync(f, 'utf8'))).map((f) => relative(SRC, f))).toEqual([]);
+  });
+
   it('simulation code uses no wall clock or unseeded randomness', () => {
     const bad = [...files(join(SRC, 'core')), ...files(join(SRC, 'match', 'sim'))].filter((file) =>
       /Math\.random|Date\.now|performance\.now|new Date\(/.test(readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '')),

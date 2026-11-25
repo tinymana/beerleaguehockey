@@ -1,0 +1,29 @@
+{
+  "batch": "09.06",
+  "tileSize": [
+    8,
+    8
+  ],
+  "atlas": "goal_line_atlas.png",
+  "tiles": [
+    {
+      "index": 0,
+      "file": "goal_line_standard.png"
+    },
+    {
+      "index": 1,
+      "file": "goal_line_rich.png"
+    },
+    {
+      "index": 2,
+      "file": "goal_line_worn.png"
+    },
+    {
+      "index": 3,
+      "file": "goal_line_scuffed.png"
+    }
+  ],
+  "orientation": "horizontal",
+  "thickness": 2,
+  "layer": "rink_markings"
+}

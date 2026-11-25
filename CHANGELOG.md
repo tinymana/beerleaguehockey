@@ -2,6 +2,27 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.2.0 - 2026-11-25 - Modular arena and Arena Asset Lab
+
+Scope: integration of supplied arena art only. No gameplay physics changed; the simulation and its tests are untouched.
+
+### Added
+- **Asset pipeline:** `npm run assets:ingest` reads `art/packages/BLH_Batch_*.zip`, validates every PNG, files it under `public/assets/arena/` with its original name and bytes, and writes a central registry with a list of missing art slots. 201 assets from 14 packages registered, 0 errors.
+- **Modular arena renderer** (`src/match/view/arena/`): the rink is assembled from 8x8 tile layers and independent sprites in twelve switchable layers, clipped to the ice outline, driven by an arena configuration. Three configurations: standard, supplied art only, practice sheet.
+- **Supplied art in the game:** ice surface, scratches, light reflections, centre line, blue lines, goal lines, faceoff circles, dots and hash marks, centre circle, both creases, referee crease, centre-ice logo and west boards.
+- **Cosmetic ice wear** that follows the skater and clears on resurfacing.
+- **Arena Asset Lab** (press L on the title screen, or load with `#arena-lab`): rink preview, configuration selector, layer switches, tile grid, collision overlay, alignment guides, goal alignment tests, logo replacement test, wear control, art slots, asset browser, ingestion report.
+- `ARENA.md`, screenshots in `docs/arena/`, 24 new tests (76 total).
+
+### Changed
+- Default camera tilt 0.78 to 0.74, to agree with the proportions of the supplied circles (open decision; slider unchanged).
+- Code-drawn ice and markings removed. Code-drawn boards, stands and nets remain only as labeled stand-ins for art not yet supplied.
+
+### Known issues
+- Faceoff and centre circles are supplied at about a quarter of the rink's scale and are shown at 4x, so they look blockier than the rest. See `ARENA.md` A1.
+- East boards are the west module mirrored (provisional). End boards, corners, glass, nets, benches, stands and spectators are stand-ins or absent until batches 10 to 14 arrive.
+- Supplied side boards and stand-in corner boards do not match where they meet.
+
 ## 0.1.2 - 2026-11-25 - Supplied skater art
 
 ### Added

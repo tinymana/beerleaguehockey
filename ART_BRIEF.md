@@ -109,7 +109,9 @@ Prompt:
 - **Columns:** ready stance, shuffle left, shuffle right, butterfly, glove save, blocker save, kick save left, kick save right, poke check, down on the ice.
 - Bulky pads, blocker, trapper, cage mask. Same three color zones as the skater.
 
-#### 1.4 Rink, in three pieces (wait for the camera tilt to be approved)
+#### 1.4 Rink (superseded: now delivered as modular 8x8 tile batches 09 to 14; see `ARENA.md`)
+
+The text below describes the earlier painted-rink approach and is kept for reference only.
 
 The game stacks three images: far end, centre ice, near end. **Paint over the attached templates and keep every line, ellipse, net position and board edge exactly where the template has it.**
 
@@ -183,7 +185,7 @@ Image models drift between frames and rarely land on a perfect pixel grid. That 
 
 Batch 01 worked: the skater sheet is in the game. These are the gaps and fixes, most important first.
 
-1. **Rink over the templates** (section 1.4), once the camera tilt is approved. The batch 01 rinks were drawn in converging perspective, like a photo. The game needs a **parallel projection**: the left and right boards are vertical and parallel, never converging, and the rink is much taller than the screen. Paint over the three templates exactly. Deliver real transparency, not a painted checkerboard.
+1. **Rink:** now handled by the modular tile batches (09 to 14), not a painted image. For those batches the open art questions are in `ARENA.md`, chiefly: draw the faceoff and centre circles at 120x88 pixels, not 32x32. The rest of this item is the old request, kept for reference: The batch 01 rinks were drawn in converging perspective, like a photo. The game needs a **parallel projection**: the left and right boards are vertical and parallel, never converging, and the rink is much taller than the screen. Paint over the three templates exactly. Deliver real transparency, not a painted checkerboard.
 2. **Nets, puck, shadow** as separate sprites (section 1.5).
 3. **Controlled-player marker, two meters, menu panel frame, menu cursor** (sections 1.6 and 1.7).
 4. **Referee back view:** one more row of the referee sheet, facing north (seen from behind): skate x4, glide, stop, arm up, point.

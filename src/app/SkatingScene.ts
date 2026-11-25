@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 import { GAME_HEIGHT, GAME_WIDTH, SCENES, UI } from './config';
 import { Edge, readPad } from './padInput';
 import { addText, fontText } from './pixelFont';
-import { tuning, tuningPanel } from './session';
+import { arenaChoice, tuning, tuningPanel } from './session';
 import { setTitleArtVisible } from './stage';
 import { directionIndex8, lerp } from '../core/math';
 import { quantize8 } from '../match/sim/input';
@@ -10,13 +10,20 @@ import type { SimInput } from '../match/sim/input';
 import { SIM_DT, SkatingSim } from '../match/sim/skatingSim';
 import type { SimEvent } from '../match/sim/skatingSim';
 import { cameraTargetY, stepCamera } from '../match/view/cameraModel';
-import { projectY, worldScreenHeight } from '../match/view/projection';
+import { projectY } from '../match/view/projection';
 import { SKATER_SHEET, choosePose, skaterFrame } from '../match/view/skaterSprite';
-import { TEX, buildTemporaryTextures, netLayout, netScreenAnchor, texturesTilt } from '../match/view/textures';
+import { ArenaRenderer } from '../match/view/arena/ArenaRenderer';
+import { arenaConfig } from '../match/view/arena/config';
+import { layerDepth } from '../match/view/arena/layout';
+import { REGISTRY_KEY } from '../match/view/arena/registry';
+import type { ArenaRegistry } from '../match/view/arena/registry';
+import { TEX } from '../match/view/textures';
 
 const STRIDE_LENGTH = 11;
-const DEPTH_FRONT_BOARDS = 5000;
-const DEPTH_HUD = 9000;
+const DEPTH_FRONT_BOARDS = layerDepth('frontBoards');
+const DEPTH_HUD = layerDepth('ui');
+/** Skating this many pixels over a tile takes it from fresh to fully worn. */
+const WEAR_DISTANCE = 900;
 
 /**
  * Skating prototype view. Reads input, steps the simulation at a fixed
@@ -28,6 +35,8 @@ export class SkatingScene extends Phaser.Scene {
   private prev = { sx: 0, sy: 0, px: 0, py: 0 };
   private camY = 0;
   private tilt = 1;
+  private arena!: ArenaRenderer;
+  private wearTimer = 0;
   private worldHeight = 0;
 
   private skater!: Phaser.GameObjects.Image;
@@ -58,21 +67,10 @@ export class SkatingScene extends Phaser.Scene {
 
     // The camera tilt is view-only: the simulation never knows about it.
     this.tilt = tuning.cameraTilt;
-    if (texturesTilt() !== this.tilt) buildTemporaryTextures(this, rink, this.tilt);
-    this.worldHeight = worldScreenHeight(rink.worldHeight, this.tilt);
+    this.arena = new ArenaRenderer(this, this.cache.json.get(REGISTRY_KEY) as ArenaRegistry, arenaConfig(arenaChoice.id), rink, this.tilt);
+    this.worldHeight = this.arena.worldHeight;
+    this.wearTimer = 0;
 
-    // Depth is screen y, so nearer things cover farther ones.
-    this.add.image(0, 0, TEX.rink).setOrigin(0, 0).setDepth(-10);
-    this.add.image(0, 0, TEX.rinkFront).setOrigin(0, 0).setDepth(DEPTH_FRONT_BOARDS);
-    for (const end of ['top', 'bottom'] as const) {
-      const anchor = netScreenAnchor(rink, end, this.tilt);
-      const layout = netLayout(rink, end, this.tilt);
-      const nearEdge = anchor.y - layout.goalLineRow + layout.height;
-      this.add
-        .image(anchor.x, anchor.y - layout.goalLineRow, end === 'top' ? TEX.netTop : TEX.netBottom)
-        .setOrigin(0, 0)
-        .setDepth(end === 'top' ? anchor.y : nearEdge);
-    }
     this.puck = this.add.image(0, 0, TEX.puck);
     this.skater = this.add
       .image(0, 0, SKATER_SHEET.key, 0)
@@ -119,6 +117,7 @@ export class SkatingScene extends Phaser.Scene {
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => {
       kb.removeAllListeners();
       tuningPanel().hide();
+      this.arena.destroy();
     });
   }
 
@@ -145,7 +144,15 @@ export class SkatingScene extends Phaser.Scene {
     while (this.accumulator >= SIM_DT) {
       this.capturePrev();
       this.handleEvents(this.sim.step(input));
+      // Cosmetic ice wear follows the skater. It never feeds back into the simulation.
+      const { skater } = this.sim;
+      this.arena.addTraffic(skater.x, skater.y, Math.hypot(skater.x - this.prev.sx, skater.y - this.prev.sy) / WEAR_DISTANCE);
       this.accumulator -= SIM_DT;
+    }
+    this.wearTimer += deltaMs;
+    if (this.wearTimer > 400) {
+      this.wearTimer = 0;
+      this.arena.refreshWear();
     }
     this.draw(this.accumulator / SIM_DT, deltaMs / 1000);
   }

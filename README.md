@@ -2,7 +2,7 @@
 
 A recreational hockey universe by Tiny Mana Studios: 16-bit arcade hockey feel, a deep persistent rec-league dynasty, and beer league culture.
 
-**Status: Milestone 0 and the skating prototype (v0.1.0).** One skater, one puck, one rink, and a live tuning panel, so the feel of skating can be judged before a hockey game is built on it. Dynasty, lifestyle, economy and multiplayer are not started.
+**Status: Milestone 0, the skating prototype and the modular arena (v0.2.0).** One skater, one puck, one rink, and a live tuning panel, so the feel of skating can be judged before a hockey game is built on it. Dynasty, lifestyle, economy and multiplayer are not started.
 
 ## Run it
 
@@ -15,6 +15,7 @@ npm test             # automated tests
 npm run typecheck    # TypeScript, strict
 npm run build        # game only, into dist/
 npm run build:site   # website with the game under /play/, into dist-site/
+npm run assets:ingest # rebuild public/assets/arena/ from art/packages/
 npm run preview:site # serve the assembled website locally
 ```
 
@@ -31,6 +32,10 @@ npm run preview:site # serve the assembled website locally
 
 On the main menu choose **Exhibition** for the skating prototype. Other modes are marked Coming Soon.
 
+## Arena art and the Arena Asset Lab
+
+The rink is assembled from supplied tile art. To add a new art package: drop the `BLH_Batch_*.zip` into `art/packages/` and run `npm run assets:ingest` (needs Python 3 with Pillow and NumPy). Review it in the **Arena Asset Lab**: press **L** on the title screen, or open the game with `#arena-lab` at the end of the address. Details in `ARENA.md`.
+
 ## Tuning the feel
 
 Press backquote in the prototype. Every slider changes the game live and is remembered in that browser. COPY VALUES puts the current numbers on the clipboard as JSON; paste them into `src/match/sim/tuning.ts` (`DEFAULT_TUNING`) to make them the defaults.
@@ -40,7 +45,8 @@ Press backquote in the prototype. Every slider changes the game live and is reme
 ```
 src/core        seeded RNG, math helpers (depends on nothing)
 src/match/sim   skating simulation, pure TypeScript, fixed 60 Hz step
-src/match/view  Phaser-side match helpers: temporary textures, camera maths
+src/match/view  Phaser-side match helpers: projection, camera maths, skater sheet, stand-ins
+src/match/view/arena  modular arena renderer, layout maths, ice wear, asset registry
 src/app         Phaser boot, title menu, skating scene, tuning panel
 src/dynasty     not started
 src/lifestyle   not started
@@ -59,4 +65,4 @@ art/source      artwork supplied by the creative director
 
 ## Art
 
-Title art, sunset splash and crest are supplied by Tiny Mana Studios. The rink, skater, puck and pixel font are temporary code-drawn stand-ins, not final assets. See `ASSET_MANIFEST.md`.
+Title art, skater sprites and rink tiles are supplied by Tiny Mana Studios. The puck, the pixel font and the stand-ins for missing arena pieces (end boards, nets, stands) are temporary and code-drawn. See `ASSET_MANIFEST.md`.

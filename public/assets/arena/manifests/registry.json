@@ -1,0 +1,4409 @@
+{
+ "generatedBy": "scripts/art/ingest_arena.py",
+ "tileSize": 8,
+ "batches": {
+  "09.01": {
+   "package": "BLH_Batch_09_01.zip",
+   "category": "ice/base",
+   "notes": "manifests/09.01.notes.md",
+   "manifest": "manifests/09.01.manifest.json",
+   "name": null,
+   "assetCount": 17
+  },
+  "09.02": {
+   "package": "BLH_Batch_09_02.zip",
+   "category": "ice/scratches",
+   "notes": "manifests/09.02.notes.md",
+   "manifest": "manifests/09.02.manifest.json",
+   "name": null,
+   "assetCount": 17
+  },
+  "09.03": {
+   "package": "BLH_Batch_09_03.zip",
+   "category": "ice/reflections",
+   "notes": "manifests/09.03.notes.md",
+   "manifest": "manifests/09.03.manifest.json",
+   "name": null,
+   "assetCount": 17
+  },
+  "09.04": {
+   "package": "BLH_Batch_09_04.zip",
+   "category": "ice/markings",
+   "notes": "manifests/09.04.notes.md",
+   "manifest": "manifests/09.04.manifest.json",
+   "name": null,
+   "assetCount": 5
+  },
+  "09.05": {
+   "package": "BLH_Batch_09_05.zip",
+   "category": "ice/markings",
+   "notes": "manifests/09.05.notes.md",
+   "manifest": "manifests/09.05.manifest.json",
+   "name": null,
+   "assetCount": 5
+  },
+  "09.06": {
+   "package": "BLH_Batch_09_06.zip",
+   "category": "ice/markings",
+   "notes": "manifests/09.06.notes.md",
+   "manifest": "manifests/09.06.manifest.json",
+   "name": null,
+   "assetCount": 5
+  },
+  "09.07": {
+   "package": "BLH_Batch_09_07.zip",
+   "category": "ice/markings",
+   "notes": "manifests/09.07.notes.md",
+   "manifest": "manifests/09.07.manifest.json",
+   "name": null,
+   "assetCount": 22
+  },
+  "09.08": {
+   "package": "BLH_Batch_09_08.zip",
+   "category": "ice/markings",
+   "notes": "manifests/09.08.notes.md",
+   "manifest": "manifests/09.08.manifest.json",
+   "name": null,
+   "assetCount": 18
+  },
+  "09.09": {
+   "package": "BLH_Batch_09_09.zip",
+   "category": "ice/markings",
+   "notes": "manifests/09.09.notes.md",
+   "manifest": "manifests/09.09.manifest.json",
+   "name": null,
+   "assetCount": 23
+  },
+  "09.10": {
+   "package": "BLH_Batch_09_10.zip",
+   "category": "ice/markings",
+   "notes": "manifests/09.10.notes.md",
+   "manifest": "manifests/09.10.manifest.json",
+   "name": null,
+   "assetCount": 12
+  },
+  "09.11": {
+   "package": "BLH_Batch_09_11.zip",
+   "category": "ice/markings",
+   "notes": "manifests/09.11.notes.md",
+   "manifest": "manifests/09.11.manifest.json",
+   "name": null,
+   "assetCount": 12
+  },
+  "09.12": {
+   "package": "BLH_Batch_09_12.zip",
+   "category": "ice/markings",
+   "notes": "manifests/09.12.notes.md",
+   "manifest": "manifests/09.12.manifest.json",
+   "name": null,
+   "assetCount": 10
+  },
+  "09.13": {
+   "package": "BLH_Batch_09_13.zip",
+   "category": "ice/logos",
+   "notes": "manifests/09.13.notes.md",
+   "manifest": "manifests/09.13.manifest.json",
+   "name": "Center-ice logo",
+   "assetCount": 22
+  },
+  "10.01": {
+   "package": "BLH_Batch_10_01.zip",
+   "category": "boards/straight",
+   "notes": "manifests/10.01.notes.md",
+   "manifest": "manifests/10.01.manifest.json",
+   "name": "West straight boards",
+   "assetCount": 16
+  }
+ },
+ "assets": [
+  {
+   "id": "09.01/ice_base_01",
+   "batch": "09.01",
+   "name": "ice_base_01.png",
+   "file": "ice/base/09.01/ice_base_01.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "b9037ceca0b0f705",
+   "tileIndex": 0
+  },
+  {
+   "id": "09.01/ice_base_02",
+   "batch": "09.01",
+   "name": "ice_base_02.png",
+   "file": "ice/base/09.01/ice_base_02.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "66fbc8591cabd824",
+   "tileIndex": 1
+  },
+  {
+   "id": "09.01/ice_base_03",
+   "batch": "09.01",
+   "name": "ice_base_03.png",
+   "file": "ice/base/09.01/ice_base_03.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "a6906bc83c82f622",
+   "tileIndex": 2
+  },
+  {
+   "id": "09.01/ice_base_04",
+   "batch": "09.01",
+   "name": "ice_base_04.png",
+   "file": "ice/base/09.01/ice_base_04.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "0a16c83fcfe00505",
+   "tileIndex": 3
+  },
+  {
+   "id": "09.01/ice_reflect_01",
+   "batch": "09.01",
+   "name": "ice_reflect_01.png",
+   "file": "ice/base/09.01/ice_reflect_01.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "cf434ac752fd345c",
+   "tileIndex": 8
+  },
+  {
+   "id": "09.01/ice_reflect_02",
+   "batch": "09.01",
+   "name": "ice_reflect_02.png",
+   "file": "ice/base/09.01/ice_reflect_02.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "acdfe388ec5e422d",
+   "tileIndex": 9
+  },
+  {
+   "id": "09.01/ice_reflect_03",
+   "batch": "09.01",
+   "name": "ice_reflect_03.png",
+   "file": "ice/base/09.01/ice_reflect_03.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "7b1edadcdd2913e3",
+   "tileIndex": 10
+  },
+  {
+   "id": "09.01/ice_reflect_04",
+   "batch": "09.01",
+   "name": "ice_reflect_04.png",
+   "file": "ice/base/09.01/ice_reflect_04.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "fa97d9611c394744",
+   "tileIndex": 11
+  },
+  {
+   "id": "09.01/ice_scuff_01",
+   "batch": "09.01",
+   "name": "ice_scuff_01.png",
+   "file": "ice/base/09.01/ice_scuff_01.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "de3226f176aedcec",
+   "tileIndex": 4
+  },
+  {
+   "id": "09.01/ice_scuff_02",
+   "batch": "09.01",
+   "name": "ice_scuff_02.png",
+   "file": "ice/base/09.01/ice_scuff_02.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "10f7616cab3ef77a",
+   "tileIndex": 5
+  },
+  {
+   "id": "09.01/ice_scuff_03",
+   "batch": "09.01",
+   "name": "ice_scuff_03.png",
+   "file": "ice/base/09.01/ice_scuff_03.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "a9a996259c069621",
+   "tileIndex": 6
+  },
+  {
+   "id": "09.01/ice_scuff_04",
+   "batch": "09.01",
+   "name": "ice_scuff_04.png",
+   "file": "ice/base/09.01/ice_scuff_04.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "9803a8d08e02d704",
+   "tileIndex": 7
+  },
+  {
+   "id": "09.01/ice_snow_01",
+   "batch": "09.01",
+   "name": "ice_snow_01.png",
+   "file": "ice/base/09.01/ice_snow_01.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "2e930fd5086501e9",
+   "tileIndex": 12
+  },
+  {
+   "id": "09.01/ice_snow_02",
+   "batch": "09.01",
+   "name": "ice_snow_02.png",
+   "file": "ice/base/09.01/ice_snow_02.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "8cb3c92f2f33b72a",
+   "tileIndex": 13
+  },
+  {
+   "id": "09.01/ice_snow_03",
+   "batch": "09.01",
+   "name": "ice_snow_03.png",
+   "file": "ice/base/09.01/ice_snow_03.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "ecc10f1af9dd8d05",
+   "tileIndex": 14
+  },
+  {
+   "id": "09.01/ice_snow_04",
+   "batch": "09.01",
+   "name": "ice_snow_04.png",
+   "file": "ice/base/09.01/ice_snow_04.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "2bb65a0ada1e090e",
+   "tileIndex": 15
+  },
+  {
+   "id": "09.01/ice_tileset_4x4",
+   "batch": "09.01",
+   "name": "ice_tileset_4x4.png",
+   "file": "ice/base/09.01/ice_tileset_4x4.png",
+   "width": 32,
+   "height": 32,
+   "role": "atlas",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    31,
+    31
+   ],
+   "hash": "a72f16b6d05ea4bf",
+   "columns": 4,
+   "rows": 4
+  },
+  {
+   "id": "09.02/ice_scratch_01",
+   "batch": "09.02",
+   "name": "ice_scratch_01.png",
+   "file": "ice/scratches/09.02/ice_scratch_01.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    5,
+    4,
+    6
+   ],
+   "hash": "55548031006fda2a",
+   "tileIndex": 0
+  },
+  {
+   "id": "09.02/ice_scratch_02",
+   "batch": "09.02",
+   "name": "ice_scratch_02.png",
+   "file": "ice/scratches/09.02/ice_scratch_02.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    2,
+    1,
+    4,
+    3
+   ],
+   "hash": "bb1f56cbd74811c1",
+   "tileIndex": 1
+  },
+  {
+   "id": "09.02/ice_scratch_03",
+   "batch": "09.02",
+   "name": "ice_scratch_03.png",
+   "file": "ice/scratches/09.02/ice_scratch_03.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    1,
+    4,
+    4
+   ],
+   "hash": "df085a9767bf7130",
+   "tileIndex": 2
+  },
+  {
+   "id": "09.02/ice_scratch_04",
+   "batch": "09.02",
+   "name": "ice_scratch_04.png",
+   "file": "ice/scratches/09.02/ice_scratch_04.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    2,
+    6,
+    4
+   ],
+   "hash": "aedc4b5b45e80462",
+   "tileIndex": 3
+  },
+  {
+   "id": "09.02/ice_scratch_05",
+   "batch": "09.02",
+   "name": "ice_scratch_05.png",
+   "file": "ice/scratches/09.02/ice_scratch_05.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    1,
+    4,
+    6
+   ],
+   "hash": "8cc63de979bc9a3e",
+   "tileIndex": 4
+  },
+  {
+   "id": "09.02/ice_scratch_06",
+   "batch": "09.02",
+   "name": "ice_scratch_06.png",
+   "file": "ice/scratches/09.02/ice_scratch_06.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    3,
+    6,
+    6
+   ],
+   "hash": "24a06cbf804d4ff3",
+   "tileIndex": 5
+  },
+  {
+   "id": "09.02/ice_scratch_07",
+   "batch": "09.02",
+   "name": "ice_scratch_07.png",
+   "file": "ice/scratches/09.02/ice_scratch_07.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    2,
+    4,
+    6,
+    6
+   ],
+   "hash": "1e9ab96438bee5e3",
+   "tileIndex": 6
+  },
+  {
+   "id": "09.02/ice_scratch_08",
+   "batch": "09.02",
+   "name": "ice_scratch_08.png",
+   "file": "ice/scratches/09.02/ice_scratch_08.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    3,
+    1,
+    6,
+    4
+   ],
+   "hash": "b4fb037429925e27",
+   "tileIndex": 7
+  },
+  {
+   "id": "09.02/ice_scratch_09",
+   "batch": "09.02",
+   "name": "ice_scratch_09.png",
+   "file": "ice/scratches/09.02/ice_scratch_09.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    2,
+    1,
+    6,
+    6
+   ],
+   "hash": "22991e4a77d1ba78",
+   "tileIndex": 8
+  },
+  {
+   "id": "09.02/ice_scratch_10",
+   "batch": "09.02",
+   "name": "ice_scratch_10.png",
+   "file": "ice/scratches/09.02/ice_scratch_10.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    1,
+    6,
+    6
+   ],
+   "hash": "7d93ae38cb53a1a6",
+   "tileIndex": 9
+  },
+  {
+   "id": "09.02/ice_scratch_11",
+   "batch": "09.02",
+   "name": "ice_scratch_11.png",
+   "file": "ice/scratches/09.02/ice_scratch_11.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    1,
+    6,
+    4
+   ],
+   "hash": "c9fb9b49049b335e",
+   "tileIndex": 10
+  },
+  {
+   "id": "09.02/ice_scratch_12",
+   "batch": "09.02",
+   "name": "ice_scratch_12.png",
+   "file": "ice/scratches/09.02/ice_scratch_12.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    1,
+    6,
+    6
+   ],
+   "hash": "6ab7441f3bdcb968",
+   "tileIndex": 11
+  },
+  {
+   "id": "09.02/ice_scratch_13",
+   "batch": "09.02",
+   "name": "ice_scratch_13.png",
+   "file": "ice/scratches/09.02/ice_scratch_13.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    1,
+    6,
+    5
+   ],
+   "hash": "d9fd1aa3738e65b3",
+   "tileIndex": 12
+  },
+  {
+   "id": "09.02/ice_scratch_14",
+   "batch": "09.02",
+   "name": "ice_scratch_14.png",
+   "file": "ice/scratches/09.02/ice_scratch_14.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    1,
+    6,
+    4
+   ],
+   "hash": "1722714d21e8d8a9",
+   "tileIndex": 13
+  },
+  {
+   "id": "09.02/ice_scratch_15",
+   "batch": "09.02",
+   "name": "ice_scratch_15.png",
+   "file": "ice/scratches/09.02/ice_scratch_15.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    5,
+    6,
+    6
+   ],
+   "hash": "5bb5513be390cc4a",
+   "tileIndex": 14
+  },
+  {
+   "id": "09.02/ice_scratch_16",
+   "batch": "09.02",
+   "name": "ice_scratch_16.png",
+   "file": "ice/scratches/09.02/ice_scratch_16.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    1,
+    6,
+    3
+   ],
+   "hash": "c8f3c1fbd0aed7a8",
+   "tileIndex": 15
+  },
+  {
+   "id": "09.02/ice_scratch_atlas",
+   "batch": "09.02",
+   "name": "ice_scratch_atlas.png",
+   "file": "ice/scratches/09.02/ice_scratch_atlas.png",
+   "width": 32,
+   "height": 32,
+   "role": "atlas",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    1,
+    30,
+    30
+   ],
+   "hash": "14891e9f3338ee69",
+   "columns": 4,
+   "rows": 4
+  },
+  {
+   "id": "09.03/light_angle_l_01",
+   "batch": "09.03",
+   "name": "light_angle_l_01.png",
+   "file": "ice/reflections/09.03/light_angle_l_01.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "53dd6138d49cbb7e",
+   "tileIndex": 4
+  },
+  {
+   "id": "09.03/light_angle_l_02",
+   "batch": "09.03",
+   "name": "light_angle_l_02.png",
+   "file": "ice/reflections/09.03/light_angle_l_02.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "a606171d1e34aff1",
+   "tileIndex": 5
+  },
+  {
+   "id": "09.03/light_angle_l_03",
+   "batch": "09.03",
+   "name": "light_angle_l_03.png",
+   "file": "ice/reflections/09.03/light_angle_l_03.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "d20649f5ebbda15b",
+   "tileIndex": 6
+  },
+  {
+   "id": "09.03/light_angle_l_04",
+   "batch": "09.03",
+   "name": "light_angle_l_04.png",
+   "file": "ice/reflections/09.03/light_angle_l_04.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "26c0b0924c2d4fab",
+   "tileIndex": 7
+  },
+  {
+   "id": "09.03/light_angle_r_01",
+   "batch": "09.03",
+   "name": "light_angle_r_01.png",
+   "file": "ice/reflections/09.03/light_angle_r_01.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "a6400222ad3cf348",
+   "tileIndex": 8
+  },
+  {
+   "id": "09.03/light_angle_r_02",
+   "batch": "09.03",
+   "name": "light_angle_r_02.png",
+   "file": "ice/reflections/09.03/light_angle_r_02.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "7498b620cae8114b",
+   "tileIndex": 9
+  },
+  {
+   "id": "09.03/light_angle_r_03",
+   "batch": "09.03",
+   "name": "light_angle_r_03.png",
+   "file": "ice/reflections/09.03/light_angle_r_03.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "5265aec14f861fe5",
+   "tileIndex": 10
+  },
+  {
+   "id": "09.03/light_angle_r_04",
+   "batch": "09.03",
+   "name": "light_angle_r_04.png",
+   "file": "ice/reflections/09.03/light_angle_r_04.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "9c71da6db241eece",
+   "tileIndex": 11
+  },
+  {
+   "id": "09.03/light_center_01",
+   "batch": "09.03",
+   "name": "light_center_01.png",
+   "file": "ice/reflections/09.03/light_center_01.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    2,
+    0,
+    5,
+    7
+   ],
+   "hash": "4b898d2de6c6cb01",
+   "tileIndex": 0
+  },
+  {
+   "id": "09.03/light_center_02",
+   "batch": "09.03",
+   "name": "light_center_02.png",
+   "file": "ice/reflections/09.03/light_center_02.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    0,
+    6,
+    7
+   ],
+   "hash": "75d8c0494e32ac38",
+   "tileIndex": 1
+  },
+  {
+   "id": "09.03/light_center_03",
+   "batch": "09.03",
+   "name": "light_center_03.png",
+   "file": "ice/reflections/09.03/light_center_03.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "4d36c6fd49a689d5",
+   "tileIndex": 2
+  },
+  {
+   "id": "09.03/light_center_04",
+   "batch": "09.03",
+   "name": "light_center_04.png",
+   "file": "ice/reflections/09.03/light_center_04.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "7256120dd7ec7f51",
+   "tileIndex": 3
+  },
+  {
+   "id": "09.03/light_pool_01",
+   "batch": "09.03",
+   "name": "light_pool_01.png",
+   "file": "ice/reflections/09.03/light_pool_01.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    2,
+    2,
+    5,
+    5
+   ],
+   "hash": "df98b68e08581d16",
+   "tileIndex": 12
+  },
+  {
+   "id": "09.03/light_pool_02",
+   "batch": "09.03",
+   "name": "light_pool_02.png",
+   "file": "ice/reflections/09.03/light_pool_02.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    1,
+    6,
+    6
+   ],
+   "hash": "bb72acd277b77d8c",
+   "tileIndex": 13
+  },
+  {
+   "id": "09.03/light_pool_03",
+   "batch": "09.03",
+   "name": "light_pool_03.png",
+   "file": "ice/reflections/09.03/light_pool_03.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "9595001bb4d250dc",
+   "tileIndex": 14
+  },
+  {
+   "id": "09.03/light_pool_04",
+   "batch": "09.03",
+   "name": "light_pool_04.png",
+   "file": "ice/reflections/09.03/light_pool_04.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "2b68fde592e8aa64",
+   "tileIndex": 15
+  },
+  {
+   "id": "09.03/light_reflections_atlas",
+   "batch": "09.03",
+   "name": "light_reflections_atlas.png",
+   "file": "ice/reflections/09.03/light_reflections_atlas.png",
+   "width": 32,
+   "height": 32,
+   "role": "atlas",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    0,
+    31,
+    31
+   ],
+   "hash": "a22ff9d234fa088b",
+   "columns": 4,
+   "rows": 4
+  },
+  {
+   "id": "09.04/center_dash",
+   "batch": "09.04",
+   "name": "center_dash.png",
+   "file": "ice/markings/09.04/center_dash.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    2,
+    7,
+    5
+   ],
+   "hash": "7fa6fa23ad7d771b",
+   "tileIndex": 1
+  },
+  {
+   "id": "09.04/center_dash_alt",
+   "batch": "09.04",
+   "name": "center_dash_alt.png",
+   "file": "ice/markings/09.04/center_dash_alt.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    2,
+    7,
+    5
+   ],
+   "hash": "27c11b845d1b9e02",
+   "tileIndex": 3
+  },
+  {
+   "id": "09.04/center_gap",
+   "batch": "09.04",
+   "name": "center_gap.png",
+   "file": "ice/markings/09.04/center_gap.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    2,
+    7,
+    5
+   ],
+   "hash": "e1d1ed023fd67bbb",
+   "tileIndex": 2
+  },
+  {
+   "id": "09.04/center_line_atlas",
+   "batch": "09.04",
+   "name": "center_line_atlas.png",
+   "file": "ice/markings/09.04/center_line_atlas.png",
+   "width": 32,
+   "height": 8,
+   "role": "atlas",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    2,
+    31,
+    5
+   ],
+   "hash": "4e4fff10baf0f108",
+   "columns": 4,
+   "rows": 1
+  },
+  {
+   "id": "09.04/center_solid",
+   "batch": "09.04",
+   "name": "center_solid.png",
+   "file": "ice/markings/09.04/center_solid.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    2,
+    7,
+    5
+   ],
+   "hash": "e1d1ed023fd67bbb",
+   "tileIndex": 0,
+   "duplicateOf": "09.04/center_gap"
+  },
+  {
+   "id": "09.05/blue_line_atlas",
+   "batch": "09.05",
+   "name": "blue_line_atlas.png",
+   "file": "ice/markings/09.05/blue_line_atlas.png",
+   "width": 32,
+   "height": 8,
+   "role": "atlas",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    2,
+    31,
+    5
+   ],
+   "hash": "4c0eaecf973029e6",
+   "columns": 4,
+   "rows": 1
+  },
+  {
+   "id": "09.05/blue_line_dark",
+   "batch": "09.05",
+   "name": "blue_line_dark.png",
+   "file": "ice/markings/09.05/blue_line_dark.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    2,
+    7,
+    5
+   ],
+   "hash": "e92ac25fdb6347aa",
+   "tileIndex": 2
+  },
+  {
+   "id": "09.05/blue_line_faded",
+   "batch": "09.05",
+   "name": "blue_line_faded.png",
+   "file": "ice/markings/09.05/blue_line_faded.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    2,
+    7,
+    5
+   ],
+   "hash": "c41235a924c7b858",
+   "tileIndex": 3
+  },
+  {
+   "id": "09.05/blue_line_light",
+   "batch": "09.05",
+   "name": "blue_line_light.png",
+   "file": "ice/markings/09.05/blue_line_light.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    2,
+    7,
+    5
+   ],
+   "hash": "24a6df1ccd3eb7d8",
+   "tileIndex": 1
+  },
+  {
+   "id": "09.05/blue_line_standard",
+   "batch": "09.05",
+   "name": "blue_line_standard.png",
+   "file": "ice/markings/09.05/blue_line_standard.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    2,
+    7,
+    5
+   ],
+   "hash": "0f31662c516b5e30",
+   "tileIndex": 0
+  },
+  {
+   "id": "09.06/goal_line_atlas",
+   "batch": "09.06",
+   "name": "goal_line_atlas.png",
+   "file": "ice/markings/09.06/goal_line_atlas.png",
+   "width": 32,
+   "height": 8,
+   "role": "atlas",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    3,
+    31,
+    4
+   ],
+   "hash": "da3800d81198fc73",
+   "columns": 4,
+   "rows": 1
+  },
+  {
+   "id": "09.06/goal_line_rich",
+   "batch": "09.06",
+   "name": "goal_line_rich.png",
+   "file": "ice/markings/09.06/goal_line_rich.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    3,
+    7,
+    4
+   ],
+   "hash": "3de31f812bf39bee",
+   "tileIndex": 1
+  },
+  {
+   "id": "09.06/goal_line_scuffed",
+   "batch": "09.06",
+   "name": "goal_line_scuffed.png",
+   "file": "ice/markings/09.06/goal_line_scuffed.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    3,
+    7,
+    4
+   ],
+   "hash": "7e62c92c8f79080f",
+   "tileIndex": 3
+  },
+  {
+   "id": "09.06/goal_line_standard",
+   "batch": "09.06",
+   "name": "goal_line_standard.png",
+   "file": "ice/markings/09.06/goal_line_standard.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    3,
+    7,
+    4
+   ],
+   "hash": "62424f68f98205cd",
+   "tileIndex": 0
+  },
+  {
+   "id": "09.06/goal_line_worn",
+   "batch": "09.06",
+   "name": "goal_line_worn.png",
+   "file": "ice/markings/09.06/goal_line_worn.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    3,
+    7,
+    4
+   ],
+   "hash": "8ede7151ba87fe36",
+   "tileIndex": 2
+  },
+  {
+   "id": "09.07/circle_0_0",
+   "batch": "09.07",
+   "name": "circle_0_0.png",
+   "file": "ice/markings/09.07/circle_0_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    6,
+    6,
+    7,
+    7
+   ],
+   "hash": "186be75a27c4d471",
+   "tileIndex": 0
+  },
+  {
+   "id": "09.07/circle_0_1",
+   "batch": "09.07",
+   "name": "circle_0_1.png",
+   "file": "ice/markings/09.07/circle_0_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    4,
+    7,
+    7
+   ],
+   "hash": "4a1b6416279fd328",
+   "tileIndex": 1
+  },
+  {
+   "id": "09.07/circle_0_2",
+   "batch": "09.07",
+   "name": "circle_0_2.png",
+   "file": "ice/markings/09.07/circle_0_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    4,
+    7,
+    7
+   ],
+   "hash": "edb23e20a5f08050",
+   "tileIndex": 2
+  },
+  {
+   "id": "09.07/circle_0_3",
+   "batch": "09.07",
+   "name": "circle_0_3.png",
+   "file": "ice/markings/09.07/circle_0_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    6,
+    1,
+    7
+   ],
+   "hash": "00484dd5bf6af960",
+   "tileIndex": 3
+  },
+  {
+   "id": "09.07/circle_1_0",
+   "batch": "09.07",
+   "name": "circle_1_0.png",
+   "file": "ice/markings/09.07/circle_1_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    0,
+    6,
+    7
+   ],
+   "hash": "27896cc0be25b460",
+   "tileIndex": 4
+  },
+  {
+   "id": "09.07/circle_1_1",
+   "batch": "09.07",
+   "name": "circle_1_1.png",
+   "file": "ice/markings/09.07/circle_1_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": null,
+   "hash": "fc8c6e9471a7647d",
+   "tileIndex": 5
+  },
+  {
+   "id": "09.07/circle_1_2",
+   "batch": "09.07",
+   "name": "circle_1_2.png",
+   "file": "ice/markings/09.07/circle_1_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": null,
+   "hash": "fc8c6e9471a7647d",
+   "tileIndex": 6
+  },
+  {
+   "id": "09.07/circle_1_3",
+   "batch": "09.07",
+   "name": "circle_1_3.png",
+   "file": "ice/markings/09.07/circle_1_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    0,
+    6,
+    7
+   ],
+   "hash": "c7b4fc00cca64702",
+   "tileIndex": 7
+  },
+  {
+   "id": "09.07/circle_2_0",
+   "batch": "09.07",
+   "name": "circle_2_0.png",
+   "file": "ice/markings/09.07/circle_2_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    0,
+    6,
+    7
+   ],
+   "hash": "2f223446a6162fe2",
+   "tileIndex": 8
+  },
+  {
+   "id": "09.07/circle_2_1",
+   "batch": "09.07",
+   "name": "circle_2_1.png",
+   "file": "ice/markings/09.07/circle_2_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": null,
+   "hash": "fc8c6e9471a7647d",
+   "tileIndex": 9
+  },
+  {
+   "id": "09.07/circle_2_2",
+   "batch": "09.07",
+   "name": "circle_2_2.png",
+   "file": "ice/markings/09.07/circle_2_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": null,
+   "hash": "fc8c6e9471a7647d",
+   "tileIndex": 10
+  },
+  {
+   "id": "09.07/circle_2_3",
+   "batch": "09.07",
+   "name": "circle_2_3.png",
+   "file": "ice/markings/09.07/circle_2_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    0,
+    6,
+    7
+   ],
+   "hash": "d015fe0cf405ca5d",
+   "tileIndex": 11
+  },
+  {
+   "id": "09.07/circle_3_0",
+   "batch": "09.07",
+   "name": "circle_3_0.png",
+   "file": "ice/markings/09.07/circle_3_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    6,
+    0,
+    7,
+    1
+   ],
+   "hash": "87efaae70f80d5c4",
+   "tileIndex": 12
+  },
+  {
+   "id": "09.07/circle_3_1",
+   "batch": "09.07",
+   "name": "circle_3_1.png",
+   "file": "ice/markings/09.07/circle_3_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    3
+   ],
+   "hash": "f67726e9d4c34696",
+   "tileIndex": 13
+  },
+  {
+   "id": "09.07/circle_3_2",
+   "batch": "09.07",
+   "name": "circle_3_2.png",
+   "file": "ice/markings/09.07/circle_3_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    3
+   ],
+   "hash": "fe4104fc1ec10620",
+   "tileIndex": 14
+  },
+  {
+   "id": "09.07/circle_3_3",
+   "batch": "09.07",
+   "name": "circle_3_3.png",
+   "file": "ice/markings/09.07/circle_3_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    1,
+    1
+   ],
+   "hash": "2ff286c5f4435e0f",
+   "tileIndex": 15
+  },
+  {
+   "id": "09.07/faceoff_atlas",
+   "batch": "09.07",
+   "name": "faceoff_atlas.png",
+   "file": "ice/markings/09.07/faceoff_atlas.png",
+   "width": 32,
+   "height": 32,
+   "role": "atlas",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    4,
+    30,
+    27
+   ],
+   "hash": "3f21c1b5f36dd261",
+   "columns": 4,
+   "rows": 4
+  },
+  {
+   "id": "09.07/faceoff_circle",
+   "batch": "09.07",
+   "name": "faceoff_circle.png",
+   "file": "ice/markings/09.07/faceoff_circle.png",
+   "width": 32,
+   "height": 32,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    4,
+    30,
+    27
+   ],
+   "hash": "3f21c1b5f36dd261",
+   "duplicateOf": "09.07/faceoff_atlas"
+  },
+  {
+   "id": "09.07/quadrant_bl",
+   "batch": "09.07",
+   "name": "quadrant_bl.png",
+   "file": "ice/markings/09.07/quadrant_bl.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    0,
+    15,
+    11
+   ],
+   "hash": "639d286689ece935"
+  },
+  {
+   "id": "09.07/quadrant_br",
+   "batch": "09.07",
+   "name": "quadrant_br.png",
+   "file": "ice/markings/09.07/quadrant_br.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    14,
+    11
+   ],
+   "hash": "6435653667b7b511"
+  },
+  {
+   "id": "09.07/quadrant_tl",
+   "batch": "09.07",
+   "name": "quadrant_tl.png",
+   "file": "ice/markings/09.07/quadrant_tl.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    4,
+    15,
+    15
+   ],
+   "hash": "49d84768bca1b462"
+  },
+  {
+   "id": "09.07/quadrant_tr",
+   "batch": "09.07",
+   "name": "quadrant_tr.png",
+   "file": "ice/markings/09.07/quadrant_tr.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    4,
+    14,
+    15
+   ],
+   "hash": "dbf482cec1a2bc90"
+  },
+  {
+   "id": "09.08/corner_01",
+   "batch": "09.08",
+   "name": "corner_01.png",
+   "file": "ice/markings/09.08/corner_01.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "628d426a58e5e6a1",
+   "tileIndex": 12
+  },
+  {
+   "id": "09.08/corner_02",
+   "batch": "09.08",
+   "name": "corner_02.png",
+   "file": "ice/markings/09.08/corner_02.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "f8b4a73e15ace705",
+   "tileIndex": 13
+  },
+  {
+   "id": "09.08/corner_03",
+   "batch": "09.08",
+   "name": "corner_03.png",
+   "file": "ice/markings/09.08/corner_03.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "fab73d291ab23d96",
+   "tileIndex": 14
+  },
+  {
+   "id": "09.08/corner_04",
+   "batch": "09.08",
+   "name": "corner_04.png",
+   "file": "ice/markings/09.08/corner_04.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "0e47c059f0d4a91f",
+   "tileIndex": 15
+  },
+  {
+   "id": "09.08/dot_01",
+   "batch": "09.08",
+   "name": "dot_01.png",
+   "file": "ice/markings/09.08/dot_01.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    2,
+    6,
+    5
+   ],
+   "hash": "bbebbce1bf8ab9ed",
+   "tileIndex": 0
+  },
+  {
+   "id": "09.08/dot_02",
+   "batch": "09.08",
+   "name": "dot_02.png",
+   "file": "ice/markings/09.08/dot_02.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    2,
+    6,
+    5
+   ],
+   "hash": "57075fe3983dcffb",
+   "tileIndex": 1
+  },
+  {
+   "id": "09.08/dot_03",
+   "batch": "09.08",
+   "name": "dot_03.png",
+   "file": "ice/markings/09.08/dot_03.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    2,
+    6,
+    5
+   ],
+   "hash": "625264b81ec4e9e3",
+   "tileIndex": 2
+  },
+  {
+   "id": "09.08/dot_04",
+   "batch": "09.08",
+   "name": "dot_04.png",
+   "file": "ice/markings/09.08/dot_04.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    1,
+    2,
+    6,
+    5
+   ],
+   "hash": "11d41bfcb848b141",
+   "tileIndex": 3
+  },
+  {
+   "id": "09.08/faceoff_hash_atlas",
+   "batch": "09.08",
+   "name": "faceoff_hash_atlas.png",
+   "file": "ice/markings/09.08/faceoff_hash_atlas.png",
+   "width": 32,
+   "height": 32,
+   "role": "atlas",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    2,
+    31,
+    31
+   ],
+   "hash": "66c4ed2bdb543c62",
+   "columns": 4,
+   "rows": 4
+  },
+  {
+   "id": "09.08/faceoff_mark",
+   "batch": "09.08",
+   "name": "faceoff_mark.png",
+   "file": "ice/markings/09.08/faceoff_mark.png",
+   "width": 32,
+   "height": 32,
+   "role": "composite",
+   "alpha": "binary",
+   "bbox": [
+    6,
+    6,
+    25,
+    25
+   ],
+   "hash": "b98988c2921c8393"
+  },
+  {
+   "id": "09.08/hash_h_01",
+   "batch": "09.08",
+   "name": "hash_h_01.png",
+   "file": "ice/markings/09.08/hash_h_01.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    3,
+    7,
+    4
+   ],
+   "hash": "5a62145350f03bda",
+   "tileIndex": 4
+  },
+  {
+   "id": "09.08/hash_h_02",
+   "batch": "09.08",
+   "name": "hash_h_02.png",
+   "file": "ice/markings/09.08/hash_h_02.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    3,
+    7,
+    4
+   ],
+   "hash": "5a62145350f03bda",
+   "tileIndex": 5,
+   "duplicateOf": "09.08/hash_h_01"
+  },
+  {
+   "id": "09.08/hash_h_03",
+   "batch": "09.08",
+   "name": "hash_h_03.png",
+   "file": "ice/markings/09.08/hash_h_03.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    3,
+    6,
+    4
+   ],
+   "hash": "6b86dcb98783340b",
+   "tileIndex": 6
+  },
+  {
+   "id": "09.08/hash_h_04",
+   "batch": "09.08",
+   "name": "hash_h_04.png",
+   "file": "ice/markings/09.08/hash_h_04.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    0,
+    3,
+    7,
+    4
+   ],
+   "hash": "dc73de7d111cfad3",
+   "tileIndex": 7
+  },
+  {
+   "id": "09.08/hash_v_01",
+   "batch": "09.08",
+   "name": "hash_v_01.png",
+   "file": "ice/markings/09.08/hash_v_01.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    3,
+    0,
+    4,
+    7
+   ],
+   "hash": "fad10a0d12afc8ef",
+   "tileIndex": 8
+  },
+  {
+   "id": "09.08/hash_v_02",
+   "batch": "09.08",
+   "name": "hash_v_02.png",
+   "file": "ice/markings/09.08/hash_v_02.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    3,
+    0,
+    4,
+    7
+   ],
+   "hash": "fad10a0d12afc8ef",
+   "tileIndex": 9,
+   "duplicateOf": "09.08/hash_v_01"
+  },
+  {
+   "id": "09.08/hash_v_03",
+   "batch": "09.08",
+   "name": "hash_v_03.png",
+   "file": "ice/markings/09.08/hash_v_03.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    3,
+    1,
+    4,
+    6
+   ],
+   "hash": "bee4e68dcfd58329",
+   "tileIndex": 10
+  },
+  {
+   "id": "09.08/hash_v_04",
+   "batch": "09.08",
+   "name": "hash_v_04.png",
+   "file": "ice/markings/09.08/hash_v_04.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "soft",
+   "bbox": [
+    3,
+    0,
+    4,
+    7
+   ],
+   "hash": "7a22c8fc67223168",
+   "tileIndex": 11
+  },
+  {
+   "id": "09.09/center_circle",
+   "batch": "09.09",
+   "name": "center_circle.png",
+   "file": "ice/markings/09.09/center_circle.png",
+   "width": 32,
+   "height": 32,
+   "role": "composite",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    5,
+    30,
+    26
+   ],
+   "hash": "17c1afb9a247eda8"
+  },
+  {
+   "id": "09.09/center_circle_atlas",
+   "batch": "09.09",
+   "name": "center_circle_atlas.png",
+   "file": "ice/markings/09.09/center_circle_atlas.png",
+   "width": 32,
+   "height": 32,
+   "role": "atlas",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    5,
+    30,
+    26
+   ],
+   "hash": "17c1afb9a247eda8",
+   "columns": 4,
+   "rows": 4,
+   "duplicateOf": "09.09/center_circle"
+  },
+  {
+   "id": "09.09/center_dot",
+   "batch": "09.09",
+   "name": "center_dot.png",
+   "file": "ice/markings/09.09/center_dot.png",
+   "width": 8,
+   "height": 8,
+   "role": "composite",
+   "alpha": "binary",
+   "bbox": [
+    2,
+    2,
+    5,
+    5
+   ],
+   "hash": "2127deadef1d1538"
+  },
+  {
+   "id": "09.09/circle_0_0",
+   "batch": "09.09",
+   "name": "circle_0_0.png",
+   "file": "ice/markings/09.09/circle_0_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    6,
+    7,
+    7,
+    7
+   ],
+   "hash": "9a2a3186aa5ac6fe",
+   "tileIndex": 0
+  },
+  {
+   "id": "09.09/circle_0_1",
+   "batch": "09.09",
+   "name": "circle_0_1.png",
+   "file": "ice/markings/09.09/circle_0_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    5,
+    7,
+    7
+   ],
+   "hash": "d3fbe3e5f23c5adc",
+   "tileIndex": 1
+  },
+  {
+   "id": "09.09/circle_0_2",
+   "batch": "09.09",
+   "name": "circle_0_2.png",
+   "file": "ice/markings/09.09/circle_0_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    5,
+    7,
+    7
+   ],
+   "hash": "08669d048a42338e",
+   "tileIndex": 2
+  },
+  {
+   "id": "09.09/circle_0_3",
+   "batch": "09.09",
+   "name": "circle_0_3.png",
+   "file": "ice/markings/09.09/circle_0_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    7,
+    1,
+    7
+   ],
+   "hash": "2b86d8259f9d11c6",
+   "tileIndex": 3
+  },
+  {
+   "id": "09.09/circle_1_0",
+   "batch": "09.09",
+   "name": "circle_1_0.png",
+   "file": "ice/markings/09.09/circle_1_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    0,
+    7,
+    7
+   ],
+   "hash": "daf92a8a4c36f860",
+   "tileIndex": 4
+  },
+  {
+   "id": "09.09/circle_1_1",
+   "batch": "09.09",
+   "name": "circle_1_1.png",
+   "file": "ice/markings/09.09/circle_1_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "hash": "5005c7e44759617a",
+   "tileIndex": 5
+  },
+  {
+   "id": "09.09/circle_1_2",
+   "batch": "09.09",
+   "name": "circle_1_2.png",
+   "file": "ice/markings/09.09/circle_1_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    7,
+    0,
+    7,
+    0
+   ],
+   "hash": "5c83042e099dbe3e",
+   "tileIndex": 6
+  },
+  {
+   "id": "09.09/circle_1_3",
+   "batch": "09.09",
+   "name": "circle_1_3.png",
+   "file": "ice/markings/09.09/circle_1_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    6,
+    7
+   ],
+   "hash": "fe05fb223ab4e45d",
+   "tileIndex": 7
+  },
+  {
+   "id": "09.09/circle_2_0",
+   "batch": "09.09",
+   "name": "circle_2_0.png",
+   "file": "ice/markings/09.09/circle_2_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    0,
+    7,
+    7
+   ],
+   "hash": "65639449e76a7117",
+   "tileIndex": 8
+  },
+  {
+   "id": "09.09/circle_2_1",
+   "batch": "09.09",
+   "name": "circle_2_1.png",
+   "file": "ice/markings/09.09/circle_2_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    7,
+    0,
+    7
+   ],
+   "hash": "394999db21688f51",
+   "tileIndex": 9
+  },
+  {
+   "id": "09.09/circle_2_2",
+   "batch": "09.09",
+   "name": "circle_2_2.png",
+   "file": "ice/markings/09.09/circle_2_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    7,
+    7,
+    7,
+    7
+   ],
+   "hash": "4d2bd20b6bfa2a87",
+   "tileIndex": 10
+  },
+  {
+   "id": "09.09/circle_2_3",
+   "batch": "09.09",
+   "name": "circle_2_3.png",
+   "file": "ice/markings/09.09/circle_2_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    6,
+    7
+   ],
+   "hash": "3e3117f83388d897",
+   "tileIndex": 11
+  },
+  {
+   "id": "09.09/circle_3_0",
+   "batch": "09.09",
+   "name": "circle_3_0.png",
+   "file": "ice/markings/09.09/circle_3_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    6,
+    0,
+    7,
+    0
+   ],
+   "hash": "00f43013340f7f29",
+   "tileIndex": 12
+  },
+  {
+   "id": "09.09/circle_3_1",
+   "batch": "09.09",
+   "name": "circle_3_1.png",
+   "file": "ice/markings/09.09/circle_3_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    2
+   ],
+   "hash": "a3ba1b54b7f2ae34",
+   "tileIndex": 13
+  },
+  {
+   "id": "09.09/circle_3_2",
+   "batch": "09.09",
+   "name": "circle_3_2.png",
+   "file": "ice/markings/09.09/circle_3_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    2
+   ],
+   "hash": "4c38cea1e8b77283",
+   "tileIndex": 14
+  },
+  {
+   "id": "09.09/circle_3_3",
+   "batch": "09.09",
+   "name": "circle_3_3.png",
+   "file": "ice/markings/09.09/circle_3_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    1,
+    0
+   ],
+   "hash": "72323dd9adb88c35",
+   "tileIndex": 15
+  },
+  {
+   "id": "09.09/quadrant_bl",
+   "batch": "09.09",
+   "name": "quadrant_bl.png",
+   "file": "ice/markings/09.09/quadrant_bl.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    0,
+    15,
+    10
+   ],
+   "hash": "abd7be3cbc7ada58"
+  },
+  {
+   "id": "09.09/quadrant_br",
+   "batch": "09.09",
+   "name": "quadrant_br.png",
+   "file": "ice/markings/09.09/quadrant_br.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    14,
+    10
+   ],
+   "hash": "dd7c78d5c70d75c2"
+  },
+  {
+   "id": "09.09/quadrant_tl",
+   "batch": "09.09",
+   "name": "quadrant_tl.png",
+   "file": "ice/markings/09.09/quadrant_tl.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    5,
+    15,
+    15
+   ],
+   "hash": "98486e4b7d3a6f6d"
+  },
+  {
+   "id": "09.09/quadrant_tr",
+   "batch": "09.09",
+   "name": "quadrant_tr.png",
+   "file": "ice/markings/09.09/quadrant_tr.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    5,
+    14,
+    15
+   ],
+   "hash": "87c5ce6b6a044497"
+  },
+  {
+   "id": "09.10/crease_0_0",
+   "batch": "09.10",
+   "name": "crease_0_0.png",
+   "file": "ice/markings/09.10/crease_0_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    0,
+    7,
+    7
+   ],
+   "hash": "9624e9da14e0fdde",
+   "tileIndex": 0
+  },
+  {
+   "id": "09.10/crease_0_1",
+   "batch": "09.10",
+   "name": "crease_0_1.png",
+   "file": "ice/markings/09.10/crease_0_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "ad229bc11f68c163",
+   "tileIndex": 1
+  },
+  {
+   "id": "09.10/crease_0_2",
+   "batch": "09.10",
+   "name": "crease_0_2.png",
+   "file": "ice/markings/09.10/crease_0_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "ad229bc11f68c163",
+   "tileIndex": 2,
+   "duplicateOf": "09.10/crease_0_1"
+  },
+  {
+   "id": "09.10/crease_0_3",
+   "batch": "09.10",
+   "name": "crease_0_3.png",
+   "file": "ice/markings/09.10/crease_0_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    6,
+    7
+   ],
+   "hash": "9c5ca0305af0ed02",
+   "tileIndex": 3
+  },
+  {
+   "id": "09.10/crease_1_0",
+   "batch": "09.10",
+   "name": "crease_1_0.png",
+   "file": "ice/markings/09.10/crease_1_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    4,
+    0,
+    7,
+    3
+   ],
+   "hash": "046f680c1f2d4914",
+   "tileIndex": 4
+  },
+  {
+   "id": "09.10/crease_1_1",
+   "batch": "09.10",
+   "name": "crease_1_1.png",
+   "file": "ice/markings/09.10/crease_1_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    5
+   ],
+   "hash": "1326d5bebab1fc0e",
+   "tileIndex": 5
+  },
+  {
+   "id": "09.10/crease_1_2",
+   "batch": "09.10",
+   "name": "crease_1_2.png",
+   "file": "ice/markings/09.10/crease_1_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    5
+   ],
+   "hash": "d7cee1ce65691063",
+   "tileIndex": 6
+  },
+  {
+   "id": "09.10/crease_1_3",
+   "batch": "09.10",
+   "name": "crease_1_3.png",
+   "file": "ice/markings/09.10/crease_1_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    3,
+    3
+   ],
+   "hash": "f6f01b533ed506bc",
+   "tileIndex": 7
+  },
+  {
+   "id": "09.10/crease_atlas",
+   "batch": "09.10",
+   "name": "crease_atlas.png",
+   "file": "ice/markings/09.10/crease_atlas.png",
+   "width": 32,
+   "height": 16,
+   "role": "atlas",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    0,
+    30,
+    13
+   ],
+   "hash": "b25a9596cabf0fba",
+   "columns": 4,
+   "rows": 2
+  },
+  {
+   "id": "09.10/crease_left",
+   "batch": "09.10",
+   "name": "crease_left.png",
+   "file": "ice/markings/09.10/crease_left.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    0,
+    15,
+    13
+   ],
+   "hash": "a55707163c041656"
+  },
+  {
+   "id": "09.10/crease_north",
+   "batch": "09.10",
+   "name": "crease_north.png",
+   "file": "ice/markings/09.10/crease_north.png",
+   "width": 32,
+   "height": 16,
+   "role": "composite",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    0,
+    30,
+    13
+   ],
+   "hash": "b25a9596cabf0fba",
+   "duplicateOf": "09.10/crease_atlas"
+  },
+  {
+   "id": "09.10/crease_right",
+   "batch": "09.10",
+   "name": "crease_right.png",
+   "file": "ice/markings/09.10/crease_right.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    14,
+    13
+   ],
+   "hash": "5153e5f4627142f3"
+  },
+  {
+   "id": "09.11/crease_south",
+   "batch": "09.11",
+   "name": "crease_south.png",
+   "file": "ice/markings/09.11/crease_south.png",
+   "width": 32,
+   "height": 16,
+   "role": "composite",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    2,
+    30,
+    15
+   ],
+   "hash": "2c00ad51ec42457e"
+  },
+  {
+   "id": "09.11/south_crease_0_0",
+   "batch": "09.11",
+   "name": "south_crease_0_0.png",
+   "file": "ice/markings/09.11/south_crease_0_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    4,
+    4,
+    7,
+    7
+   ],
+   "hash": "37d6e5ab1792577c",
+   "tileIndex": 0
+  },
+  {
+   "id": "09.11/south_crease_0_1",
+   "batch": "09.11",
+   "name": "south_crease_0_1.png",
+   "file": "ice/markings/09.11/south_crease_0_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    2,
+    7,
+    7
+   ],
+   "hash": "4cbf5a09ff691f54",
+   "tileIndex": 1
+  },
+  {
+   "id": "09.11/south_crease_0_2",
+   "batch": "09.11",
+   "name": "south_crease_0_2.png",
+   "file": "ice/markings/09.11/south_crease_0_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    2,
+    7,
+    7
+   ],
+   "hash": "e09134408b1dde22",
+   "tileIndex": 2
+  },
+  {
+   "id": "09.11/south_crease_0_3",
+   "batch": "09.11",
+   "name": "south_crease_0_3.png",
+   "file": "ice/markings/09.11/south_crease_0_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    4,
+    3,
+    7
+   ],
+   "hash": "584686b347a9465e",
+   "tileIndex": 3
+  },
+  {
+   "id": "09.11/south_crease_1_0",
+   "batch": "09.11",
+   "name": "south_crease_1_0.png",
+   "file": "ice/markings/09.11/south_crease_1_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    0,
+    7,
+    7
+   ],
+   "hash": "32a2a5a87d6345bd",
+   "tileIndex": 4
+  },
+  {
+   "id": "09.11/south_crease_1_1",
+   "batch": "09.11",
+   "name": "south_crease_1_1.png",
+   "file": "ice/markings/09.11/south_crease_1_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "ad229bc11f68c163",
+   "tileIndex": 5,
+   "duplicateOf": "09.10/crease_0_1"
+  },
+  {
+   "id": "09.11/south_crease_1_2",
+   "batch": "09.11",
+   "name": "south_crease_1_2.png",
+   "file": "ice/markings/09.11/south_crease_1_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "ad229bc11f68c163",
+   "tileIndex": 6,
+   "duplicateOf": "09.10/crease_0_1"
+  },
+  {
+   "id": "09.11/south_crease_1_3",
+   "batch": "09.11",
+   "name": "south_crease_1_3.png",
+   "file": "ice/markings/09.11/south_crease_1_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    6,
+    7
+   ],
+   "hash": "731c8be68fa0a763",
+   "tileIndex": 7
+  },
+  {
+   "id": "09.11/south_crease_atlas",
+   "batch": "09.11",
+   "name": "south_crease_atlas.png",
+   "file": "ice/markings/09.11/south_crease_atlas.png",
+   "width": 32,
+   "height": 16,
+   "role": "atlas",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    2,
+    30,
+    15
+   ],
+   "hash": "2c00ad51ec42457e",
+   "columns": 4,
+   "rows": 2,
+   "duplicateOf": "09.11/crease_south"
+  },
+  {
+   "id": "09.11/south_crease_left",
+   "batch": "09.11",
+   "name": "south_crease_left.png",
+   "file": "ice/markings/09.11/south_crease_left.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    2,
+    15,
+    15
+   ],
+   "hash": "eca0c2f31d8e57eb"
+  },
+  {
+   "id": "09.11/south_crease_right",
+   "batch": "09.11",
+   "name": "south_crease_right.png",
+   "file": "ice/markings/09.11/south_crease_right.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    2,
+    14,
+    15
+   ],
+   "hash": "9722b694bf3177cc"
+  },
+  {
+   "id": "09.12/referee_crease_0_0",
+   "batch": "09.12",
+   "name": "referee_crease_0_0.png",
+   "file": "ice/markings/09.12/referee_crease_0_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    5,
+    6,
+    7,
+    7
+   ],
+   "hash": "490656e9960c8b47",
+   "tileIndex": 0
+  },
+  {
+   "id": "09.12/referee_crease_0_1",
+   "batch": "09.12",
+   "name": "referee_crease_0_1.png",
+   "file": "ice/markings/09.12/referee_crease_0_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    4,
+    7,
+    7
+   ],
+   "hash": "e4391f5817ebaec1",
+   "tileIndex": 1
+  },
+  {
+   "id": "09.12/referee_crease_1_0",
+   "batch": "09.12",
+   "name": "referee_crease_1_0.png",
+   "file": "ice/markings/09.12/referee_crease_1_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    0,
+    6,
+    7
+   ],
+   "hash": "f11c1e8557b084a9",
+   "tileIndex": 2
+  },
+  {
+   "id": "09.12/referee_crease_1_1",
+   "batch": "09.12",
+   "name": "referee_crease_1_1.png",
+   "file": "ice/markings/09.12/referee_crease_1_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": null,
+   "hash": "fc8c6e9471a7647d",
+   "tileIndex": 3
+  },
+  {
+   "id": "09.12/referee_crease_2_0",
+   "batch": "09.12",
+   "name": "referee_crease_2_0.png",
+   "file": "ice/markings/09.12/referee_crease_2_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    0,
+    6,
+    7
+   ],
+   "hash": "7c14a762b91fd28c",
+   "tileIndex": 4
+  },
+  {
+   "id": "09.12/referee_crease_2_1",
+   "batch": "09.12",
+   "name": "referee_crease_2_1.png",
+   "file": "ice/markings/09.12/referee_crease_2_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": null,
+   "hash": "fc8c6e9471a7647d",
+   "tileIndex": 5
+  },
+  {
+   "id": "09.12/referee_crease_3_0",
+   "batch": "09.12",
+   "name": "referee_crease_3_0.png",
+   "file": "ice/markings/09.12/referee_crease_3_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    5,
+    0,
+    7,
+    1
+   ],
+   "hash": "f72c58678c384caf",
+   "tileIndex": 6
+  },
+  {
+   "id": "09.12/referee_crease_3_1",
+   "batch": "09.12",
+   "name": "referee_crease_3_1.png",
+   "file": "ice/markings/09.12/referee_crease_3_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    3
+   ],
+   "hash": "85920008a9d5369e",
+   "tileIndex": 7
+  },
+  {
+   "id": "09.12/referee_crease_atlas",
+   "batch": "09.12",
+   "name": "referee_crease_atlas.png",
+   "file": "ice/markings/09.12/referee_crease_atlas.png",
+   "width": 16,
+   "height": 32,
+   "role": "atlas",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    4,
+    15,
+    27
+   ],
+   "hash": "15dea3398a6d1567",
+   "columns": 2,
+   "rows": 4
+  },
+  {
+   "id": "09.12/referee_crease_east",
+   "batch": "09.12",
+   "name": "referee_crease_east.png",
+   "file": "ice/markings/09.12/referee_crease_east.png",
+   "width": 16,
+   "height": 32,
+   "role": "composite",
+   "alpha": "binary",
+   "bbox": [
+    1,
+    4,
+    15,
+    27
+   ],
+   "hash": "15dea3398a6d1567",
+   "duplicateOf": "09.12/referee_crease_atlas"
+  },
+  {
+   "id": "09.13/center_logo",
+   "batch": "09.13",
+   "name": "center_logo.png",
+   "file": "ice/logos/09.13/center_logo.png",
+   "width": 32,
+   "height": 32,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    4,
+    31,
+    27
+   ],
+   "hash": "e3c7aeb7543f7dec"
+  },
+  {
+   "id": "09.13/center_logo_atlas",
+   "batch": "09.13",
+   "name": "center_logo_atlas.png",
+   "file": "ice/logos/09.13/center_logo_atlas.png",
+   "width": 32,
+   "height": 32,
+   "role": "atlas",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    4,
+    31,
+    27
+   ],
+   "hash": "e3c7aeb7543f7dec",
+   "columns": 4,
+   "rows": 4,
+   "duplicateOf": "09.13/center_logo"
+  },
+  {
+   "id": "09.13/logo_0_0",
+   "batch": "09.13",
+   "name": "logo_0_0.png",
+   "file": "ice/logos/09.13/logo_0_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    5,
+    6,
+    7,
+    7
+   ],
+   "hash": "503c3e1eab590256",
+   "tileIndex": 0
+  },
+  {
+   "id": "09.13/logo_0_1",
+   "batch": "09.13",
+   "name": "logo_0_1.png",
+   "file": "ice/logos/09.13/logo_0_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    4,
+    7,
+    7
+   ],
+   "hash": "9cfff9e227c1f51d",
+   "tileIndex": 1
+  },
+  {
+   "id": "09.13/logo_0_2",
+   "batch": "09.13",
+   "name": "logo_0_2.png",
+   "file": "ice/logos/09.13/logo_0_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    4,
+    7,
+    7
+   ],
+   "hash": "6956e861c3c6c15b",
+   "tileIndex": 2
+  },
+  {
+   "id": "09.13/logo_0_3",
+   "batch": "09.13",
+   "name": "logo_0_3.png",
+   "file": "ice/logos/09.13/logo_0_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    6,
+    2,
+    7
+   ],
+   "hash": "a6c893213fc0faa9",
+   "tileIndex": 3
+  },
+  {
+   "id": "09.13/logo_1_0",
+   "batch": "09.13",
+   "name": "logo_1_0.png",
+   "file": "ice/logos/09.13/logo_1_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "89f128d0d8099838",
+   "tileIndex": 4
+  },
+  {
+   "id": "09.13/logo_1_1",
+   "batch": "09.13",
+   "name": "logo_1_1.png",
+   "file": "ice/logos/09.13/logo_1_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "beeb950e24363d79",
+   "tileIndex": 5
+  },
+  {
+   "id": "09.13/logo_1_2",
+   "batch": "09.13",
+   "name": "logo_1_2.png",
+   "file": "ice/logos/09.13/logo_1_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "cc9b93dd0fa71076",
+   "tileIndex": 6
+  },
+  {
+   "id": "09.13/logo_1_3",
+   "batch": "09.13",
+   "name": "logo_1_3.png",
+   "file": "ice/logos/09.13/logo_1_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "a1b27f7dd851a21e",
+   "tileIndex": 7
+  },
+  {
+   "id": "09.13/logo_2_0",
+   "batch": "09.13",
+   "name": "logo_2_0.png",
+   "file": "ice/logos/09.13/logo_2_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "0ea9a07088dff9c9",
+   "tileIndex": 8
+  },
+  {
+   "id": "09.13/logo_2_1",
+   "batch": "09.13",
+   "name": "logo_2_1.png",
+   "file": "ice/logos/09.13/logo_2_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "bd6c8ad920a449e8",
+   "tileIndex": 9
+  },
+  {
+   "id": "09.13/logo_2_2",
+   "batch": "09.13",
+   "name": "logo_2_2.png",
+   "file": "ice/logos/09.13/logo_2_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "21ed02af6d98ca31",
+   "tileIndex": 10
+  },
+  {
+   "id": "09.13/logo_2_3",
+   "batch": "09.13",
+   "name": "logo_2_3.png",
+   "file": "ice/logos/09.13/logo_2_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "5cbac28eb71abde4",
+   "tileIndex": 11
+  },
+  {
+   "id": "09.13/logo_3_0",
+   "batch": "09.13",
+   "name": "logo_3_0.png",
+   "file": "ice/logos/09.13/logo_3_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    5,
+    0,
+    7,
+    1
+   ],
+   "hash": "a3cfa7f5fbc2d5ee",
+   "tileIndex": 12
+  },
+  {
+   "id": "09.13/logo_3_1",
+   "batch": "09.13",
+   "name": "logo_3_1.png",
+   "file": "ice/logos/09.13/logo_3_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    3
+   ],
+   "hash": "3ef617c11df48ea2",
+   "tileIndex": 13
+  },
+  {
+   "id": "09.13/logo_3_2",
+   "batch": "09.13",
+   "name": "logo_3_2.png",
+   "file": "ice/logos/09.13/logo_3_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    7,
+    3
+   ],
+   "hash": "7064ad4ac447b298",
+   "tileIndex": 14
+  },
+  {
+   "id": "09.13/logo_3_3",
+   "batch": "09.13",
+   "name": "logo_3_3.png",
+   "file": "ice/logos/09.13/logo_3_3.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    2,
+    1
+   ],
+   "hash": "b63396faabdf9b23",
+   "tileIndex": 15
+  },
+  {
+   "id": "09.13/quadrant_0_0",
+   "batch": "09.13",
+   "name": "quadrant_0_0.png",
+   "file": "ice/logos/09.13/quadrant_0_0.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    4,
+    15,
+    15
+   ],
+   "hash": "ac74fcb9f3f91197"
+  },
+  {
+   "id": "09.13/quadrant_0_1",
+   "batch": "09.13",
+   "name": "quadrant_0_1.png",
+   "file": "ice/logos/09.13/quadrant_0_1.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    4,
+    15,
+    15
+   ],
+   "hash": "51c0265fd77fe79c"
+  },
+  {
+   "id": "09.13/quadrant_1_0",
+   "batch": "09.13",
+   "name": "quadrant_1_0.png",
+   "file": "ice/logos/09.13/quadrant_1_0.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    15,
+    11
+   ],
+   "hash": "eb278e32870297ec"
+  },
+  {
+   "id": "09.13/quadrant_1_1",
+   "batch": "09.13",
+   "name": "quadrant_1_1.png",
+   "file": "ice/logos/09.13/quadrant_1_1.png",
+   "width": 16,
+   "height": 16,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    15,
+    11
+   ],
+   "hash": "7c964cb9f747e9ba"
+  },
+  {
+   "id": "10.01/west_board_0_0",
+   "batch": "10.01",
+   "name": "west_board_0_0.png",
+   "file": "boards/straight/10.01/west_board_0_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    4,
+    0,
+    7,
+    7
+   ],
+   "hash": "b6c35e45dcfbada5",
+   "tileIndex": 0
+  },
+  {
+   "id": "10.01/west_board_0_1",
+   "batch": "10.01",
+   "name": "west_board_0_1.png",
+   "file": "boards/straight/10.01/west_board_0_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "53969f2d547754cd",
+   "tileIndex": 1
+  },
+  {
+   "id": "10.01/west_board_0_2",
+   "batch": "10.01",
+   "name": "west_board_0_2.png",
+   "file": "boards/straight/10.01/west_board_0_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    2,
+    7
+   ],
+   "hash": "344a2c74a027e1e2",
+   "tileIndex": 2
+  },
+  {
+   "id": "10.01/west_board_1_0",
+   "batch": "10.01",
+   "name": "west_board_1_0.png",
+   "file": "boards/straight/10.01/west_board_1_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    4,
+    0,
+    7,
+    7
+   ],
+   "hash": "b6c35e45dcfbada5",
+   "tileIndex": 3,
+   "duplicateOf": "10.01/west_board_0_0"
+  },
+  {
+   "id": "10.01/west_board_1_1",
+   "batch": "10.01",
+   "name": "west_board_1_1.png",
+   "file": "boards/straight/10.01/west_board_1_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "5be5c75e19831814",
+   "tileIndex": 4
+  },
+  {
+   "id": "10.01/west_board_1_2",
+   "batch": "10.01",
+   "name": "west_board_1_2.png",
+   "file": "boards/straight/10.01/west_board_1_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    2,
+    7
+   ],
+   "hash": "344a2c74a027e1e2",
+   "tileIndex": 5,
+   "duplicateOf": "10.01/west_board_0_2"
+  },
+  {
+   "id": "10.01/west_board_2_0",
+   "batch": "10.01",
+   "name": "west_board_2_0.png",
+   "file": "boards/straight/10.01/west_board_2_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    4,
+    0,
+    7,
+    7
+   ],
+   "hash": "b6c35e45dcfbada5",
+   "tileIndex": 6,
+   "duplicateOf": "10.01/west_board_0_0"
+  },
+  {
+   "id": "10.01/west_board_2_1",
+   "batch": "10.01",
+   "name": "west_board_2_1.png",
+   "file": "boards/straight/10.01/west_board_2_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "53969f2d547754cd",
+   "tileIndex": 7,
+   "duplicateOf": "10.01/west_board_0_1"
+  },
+  {
+   "id": "10.01/west_board_2_2",
+   "batch": "10.01",
+   "name": "west_board_2_2.png",
+   "file": "boards/straight/10.01/west_board_2_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    2,
+    7
+   ],
+   "hash": "344a2c74a027e1e2",
+   "tileIndex": 8,
+   "duplicateOf": "10.01/west_board_0_2"
+  },
+  {
+   "id": "10.01/west_board_3_0",
+   "batch": "10.01",
+   "name": "west_board_3_0.png",
+   "file": "boards/straight/10.01/west_board_3_0.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    4,
+    0,
+    7,
+    7
+   ],
+   "hash": "b6c35e45dcfbada5",
+   "tileIndex": 9,
+   "duplicateOf": "10.01/west_board_0_0"
+  },
+  {
+   "id": "10.01/west_board_3_1",
+   "batch": "10.01",
+   "name": "west_board_3_1.png",
+   "file": "boards/straight/10.01/west_board_3_1.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "opaque",
+   "bbox": [
+    0,
+    0,
+    7,
+    7
+   ],
+   "hash": "5be5c75e19831814",
+   "tileIndex": 10,
+   "duplicateOf": "10.01/west_board_1_1"
+  },
+  {
+   "id": "10.01/west_board_3_2",
+   "batch": "10.01",
+   "name": "west_board_3_2.png",
+   "file": "boards/straight/10.01/west_board_3_2.png",
+   "width": 8,
+   "height": 8,
+   "role": "tile",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    2,
+    7
+   ],
+   "hash": "344a2c74a027e1e2",
+   "tileIndex": 11,
+   "duplicateOf": "10.01/west_board_0_2"
+  },
+  {
+   "id": "10.01/west_board_atlas",
+   "batch": "10.01",
+   "name": "west_board_atlas.png",
+   "file": "boards/straight/10.01/west_board_atlas.png",
+   "width": 24,
+   "height": 32,
+   "role": "atlas",
+   "alpha": "binary",
+   "bbox": [
+    4,
+    0,
+    18,
+    31
+   ],
+   "hash": "9ee0492c8bd8bf9c",
+   "columns": 3,
+   "rows": 4
+  },
+  {
+   "id": "10.01/west_board_body",
+   "batch": "10.01",
+   "name": "west_board_body.png",
+   "file": "boards/straight/10.01/west_board_body.png",
+   "width": 16,
+   "height": 32,
+   "role": "composite",
+   "alpha": "binary",
+   "bbox": [
+    4,
+    0,
+    15,
+    31
+   ],
+   "hash": "1b12161e6674cd63"
+  },
+  {
+   "id": "10.01/west_board_module",
+   "batch": "10.01",
+   "name": "west_board_module.png",
+   "file": "boards/straight/10.01/west_board_module.png",
+   "width": 24,
+   "height": 32,
+   "role": "module",
+   "alpha": "binary",
+   "bbox": [
+    4,
+    0,
+    18,
+    31
+   ],
+   "hash": "9ee0492c8bd8bf9c",
+   "duplicateOf": "10.01/west_board_atlas"
+  },
+  {
+   "id": "10.01/west_kickplate",
+   "batch": "10.01",
+   "name": "west_kickplate.png",
+   "file": "boards/straight/10.01/west_kickplate.png",
+   "width": 8,
+   "height": 32,
+   "role": "composite",
+   "alpha": "binary",
+   "bbox": [
+    0,
+    0,
+    2,
+    31
+   ],
+   "hash": "11ae4851b0c201c5"
+  }
+ ],
+ "slots": [
+  {
+   "id": "ice.base",
+   "layer": "baseIce",
+   "label": "Base ice tiles",
+   "expectedBatch": "09.01",
+   "assets": [
+    "09.01/ice_tileset_4x4"
+   ],
+   "status": "supplied"
+  },
+  {
+   "id": "ice.scratches",
+   "layer": "scratches",
+   "label": "Scratched ice overlays",
+   "expectedBatch": "09.02",
+   "assets": [
+    "09.02/ice_scratch_atlas"
+   ],
+   "status": "supplied"
+  },
+  {
+   "id": "ice.reflections",
+   "layer": "reflections",
+   "label": "Overhead light reflections",
+   "expectedBatch": "09.03",
+   "assets": [
+    "09.03/light_reflections_atlas"
+   ],
+   "status": "supplied"
+  },
+  {
+   "id": "markings.centerLine",
+   "layer": "markings",
+   "label": "Red centre line",
+   "expectedBatch": "09.04",
+   "assets": [
+    "09.04/center_line_atlas"
+   ],
+   "status": "supplied"
+  },
+  {
+   "id": "markings.blueLine",
+   "layer": "markings",
+   "label": "Blue lines",
+   "expectedBatch": "09.05",
+   "assets": [
+    "09.05/blue_line_atlas"
+   ],
+   "status": "supplied"
+  },
+  {
+   "id": "markings.goalLine",
+   "layer": "markings",
+   "label": "Red goal lines",
+   "expectedBatch": "09.06",
+   "assets": [
+    "09.06/goal_line_atlas"
+   ],
+   "status": "supplied"
+  },
+  {
+   "id": "markings.faceoffCircle",
+   "layer": "markings",
+   "label": "Faceoff circles",
+   "expectedBatch": "09.07",
+   "assets": [
+    "09.07/faceoff_circle"
+   ],
+   "status": "supplied"
+  },
+  {
+   "id": "markings.faceoffDots",
+   "layer": "markings",
+   "label": "Faceoff dots and hash marks",
+   "expectedBatch": "09.08",
+   "assets": [
+    "09.08/faceoff_mark",
+    "09.08/dot_01"
+   ],
+   "status": "supplied"
+  },
+  {
+   "id": "markings.centerCircle",
+   "layer": "markings",
+   "label": "Centre circle",
+   "expectedBatch": "09.09",
+   "assets": [
+    "09.09/center_circle",
+    "09.09/center_dot"
+   ],
+   "status": "supplied"
+  },
+  {
+   "id": "markings.creaseNorth",
+   "layer": "markings",
+   "label": "North goal crease",
+   "expectedBatch": "09.10",
+   "assets": [
+    "09.10/crease_north"
+   ],
+   "status": "supplied"
+  },
+  {
+   "id": "markings.creaseSouth",
+   "layer": "markings",
+   "label": "South goal crease",
+   "expectedBatch": "09.11",
+   "assets": [
+    "09.11/crease_south"
+   ],
+   "status": "supplied"
+  },
+  {
+   "id": "markings.refereeCrease",
+   "layer": "markings",
+   "label": "Referee crease",
+   "expectedBatch": "09.12",
+   "assets": [
+    "09.12/referee_crease_east"
+   ],
+   "status": "supplied"
+  },
+  {
+   "id": "logo.center",
+   "layer": "centerLogo",
+   "label": "Centre-ice logo",
+   "expectedBatch": "09.13",
+   "assets": [
+    "09.13/center_logo"
+   ],
+   "status": "supplied"
+  },
+  {
+   "id": "boards.west",
+   "layer": "backBoards",
+   "label": "West straight boards",
+   "expectedBatch": "10.01",
+   "assets": [
+    "10.01/west_board_module"
+   ],
+   "status": "supplied"
+  },
+  {
+   "id": "boards.east",
+   "layer": "backBoards",
+   "label": "East straight boards",
+   "expectedBatch": "10.x",
+   "assets": [],
+   "note": "Until supplied, the west module is shown mirrored.",
+   "status": "missing"
+  },
+  {
+   "id": "boards.north",
+   "layer": "backBoards",
+   "label": "North end boards",
+   "expectedBatch": "10.x",
+   "assets": [],
+   "status": "missing"
+  },
+  {
+   "id": "boards.south",
+   "layer": "frontBoards",
+   "label": "South end boards (foreground)",
+   "expectedBatch": "10.x",
+   "assets": [],
+   "status": "missing"
+  },
+  {
+   "id": "boards.corners",
+   "layer": "backBoards",
+   "label": "Corner boards (four)",
+   "expectedBatch": "10.x",
+   "assets": [],
+   "status": "missing"
+  },
+  {
+   "id": "glass",
+   "layer": "backBoards",
+   "label": "Protective glass",
+   "expectedBatch": "10.x",
+   "assets": [],
+   "status": "missing"
+  },
+  {
+   "id": "goals.north",
+   "layer": "nets",
+   "label": "North goal net",
+   "expectedBatch": "11",
+   "assets": [],
+   "status": "missing"
+  },
+  {
+   "id": "goals.south",
+   "layer": "nets",
+   "label": "South goal net",
+   "expectedBatch": "11",
+   "assets": [],
+   "status": "missing"
+  },
+  {
+   "id": "benches",
+   "layer": "stadium",
+   "label": "Player benches",
+   "expectedBatch": "12",
+   "assets": [],
+   "status": "missing"
+  },
+  {
+   "id": "penaltyBox",
+   "layer": "stadium",
+   "label": "Penalty boxes",
+   "expectedBatch": "12",
+   "assets": [],
+   "status": "missing"
+  },
+  {
+   "id": "stadium",
+   "layer": "stadium",
+   "label": "Stadium and seating",
+   "expectedBatch": "13",
+   "assets": [],
+   "status": "missing"
+  },
+  {
+   "id": "spectators",
+   "layer": "frontSpectators",
+   "label": "Animated spectators",
+   "expectedBatch": "13",
+   "assets": [],
+   "status": "missing"
+  },
+  {
+   "id": "equipment",
+   "layer": "stadium",
+   "label": "Arena equipment and details",
+   "expectedBatch": "14",
+   "assets": [],
+   "status": "missing"
+  }
+ ],
+ "issues": [
+  {
+   "level": "info",
+   "batch": "09.01",
+   "asset": null,
+   "message": "preview.png: presentation image, excluded from the game"
+  },
+  {
+   "level": "info",
+   "batch": "09.02",
+   "asset": null,
+   "message": "preview.png: presentation image, excluded from the game"
+  },
+  {
+   "level": "info",
+   "batch": "09.03",
+   "asset": null,
+   "message": "preview.png: presentation image, excluded from the game"
+  },
+  {
+   "level": "info",
+   "batch": "09.04",
+   "asset": "09.04/center_solid",
+   "message": "center_solid.png: identical pixels to 09.04/center_gap"
+  },
+  {
+   "level": "info",
+   "batch": "09.04",
+   "asset": null,
+   "message": "preview.png: presentation image, excluded from the game"
+  },
+  {
+   "level": "info",
+   "batch": "09.05",
+   "asset": null,
+   "message": "preview.png: presentation image, excluded from the game"
+  },
+  {
+   "level": "info",
+   "batch": "09.06",
+   "asset": null,
+   "message": "preview.png: presentation image, excluded from the game"
+  },
+  {
+   "level": "info",
+   "batch": "09.07",
+   "asset": "09.07/circle_1_1",
+   "message": "circle_1_1.png: fully transparent (an intentionally empty tile)"
+  },
+  {
+   "level": "info",
+   "batch": "09.07",
+   "asset": "09.07/circle_1_2",
+   "message": "circle_1_2.png: fully transparent (an intentionally empty tile)"
+  },
+  {
+   "level": "info",
+   "batch": "09.07",
+   "asset": "09.07/circle_2_1",
+   "message": "circle_2_1.png: fully transparent (an intentionally empty tile)"
+  },
+  {
+   "level": "info",
+   "batch": "09.07",
+   "asset": "09.07/circle_2_2",
+   "message": "circle_2_2.png: fully transparent (an intentionally empty tile)"
+  },
+  {
+   "level": "info",
+   "batch": "09.07",
+   "asset": "09.07/faceoff_circle",
+   "message": "faceoff_circle.png: identical pixels to 09.07/faceoff_atlas"
+  },
+  {
+   "level": "info",
+   "batch": "09.07",
+   "asset": null,
+   "message": "preview.png: presentation image, excluded from the game"
+  },
+  {
+   "level": "info",
+   "batch": "09.08",
+   "asset": "09.08/hash_h_02",
+   "message": "hash_h_02.png: identical pixels to 09.08/hash_h_01"
+  },
+  {
+   "level": "info",
+   "batch": "09.08",
+   "asset": "09.08/hash_v_02",
+   "message": "hash_v_02.png: identical pixels to 09.08/hash_v_01"
+  },
+  {
+   "level": "info",
+   "batch": "09.08",
+   "asset": null,
+   "message": "preview.png: presentation image, excluded from the game"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/center_circle_atlas",
+   "message": "center_circle_atlas.png: identical pixels to 09.09/center_circle"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_0_0",
+   "message": "circle_0_0.png: same filename as 09.07/circle_0_0 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_0_1",
+   "message": "circle_0_1.png: same filename as 09.07/circle_0_1 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_0_2",
+   "message": "circle_0_2.png: same filename as 09.07/circle_0_2 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_0_3",
+   "message": "circle_0_3.png: same filename as 09.07/circle_0_3 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_1_0",
+   "message": "circle_1_0.png: same filename as 09.07/circle_1_0 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_1_1",
+   "message": "circle_1_1.png: same filename as 09.07/circle_1_1 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_1_2",
+   "message": "circle_1_2.png: same filename as 09.07/circle_1_2 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_1_3",
+   "message": "circle_1_3.png: same filename as 09.07/circle_1_3 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_2_0",
+   "message": "circle_2_0.png: same filename as 09.07/circle_2_0 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_2_1",
+   "message": "circle_2_1.png: same filename as 09.07/circle_2_1 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_2_2",
+   "message": "circle_2_2.png: same filename as 09.07/circle_2_2 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_2_3",
+   "message": "circle_2_3.png: same filename as 09.07/circle_2_3 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_3_0",
+   "message": "circle_3_0.png: same filename as 09.07/circle_3_0 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_3_1",
+   "message": "circle_3_1.png: same filename as 09.07/circle_3_1 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_3_2",
+   "message": "circle_3_2.png: same filename as 09.07/circle_3_2 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/circle_3_3",
+   "message": "circle_3_3.png: same filename as 09.07/circle_3_3 with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": null,
+   "message": "preview.png: presentation image, excluded from the game"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/quadrant_bl",
+   "message": "quadrant_bl.png: same filename as 09.07/quadrant_bl with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/quadrant_br",
+   "message": "quadrant_br.png: same filename as 09.07/quadrant_br with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/quadrant_tl",
+   "message": "quadrant_tl.png: same filename as 09.07/quadrant_tl with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.09",
+   "asset": "09.09/quadrant_tr",
+   "message": "quadrant_tr.png: same filename as 09.07/quadrant_tr with different pixels; kept apart by batch folder"
+  },
+  {
+   "level": "info",
+   "batch": "09.10",
+   "asset": "09.10/crease_0_2",
+   "message": "crease_0_2.png: identical pixels to 09.10/crease_0_1"
+  },
+  {
+   "level": "info",
+   "batch": "09.10",
+   "asset": "09.10/crease_north",
+   "message": "crease_north.png: identical pixels to 09.10/crease_atlas"
+  },
+  {
+   "level": "info",
+   "batch": "09.10",
+   "asset": null,
+   "message": "preview.png: presentation image, excluded from the game"
+  },
+  {
+   "level": "info",
+   "batch": "09.11",
+   "asset": null,
+   "message": "preview.png: presentation image, excluded from the game"
+  },
+  {
+   "level": "info",
+   "batch": "09.11",
+   "asset": "09.11/south_crease_1_1",
+   "message": "south_crease_1_1.png: identical pixels to 09.10/crease_0_1"
+  },
+  {
+   "level": "info",
+   "batch": "09.11",
+   "asset": "09.11/south_crease_1_2",
+   "message": "south_crease_1_2.png: identical pixels to 09.10/crease_0_1"
+  },
+  {
+   "level": "info",
+   "batch": "09.11",
+   "asset": "09.11/south_crease_atlas",
+   "message": "south_crease_atlas.png: identical pixels to 09.11/crease_south"
+  },
+  {
+   "level": "info",
+   "batch": "09.12",
+   "asset": null,
+   "message": "preview.png: presentation image, excluded from the game"
+  },
+  {
+   "level": "info",
+   "batch": "09.12",
+   "asset": "09.12/referee_crease_1_1",
+   "message": "referee_crease_1_1.png: fully transparent (an intentionally empty tile)"
+  },
+  {
+   "level": "info",
+   "batch": "09.12",
+   "asset": "09.12/referee_crease_2_1",
+   "message": "referee_crease_2_1.png: fully transparent (an intentionally empty tile)"
+  },
+  {
+   "level": "info",
+   "batch": "09.12",
+   "asset": "09.12/referee_crease_east",
+   "message": "referee_crease_east.png: identical pixels to 09.12/referee_crease_atlas"
+  },
+  {
+   "level": "info",
+   "batch": "09.13",
+   "asset": "09.13/center_logo_atlas",
+   "message": "center_logo_atlas.png: identical pixels to 09.13/center_logo"
+  },
+  {
+   "level": "info",
+   "batch": "09.13",
+   "asset": null,
+   "message": "preview.png: presentation image, excluded from the game"
+  },
+  {
+   "level": "info",
+   "batch": "10.01",
+   "asset": null,
+   "message": "preview.png: presentation image, excluded from the game"
+  },
+  {
+   "level": "info",
+   "batch": "10.01",
+   "asset": "10.01/west_board_1_0",
+   "message": "west_board_1_0.png: identical pixels to 10.01/west_board_0_0"
+  },
+  {
+   "level": "info",
+   "batch": "10.01",
+   "asset": "10.01/west_board_1_2",
+   "message": "west_board_1_2.png: identical pixels to 10.01/west_board_0_2"
+  },
+  {
+   "level": "info",
+   "batch": "10.01",
+   "asset": "10.01/west_board_2_0",
+   "message": "west_board_2_0.png: identical pixels to 10.01/west_board_0_0"
+  },
+  {
+   "level": "info",
+   "batch": "10.01",
+   "asset": "10.01/west_board_2_1",
+   "message": "west_board_2_1.png: identical pixels to 10.01/west_board_0_1"
+  },
+  {
+   "level": "info",
+   "batch": "10.01",
+   "asset": "10.01/west_board_2_2",
+   "message": "west_board_2_2.png: identical pixels to 10.01/west_board_0_2"
+  },
+  {
+   "level": "info",
+   "batch": "10.01",
+   "asset": "10.01/west_board_3_0",
+   "message": "west_board_3_0.png: identical pixels to 10.01/west_board_0_0"
+  },
+  {
+   "level": "info",
+   "batch": "10.01",
+   "asset": "10.01/west_board_3_1",
+   "message": "west_board_3_1.png: identical pixels to 10.01/west_board_1_1"
+  },
+  {
+   "level": "info",
+   "batch": "10.01",
+   "asset": "10.01/west_board_3_2",
+   "message": "west_board_3_2.png: identical pixels to 10.01/west_board_0_2"
+  },
+  {
+   "level": "info",
+   "batch": "10.01",
+   "asset": "10.01/west_board_module",
+   "message": "west_board_module.png: identical pixels to 10.01/west_board_atlas"
+  },
+  {
+   "level": "info",
+   "batch": "09.11",
+   "asset": null,
+   "message": "North and south creases are exact vertical mirrors"
+  },
+  {
+   "level": "info",
+   "batch": "10.01",
+   "asset": null,
+   "message": "West board module repeats cleanly every 16 px (its two halves are identical)"
+  },
+  {
+   "level": "warn",
+   "batch": null,
+   "asset": null,
+   "message": "Missing art: East straight boards (expected in batch 10.x)"
+  },
+  {
+   "level": "warn",
+   "batch": null,
+   "asset": null,
+   "message": "Missing art: North end boards (expected in batch 10.x)"
+  },
+  {
+   "level": "warn",
+   "batch": null,
+   "asset": null,
+   "message": "Missing art: South end boards (foreground) (expected in batch 10.x)"
+  },
+  {
+   "level": "warn",
+   "batch": null,
+   "asset": null,
+   "message": "Missing art: Corner boards (four) (expected in batch 10.x)"
+  },
+  {
+   "level": "warn",
+   "batch": null,
+   "asset": null,
+   "message": "Missing art: Protective glass (expected in batch 10.x)"
+  },
+  {
+   "level": "warn",
+   "batch": null,
+   "asset": null,
+   "message": "Missing art: North goal net (expected in batch 11)"
+  },
+  {
+   "level": "warn",
+   "batch": null,
+   "asset": null,
+   "message": "Missing art: South goal net (expected in batch 11)"
+  },
+  {
+   "level": "warn",
+   "batch": null,
+   "asset": null,
+   "message": "Missing art: Player benches (expected in batch 12)"
+  },
+  {
+   "level": "warn",
+   "batch": null,
+   "asset": null,
+   "message": "Missing art: Penalty boxes (expected in batch 12)"
+  },
+  {
+   "level": "warn",
+   "batch": null,
+   "asset": null,
+   "message": "Missing art: Stadium and seating (expected in batch 13)"
+  },
+  {
+   "level": "warn",
+   "batch": null,
+   "asset": null,
+   "message": "Missing art: Animated spectators (expected in batch 13)"
+  },
+  {
+   "level": "warn",
+   "batch": null,
+   "asset": null,
+   "message": "Missing art: Arena equipment and details (expected in batch 14)"
+  }
+ ]
+}

@@ -1,0 +1,85 @@
+{
+  "batch": "09.10",
+  "tileSize": [
+    8,
+    8
+  ],
+  "atlas": "crease_atlas.png",
+  "rows": 2,
+  "columns": 4,
+  "tiles": [
+    {
+      "index": 0,
+      "file": "crease_0_0.png",
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "index": 1,
+      "file": "crease_0_1.png",
+      "offset": [
+        8,
+        0
+      ]
+    },
+    {
+      "index": 2,
+      "file": "crease_0_2.png",
+      "offset": [
+        16,
+        0
+      ]
+    },
+    {
+      "index": 3,
+      "file": "crease_0_3.png",
+      "offset": [
+        24,
+        0
+      ]
+    },
+    {
+      "index": 4,
+      "file": "crease_1_0.png",
+      "offset": [
+        0,
+        8
+      ]
+    },
+    {
+      "index": 5,
+      "file": "crease_1_1.png",
+      "offset": [
+        8,
+        8
+      ]
+    },
+    {
+      "index": 6,
+      "file": "crease_1_2.png",
+      "offset": [
+        16,
+        8
+      ]
+    },
+    {
+      "index": 7,
+      "file": "crease_1_3.png",
+      "offset": [
+        24,
+        8
+      ]
+    }
+  ],
+  "composite": "crease_north.png",
+  "anchor": [
+    16,
+    0
+  ],
+  "layer": "rink_markings",
+  "orientation": "north goal; opens south toward center ice",
+  "outlinePixels": 2,
+  "goalLineIncluded": false
+}

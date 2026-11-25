@@ -1,0 +1,91 @@
+{
+  "batch": "09.02",
+  "tileWidth": 8,
+  "tileHeight": 8,
+  "columns": 4,
+  "rows": 4,
+  "atlas": "ice/ice_scratch_atlas.png",
+  "blendMode": "normal",
+  "tiles": [
+    {
+      "index": 0,
+      "file": "ice/ice_scratch_01.png",
+      "wear": "light"
+    },
+    {
+      "index": 1,
+      "file": "ice/ice_scratch_02.png",
+      "wear": "light"
+    },
+    {
+      "index": 2,
+      "file": "ice/ice_scratch_03.png",
+      "wear": "light"
+    },
+    {
+      "index": 3,
+      "file": "ice/ice_scratch_04.png",
+      "wear": "light"
+    },
+    {
+      "index": 4,
+      "file": "ice/ice_scratch_05.png",
+      "wear": "medium"
+    },
+    {
+      "index": 5,
+      "file": "ice/ice_scratch_06.png",
+      "wear": "medium"
+    },
+    {
+      "index": 6,
+      "file": "ice/ice_scratch_07.png",
+      "wear": "medium"
+    },
+    {
+      "index": 7,
+      "file": "ice/ice_scratch_08.png",
+      "wear": "medium"
+    },
+    {
+      "index": 8,
+      "file": "ice/ice_scratch_09.png",
+      "wear": "heavy"
+    },
+    {
+      "index": 9,
+      "file": "ice/ice_scratch_10.png",
+      "wear": "heavy"
+    },
+    {
+      "index": 10,
+      "file": "ice/ice_scratch_11.png",
+      "wear": "heavy"
+    },
+    {
+      "index": 11,
+      "file": "ice/ice_scratch_12.png",
+      "wear": "heavy"
+    },
+    {
+      "index": 12,
+      "file": "ice/ice_scratch_13.png",
+      "wear": "severe"
+    },
+    {
+      "index": 13,
+      "file": "ice/ice_scratch_14.png",
+      "wear": "severe"
+    },
+    {
+      "index": 14,
+      "file": "ice/ice_scratch_15.png",
+      "wear": "severe"
+    },
+    {
+      "index": 15,
+      "file": "ice/ice_scratch_16.png",
+      "wear": "severe"
+    }
+  ]
+}

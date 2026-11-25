@@ -1,0 +1,85 @@
+{
+  "batch": "09.12",
+  "tileSize": [
+    8,
+    8
+  ],
+  "atlas": "referee_crease_atlas.png",
+  "rows": 4,
+  "columns": 2,
+  "tiles": [
+    {
+      "index": 0,
+      "file": "referee_crease_0_0.png",
+      "offset": [
+        0,
+        0
+      ]
+    },
+    {
+      "index": 1,
+      "file": "referee_crease_0_1.png",
+      "offset": [
+        8,
+        0
+      ]
+    },
+    {
+      "index": 2,
+      "file": "referee_crease_1_0.png",
+      "offset": [
+        0,
+        8
+      ]
+    },
+    {
+      "index": 3,
+      "file": "referee_crease_1_1.png",
+      "offset": [
+        8,
+        8
+      ]
+    },
+    {
+      "index": 4,
+      "file": "referee_crease_2_0.png",
+      "offset": [
+        0,
+        16
+      ]
+    },
+    {
+      "index": 5,
+      "file": "referee_crease_2_1.png",
+      "offset": [
+        8,
+        16
+      ]
+    },
+    {
+      "index": 6,
+      "file": "referee_crease_3_0.png",
+      "offset": [
+        0,
+        24
+      ]
+    },
+    {
+      "index": 7,
+      "file": "referee_crease_3_1.png",
+      "offset": [
+        8,
+        24
+      ]
+    }
+  ],
+  "composite": "referee_crease_east.png",
+  "anchor": [
+    16,
+    16
+  ],
+  "layer": "rink_markings",
+  "orientation": "east boards; arc extends west onto ice",
+  "outlinePixels": 2,
+  "fill": false
+}

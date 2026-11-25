@@ -5,6 +5,9 @@ import { TuningPanel, loadSavedTuning } from './tuningPanel';
 export const tuning = cloneTuning();
 loadSavedTuning(tuning);
 
+/** Which arena configuration the game uses. Chosen in the Arena Asset Lab. */
+export const arenaChoice = { id: 'standard' };
+
 let panel: TuningPanel | null = null;
 
 export function tuningPanel(): TuningPanel {

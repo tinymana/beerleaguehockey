@@ -1,0 +1,31 @@
+{
+  "_howto": "Every piece of art the arena renderer has a place for. `assets` lists the registry ids that fill the slot; a slot with no assets yet is reported as missing. Add ids here when a new batch arrives.",
+  "slots": [
+    { "id": "ice.base", "layer": "baseIce", "label": "Base ice tiles", "expectedBatch": "09.01", "assets": ["09.01/ice_tileset_4x4"] },
+    { "id": "ice.scratches", "layer": "scratches", "label": "Scratched ice overlays", "expectedBatch": "09.02", "assets": ["09.02/ice_scratch_atlas"] },
+    { "id": "ice.reflections", "layer": "reflections", "label": "Overhead light reflections", "expectedBatch": "09.03", "assets": ["09.03/light_reflections_atlas"] },
+    { "id": "markings.centerLine", "layer": "markings", "label": "Red centre line", "expectedBatch": "09.04", "assets": ["09.04/center_line_atlas"] },
+    { "id": "markings.blueLine", "layer": "markings", "label": "Blue lines", "expectedBatch": "09.05", "assets": ["09.05/blue_line_atlas"] },
+    { "id": "markings.goalLine", "layer": "markings", "label": "Red goal lines", "expectedBatch": "09.06", "assets": ["09.06/goal_line_atlas"] },
+    { "id": "markings.faceoffCircle", "layer": "markings", "label": "Faceoff circles", "expectedBatch": "09.07", "assets": ["09.07/faceoff_circle"] },
+    { "id": "markings.faceoffDots", "layer": "markings", "label": "Faceoff dots and hash marks", "expectedBatch": "09.08", "assets": ["09.08/faceoff_mark", "09.08/dot_01"] },
+    { "id": "markings.centerCircle", "layer": "markings", "label": "Centre circle", "expectedBatch": "09.09", "assets": ["09.09/center_circle", "09.09/center_dot"] },
+    { "id": "markings.creaseNorth", "layer": "markings", "label": "North goal crease", "expectedBatch": "09.10", "assets": ["09.10/crease_north"] },
+    { "id": "markings.creaseSouth", "layer": "markings", "label": "South goal crease", "expectedBatch": "09.11", "assets": ["09.11/crease_south"] },
+    { "id": "markings.refereeCrease", "layer": "markings", "label": "Referee crease", "expectedBatch": "09.12", "assets": ["09.12/referee_crease_east"] },
+    { "id": "logo.center", "layer": "centerLogo", "label": "Centre-ice logo", "expectedBatch": "09.13", "assets": ["09.13/center_logo"] },
+    { "id": "boards.west", "layer": "backBoards", "label": "West straight boards", "expectedBatch": "10.01", "assets": ["10.01/west_board_module"] },
+    { "id": "boards.east", "layer": "backBoards", "label": "East straight boards", "expectedBatch": "10.x", "assets": [], "note": "Until supplied, the west module is shown mirrored." },
+    { "id": "boards.north", "layer": "backBoards", "label": "North end boards", "expectedBatch": "10.x", "assets": [] },
+    { "id": "boards.south", "layer": "frontBoards", "label": "South end boards (foreground)", "expectedBatch": "10.x", "assets": [] },
+    { "id": "boards.corners", "layer": "backBoards", "label": "Corner boards (four)", "expectedBatch": "10.x", "assets": [] },
+    { "id": "glass", "layer": "backBoards", "label": "Protective glass", "expectedBatch": "10.x", "assets": [] },
+    { "id": "goals.north", "layer": "nets", "label": "North goal net", "expectedBatch": "11", "assets": [] },
+    { "id": "goals.south", "layer": "nets", "label": "South goal net", "expectedBatch": "11", "assets": [] },
+    { "id": "benches", "layer": "stadium", "label": "Player benches", "expectedBatch": "12", "assets": [] },
+    { "id": "penaltyBox", "layer": "stadium", "label": "Penalty boxes", "expectedBatch": "12", "assets": [] },
+    { "id": "stadium", "layer": "stadium", "label": "Stadium and seating", "expectedBatch": "13", "assets": [] },
+    { "id": "spectators", "layer": "frontSpectators", "label": "Animated spectators", "expectedBatch": "13", "assets": [] },
+    { "id": "equipment", "layer": "stadium", "label": "Arena equipment and details", "expectedBatch": "14", "assets": [] }
+  ]
+}

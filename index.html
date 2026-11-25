@@ -106,6 +106,152 @@
         margin-top: 6px;
         color: #6f7fb5;
       }
+
+      /* Arena Asset Lab panel: developer tool. */
+      #arena-lab-panel {
+        position: fixed;
+        top: 8px;
+        right: 8px;
+        bottom: 8px;
+        width: 330px;
+        overflow-y: auto;
+        box-sizing: border-box;
+        padding: 8px;
+        background: #0b1030;
+        border: 2px solid #bfd8ff;
+        outline: 2px solid #05071a;
+        color: #ffffff;
+        font: 11px/1.35 'Courier New', Courier, monospace;
+        z-index: 10;
+      }
+      #arena-lab-panel .lab-title {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: #ffc83a;
+        font-weight: bold;
+        padding-bottom: 4px;
+        border-bottom: 2px solid #2b5fd9;
+      }
+      #arena-lab-panel h3 {
+        margin: 10px 0 4px;
+        font-size: 11px;
+        color: #bfd8ff;
+        text-transform: uppercase;
+        border-bottom: 1px solid #2b5fd9;
+      }
+      #arena-lab-panel select {
+        width: 100%;
+        background: #1c2a66;
+        color: #fff;
+        border: 2px solid #bfd8ff;
+        border-radius: 0;
+        font: inherit;
+        padding: 2px;
+      }
+      #arena-lab-panel button {
+        padding: 3px 6px;
+        background: #1c2a66;
+        color: #fff;
+        border: 2px solid #bfd8ff;
+        border-radius: 0;
+        font: inherit;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      #arena-lab-panel button:hover {
+        background: #2b5fd9;
+      }
+      #arena-lab-panel .lab-buttons {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        margin: 4px 0;
+      }
+      #arena-lab-panel .lab-check {
+        display: flex;
+        align-items: baseline;
+        gap: 5px;
+        margin: 1px 0;
+      }
+      #arena-lab-panel .lab-check em,
+      #arena-lab-panel .lab-slots em {
+        color: #ffb08a;
+        font-style: normal;
+      }
+      #arena-lab-panel .lab-note {
+        margin: 4px 0;
+        color: #9fb0e6;
+      }
+      #arena-lab-panel .lab-slider {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        margin-top: 4px;
+      }
+      #arena-lab-panel .lab-slider input {
+        grid-column: 1 / -1;
+        width: 100%;
+        accent-color: #ffc83a;
+      }
+      #arena-lab-panel .lab-status,
+      #arena-lab-panel .lab-readout {
+        margin: 5px 0;
+        padding: 3px 5px;
+        white-space: pre-wrap;
+        border: 1px solid currentColor;
+      }
+      #arena-lab-panel .good {
+        color: #8af28a;
+      }
+      #arena-lab-panel .bad {
+        color: #ff8a8a;
+      }
+      #arena-lab-panel ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+      }
+      #arena-lab-panel .slot-supplied b {
+        color: #8af28a;
+      }
+      #arena-lab-panel .slot-provisional b {
+        color: #ffc83a;
+      }
+      #arena-lab-panel .slot-missing b,
+      #arena-lab-panel .issue-error {
+        color: #ff8a8a;
+      }
+      #arena-lab-panel .issue-warn {
+        color: #ffb08a;
+      }
+      #arena-lab-panel .lab-frames {
+        display: flex;
+        gap: 10px;
+        align-items: flex-end;
+        flex-wrap: wrap;
+        margin: 6px 0;
+      }
+      #arena-lab-panel figure {
+        margin: 0;
+      }
+      #arena-lab-panel figcaption {
+        color: #9fb0e6;
+      }
+      /* A real checkerboard behind previews, so transparent pixels read as transparent. */
+      #arena-lab-panel .lab-preview img,
+      #arena-lab-panel .lab-preview canvas {
+        display: block;
+        image-rendering: pixelated;
+        background: repeating-conic-gradient(#3a4680 0% 25%, #2a3566 0% 50%) 0 0 / 8px 8px;
+        outline: 1px solid #bfd8ff;
+      }
+      #arena-lab-panel pre {
+        margin: 0;
+        white-space: pre-wrap;
+        word-break: break-all;
+        color: #dfe7ff;
+        font: inherit;
+      }
     </style>
   </head>
   <body>

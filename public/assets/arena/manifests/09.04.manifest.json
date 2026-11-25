@@ -1,0 +1,30 @@
+{
+  "batch": "09.04",
+  "tileWidth": 8,
+  "tileHeight": 8,
+  "atlas": "center_line_atlas.png",
+  "tiles": [
+    {
+      "index": 0,
+      "file": "center_solid.png"
+    },
+    {
+      "index": 1,
+      "file": "center_dash.png"
+    },
+    {
+      "index": 2,
+      "file": "center_gap.png"
+    },
+    {
+      "index": 3,
+      "file": "center_dash_alt.png"
+    }
+  ],
+  "layer": "rink_markings",
+  "orientation": "horizontal across vertical rink",
+  "recommendedPattern": [
+    1,
+    2
+  ]
+}

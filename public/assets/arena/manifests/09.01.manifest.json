@@ -1,0 +1,90 @@
+{
+  "batch": "09.01",
+  "tileWidth": 8,
+  "tileHeight": 8,
+  "atlas": "ice/ice_tileset_4x4.png",
+  "columns": 4,
+  "rows": 4,
+  "tiles": [
+    {
+      "index": 0,
+      "file": "ice/ice_base_01.png",
+      "category": "base"
+    },
+    {
+      "index": 1,
+      "file": "ice/ice_base_02.png",
+      "category": "base"
+    },
+    {
+      "index": 2,
+      "file": "ice/ice_base_03.png",
+      "category": "base"
+    },
+    {
+      "index": 3,
+      "file": "ice/ice_base_04.png",
+      "category": "base"
+    },
+    {
+      "index": 4,
+      "file": "ice/ice_scuff_01.png",
+      "category": "scuff"
+    },
+    {
+      "index": 5,
+      "file": "ice/ice_scuff_02.png",
+      "category": "scuff"
+    },
+    {
+      "index": 6,
+      "file": "ice/ice_scuff_03.png",
+      "category": "scuff"
+    },
+    {
+      "index": 7,
+      "file": "ice/ice_scuff_04.png",
+      "category": "scuff"
+    },
+    {
+      "index": 8,
+      "file": "ice/ice_reflect_01.png",
+      "category": "reflect"
+    },
+    {
+      "index": 9,
+      "file": "ice/ice_reflect_02.png",
+      "category": "reflect"
+    },
+    {
+      "index": 10,
+      "file": "ice/ice_reflect_03.png",
+      "category": "reflect"
+    },
+    {
+      "index": 11,
+      "file": "ice/ice_reflect_04.png",
+      "category": "reflect"
+    },
+    {
+      "index": 12,
+      "file": "ice/ice_snow_01.png",
+      "category": "snow"
+    },
+    {
+      "index": 13,
+      "file": "ice/ice_snow_02.png",
+      "category": "snow"
+    },
+    {
+      "index": 14,
+      "file": "ice/ice_snow_03.png",
+      "category": "snow"
+    },
+    {
+      "index": 15,
+      "file": "ice/ice_snow_04.png",
+      "category": "snow"
+    }
+  ]
+}

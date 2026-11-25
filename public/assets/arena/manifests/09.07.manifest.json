@@ -1,0 +1,113 @@
+{
+  "batch": "09.07",
+  "tileSize": 8,
+  "atlas": "faceoff_atlas.png",
+  "columns": 4,
+  "rows": 4,
+  "tiles": [
+    {
+      "file": "circle_0_0.png",
+      "index": 0,
+      "x": 0,
+      "y": 0
+    },
+    {
+      "file": "circle_0_1.png",
+      "index": 1,
+      "x": 1,
+      "y": 0
+    },
+    {
+      "file": "circle_0_2.png",
+      "index": 2,
+      "x": 2,
+      "y": 0
+    },
+    {
+      "file": "circle_0_3.png",
+      "index": 3,
+      "x": 3,
+      "y": 0
+    },
+    {
+      "file": "circle_1_0.png",
+      "index": 4,
+      "x": 0,
+      "y": 1
+    },
+    {
+      "file": "circle_1_1.png",
+      "index": 5,
+      "x": 1,
+      "y": 1
+    },
+    {
+      "file": "circle_1_2.png",
+      "index": 6,
+      "x": 2,
+      "y": 1
+    },
+    {
+      "file": "circle_1_3.png",
+      "index": 7,
+      "x": 3,
+      "y": 1
+    },
+    {
+      "file": "circle_2_0.png",
+      "index": 8,
+      "x": 0,
+      "y": 2
+    },
+    {
+      "file": "circle_2_1.png",
+      "index": 9,
+      "x": 1,
+      "y": 2
+    },
+    {
+      "file": "circle_2_2.png",
+      "index": 10,
+      "x": 2,
+      "y": 2
+    },
+    {
+      "file": "circle_2_3.png",
+      "index": 11,
+      "x": 3,
+      "y": 2
+    },
+    {
+      "file": "circle_3_0.png",
+      "index": 12,
+      "x": 0,
+      "y": 3
+    },
+    {
+      "file": "circle_3_1.png",
+      "index": 13,
+      "x": 1,
+      "y": 3
+    },
+    {
+      "file": "circle_3_2.png",
+      "index": 14,
+      "x": 2,
+      "y": 3
+    },
+    {
+      "file": "circle_3_3.png",
+      "index": 15,
+      "x": 3,
+      "y": 3
+    }
+  ],
+  "compositeSize": [
+    32,
+    32
+  ],
+  "quadrantSize": [
+    16,
+    16
+  ]
+}

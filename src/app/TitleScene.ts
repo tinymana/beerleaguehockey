@@ -77,7 +77,7 @@ export class TitleScene extends Phaser.Scene {
     g.lineBetween(PANEL.x + 6, PANEL.y + PANEL.h - 16.5, PANEL.x + PANEL.w - 6, PANEL.y + PANEL.h - 16.5);
     this.status = addText(this, MENU_X, PANEL.y + PANEL.h - 12, '', UI.ice).setOrigin(0.5, 0);
 
-    this.shadowText(4, GAME_HEIGHT - 10, `V${VERSION} PROTOTYPE`, UI.ice);
+    this.shadowText(4, GAME_HEIGHT - 10, `V${VERSION} PROTOTYPE   L: ARENA LAB (DEV)`, UI.ice);
     this.shadowText(GAME_WIDTH - 4, GAME_HEIGHT - 10, 'ARROWS + ENTER  /  D-PAD + A', UI.ice, 1);
 
     const kb = this.input.keyboard;
@@ -89,6 +89,10 @@ export class TitleScene extends Phaser.Scene {
       kb.on('keydown-ENTER', () => this.activate());
       kb.on('keydown-SPACE', () => this.activate());
       kb.on('keydown-ESC', () => this.closeCredits());
+      // Developer shortcut: the Arena Asset Lab. Not part of the player menu.
+      kb.on('keydown-L', () => {
+        if (!this.credits) this.scene.start(SCENES.arenaLab);
+      });
     }
 
     this.select(this.selected);

@@ -1,0 +1,76 @@
+{
+  "batch": "09.03",
+  "tileSize": [
+    8,
+    8
+  ],
+  "atlas": "light_reflections_atlas.png",
+  "tiles": [
+    {
+      "index": 0,
+      "file": "light_center_01.png"
+    },
+    {
+      "index": 1,
+      "file": "light_center_02.png"
+    },
+    {
+      "index": 2,
+      "file": "light_center_03.png"
+    },
+    {
+      "index": 3,
+      "file": "light_center_04.png"
+    },
+    {
+      "index": 4,
+      "file": "light_angle_l_01.png"
+    },
+    {
+      "index": 5,
+      "file": "light_angle_l_02.png"
+    },
+    {
+      "index": 6,
+      "file": "light_angle_l_03.png"
+    },
+    {
+      "index": 7,
+      "file": "light_angle_l_04.png"
+    },
+    {
+      "index": 8,
+      "file": "light_angle_r_01.png"
+    },
+    {
+      "index": 9,
+      "file": "light_angle_r_02.png"
+    },
+    {
+      "index": 10,
+      "file": "light_angle_r_03.png"
+    },
+    {
+      "index": 11,
+      "file": "light_angle_r_04.png"
+    },
+    {
+      "index": 12,
+      "file": "light_pool_01.png"
+    },
+    {
+      "index": 13,
+      "file": "light_pool_02.png"
+    },
+    {
+      "index": 14,
+      "file": "light_pool_03.png"
+    },
+    {
+      "index": 15,
+      "file": "light_pool_04.png"
+    }
+  ],
+  "blendMode": "ADD",
+  "suggestedOpacity": 0.45
+}

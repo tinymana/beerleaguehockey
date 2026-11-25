@@ -34,7 +34,7 @@ export const DEFAULT_TUNING: Readonly<Tuning> = Object.freeze({
   boardRestitution: 0.65,
   cameraFollow: 6,
   cameraLookahead: 0.35,
-  cameraTilt: 0.78,
+  cameraTilt: 0.74,
 });
 
 export interface TuningSpec {

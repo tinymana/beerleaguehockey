@@ -1,6 +1,10 @@
 /**
- * TEMPORARY ART: code-drawn rink, nets, puck and shadow for the style test.
- * (The skater now uses supplied art; see skaterSprite.ts.)
+ * TEMPORARY STAND-INS: code-drawn boards, stands, nets, puck and shadow.
+ *
+ * The ice surface, its markings and the west boards now come from supplied
+ * arena art (see ./arena). These stand-ins fill only the slots whose art has
+ * not arrived yet, so the game stays playable, and are switched off in the
+ * "supplied art only" arena configuration.
  *
  * Everything here is a stand-in, drawn pixel by pixel on the gameplay grid,
  * so the creative director can judge camera angle, readability and palette.
@@ -17,6 +21,7 @@ import type { RinkGeometry } from '../sim/rink';
 import { HEIGHTS, projectY, riseOf, worldScreenHeight } from './projection';
 
 export const TEX = {
+  surround: 'tmp-surround',
   rink: 'tmp-rink',
   rinkFront: 'tmp-rink-front',
   netTop: 'tmp-net-top',
@@ -105,14 +110,17 @@ function boardDistance(x: number, y: number, rink: RinkGeometry): number {
 const BOARD_THICKNESS = 3;
 
 /**
- * Paints the rink in two layers: everything behind the players, and the near
- * boards, which stand between the camera and the ice and are drawn in front.
+ * Stand-in surroundings, in three layers: the dark stands outside the rink,
+ * the boards behind the players, and the near boards in front of them.
+ * The ice itself is left transparent: supplied arena tiles draw it.
  */
-function drawRink(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
+function drawStandInBoards(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
   const w = rink.worldWidth;
   const h = worldScreenHeight(rink.worldHeight, tilt);
+  const surroundTex = makeCanvas(scene, TEX.surround, w, h);
   const backTex = makeCanvas(scene, TEX.rink, w, h);
   const frontTex = makeCanvas(scene, TEX.rinkFront, w, h);
+  const surround = new Buffer(surroundTex.getContext(), w, h);
   const back = new Buffer(backTex.getContext(), w, h);
   const front = new Buffer(frontTex.getContext(), w, h);
   const rng = new Rng(1994).fork('rink-art');
@@ -126,54 +134,9 @@ function drawRink(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
     boardFaceShade: rgb(PAL.boardFaceShade),
     boardOutside: rgb(PAL.boardOutside),
     kickplate: rgb(PAL.kickplate),
-    ice: rgb(PAL.ice),
-    iceDark: rgb(PAL.iceDark),
-    iceLight: rgb(PAL.iceLight),
-    red: rgb(PAL.red),
-    blue: rgb(PAL.blue),
-    crease: rgb(PAL.crease),
   };
 
-  const { centerX: cx, centerY: cy } = rink;
-  const topGoal = goalLineY(rink, 'top');
-  const bottomGoal = goalLineY(rink, 'bottom');
-  // Lines are specified by their thickness on screen, so they stay crisp at any tilt.
-  const thin = 0.5 / tilt;
-  const thick = 1.5 / tilt;
-  const ringHalf = Math.max(0.75, 0.7 / tilt);
-  const circles: Array<[number, number, Rgb]> = [[cx, cy, C.blue]];
-  const dots: Array<[number, number, Rgb]> = [[cx, cy, C.blue]];
-  for (const gy of [topGoal + 80, bottomGoal - 80]) {
-    for (const fx of [cx - 88, cx + 88]) {
-      circles.push([fx, gy, C.red]);
-      dots.push([fx, gy, C.red]);
-    }
-  }
-  for (const ny of [cy - rink.blueLineOffset + 20, cy + rink.blueLineOffset - 20]) {
-    for (const fx of [cx - 88, cx + 88]) dots.push([fx, ny, C.red]);
-  }
-
-  const iceColor = (x: number, y: number): Rgb => {
-    for (const [dx, dy, color] of dots) {
-      if (Math.hypot(x - dx, y - dy) <= 2.6) return color;
-    }
-    if (Math.abs(y - cy) <= thick) return C.red;
-    if (Math.abs(y - (cy - rink.blueLineOffset)) <= thick || Math.abs(y - (cy + rink.blueLineOffset)) <= thick) return C.blue;
-    for (const [ox, oy, color] of circles) {
-      if (Math.abs(Math.hypot(x - ox, y - oy) - 60) <= ringHalf) return color;
-    }
-    for (const line of [topGoal, bottomGoal]) {
-      const inFront = line === topGoal ? y - line : line - y;
-      const r = Math.hypot(x - cx, y - line);
-      if (inFront > 0 && Math.abs(r - 24) <= ringHalf) return C.red;
-      if (Math.abs(y - line) <= thin) return C.red;
-      if (inFront > 0 && r < 24) return C.crease;
-    }
-    const roll = rng.next();
-    return roll < 0.035 ? C.iceDark : roll < 0.045 ? C.iceLight : C.ice;
-  };
-
-  // Pass 1: the flat ground. Remember where the boards stand.
+  // Pass 1: the ground outside the ice. Remember where the boards stand.
   const footprint: Array<{ x: number; sy: number; d: number; ny: number }> = [];
   const crowdCols = Math.ceil(w / 4);
   const crowd: Array<Rgb | null> = [];
@@ -184,15 +147,14 @@ function drawRink(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
     for (let x = 0; x < w; x++) {
       const px = x + 0.5;
       const d = boardDistance(px, y, rink);
-      if (d <= 0) {
-        back.set(x, sy, iceColor(px, y));
-      } else if (d <= BOARD_THICKNESS) {
+      if (d <= 0) continue;
+      if (d <= BOARD_THICKNESS) {
         back.set(x, sy, C.boardBase);
         const ny = boardDistance(px, y + 0.5, rink) - boardDistance(px, y - 0.5, rink);
         footprint.push({ x, sy, d, ny });
       } else {
         const tile = x % 4 < 3 && sy % 4 < 3 ? crowd[Math.floor(sy / 4) * crowdCols + Math.floor(x / 4)] : null;
-        back.set(x, sy, tile ?? C.outside);
+        surround.set(x, sy, tile ?? C.outside);
       }
     }
   }
@@ -215,8 +177,10 @@ function drawRink(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
     if (wall <= 1) layer.set(p.x, p.sy, p.d <= 1 ? C.kickplate : C.boardCap);
   }
 
+  surroundTex.getContext().putImageData(surround.image, 0, 0);
   backTex.getContext().putImageData(back.image, 0, 0);
   frontTex.getContext().putImageData(front.image, 0, 0);
+  surroundTex.refresh();
   backTex.refresh();
   frontTex.refresh();
 }
@@ -334,7 +298,7 @@ export function texturesTilt(): number | null {
 
 /** Build every temporary gameplay texture for a camera tilt. Safe to call again. */
 export function buildTemporaryTextures(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
-  drawRink(scene, rink, tilt);
+  drawStandInBoards(scene, rink, tilt);
   drawNets(scene, rink, tilt);
   drawPuckAndShadow(scene, tilt);
   builtTilt = tilt;

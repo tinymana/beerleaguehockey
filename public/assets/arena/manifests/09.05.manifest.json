@@ -1,0 +1,28 @@
+{
+  "batch": "09.05",
+  "tileWidth": 8,
+  "tileHeight": 8,
+  "atlas": "blue_line_atlas.png",
+  "tiles": [
+    {
+      "index": 0,
+      "file": "blue_line_standard.png"
+    },
+    {
+      "index": 1,
+      "file": "blue_line_light.png"
+    },
+    {
+      "index": 2,
+      "file": "blue_line_dark.png"
+    },
+    {
+      "index": 3,
+      "file": "blue_line_faded.png"
+    }
+  ],
+  "layer": "rink_markings",
+  "orientation": "horizontal across vertical rink",
+  "recommendedIndex": 0,
+  "lineThickness": 4
+}

@@ -2,6 +2,25 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.2.0",
+      "date": "2026-11-25",
+      "title": "A proper sheet of ice",
+      "items": [
+        {
+          "tag": "new",
+          "text": "The rink is now built from Tiny Mana Studios' own tile art: ice, lines, faceoff circles, creases, a centre-ice logo and side boards."
+        },
+        {
+          "tag": "new",
+          "text": "The ice wears where you skate. Carve up one corner and you will see it."
+        },
+        {
+          "tag": "improved",
+          "text": "Overhead lights now glint off the ice."
+        }
+      ]
+    },
+    {
       "version": "0.1.2",
       "date": "2026-11-25",
       "title": "A real skater",

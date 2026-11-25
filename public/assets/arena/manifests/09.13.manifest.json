@@ -1,0 +1,121 @@
+{
+  "batch": "09.13",
+  "name": "Center-ice logo",
+  "tileSize": [
+    8,
+    8
+  ],
+  "atlas": "center_logo_atlas.png",
+  "atlasSize": [
+    32,
+    32
+  ],
+  "tiles": [
+    {
+      "index": 0,
+      "file": "logo_0_0.png",
+      "x": 0,
+      "y": 0
+    },
+    {
+      "index": 1,
+      "file": "logo_0_1.png",
+      "x": 8,
+      "y": 0
+    },
+    {
+      "index": 2,
+      "file": "logo_0_2.png",
+      "x": 16,
+      "y": 0
+    },
+    {
+      "index": 3,
+      "file": "logo_0_3.png",
+      "x": 24,
+      "y": 0
+    },
+    {
+      "index": 4,
+      "file": "logo_1_0.png",
+      "x": 0,
+      "y": 8
+    },
+    {
+      "index": 5,
+      "file": "logo_1_1.png",
+      "x": 8,
+      "y": 8
+    },
+    {
+      "index": 6,
+      "file": "logo_1_2.png",
+      "x": 16,
+      "y": 8
+    },
+    {
+      "index": 7,
+      "file": "logo_1_3.png",
+      "x": 24,
+      "y": 8
+    },
+    {
+      "index": 8,
+      "file": "logo_2_0.png",
+      "x": 0,
+      "y": 16
+    },
+    {
+      "index": 9,
+      "file": "logo_2_1.png",
+      "x": 8,
+      "y": 16
+    },
+    {
+      "index": 10,
+      "file": "logo_2_2.png",
+      "x": 16,
+      "y": 16
+    },
+    {
+      "index": 11,
+      "file": "logo_2_3.png",
+      "x": 24,
+      "y": 16
+    },
+    {
+      "index": 12,
+      "file": "logo_3_0.png",
+      "x": 0,
+      "y": 24
+    },
+    {
+      "index": 13,
+      "file": "logo_3_1.png",
+      "x": 8,
+      "y": 24
+    },
+    {
+      "index": 14,
+      "file": "logo_3_2.png",
+      "x": 16,
+      "y": 24
+    },
+    {
+      "index": 15,
+      "file": "logo_3_3.png",
+      "x": 24,
+      "y": 24
+    }
+  ],
+  "anchor": [
+    0.5,
+    0.5
+  ],
+  "layer": "rink_markings",
+  "orientation": "north-up",
+  "quadrantSize": [
+    16,
+    16
+  ]
+}

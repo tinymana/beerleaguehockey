@@ -1,0 +1,78 @@
+{
+  "batch": "09.08",
+  "tileSize": [
+    8,
+    8
+  ],
+  "atlas": "faceoff_hash_atlas.png",
+  "columns": 4,
+  "rows": 4,
+  "tiles": [
+    {
+      "index": 0,
+      "file": "dot_01.png"
+    },
+    {
+      "index": 1,
+      "file": "dot_02.png"
+    },
+    {
+      "index": 2,
+      "file": "dot_03.png"
+    },
+    {
+      "index": 3,
+      "file": "dot_04.png"
+    },
+    {
+      "index": 4,
+      "file": "hash_h_01.png"
+    },
+    {
+      "index": 5,
+      "file": "hash_h_02.png"
+    },
+    {
+      "index": 6,
+      "file": "hash_h_03.png"
+    },
+    {
+      "index": 7,
+      "file": "hash_h_04.png"
+    },
+    {
+      "index": 8,
+      "file": "hash_v_01.png"
+    },
+    {
+      "index": 9,
+      "file": "hash_v_02.png"
+    },
+    {
+      "index": 10,
+      "file": "hash_v_03.png"
+    },
+    {
+      "index": 11,
+      "file": "hash_v_04.png"
+    },
+    {
+      "index": 12,
+      "file": "corner_01.png"
+    },
+    {
+      "index": 13,
+      "file": "corner_02.png"
+    },
+    {
+      "index": 14,
+      "file": "corner_03.png"
+    },
+    {
+      "index": 15,
+      "file": "corner_04.png"
+    }
+  ],
+  "composite": "faceoff_mark.png",
+  "layer": "rink_markings"
+}

@@ -1,0 +1,83 @@
+{
+  "batch": "09.09",
+  "tileSize": [
+    8,
+    8
+  ],
+  "atlas": "center_circle_atlas.png",
+  "rows": 4,
+  "columns": 4,
+  "tiles": [
+    {
+      "index": 0,
+      "file": "circle_0_0.png"
+    },
+    {
+      "index": 1,
+      "file": "circle_0_1.png"
+    },
+    {
+      "index": 2,
+      "file": "circle_0_2.png"
+    },
+    {
+      "index": 3,
+      "file": "circle_0_3.png"
+    },
+    {
+      "index": 4,
+      "file": "circle_1_0.png"
+    },
+    {
+      "index": 5,
+      "file": "circle_1_1.png"
+    },
+    {
+      "index": 6,
+      "file": "circle_1_2.png"
+    },
+    {
+      "index": 7,
+      "file": "circle_1_3.png"
+    },
+    {
+      "index": 8,
+      "file": "circle_2_0.png"
+    },
+    {
+      "index": 9,
+      "file": "circle_2_1.png"
+    },
+    {
+      "index": 10,
+      "file": "circle_2_2.png"
+    },
+    {
+      "index": 11,
+      "file": "circle_2_3.png"
+    },
+    {
+      "index": 12,
+      "file": "circle_3_0.png"
+    },
+    {
+      "index": 13,
+      "file": "circle_3_1.png"
+    },
+    {
+      "index": 14,
+      "file": "circle_3_2.png"
+    },
+    {
+      "index": 15,
+      "file": "circle_3_3.png"
+    }
+  ],
+  "composite": "center_circle.png",
+  "dot": "center_dot.png",
+  "anchor": [
+    16,
+    16
+  ],
+  "layer": "rink_markings"
+}
