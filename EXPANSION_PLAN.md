@@ -94,6 +94,7 @@ Nothing below exists yet unless noted.
 | Cinematics | About 55 full-screen scenes across the four lists in the brief, as layered backgrounds, characters and effects, with safe areas for text | 480x320 native. The ingest pipeline needs a cinematic category that is exempt from the 8-pixel rule |
 | Fighting | Two fighters built in layers (appearance, jersey, number); idle, quick punch, heavy punch, block, duck, dodge left and right, grab, hit reactions, knockdown, tired; telegraph poses for eight personalities; referee break-up; backgrounds; HUD (stamina, balance) | The largest single art job in the brief |
 | Celly Packs | Per celebration: an on-ice sprite animation in the skater's layer scheme, and where practical a full-screen layered scene; pack preview art; collection screen, locked and unlocked frames, four-slot selector | A standing monthly art commitment. The on-ice versions need the layered skater sprites listed above |
+| Overtime and shootout | Ten more presentation scenes (end of regulation, overtime and shootout introductions, attempt, save, winners, multiple overtime, playoff and championship winners) | Adds to the cinematic count above, taking it to about 65 |
 | Collectibles | Shirt template with regions for team, division, year and season; a set of distinct tournament trophies; collection shelf and clubhouse backgrounds | The existing trophy art resembles a real trophy (P12) |
 | Scoreboard and banners | A 3x5 digit font; a place to hang banners and jerseys | Art supplied in batch 14, waiting on the world-width ruling (A20) |
 | Injuries, recruitment, substitutes | Small icons and chat stickers | |
@@ -133,7 +134,7 @@ In rough order of how much work they block.
 20. **Pick window.** *Answered Nov 25 (Decisions 28 and 29):* up to 2 seconds; a pick closes the window and starts the animation at once; no pick plays the default; automatic mode skips the window; the animation is skippable.
 21. **Pack size and cadence.** You have reserved these for your approval; they also set the monthly art workload (two formats per celebration).
 
-22. **Overtime details (Decision 30).** One 5-minute overtime, then a shootout, is approved. Still to settle: sudden death or full period, skaters a side, shootout rounds, and whether playoffs use the same rule.
+22. **Overtime (Decision 30).** *Answered Nov 25:* regular season is 3-on-3 sudden death for five simulated minutes, then a three-round shootout; playoffs are 5-on-5 sudden death in 20-minute periods with no shootout. Still open: what an overtime or shootout loss is worth in the standings (the same as a regulation loss, or a point), and the regulation period length the 20-minute playoff overtime is modelled on.
 
 ## 7. What I would not do without your ruling
 
