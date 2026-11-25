@@ -1,0 +1,495 @@
+{
+  "batch": "15.02",
+  "tileSize": [
+    8,
+    8
+  ],
+  "frameSize": [
+    32,
+    32
+  ],
+  "atlas": "locker_atlas.png",
+  "assets": [
+    {
+      "file": "blue_closed.png",
+      "state": "closed",
+      "atlasRect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "tiles": [
+        [
+          "blue_closed_0_0.png",
+          "blue_closed_0_1.png",
+          "blue_closed_0_2.png",
+          "blue_closed_0_3.png"
+        ],
+        [
+          "blue_closed_1_0.png",
+          "blue_closed_1_1.png",
+          "blue_closed_1_2.png",
+          "blue_closed_1_3.png"
+        ],
+        [
+          "blue_closed_2_0.png",
+          "blue_closed_2_1.png",
+          "blue_closed_2_2.png",
+          "blue_closed_2_3.png"
+        ],
+        [
+          "blue_closed_3_0.png",
+          "blue_closed_3_1.png",
+          "blue_closed_3_2.png",
+          "blue_closed_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "blue_open.png",
+      "state": "open",
+      "atlasRect": [
+        32,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "tiles": [
+        [
+          "blue_open_0_0.png",
+          "blue_open_0_1.png",
+          "blue_open_0_2.png",
+          "blue_open_0_3.png"
+        ],
+        [
+          "blue_open_1_0.png",
+          "blue_open_1_1.png",
+          "blue_open_1_2.png",
+          "blue_open_1_3.png"
+        ],
+        [
+          "blue_open_2_0.png",
+          "blue_open_2_1.png",
+          "blue_open_2_2.png",
+          "blue_open_2_3.png"
+        ],
+        [
+          "blue_open_3_0.png",
+          "blue_open_3_1.png",
+          "blue_open_3_2.png",
+          "blue_open_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "blue_jersey.png",
+      "state": "jersey",
+      "atlasRect": [
+        64,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "tiles": [
+        [
+          "blue_jersey_0_0.png",
+          "blue_jersey_0_1.png",
+          "blue_jersey_0_2.png",
+          "blue_jersey_0_3.png"
+        ],
+        [
+          "blue_jersey_1_0.png",
+          "blue_jersey_1_1.png",
+          "blue_jersey_1_2.png",
+          "blue_jersey_1_3.png"
+        ],
+        [
+          "blue_jersey_2_0.png",
+          "blue_jersey_2_1.png",
+          "blue_jersey_2_2.png",
+          "blue_jersey_2_3.png"
+        ],
+        [
+          "blue_jersey_3_0.png",
+          "blue_jersey_3_1.png",
+          "blue_jersey_3_2.png",
+          "blue_jersey_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "red_closed.png",
+      "state": "closed",
+      "atlasRect": [
+        96,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "tiles": [
+        [
+          "red_closed_0_0.png",
+          "red_closed_0_1.png",
+          "red_closed_0_2.png",
+          "red_closed_0_3.png"
+        ],
+        [
+          "red_closed_1_0.png",
+          "red_closed_1_1.png",
+          "red_closed_1_2.png",
+          "red_closed_1_3.png"
+        ],
+        [
+          "red_closed_2_0.png",
+          "red_closed_2_1.png",
+          "red_closed_2_2.png",
+          "red_closed_2_3.png"
+        ],
+        [
+          "red_closed_3_0.png",
+          "red_closed_3_1.png",
+          "red_closed_3_2.png",
+          "red_closed_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "red_open.png",
+      "state": "open",
+      "atlasRect": [
+        0,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "tiles": [
+        [
+          "red_open_0_0.png",
+          "red_open_0_1.png",
+          "red_open_0_2.png",
+          "red_open_0_3.png"
+        ],
+        [
+          "red_open_1_0.png",
+          "red_open_1_1.png",
+          "red_open_1_2.png",
+          "red_open_1_3.png"
+        ],
+        [
+          "red_open_2_0.png",
+          "red_open_2_1.png",
+          "red_open_2_2.png",
+          "red_open_2_3.png"
+        ],
+        [
+          "red_open_3_0.png",
+          "red_open_3_1.png",
+          "red_open_3_2.png",
+          "red_open_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "red_jersey.png",
+      "state": "jersey",
+      "atlasRect": [
+        32,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "tiles": [
+        [
+          "red_jersey_0_0.png",
+          "red_jersey_0_1.png",
+          "red_jersey_0_2.png",
+          "red_jersey_0_3.png"
+        ],
+        [
+          "red_jersey_1_0.png",
+          "red_jersey_1_1.png",
+          "red_jersey_1_2.png",
+          "red_jersey_1_3.png"
+        ],
+        [
+          "red_jersey_2_0.png",
+          "red_jersey_2_1.png",
+          "red_jersey_2_2.png",
+          "red_jersey_2_3.png"
+        ],
+        [
+          "red_jersey_3_0.png",
+          "red_jersey_3_1.png",
+          "red_jersey_3_2.png",
+          "red_jersey_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "green_closed.png",
+      "state": "closed",
+      "atlasRect": [
+        64,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "tiles": [
+        [
+          "green_closed_0_0.png",
+          "green_closed_0_1.png",
+          "green_closed_0_2.png",
+          "green_closed_0_3.png"
+        ],
+        [
+          "green_closed_1_0.png",
+          "green_closed_1_1.png",
+          "green_closed_1_2.png",
+          "green_closed_1_3.png"
+        ],
+        [
+          "green_closed_2_0.png",
+          "green_closed_2_1.png",
+          "green_closed_2_2.png",
+          "green_closed_2_3.png"
+        ],
+        [
+          "green_closed_3_0.png",
+          "green_closed_3_1.png",
+          "green_closed_3_2.png",
+          "green_closed_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "green_open.png",
+      "state": "open",
+      "atlasRect": [
+        96,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "tiles": [
+        [
+          "green_open_0_0.png",
+          "green_open_0_1.png",
+          "green_open_0_2.png",
+          "green_open_0_3.png"
+        ],
+        [
+          "green_open_1_0.png",
+          "green_open_1_1.png",
+          "green_open_1_2.png",
+          "green_open_1_3.png"
+        ],
+        [
+          "green_open_2_0.png",
+          "green_open_2_1.png",
+          "green_open_2_2.png",
+          "green_open_2_3.png"
+        ],
+        [
+          "green_open_3_0.png",
+          "green_open_3_1.png",
+          "green_open_3_2.png",
+          "green_open_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "green_jersey.png",
+      "state": "jersey",
+      "atlasRect": [
+        0,
+        64,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "tiles": [
+        [
+          "green_jersey_0_0.png",
+          "green_jersey_0_1.png",
+          "green_jersey_0_2.png",
+          "green_jersey_0_3.png"
+        ],
+        [
+          "green_jersey_1_0.png",
+          "green_jersey_1_1.png",
+          "green_jersey_1_2.png",
+          "green_jersey_1_3.png"
+        ],
+        [
+          "green_jersey_2_0.png",
+          "green_jersey_2_1.png",
+          "green_jersey_2_2.png",
+          "green_jersey_2_3.png"
+        ],
+        [
+          "green_jersey_3_0.png",
+          "green_jersey_3_1.png",
+          "green_jersey_3_2.png",
+          "green_jersey_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "neutral_closed.png",
+      "state": "closed",
+      "atlasRect": [
+        32,
+        64,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "tiles": [
+        [
+          "neutral_closed_0_0.png",
+          "neutral_closed_0_1.png",
+          "neutral_closed_0_2.png",
+          "neutral_closed_0_3.png"
+        ],
+        [
+          "neutral_closed_1_0.png",
+          "neutral_closed_1_1.png",
+          "neutral_closed_1_2.png",
+          "neutral_closed_1_3.png"
+        ],
+        [
+          "neutral_closed_2_0.png",
+          "neutral_closed_2_1.png",
+          "neutral_closed_2_2.png",
+          "neutral_closed_2_3.png"
+        ],
+        [
+          "neutral_closed_3_0.png",
+          "neutral_closed_3_1.png",
+          "neutral_closed_3_2.png",
+          "neutral_closed_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "neutral_open.png",
+      "state": "open",
+      "atlasRect": [
+        64,
+        64,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "tiles": [
+        [
+          "neutral_open_0_0.png",
+          "neutral_open_0_1.png",
+          "neutral_open_0_2.png",
+          "neutral_open_0_3.png"
+        ],
+        [
+          "neutral_open_1_0.png",
+          "neutral_open_1_1.png",
+          "neutral_open_1_2.png",
+          "neutral_open_1_3.png"
+        ],
+        [
+          "neutral_open_2_0.png",
+          "neutral_open_2_1.png",
+          "neutral_open_2_2.png",
+          "neutral_open_2_3.png"
+        ],
+        [
+          "neutral_open_3_0.png",
+          "neutral_open_3_1.png",
+          "neutral_open_3_2.png",
+          "neutral_open_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "neutral_jersey.png",
+      "state": "jersey",
+      "atlasRect": [
+        96,
+        64,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "tiles": [
+        [
+          "neutral_jersey_0_0.png",
+          "neutral_jersey_0_1.png",
+          "neutral_jersey_0_2.png",
+          "neutral_jersey_0_3.png"
+        ],
+        [
+          "neutral_jersey_1_0.png",
+          "neutral_jersey_1_1.png",
+          "neutral_jersey_1_2.png",
+          "neutral_jersey_1_3.png"
+        ],
+        [
+          "neutral_jersey_2_0.png",
+          "neutral_jersey_2_1.png",
+          "neutral_jersey_2_2.png",
+          "neutral_jersey_2_3.png"
+        ],
+        [
+          "neutral_jersey_3_0.png",
+          "neutral_jersey_3_1.png",
+          "neutral_jersey_3_2.png",
+          "neutral_jersey_3_3.png"
+        ]
+      ]
+    }
+  ],
+  "previewOnly": "preview.png"
+}

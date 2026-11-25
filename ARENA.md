@@ -70,15 +70,16 @@ Open it by pressing **L** on the title screen, or by loading the game with `#are
 - Ice wear control, 0 to 100%.
 - Goal states: rest, scored, net ripple, bottle off, dislodged, played on both nets; a goal fit readout gives the drawn mouth and depth against the physics net.
 - Stands: sit, stand, fans cheer, goal celebration, glass banging (front row), drink, heckle, goal lamps; a readout gives seats on screen, seats taken and seats that fall outside the world.
+- Locker room fit test (batch 15): its own screen, opened from the Lab. Keys 1 to 5 change the mood, C the colour, T shows sample trophies, Esc returns.
 - Equipment tests: run the resurfacer over worn ice, debris on the ice, light pools, and the four scoreboard states with sample numbers.
 - Benches: empty, seated, standing, cheer, groan; open and close every door; a footprint report says whether each structure is off the ice, on screen, clear of its neighbour and has its doors on whole board modules.
 - Art slots list: every slot with supplied, provisional or missing.
 - Asset browser: every registered asset at native size and enlarged, on a real checkerboard, with its facts.
 - Ingestion report: counts and every warning.
 
-## Status (v0.3.0)
+## Status (v0.3.1)
 
-Registered: 12,436 assets from 70 packages (batches 09.01 to 09.13, 10.01 to 10.14, 11.01 to 11.10, 12.01 to 12.10, 13.01 to 13.15 and 14.01 to 14.08). Errors: 0. Rejected: 0. Excluded: 70 preview images. The game loads 194 of the files: one per atlas or animation strip and one per distinct whole image. Single tiles, files a manifest places inside an atlas, and byte-identical duplicates are all drawn from those (`textureSource()` in `registry.ts`).
+Registered: 16,577 assets from 80 packages (batches 09.01 to 09.13, 10.01 to 10.14, 11.01 to 11.10, 12.01 to 12.10, 13.01 to 13.15, 14.01 to 14.08 and 15.01 to 15.10). Errors: 0. Rejected: 0. Excluded: 80 preview images. The game loads 204 of the files: one per atlas or animation strip and one per distinct whole image. Single tiles, files a manifest places inside an atlas, and byte-identical duplicates are all drawn from those (`textureSource()` in `registry.ts`).
 
 In the standard arena now: ice, scratches, reflections, all markings, centre logo, straight boards on all four sides, glass panes and posts on the straight runs, two sponsor panels, the supplied north and south goals (provisional: see A13), and the bench area: two benches with seated players, two penalty boxes, the timekeeper booth and six closed doors (provisional: see A16), side seating with a seated crowd, and a goal lamp behind each net (provisional: see A20, A21). Glass damage states (cracked, shattered, missing) can be set per pane and are shown by the Lab's glass damage test.
 
@@ -90,7 +91,9 @@ Stands and crowd (batch 13): `stadium` in the arena config names the seating and
 
 Equipment (batch 14): nothing is drawn in play. `equipment` in the arena config names the resurfacer, debris, light glow and scoreboard art for four Lab tests: `runResurfacer()` (lanes from `resurfacerLanes()`, cleaning wear with `IceWear.clearCell()`), `setDebrisTest()`, `setLightPoolsTest()` and the Lab scene's scoreboard overlay. The garage is marked unfit; banners, jerseys, signs and fixtures are registered only.
 
-Not usable as drawn (2 slots): corner boards (A8), resurfacer garage (A24). Missing (1 slot): curved corner glass. Also not drawn: seating for the ends and corners, which no batch has supplied.
+Locker room (batch 15): not arena art, but it comes through the same pipeline and registry (category `locker`). `src/match/view/locker/lockerRoom.ts` lays out one room and lists every supplied animation with its manifest timings and anchors; `LockerRoomTestScene` draws it. Developer fit test only.
+
+Not usable as drawn (4 slots): corner boards (A8), both goals (A13, being redrawn), resurfacer garage (A24). Earlier wording: Not usable as drawn (2 slots): corner boards (A8), resurfacer garage (A24). Missing (1 slot): curved corner glass. Also not drawn: seating for the ends and corners, which no batch has supplied.
 
 Arena configurations: Standard rink; Supplied art only (no stand-ins); Corner art fit test; Goal art fit test; Practice sheet.
 
@@ -124,4 +127,6 @@ Arena configurations: Standard rink; Supplied art only (no stand-ins); Corner ar
 | A25 | **Banners, retired jerseys and signs have nowhere to hang.** They mount on walls or rafters outside the ice, and the world has neither. Banners and jerseys must also come from real records | Registered, viewable in the Lab browser | Banner names match the five divisions (Puck, Tin, Bronze, Silver, Gold) plus Cup and League. Where they hang depends on A20, or on a separate rafters view (a title or intermission screen, say): your call |
 | A26 | **Scoreboard.** 128x64, four states, six live fields. There is no clock, period or penalty yet, and no place outside the ice to mount it. The penalty fields need a 3x5 font. Its header reads THE ICE BARN | Lab test with sample numbers; penalty fields empty | Is "The Ice Barn" the approved arena name? Should the board hang in the arena (needs room) or become the broadcast scorebug? A 3x5 digit set is needed either way |
 | A27 | **Lighting.** Fixtures mount on beams (13.14), which are unplaced. The soft glow is meant for the ice, with adjustable opacity | Glow is a Lab test at 50%; fixtures not placed | Say whether the glow should replace or join the current reflection streaks (A6) |
+| A28 | **Locker room: who is the coach?** Batch 15 supplies a coach in a tracksuit beside the captain. The design has captains, managers and player-managers, but no coach | Both stand at the whiteboard in the fit test | Is the coach the Manager (or Player-Manager) character, a separate volunteer, or only for higher divisions? |
+| A29 | **Locker room pieces.** No south-east wall corner (I mirror the south-west one). Players come in baked blue and red only, while lockers also come in green and neutral. The whiteboard diagrams are illustrations, not real tactics | Fit test uses blue or red | A south-east corner, and a decision on how team colours reach locker room characters (layers for recolouring, as with on-ice skaters) |
 | A12 | **Supplied boards and stand-in corners do not match** where they meet | Visible seam at each corner | Goes away with A8 |

@@ -31,6 +31,7 @@ export interface LabActions {
   setDebris(on: boolean): void;
   setLightPools(on: boolean): void;
   setScoreboard(state: string | null): void;
+  openLockerRoom(): void;
   setDoorsOpen(open: boolean): void;
   useInGame(id: string): void;
   exit(): void;
@@ -260,6 +261,13 @@ export class ArenaLabPanel {
       el('p', 'lab-note', 'Scoreboard states with sample numbers, pinned to the screen: the arena has no wall or rafters to hang it on yet. Banners, retired jerseys, signs, light fixtures and the garage are in the asset browser only.'),
     );
     this.root.append(gear);
+
+    // Locker room
+    const locker = section('Locker room (batch 15)');
+    const lockerRow = el('div', 'lab-buttons');
+    lockerRow.append(button('OPEN LOCKER ROOM TEST', () => actions.openLockerRoom()));
+    locker.append(lockerRow, el('p', 'lab-note', 'One assembled room with five moods: getting dressed, beers, after a win, after a loss, team talk. A fit test for the art only. The locker room is not a place in the game yet.'));
+    this.root.append(locker);
 
     // Missing art
     const slots = section('Art slots');

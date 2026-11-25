@@ -2,6 +2,17 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.3.1",
+      "date": "2026-11-25",
+      "title": "A peek in the room",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Locker room art is in the building: lockers, benches, a whiteboard nobody looks at and a trophy cabinet with nothing in it. Not open to visitors yet."
+        }
+      ]
+    },
+    {
       "version": "0.3.0",
       "date": "2026-11-25",
       "title": "Who did you grow up watching?",

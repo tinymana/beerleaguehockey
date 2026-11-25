@@ -14,6 +14,7 @@ import { TEX, buildTemporaryTextures, netLayout, netScreenAnchor } from '../text
 import type { ArenaConfig, BenchMood, BoardSide, CrowdPose, CrowdReaction, GlassState, GoalEnd, GoalState, GoalStrip } from './config';
 import { CrowdView } from './CrowdView';
 import { IceWear, trafficPrior } from './iceWear';
+import { assetFrame, cellFrame } from './phaserTextures';
 import { Rng, hashString } from '../../../core/rng';
 import { ARENA_LAYERS, faceoffSpots, iceOutline, layerDepth, layoutArena, layoutGoals, resurfacerLanes } from './layout';
 import type { ArenaLayerId, ArenaLayout, BenchSpot, GoalPlacement } from './layout';
@@ -120,17 +121,12 @@ export class ArenaRenderer {
 
   /** A named frame for one rectangle of a texture, cut on first use. */
   private cell(key: string, x: number, y: number, width: number, height: number): string {
-    const texture = this.scene.textures.get(key);
-    const name = `cell-${x}-${y}-${width}x${height}`;
-    if (!texture.has(name)) texture.add(name, 0, x, y, width, height);
-    return name;
+    return cellFrame(this.scene, key, x, y, width, height);
   }
 
   /** Texture and frame that hold an asset's pixels: its own file, its duplicate, or its cell of an atlas. */
   private tex(id: string): [string, string] {
-    const source = textureSource(this.registry, id);
-    const c = source.cell;
-    return [source.key, c ? this.cell(source.key, c.x, c.y, c.width, c.height) : WHOLE];
+    return assetFrame(this.scene, this.registry, id);
   }
 
   private has(id: string): boolean {

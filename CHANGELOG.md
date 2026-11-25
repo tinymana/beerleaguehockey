@@ -2,6 +2,22 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.3.1 - 2026-11-25 - Locker room art (fit test)
+
+Ten more packages (batches 15.01 to 15.10) ingested: 16,577 assets from 80 packages, 0 errors. Nothing in play changed.
+
+### Added (developer only)
+- **Locker room fit test**, opened from the Arena Asset Lab or with `#locker-room`: one room assembled from the supplied floor, walls, doorway, lockers, benches, gear, whiteboard and trophy cabinet, with ten people in it.
+- Five moods that play every supplied animation: getting dressed, beers, after a win, after a loss, team talk (coach and captain). Blue and red colour sets. A labelled sample-trophy toggle to check the cabinet slots.
+- Ingest: a `locker` category for batch 15.
+
+### Known issues
+- It is a fit test, not a place in the game: nothing reads or changes game state, and the lifestyle locations are not authorized.
+- No south-east wall corner was supplied; the south-west corner is mirrored.
+- The design has captains and managers but no coach. `ARENA.md` A28.
+- Players are baked blue or red and do not reflect a created player's appearance. Green and neutral lockers have no matching players or benches.
+- The trophy cabinet is empty by design: it will be filled from career history only.
+
 ## 0.3.0 - 2026-11-25 - Track B begins: menu, Hockey Influences, Player DNA, creator foundation
 
 First career-side release, authorized by Decision 34. Track A (the hockey match) is still gated on the skating checkpoint; nothing on the ice changed except the nets (below).

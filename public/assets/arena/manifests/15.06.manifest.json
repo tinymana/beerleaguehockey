@@ -1,0 +1,1550 @@
+{
+  "batch": "15.06",
+  "tileSize": [
+    8,
+    8
+  ],
+  "frameSize": [
+    32,
+    32
+  ],
+  "atlas": "celebration_atlas.png",
+  "sequences": [
+    {
+      "id": "blue_fist_pump",
+      "team": "blue",
+      "action": "fist_pump",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "loop": false,
+      "frames": [
+        {
+          "file": "blue_fist_pump_00.png",
+          "atlasRect": [
+            0,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "blue_fist_pump_00_0_0.png",
+              "blue_fist_pump_00_0_1.png",
+              "blue_fist_pump_00_0_2.png",
+              "blue_fist_pump_00_0_3.png"
+            ],
+            [
+              "blue_fist_pump_00_1_0.png",
+              "blue_fist_pump_00_1_1.png",
+              "blue_fist_pump_00_1_2.png",
+              "blue_fist_pump_00_1_3.png"
+            ],
+            [
+              "blue_fist_pump_00_2_0.png",
+              "blue_fist_pump_00_2_1.png",
+              "blue_fist_pump_00_2_2.png",
+              "blue_fist_pump_00_2_3.png"
+            ],
+            [
+              "blue_fist_pump_00_3_0.png",
+              "blue_fist_pump_00_3_1.png",
+              "blue_fist_pump_00_3_2.png",
+              "blue_fist_pump_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_fist_pump_01.png",
+          "atlasRect": [
+            32,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 120,
+          "tiles": [
+            [
+              "blue_fist_pump_01_0_0.png",
+              "blue_fist_pump_01_0_1.png",
+              "blue_fist_pump_01_0_2.png",
+              "blue_fist_pump_01_0_3.png"
+            ],
+            [
+              "blue_fist_pump_01_1_0.png",
+              "blue_fist_pump_01_1_1.png",
+              "blue_fist_pump_01_1_2.png",
+              "blue_fist_pump_01_1_3.png"
+            ],
+            [
+              "blue_fist_pump_01_2_0.png",
+              "blue_fist_pump_01_2_1.png",
+              "blue_fist_pump_01_2_2.png",
+              "blue_fist_pump_01_2_3.png"
+            ],
+            [
+              "blue_fist_pump_01_3_0.png",
+              "blue_fist_pump_01_3_1.png",
+              "blue_fist_pump_01_3_2.png",
+              "blue_fist_pump_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_fist_pump_02.png",
+          "atlasRect": [
+            64,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "blue_fist_pump_02_0_0.png",
+              "blue_fist_pump_02_0_1.png",
+              "blue_fist_pump_02_0_2.png",
+              "blue_fist_pump_02_0_3.png"
+            ],
+            [
+              "blue_fist_pump_02_1_0.png",
+              "blue_fist_pump_02_1_1.png",
+              "blue_fist_pump_02_1_2.png",
+              "blue_fist_pump_02_1_3.png"
+            ],
+            [
+              "blue_fist_pump_02_2_0.png",
+              "blue_fist_pump_02_2_1.png",
+              "blue_fist_pump_02_2_2.png",
+              "blue_fist_pump_02_2_3.png"
+            ],
+            [
+              "blue_fist_pump_02_3_0.png",
+              "blue_fist_pump_02_3_1.png",
+              "blue_fist_pump_02_3_2.png",
+              "blue_fist_pump_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_fist_pump_03.png",
+          "atlasRect": [
+            96,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_fist_pump_03_0_0.png",
+              "blue_fist_pump_03_0_1.png",
+              "blue_fist_pump_03_0_2.png",
+              "blue_fist_pump_03_0_3.png"
+            ],
+            [
+              "blue_fist_pump_03_1_0.png",
+              "blue_fist_pump_03_1_1.png",
+              "blue_fist_pump_03_1_2.png",
+              "blue_fist_pump_03_1_3.png"
+            ],
+            [
+              "blue_fist_pump_03_2_0.png",
+              "blue_fist_pump_03_2_1.png",
+              "blue_fist_pump_03_2_2.png",
+              "blue_fist_pump_03_2_3.png"
+            ],
+            [
+              "blue_fist_pump_03_3_0.png",
+              "blue_fist_pump_03_3_1.png",
+              "blue_fist_pump_03_3_2.png",
+              "blue_fist_pump_03_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_fist_pump_04.png",
+          "atlasRect": [
+            128,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "blue_fist_pump_04_0_0.png",
+              "blue_fist_pump_04_0_1.png",
+              "blue_fist_pump_04_0_2.png",
+              "blue_fist_pump_04_0_3.png"
+            ],
+            [
+              "blue_fist_pump_04_1_0.png",
+              "blue_fist_pump_04_1_1.png",
+              "blue_fist_pump_04_1_2.png",
+              "blue_fist_pump_04_1_3.png"
+            ],
+            [
+              "blue_fist_pump_04_2_0.png",
+              "blue_fist_pump_04_2_1.png",
+              "blue_fist_pump_04_2_2.png",
+              "blue_fist_pump_04_2_3.png"
+            ],
+            [
+              "blue_fist_pump_04_3_0.png",
+              "blue_fist_pump_04_3_1.png",
+              "blue_fist_pump_04_3_2.png",
+              "blue_fist_pump_04_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blue_arms_raised",
+      "team": "blue",
+      "action": "arms_raised",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "loop": false,
+      "frames": [
+        {
+          "file": "blue_arms_raised_00.png",
+          "atlasRect": [
+            0,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "blue_arms_raised_00_0_0.png",
+              "blue_arms_raised_00_0_1.png",
+              "blue_arms_raised_00_0_2.png",
+              "blue_arms_raised_00_0_3.png"
+            ],
+            [
+              "blue_arms_raised_00_1_0.png",
+              "blue_arms_raised_00_1_1.png",
+              "blue_arms_raised_00_1_2.png",
+              "blue_arms_raised_00_1_3.png"
+            ],
+            [
+              "blue_arms_raised_00_2_0.png",
+              "blue_arms_raised_00_2_1.png",
+              "blue_arms_raised_00_2_2.png",
+              "blue_arms_raised_00_2_3.png"
+            ],
+            [
+              "blue_arms_raised_00_3_0.png",
+              "blue_arms_raised_00_3_1.png",
+              "blue_arms_raised_00_3_2.png",
+              "blue_arms_raised_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_arms_raised_01.png",
+          "atlasRect": [
+            32,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 120,
+          "tiles": [
+            [
+              "blue_arms_raised_01_0_0.png",
+              "blue_arms_raised_01_0_1.png",
+              "blue_arms_raised_01_0_2.png",
+              "blue_arms_raised_01_0_3.png"
+            ],
+            [
+              "blue_arms_raised_01_1_0.png",
+              "blue_arms_raised_01_1_1.png",
+              "blue_arms_raised_01_1_2.png",
+              "blue_arms_raised_01_1_3.png"
+            ],
+            [
+              "blue_arms_raised_01_2_0.png",
+              "blue_arms_raised_01_2_1.png",
+              "blue_arms_raised_01_2_2.png",
+              "blue_arms_raised_01_2_3.png"
+            ],
+            [
+              "blue_arms_raised_01_3_0.png",
+              "blue_arms_raised_01_3_1.png",
+              "blue_arms_raised_01_3_2.png",
+              "blue_arms_raised_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_arms_raised_02.png",
+          "atlasRect": [
+            64,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "blue_arms_raised_02_0_0.png",
+              "blue_arms_raised_02_0_1.png",
+              "blue_arms_raised_02_0_2.png",
+              "blue_arms_raised_02_0_3.png"
+            ],
+            [
+              "blue_arms_raised_02_1_0.png",
+              "blue_arms_raised_02_1_1.png",
+              "blue_arms_raised_02_1_2.png",
+              "blue_arms_raised_02_1_3.png"
+            ],
+            [
+              "blue_arms_raised_02_2_0.png",
+              "blue_arms_raised_02_2_1.png",
+              "blue_arms_raised_02_2_2.png",
+              "blue_arms_raised_02_2_3.png"
+            ],
+            [
+              "blue_arms_raised_02_3_0.png",
+              "blue_arms_raised_02_3_1.png",
+              "blue_arms_raised_02_3_2.png",
+              "blue_arms_raised_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_arms_raised_03.png",
+          "atlasRect": [
+            96,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_arms_raised_03_0_0.png",
+              "blue_arms_raised_03_0_1.png",
+              "blue_arms_raised_03_0_2.png",
+              "blue_arms_raised_03_0_3.png"
+            ],
+            [
+              "blue_arms_raised_03_1_0.png",
+              "blue_arms_raised_03_1_1.png",
+              "blue_arms_raised_03_1_2.png",
+              "blue_arms_raised_03_1_3.png"
+            ],
+            [
+              "blue_arms_raised_03_2_0.png",
+              "blue_arms_raised_03_2_1.png",
+              "blue_arms_raised_03_2_2.png",
+              "blue_arms_raised_03_2_3.png"
+            ],
+            [
+              "blue_arms_raised_03_3_0.png",
+              "blue_arms_raised_03_3_1.png",
+              "blue_arms_raised_03_3_2.png",
+              "blue_arms_raised_03_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_arms_raised_04.png",
+          "atlasRect": [
+            128,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "blue_arms_raised_04_0_0.png",
+              "blue_arms_raised_04_0_1.png",
+              "blue_arms_raised_04_0_2.png",
+              "blue_arms_raised_04_0_3.png"
+            ],
+            [
+              "blue_arms_raised_04_1_0.png",
+              "blue_arms_raised_04_1_1.png",
+              "blue_arms_raised_04_1_2.png",
+              "blue_arms_raised_04_1_3.png"
+            ],
+            [
+              "blue_arms_raised_04_2_0.png",
+              "blue_arms_raised_04_2_1.png",
+              "blue_arms_raised_04_2_2.png",
+              "blue_arms_raised_04_2_3.png"
+            ],
+            [
+              "blue_arms_raised_04_3_0.png",
+              "blue_arms_raised_04_3_1.png",
+              "blue_arms_raised_04_3_2.png",
+              "blue_arms_raised_04_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blue_high_five",
+      "team": "blue",
+      "action": "high_five",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "loop": false,
+      "frames": [
+        {
+          "file": "blue_high_five_00.png",
+          "atlasRect": [
+            0,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "blue_high_five_00_0_0.png",
+              "blue_high_five_00_0_1.png",
+              "blue_high_five_00_0_2.png",
+              "blue_high_five_00_0_3.png"
+            ],
+            [
+              "blue_high_five_00_1_0.png",
+              "blue_high_five_00_1_1.png",
+              "blue_high_five_00_1_2.png",
+              "blue_high_five_00_1_3.png"
+            ],
+            [
+              "blue_high_five_00_2_0.png",
+              "blue_high_five_00_2_1.png",
+              "blue_high_five_00_2_2.png",
+              "blue_high_five_00_2_3.png"
+            ],
+            [
+              "blue_high_five_00_3_0.png",
+              "blue_high_five_00_3_1.png",
+              "blue_high_five_00_3_2.png",
+              "blue_high_five_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_high_five_01.png",
+          "atlasRect": [
+            32,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 120,
+          "tiles": [
+            [
+              "blue_high_five_01_0_0.png",
+              "blue_high_five_01_0_1.png",
+              "blue_high_five_01_0_2.png",
+              "blue_high_five_01_0_3.png"
+            ],
+            [
+              "blue_high_five_01_1_0.png",
+              "blue_high_five_01_1_1.png",
+              "blue_high_five_01_1_2.png",
+              "blue_high_five_01_1_3.png"
+            ],
+            [
+              "blue_high_five_01_2_0.png",
+              "blue_high_five_01_2_1.png",
+              "blue_high_five_01_2_2.png",
+              "blue_high_five_01_2_3.png"
+            ],
+            [
+              "blue_high_five_01_3_0.png",
+              "blue_high_five_01_3_1.png",
+              "blue_high_five_01_3_2.png",
+              "blue_high_five_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_high_five_02.png",
+          "atlasRect": [
+            64,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "blue_high_five_02_0_0.png",
+              "blue_high_five_02_0_1.png",
+              "blue_high_five_02_0_2.png",
+              "blue_high_five_02_0_3.png"
+            ],
+            [
+              "blue_high_five_02_1_0.png",
+              "blue_high_five_02_1_1.png",
+              "blue_high_five_02_1_2.png",
+              "blue_high_five_02_1_3.png"
+            ],
+            [
+              "blue_high_five_02_2_0.png",
+              "blue_high_five_02_2_1.png",
+              "blue_high_five_02_2_2.png",
+              "blue_high_five_02_2_3.png"
+            ],
+            [
+              "blue_high_five_02_3_0.png",
+              "blue_high_five_02_3_1.png",
+              "blue_high_five_02_3_2.png",
+              "blue_high_five_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_high_five_03.png",
+          "atlasRect": [
+            96,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_high_five_03_0_0.png",
+              "blue_high_five_03_0_1.png",
+              "blue_high_five_03_0_2.png",
+              "blue_high_five_03_0_3.png"
+            ],
+            [
+              "blue_high_five_03_1_0.png",
+              "blue_high_five_03_1_1.png",
+              "blue_high_five_03_1_2.png",
+              "blue_high_five_03_1_3.png"
+            ],
+            [
+              "blue_high_five_03_2_0.png",
+              "blue_high_five_03_2_1.png",
+              "blue_high_five_03_2_2.png",
+              "blue_high_five_03_2_3.png"
+            ],
+            [
+              "blue_high_five_03_3_0.png",
+              "blue_high_five_03_3_1.png",
+              "blue_high_five_03_3_2.png",
+              "blue_high_five_03_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_high_five_04.png",
+          "atlasRect": [
+            128,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "blue_high_five_04_0_0.png",
+              "blue_high_five_04_0_1.png",
+              "blue_high_five_04_0_2.png",
+              "blue_high_five_04_0_3.png"
+            ],
+            [
+              "blue_high_five_04_1_0.png",
+              "blue_high_five_04_1_1.png",
+              "blue_high_five_04_1_2.png",
+              "blue_high_five_04_1_3.png"
+            ],
+            [
+              "blue_high_five_04_2_0.png",
+              "blue_high_five_04_2_1.png",
+              "blue_high_five_04_2_2.png",
+              "blue_high_five_04_2_3.png"
+            ],
+            [
+              "blue_high_five_04_3_0.png",
+              "blue_high_five_04_3_1.png",
+              "blue_high_five_04_3_2.png",
+              "blue_high_five_04_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blue_victory_pose",
+      "team": "blue",
+      "action": "victory_pose",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "loop": false,
+      "frames": [
+        {
+          "file": "blue_victory_pose_00.png",
+          "atlasRect": [
+            0,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "blue_victory_pose_00_0_0.png",
+              "blue_victory_pose_00_0_1.png",
+              "blue_victory_pose_00_0_2.png",
+              "blue_victory_pose_00_0_3.png"
+            ],
+            [
+              "blue_victory_pose_00_1_0.png",
+              "blue_victory_pose_00_1_1.png",
+              "blue_victory_pose_00_1_2.png",
+              "blue_victory_pose_00_1_3.png"
+            ],
+            [
+              "blue_victory_pose_00_2_0.png",
+              "blue_victory_pose_00_2_1.png",
+              "blue_victory_pose_00_2_2.png",
+              "blue_victory_pose_00_2_3.png"
+            ],
+            [
+              "blue_victory_pose_00_3_0.png",
+              "blue_victory_pose_00_3_1.png",
+              "blue_victory_pose_00_3_2.png",
+              "blue_victory_pose_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_victory_pose_01.png",
+          "atlasRect": [
+            32,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 120,
+          "tiles": [
+            [
+              "blue_victory_pose_01_0_0.png",
+              "blue_victory_pose_01_0_1.png",
+              "blue_victory_pose_01_0_2.png",
+              "blue_victory_pose_01_0_3.png"
+            ],
+            [
+              "blue_victory_pose_01_1_0.png",
+              "blue_victory_pose_01_1_1.png",
+              "blue_victory_pose_01_1_2.png",
+              "blue_victory_pose_01_1_3.png"
+            ],
+            [
+              "blue_victory_pose_01_2_0.png",
+              "blue_victory_pose_01_2_1.png",
+              "blue_victory_pose_01_2_2.png",
+              "blue_victory_pose_01_2_3.png"
+            ],
+            [
+              "blue_victory_pose_01_3_0.png",
+              "blue_victory_pose_01_3_1.png",
+              "blue_victory_pose_01_3_2.png",
+              "blue_victory_pose_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_victory_pose_02.png",
+          "atlasRect": [
+            64,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "blue_victory_pose_02_0_0.png",
+              "blue_victory_pose_02_0_1.png",
+              "blue_victory_pose_02_0_2.png",
+              "blue_victory_pose_02_0_3.png"
+            ],
+            [
+              "blue_victory_pose_02_1_0.png",
+              "blue_victory_pose_02_1_1.png",
+              "blue_victory_pose_02_1_2.png",
+              "blue_victory_pose_02_1_3.png"
+            ],
+            [
+              "blue_victory_pose_02_2_0.png",
+              "blue_victory_pose_02_2_1.png",
+              "blue_victory_pose_02_2_2.png",
+              "blue_victory_pose_02_2_3.png"
+            ],
+            [
+              "blue_victory_pose_02_3_0.png",
+              "blue_victory_pose_02_3_1.png",
+              "blue_victory_pose_02_3_2.png",
+              "blue_victory_pose_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_victory_pose_03.png",
+          "atlasRect": [
+            96,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_victory_pose_03_0_0.png",
+              "blue_victory_pose_03_0_1.png",
+              "blue_victory_pose_03_0_2.png",
+              "blue_victory_pose_03_0_3.png"
+            ],
+            [
+              "blue_victory_pose_03_1_0.png",
+              "blue_victory_pose_03_1_1.png",
+              "blue_victory_pose_03_1_2.png",
+              "blue_victory_pose_03_1_3.png"
+            ],
+            [
+              "blue_victory_pose_03_2_0.png",
+              "blue_victory_pose_03_2_1.png",
+              "blue_victory_pose_03_2_2.png",
+              "blue_victory_pose_03_2_3.png"
+            ],
+            [
+              "blue_victory_pose_03_3_0.png",
+              "blue_victory_pose_03_3_1.png",
+              "blue_victory_pose_03_3_2.png",
+              "blue_victory_pose_03_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_victory_pose_04.png",
+          "atlasRect": [
+            128,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "blue_victory_pose_04_0_0.png",
+              "blue_victory_pose_04_0_1.png",
+              "blue_victory_pose_04_0_2.png",
+              "blue_victory_pose_04_0_3.png"
+            ],
+            [
+              "blue_victory_pose_04_1_0.png",
+              "blue_victory_pose_04_1_1.png",
+              "blue_victory_pose_04_1_2.png",
+              "blue_victory_pose_04_1_3.png"
+            ],
+            [
+              "blue_victory_pose_04_2_0.png",
+              "blue_victory_pose_04_2_1.png",
+              "blue_victory_pose_04_2_2.png",
+              "blue_victory_pose_04_2_3.png"
+            ],
+            [
+              "blue_victory_pose_04_3_0.png",
+              "blue_victory_pose_04_3_1.png",
+              "blue_victory_pose_04_3_2.png",
+              "blue_victory_pose_04_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_fist_pump",
+      "team": "red",
+      "action": "fist_pump",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "loop": false,
+      "frames": [
+        {
+          "file": "red_fist_pump_00.png",
+          "atlasRect": [
+            0,
+            128,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "red_fist_pump_00_0_0.png",
+              "red_fist_pump_00_0_1.png",
+              "red_fist_pump_00_0_2.png",
+              "red_fist_pump_00_0_3.png"
+            ],
+            [
+              "red_fist_pump_00_1_0.png",
+              "red_fist_pump_00_1_1.png",
+              "red_fist_pump_00_1_2.png",
+              "red_fist_pump_00_1_3.png"
+            ],
+            [
+              "red_fist_pump_00_2_0.png",
+              "red_fist_pump_00_2_1.png",
+              "red_fist_pump_00_2_2.png",
+              "red_fist_pump_00_2_3.png"
+            ],
+            [
+              "red_fist_pump_00_3_0.png",
+              "red_fist_pump_00_3_1.png",
+              "red_fist_pump_00_3_2.png",
+              "red_fist_pump_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_fist_pump_01.png",
+          "atlasRect": [
+            32,
+            128,
+            32,
+            32
+          ],
+          "durationMs": 120,
+          "tiles": [
+            [
+              "red_fist_pump_01_0_0.png",
+              "red_fist_pump_01_0_1.png",
+              "red_fist_pump_01_0_2.png",
+              "red_fist_pump_01_0_3.png"
+            ],
+            [
+              "red_fist_pump_01_1_0.png",
+              "red_fist_pump_01_1_1.png",
+              "red_fist_pump_01_1_2.png",
+              "red_fist_pump_01_1_3.png"
+            ],
+            [
+              "red_fist_pump_01_2_0.png",
+              "red_fist_pump_01_2_1.png",
+              "red_fist_pump_01_2_2.png",
+              "red_fist_pump_01_2_3.png"
+            ],
+            [
+              "red_fist_pump_01_3_0.png",
+              "red_fist_pump_01_3_1.png",
+              "red_fist_pump_01_3_2.png",
+              "red_fist_pump_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_fist_pump_02.png",
+          "atlasRect": [
+            64,
+            128,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "red_fist_pump_02_0_0.png",
+              "red_fist_pump_02_0_1.png",
+              "red_fist_pump_02_0_2.png",
+              "red_fist_pump_02_0_3.png"
+            ],
+            [
+              "red_fist_pump_02_1_0.png",
+              "red_fist_pump_02_1_1.png",
+              "red_fist_pump_02_1_2.png",
+              "red_fist_pump_02_1_3.png"
+            ],
+            [
+              "red_fist_pump_02_2_0.png",
+              "red_fist_pump_02_2_1.png",
+              "red_fist_pump_02_2_2.png",
+              "red_fist_pump_02_2_3.png"
+            ],
+            [
+              "red_fist_pump_02_3_0.png",
+              "red_fist_pump_02_3_1.png",
+              "red_fist_pump_02_3_2.png",
+              "red_fist_pump_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_fist_pump_03.png",
+          "atlasRect": [
+            96,
+            128,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_fist_pump_03_0_0.png",
+              "red_fist_pump_03_0_1.png",
+              "red_fist_pump_03_0_2.png",
+              "red_fist_pump_03_0_3.png"
+            ],
+            [
+              "red_fist_pump_03_1_0.png",
+              "red_fist_pump_03_1_1.png",
+              "red_fist_pump_03_1_2.png",
+              "red_fist_pump_03_1_3.png"
+            ],
+            [
+              "red_fist_pump_03_2_0.png",
+              "red_fist_pump_03_2_1.png",
+              "red_fist_pump_03_2_2.png",
+              "red_fist_pump_03_2_3.png"
+            ],
+            [
+              "red_fist_pump_03_3_0.png",
+              "red_fist_pump_03_3_1.png",
+              "red_fist_pump_03_3_2.png",
+              "red_fist_pump_03_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_fist_pump_04.png",
+          "atlasRect": [
+            128,
+            128,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "red_fist_pump_04_0_0.png",
+              "red_fist_pump_04_0_1.png",
+              "red_fist_pump_04_0_2.png",
+              "red_fist_pump_04_0_3.png"
+            ],
+            [
+              "red_fist_pump_04_1_0.png",
+              "red_fist_pump_04_1_1.png",
+              "red_fist_pump_04_1_2.png",
+              "red_fist_pump_04_1_3.png"
+            ],
+            [
+              "red_fist_pump_04_2_0.png",
+              "red_fist_pump_04_2_1.png",
+              "red_fist_pump_04_2_2.png",
+              "red_fist_pump_04_2_3.png"
+            ],
+            [
+              "red_fist_pump_04_3_0.png",
+              "red_fist_pump_04_3_1.png",
+              "red_fist_pump_04_3_2.png",
+              "red_fist_pump_04_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_arms_raised",
+      "team": "red",
+      "action": "arms_raised",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "loop": false,
+      "frames": [
+        {
+          "file": "red_arms_raised_00.png",
+          "atlasRect": [
+            0,
+            160,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "red_arms_raised_00_0_0.png",
+              "red_arms_raised_00_0_1.png",
+              "red_arms_raised_00_0_2.png",
+              "red_arms_raised_00_0_3.png"
+            ],
+            [
+              "red_arms_raised_00_1_0.png",
+              "red_arms_raised_00_1_1.png",
+              "red_arms_raised_00_1_2.png",
+              "red_arms_raised_00_1_3.png"
+            ],
+            [
+              "red_arms_raised_00_2_0.png",
+              "red_arms_raised_00_2_1.png",
+              "red_arms_raised_00_2_2.png",
+              "red_arms_raised_00_2_3.png"
+            ],
+            [
+              "red_arms_raised_00_3_0.png",
+              "red_arms_raised_00_3_1.png",
+              "red_arms_raised_00_3_2.png",
+              "red_arms_raised_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_arms_raised_01.png",
+          "atlasRect": [
+            32,
+            160,
+            32,
+            32
+          ],
+          "durationMs": 120,
+          "tiles": [
+            [
+              "red_arms_raised_01_0_0.png",
+              "red_arms_raised_01_0_1.png",
+              "red_arms_raised_01_0_2.png",
+              "red_arms_raised_01_0_3.png"
+            ],
+            [
+              "red_arms_raised_01_1_0.png",
+              "red_arms_raised_01_1_1.png",
+              "red_arms_raised_01_1_2.png",
+              "red_arms_raised_01_1_3.png"
+            ],
+            [
+              "red_arms_raised_01_2_0.png",
+              "red_arms_raised_01_2_1.png",
+              "red_arms_raised_01_2_2.png",
+              "red_arms_raised_01_2_3.png"
+            ],
+            [
+              "red_arms_raised_01_3_0.png",
+              "red_arms_raised_01_3_1.png",
+              "red_arms_raised_01_3_2.png",
+              "red_arms_raised_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_arms_raised_02.png",
+          "atlasRect": [
+            64,
+            160,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "red_arms_raised_02_0_0.png",
+              "red_arms_raised_02_0_1.png",
+              "red_arms_raised_02_0_2.png",
+              "red_arms_raised_02_0_3.png"
+            ],
+            [
+              "red_arms_raised_02_1_0.png",
+              "red_arms_raised_02_1_1.png",
+              "red_arms_raised_02_1_2.png",
+              "red_arms_raised_02_1_3.png"
+            ],
+            [
+              "red_arms_raised_02_2_0.png",
+              "red_arms_raised_02_2_1.png",
+              "red_arms_raised_02_2_2.png",
+              "red_arms_raised_02_2_3.png"
+            ],
+            [
+              "red_arms_raised_02_3_0.png",
+              "red_arms_raised_02_3_1.png",
+              "red_arms_raised_02_3_2.png",
+              "red_arms_raised_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_arms_raised_03.png",
+          "atlasRect": [
+            96,
+            160,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_arms_raised_03_0_0.png",
+              "red_arms_raised_03_0_1.png",
+              "red_arms_raised_03_0_2.png",
+              "red_arms_raised_03_0_3.png"
+            ],
+            [
+              "red_arms_raised_03_1_0.png",
+              "red_arms_raised_03_1_1.png",
+              "red_arms_raised_03_1_2.png",
+              "red_arms_raised_03_1_3.png"
+            ],
+            [
+              "red_arms_raised_03_2_0.png",
+              "red_arms_raised_03_2_1.png",
+              "red_arms_raised_03_2_2.png",
+              "red_arms_raised_03_2_3.png"
+            ],
+            [
+              "red_arms_raised_03_3_0.png",
+              "red_arms_raised_03_3_1.png",
+              "red_arms_raised_03_3_2.png",
+              "red_arms_raised_03_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_arms_raised_04.png",
+          "atlasRect": [
+            128,
+            160,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "red_arms_raised_04_0_0.png",
+              "red_arms_raised_04_0_1.png",
+              "red_arms_raised_04_0_2.png",
+              "red_arms_raised_04_0_3.png"
+            ],
+            [
+              "red_arms_raised_04_1_0.png",
+              "red_arms_raised_04_1_1.png",
+              "red_arms_raised_04_1_2.png",
+              "red_arms_raised_04_1_3.png"
+            ],
+            [
+              "red_arms_raised_04_2_0.png",
+              "red_arms_raised_04_2_1.png",
+              "red_arms_raised_04_2_2.png",
+              "red_arms_raised_04_2_3.png"
+            ],
+            [
+              "red_arms_raised_04_3_0.png",
+              "red_arms_raised_04_3_1.png",
+              "red_arms_raised_04_3_2.png",
+              "red_arms_raised_04_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_high_five",
+      "team": "red",
+      "action": "high_five",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "loop": false,
+      "frames": [
+        {
+          "file": "red_high_five_00.png",
+          "atlasRect": [
+            0,
+            192,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "red_high_five_00_0_0.png",
+              "red_high_five_00_0_1.png",
+              "red_high_five_00_0_2.png",
+              "red_high_five_00_0_3.png"
+            ],
+            [
+              "red_high_five_00_1_0.png",
+              "red_high_five_00_1_1.png",
+              "red_high_five_00_1_2.png",
+              "red_high_five_00_1_3.png"
+            ],
+            [
+              "red_high_five_00_2_0.png",
+              "red_high_five_00_2_1.png",
+              "red_high_five_00_2_2.png",
+              "red_high_five_00_2_3.png"
+            ],
+            [
+              "red_high_five_00_3_0.png",
+              "red_high_five_00_3_1.png",
+              "red_high_five_00_3_2.png",
+              "red_high_five_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_high_five_01.png",
+          "atlasRect": [
+            32,
+            192,
+            32,
+            32
+          ],
+          "durationMs": 120,
+          "tiles": [
+            [
+              "red_high_five_01_0_0.png",
+              "red_high_five_01_0_1.png",
+              "red_high_five_01_0_2.png",
+              "red_high_five_01_0_3.png"
+            ],
+            [
+              "red_high_five_01_1_0.png",
+              "red_high_five_01_1_1.png",
+              "red_high_five_01_1_2.png",
+              "red_high_five_01_1_3.png"
+            ],
+            [
+              "red_high_five_01_2_0.png",
+              "red_high_five_01_2_1.png",
+              "red_high_five_01_2_2.png",
+              "red_high_five_01_2_3.png"
+            ],
+            [
+              "red_high_five_01_3_0.png",
+              "red_high_five_01_3_1.png",
+              "red_high_five_01_3_2.png",
+              "red_high_five_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_high_five_02.png",
+          "atlasRect": [
+            64,
+            192,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "red_high_five_02_0_0.png",
+              "red_high_five_02_0_1.png",
+              "red_high_five_02_0_2.png",
+              "red_high_five_02_0_3.png"
+            ],
+            [
+              "red_high_five_02_1_0.png",
+              "red_high_five_02_1_1.png",
+              "red_high_five_02_1_2.png",
+              "red_high_five_02_1_3.png"
+            ],
+            [
+              "red_high_five_02_2_0.png",
+              "red_high_five_02_2_1.png",
+              "red_high_five_02_2_2.png",
+              "red_high_five_02_2_3.png"
+            ],
+            [
+              "red_high_five_02_3_0.png",
+              "red_high_five_02_3_1.png",
+              "red_high_five_02_3_2.png",
+              "red_high_five_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_high_five_03.png",
+          "atlasRect": [
+            96,
+            192,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_high_five_03_0_0.png",
+              "red_high_five_03_0_1.png",
+              "red_high_five_03_0_2.png",
+              "red_high_five_03_0_3.png"
+            ],
+            [
+              "red_high_five_03_1_0.png",
+              "red_high_five_03_1_1.png",
+              "red_high_five_03_1_2.png",
+              "red_high_five_03_1_3.png"
+            ],
+            [
+              "red_high_five_03_2_0.png",
+              "red_high_five_03_2_1.png",
+              "red_high_five_03_2_2.png",
+              "red_high_five_03_2_3.png"
+            ],
+            [
+              "red_high_five_03_3_0.png",
+              "red_high_five_03_3_1.png",
+              "red_high_five_03_3_2.png",
+              "red_high_five_03_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_high_five_04.png",
+          "atlasRect": [
+            128,
+            192,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "red_high_five_04_0_0.png",
+              "red_high_five_04_0_1.png",
+              "red_high_five_04_0_2.png",
+              "red_high_five_04_0_3.png"
+            ],
+            [
+              "red_high_five_04_1_0.png",
+              "red_high_five_04_1_1.png",
+              "red_high_five_04_1_2.png",
+              "red_high_five_04_1_3.png"
+            ],
+            [
+              "red_high_five_04_2_0.png",
+              "red_high_five_04_2_1.png",
+              "red_high_five_04_2_2.png",
+              "red_high_five_04_2_3.png"
+            ],
+            [
+              "red_high_five_04_3_0.png",
+              "red_high_five_04_3_1.png",
+              "red_high_five_04_3_2.png",
+              "red_high_five_04_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_victory_pose",
+      "team": "red",
+      "action": "victory_pose",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "loop": false,
+      "frames": [
+        {
+          "file": "red_victory_pose_00.png",
+          "atlasRect": [
+            0,
+            224,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "red_victory_pose_00_0_0.png",
+              "red_victory_pose_00_0_1.png",
+              "red_victory_pose_00_0_2.png",
+              "red_victory_pose_00_0_3.png"
+            ],
+            [
+              "red_victory_pose_00_1_0.png",
+              "red_victory_pose_00_1_1.png",
+              "red_victory_pose_00_1_2.png",
+              "red_victory_pose_00_1_3.png"
+            ],
+            [
+              "red_victory_pose_00_2_0.png",
+              "red_victory_pose_00_2_1.png",
+              "red_victory_pose_00_2_2.png",
+              "red_victory_pose_00_2_3.png"
+            ],
+            [
+              "red_victory_pose_00_3_0.png",
+              "red_victory_pose_00_3_1.png",
+              "red_victory_pose_00_3_2.png",
+              "red_victory_pose_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_victory_pose_01.png",
+          "atlasRect": [
+            32,
+            224,
+            32,
+            32
+          ],
+          "durationMs": 120,
+          "tiles": [
+            [
+              "red_victory_pose_01_0_0.png",
+              "red_victory_pose_01_0_1.png",
+              "red_victory_pose_01_0_2.png",
+              "red_victory_pose_01_0_3.png"
+            ],
+            [
+              "red_victory_pose_01_1_0.png",
+              "red_victory_pose_01_1_1.png",
+              "red_victory_pose_01_1_2.png",
+              "red_victory_pose_01_1_3.png"
+            ],
+            [
+              "red_victory_pose_01_2_0.png",
+              "red_victory_pose_01_2_1.png",
+              "red_victory_pose_01_2_2.png",
+              "red_victory_pose_01_2_3.png"
+            ],
+            [
+              "red_victory_pose_01_3_0.png",
+              "red_victory_pose_01_3_1.png",
+              "red_victory_pose_01_3_2.png",
+              "red_victory_pose_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_victory_pose_02.png",
+          "atlasRect": [
+            64,
+            224,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "red_victory_pose_02_0_0.png",
+              "red_victory_pose_02_0_1.png",
+              "red_victory_pose_02_0_2.png",
+              "red_victory_pose_02_0_3.png"
+            ],
+            [
+              "red_victory_pose_02_1_0.png",
+              "red_victory_pose_02_1_1.png",
+              "red_victory_pose_02_1_2.png",
+              "red_victory_pose_02_1_3.png"
+            ],
+            [
+              "red_victory_pose_02_2_0.png",
+              "red_victory_pose_02_2_1.png",
+              "red_victory_pose_02_2_2.png",
+              "red_victory_pose_02_2_3.png"
+            ],
+            [
+              "red_victory_pose_02_3_0.png",
+              "red_victory_pose_02_3_1.png",
+              "red_victory_pose_02_3_2.png",
+              "red_victory_pose_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_victory_pose_03.png",
+          "atlasRect": [
+            96,
+            224,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_victory_pose_03_0_0.png",
+              "red_victory_pose_03_0_1.png",
+              "red_victory_pose_03_0_2.png",
+              "red_victory_pose_03_0_3.png"
+            ],
+            [
+              "red_victory_pose_03_1_0.png",
+              "red_victory_pose_03_1_1.png",
+              "red_victory_pose_03_1_2.png",
+              "red_victory_pose_03_1_3.png"
+            ],
+            [
+              "red_victory_pose_03_2_0.png",
+              "red_victory_pose_03_2_1.png",
+              "red_victory_pose_03_2_2.png",
+              "red_victory_pose_03_2_3.png"
+            ],
+            [
+              "red_victory_pose_03_3_0.png",
+              "red_victory_pose_03_3_1.png",
+              "red_victory_pose_03_3_2.png",
+              "red_victory_pose_03_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_victory_pose_04.png",
+          "atlasRect": [
+            128,
+            224,
+            32,
+            32
+          ],
+          "durationMs": 100,
+          "tiles": [
+            [
+              "red_victory_pose_04_0_0.png",
+              "red_victory_pose_04_0_1.png",
+              "red_victory_pose_04_0_2.png",
+              "red_victory_pose_04_0_3.png"
+            ],
+            [
+              "red_victory_pose_04_1_0.png",
+              "red_victory_pose_04_1_1.png",
+              "red_victory_pose_04_1_2.png",
+              "red_victory_pose_04_1_3.png"
+            ],
+            [
+              "red_victory_pose_04_2_0.png",
+              "red_victory_pose_04_2_1.png",
+              "red_victory_pose_04_2_2.png",
+              "red_victory_pose_04_2_3.png"
+            ],
+            [
+              "red_victory_pose_04_3_0.png",
+              "red_victory_pose_04_3_1.png",
+              "red_victory_pose_04_3_2.png",
+              "red_victory_pose_04_3_3.png"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

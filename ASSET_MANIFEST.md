@@ -46,11 +46,11 @@ Three pieces of approved art exist today; everything else is either a code-drawn
 
 `data/influences/curated.tsv` holds the 64 hand-written influence profiles; `data/reference/nhl_players.csv` is the supplied reference file they take their facts from. Neither is art, and the reference file is never shipped. Still needed: 64 fictional aliases, and a card or icon per influence if the creator is to show one.
 
-## Arena art (batches 09 to 14)
+## Arena and locker room art (batches 09 to 15)
 
 Modular rink tiles arrive as `BLH_Batch_*.zip` packages in `art/packages/` and are ingested into `public/assets/arena/`. The full inventory, validation notes and missing slots live in the generated registry (`public/assets/arena/manifests/registry.json`) and are browsable in the Arena Asset Lab. See `ARENA.md`.
 
-As of v0.2.5: 12,436 assets from 70 packages, 0 errors; 42 slots supplied (batch 14 as Lab tests or registered only), 2 unfit (corner boards; resurfacer garage), 1 missing (curved corner glass). Earlier count, v0.2.4: 9,610 assets from 62 packages; 35 slots supplied, 9 provisional (goals larger than the gameplay net; bench area placement and colours; side seating that only partly fits the world; crowd; goal lamps), 1 unfit (corner boards: wrong radius for the rink), 2 missing (curved corner glass, arena equipment). Still wanted and not in any batch: seating for the ends and corners.
+As of v0.3.1: 16,577 assets from 80 packages, 0 errors; batch 15 (locker room) adds 7 slots, all supplied and used in the fit test only. As of v0.2.5: 12,436 assets from 70 packages, 0 errors; 42 slots supplied (batch 14 as Lab tests or registered only), 2 unfit (corner boards; resurfacer garage), 1 missing (curved corner glass). Earlier count, v0.2.4: 9,610 assets from 62 packages; 35 slots supplied, 9 provisional (goals larger than the gameplay net; bench area placement and colours; side seating that only partly fits the world; crowd; goal lamps), 1 unfit (corner boards: wrong radius for the rink), 2 missing (curved corner glass, arena equipment). Still wanted and not in any batch: seating for the ends and corners.
 
 ## Art batch 01 (received Nov 25): review
 

@@ -576,6 +576,79 @@
         "14.08/debris_atlas"
       ],
       "note": "Lab test only: sticks do not break yet. See ARENA.md A24."
+    },
+    {
+      "id": "locker.room",
+      "layer": "locker",
+      "label": "Locker room floor, walls and doorway",
+      "expectedBatch": "15.01",
+      "assets": [
+        "15.01/locker_atlas"
+      ],
+      "note": "Locker room fit test only (Arena Asset Lab). The locker room is not a location in the game yet: lifestyle systems are not authorized. No south-east wall corner is supplied; the south-west corner is mirrored."
+    },
+    {
+      "id": "locker.lockers",
+      "layer": "locker",
+      "label": "Player lockers (blue, red, green, neutral; closed, open, jersey)",
+      "expectedBatch": "15.02",
+      "assets": [
+        "15.02/locker_atlas"
+      ],
+      "note": "Locker room fit test only (Arena Asset Lab). The locker room is not a location in the game yet: lifestyle systems are not authorized."
+    },
+    {
+      "id": "locker.furniture",
+      "layer": "locker",
+      "label": "Benches and loose equipment",
+      "expectedBatch": "15.03",
+      "assets": [
+        "15.03/equipment_atlas"
+      ],
+      "note": "Locker room fit test only (Arena Asset Lab). The locker room is not a location in the game yet: lifestyle systems are not authorized."
+    },
+    {
+      "id": "locker.players",
+      "layer": "locker",
+      "label": "Players dressing, drinking, celebrating and frustrated",
+      "expectedBatch": "15.04-15.07",
+      "assets": [
+        "15.04/dressing_atlas",
+        "15.05/beer_atlas",
+        "15.06/celebration_atlas",
+        "15.07/frustration_atlas"
+      ],
+      "note": "Locker room fit test only (Arena Asset Lab). The locker room is not a location in the game yet: lifestyle systems are not authorized. Blue and red are baked colour variants, not the created player's appearance."
+    },
+    {
+      "id": "locker.leaders",
+      "layer": "locker",
+      "label": "Coach and captain",
+      "expectedBatch": "15.08",
+      "assets": [
+        "15.08/leadership_atlas"
+      ],
+      "note": "Locker room fit test only (Arena Asset Lab). The locker room is not a location in the game yet: lifestyle systems are not authorized. The design has captains and managers but no coach: see ARENA.md A28."
+    },
+    {
+      "id": "locker.whiteboard",
+      "layer": "locker",
+      "label": "Tactics whiteboard",
+      "expectedBatch": "15.09",
+      "assets": [
+        "15.09/whiteboard_atlas"
+      ],
+      "note": "Locker room fit test only (Arena Asset Lab). The locker room is not a location in the game yet: lifestyle systems are not authorized."
+    },
+    {
+      "id": "locker.trophies",
+      "layer": "locker",
+      "label": "Trophy cabinet and awards",
+      "expectedBatch": "15.10",
+      "assets": [
+        "15.10/trophy_atlas"
+      ],
+      "note": "Locker room fit test only (Arena Asset Lab). The locker room is not a location in the game yet: lifestyle systems are not authorized. Shown empty; the sample trophies are a labelled test. A real cabinet is filled from career history only."
     }
   ]
 }

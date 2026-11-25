@@ -1,0 +1,1263 @@
+{
+  "batch": "15.08",
+  "tileSize": [
+    8,
+    8
+  ],
+  "frameSize": [
+    32,
+    32
+  ],
+  "atlas": "leadership_atlas.png",
+  "sequences": [
+    {
+      "id": "blue_coach_talk",
+      "team": "blue",
+      "role": "coach",
+      "action": "talk",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "frames": [
+        {
+          "file": "blue_coach_talk_00.png",
+          "atlasRect": [
+            0,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_coach_talk_00_0_0.png",
+              "blue_coach_talk_00_0_1.png",
+              "blue_coach_talk_00_0_2.png",
+              "blue_coach_talk_00_0_3.png"
+            ],
+            [
+              "blue_coach_talk_00_1_0.png",
+              "blue_coach_talk_00_1_1.png",
+              "blue_coach_talk_00_1_2.png",
+              "blue_coach_talk_00_1_3.png"
+            ],
+            [
+              "blue_coach_talk_00_2_0.png",
+              "blue_coach_talk_00_2_1.png",
+              "blue_coach_talk_00_2_2.png",
+              "blue_coach_talk_00_2_3.png"
+            ],
+            [
+              "blue_coach_talk_00_3_0.png",
+              "blue_coach_talk_00_3_1.png",
+              "blue_coach_talk_00_3_2.png",
+              "blue_coach_talk_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_coach_talk_01.png",
+          "atlasRect": [
+            32,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_coach_talk_01_0_0.png",
+              "blue_coach_talk_01_0_1.png",
+              "blue_coach_talk_01_0_2.png",
+              "blue_coach_talk_01_0_3.png"
+            ],
+            [
+              "blue_coach_talk_01_1_0.png",
+              "blue_coach_talk_01_1_1.png",
+              "blue_coach_talk_01_1_2.png",
+              "blue_coach_talk_01_1_3.png"
+            ],
+            [
+              "blue_coach_talk_01_2_0.png",
+              "blue_coach_talk_01_2_1.png",
+              "blue_coach_talk_01_2_2.png",
+              "blue_coach_talk_01_2_3.png"
+            ],
+            [
+              "blue_coach_talk_01_3_0.png",
+              "blue_coach_talk_01_3_1.png",
+              "blue_coach_talk_01_3_2.png",
+              "blue_coach_talk_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_coach_talk_02.png",
+          "atlasRect": [
+            64,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "blue_coach_talk_02_0_0.png",
+              "blue_coach_talk_02_0_1.png",
+              "blue_coach_talk_02_0_2.png",
+              "blue_coach_talk_02_0_3.png"
+            ],
+            [
+              "blue_coach_talk_02_1_0.png",
+              "blue_coach_talk_02_1_1.png",
+              "blue_coach_talk_02_1_2.png",
+              "blue_coach_talk_02_1_3.png"
+            ],
+            [
+              "blue_coach_talk_02_2_0.png",
+              "blue_coach_talk_02_2_1.png",
+              "blue_coach_talk_02_2_2.png",
+              "blue_coach_talk_02_2_3.png"
+            ],
+            [
+              "blue_coach_talk_02_3_0.png",
+              "blue_coach_talk_02_3_1.png",
+              "blue_coach_talk_02_3_2.png",
+              "blue_coach_talk_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_coach_talk_03.png",
+          "atlasRect": [
+            96,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_coach_talk_03_0_0.png",
+              "blue_coach_talk_03_0_1.png",
+              "blue_coach_talk_03_0_2.png",
+              "blue_coach_talk_03_0_3.png"
+            ],
+            [
+              "blue_coach_talk_03_1_0.png",
+              "blue_coach_talk_03_1_1.png",
+              "blue_coach_talk_03_1_2.png",
+              "blue_coach_talk_03_1_3.png"
+            ],
+            [
+              "blue_coach_talk_03_2_0.png",
+              "blue_coach_talk_03_2_1.png",
+              "blue_coach_talk_03_2_2.png",
+              "blue_coach_talk_03_2_3.png"
+            ],
+            [
+              "blue_coach_talk_03_3_0.png",
+              "blue_coach_talk_03_3_1.png",
+              "blue_coach_talk_03_3_2.png",
+              "blue_coach_talk_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blue_coach_point",
+      "team": "blue",
+      "role": "coach",
+      "action": "point",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "frames": [
+        {
+          "file": "blue_coach_point_00.png",
+          "atlasRect": [
+            0,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_coach_point_00_0_0.png",
+              "blue_coach_point_00_0_1.png",
+              "blue_coach_point_00_0_2.png",
+              "blue_coach_point_00_0_3.png"
+            ],
+            [
+              "blue_coach_point_00_1_0.png",
+              "blue_coach_point_00_1_1.png",
+              "blue_coach_point_00_1_2.png",
+              "blue_coach_point_00_1_3.png"
+            ],
+            [
+              "blue_coach_point_00_2_0.png",
+              "blue_coach_point_00_2_1.png",
+              "blue_coach_point_00_2_2.png",
+              "blue_coach_point_00_2_3.png"
+            ],
+            [
+              "blue_coach_point_00_3_0.png",
+              "blue_coach_point_00_3_1.png",
+              "blue_coach_point_00_3_2.png",
+              "blue_coach_point_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_coach_point_01.png",
+          "atlasRect": [
+            32,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_coach_point_01_0_0.png",
+              "blue_coach_point_01_0_1.png",
+              "blue_coach_point_01_0_2.png",
+              "blue_coach_point_01_0_3.png"
+            ],
+            [
+              "blue_coach_point_01_1_0.png",
+              "blue_coach_point_01_1_1.png",
+              "blue_coach_point_01_1_2.png",
+              "blue_coach_point_01_1_3.png"
+            ],
+            [
+              "blue_coach_point_01_2_0.png",
+              "blue_coach_point_01_2_1.png",
+              "blue_coach_point_01_2_2.png",
+              "blue_coach_point_01_2_3.png"
+            ],
+            [
+              "blue_coach_point_01_3_0.png",
+              "blue_coach_point_01_3_1.png",
+              "blue_coach_point_01_3_2.png",
+              "blue_coach_point_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_coach_point_02.png",
+          "atlasRect": [
+            64,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "blue_coach_point_02_0_0.png",
+              "blue_coach_point_02_0_1.png",
+              "blue_coach_point_02_0_2.png",
+              "blue_coach_point_02_0_3.png"
+            ],
+            [
+              "blue_coach_point_02_1_0.png",
+              "blue_coach_point_02_1_1.png",
+              "blue_coach_point_02_1_2.png",
+              "blue_coach_point_02_1_3.png"
+            ],
+            [
+              "blue_coach_point_02_2_0.png",
+              "blue_coach_point_02_2_1.png",
+              "blue_coach_point_02_2_2.png",
+              "blue_coach_point_02_2_3.png"
+            ],
+            [
+              "blue_coach_point_02_3_0.png",
+              "blue_coach_point_02_3_1.png",
+              "blue_coach_point_02_3_2.png",
+              "blue_coach_point_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_coach_point_03.png",
+          "atlasRect": [
+            96,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_coach_point_03_0_0.png",
+              "blue_coach_point_03_0_1.png",
+              "blue_coach_point_03_0_2.png",
+              "blue_coach_point_03_0_3.png"
+            ],
+            [
+              "blue_coach_point_03_1_0.png",
+              "blue_coach_point_03_1_1.png",
+              "blue_coach_point_03_1_2.png",
+              "blue_coach_point_03_1_3.png"
+            ],
+            [
+              "blue_coach_point_03_2_0.png",
+              "blue_coach_point_03_2_1.png",
+              "blue_coach_point_03_2_2.png",
+              "blue_coach_point_03_2_3.png"
+            ],
+            [
+              "blue_coach_point_03_3_0.png",
+              "blue_coach_point_03_3_1.png",
+              "blue_coach_point_03_3_2.png",
+              "blue_coach_point_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blue_captain_talk",
+      "team": "blue",
+      "role": "captain",
+      "action": "talk",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "frames": [
+        {
+          "file": "blue_captain_talk_00.png",
+          "atlasRect": [
+            0,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_captain_talk_00_0_0.png",
+              "blue_captain_talk_00_0_1.png",
+              "blue_captain_talk_00_0_2.png",
+              "blue_captain_talk_00_0_3.png"
+            ],
+            [
+              "blue_captain_talk_00_1_0.png",
+              "blue_captain_talk_00_1_1.png",
+              "blue_captain_talk_00_1_2.png",
+              "blue_captain_talk_00_1_3.png"
+            ],
+            [
+              "blue_captain_talk_00_2_0.png",
+              "blue_captain_talk_00_2_1.png",
+              "blue_captain_talk_00_2_2.png",
+              "blue_captain_talk_00_2_3.png"
+            ],
+            [
+              "blue_captain_talk_00_3_0.png",
+              "blue_captain_talk_00_3_1.png",
+              "blue_captain_talk_00_3_2.png",
+              "blue_captain_talk_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_captain_talk_01.png",
+          "atlasRect": [
+            32,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_captain_talk_01_0_0.png",
+              "blue_captain_talk_01_0_1.png",
+              "blue_captain_talk_01_0_2.png",
+              "blue_captain_talk_01_0_3.png"
+            ],
+            [
+              "blue_captain_talk_01_1_0.png",
+              "blue_captain_talk_01_1_1.png",
+              "blue_captain_talk_01_1_2.png",
+              "blue_captain_talk_01_1_3.png"
+            ],
+            [
+              "blue_captain_talk_01_2_0.png",
+              "blue_captain_talk_01_2_1.png",
+              "blue_captain_talk_01_2_2.png",
+              "blue_captain_talk_01_2_3.png"
+            ],
+            [
+              "blue_captain_talk_01_3_0.png",
+              "blue_captain_talk_01_3_1.png",
+              "blue_captain_talk_01_3_2.png",
+              "blue_captain_talk_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_captain_talk_02.png",
+          "atlasRect": [
+            64,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "blue_captain_talk_02_0_0.png",
+              "blue_captain_talk_02_0_1.png",
+              "blue_captain_talk_02_0_2.png",
+              "blue_captain_talk_02_0_3.png"
+            ],
+            [
+              "blue_captain_talk_02_1_0.png",
+              "blue_captain_talk_02_1_1.png",
+              "blue_captain_talk_02_1_2.png",
+              "blue_captain_talk_02_1_3.png"
+            ],
+            [
+              "blue_captain_talk_02_2_0.png",
+              "blue_captain_talk_02_2_1.png",
+              "blue_captain_talk_02_2_2.png",
+              "blue_captain_talk_02_2_3.png"
+            ],
+            [
+              "blue_captain_talk_02_3_0.png",
+              "blue_captain_talk_02_3_1.png",
+              "blue_captain_talk_02_3_2.png",
+              "blue_captain_talk_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_captain_talk_03.png",
+          "atlasRect": [
+            96,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_captain_talk_03_0_0.png",
+              "blue_captain_talk_03_0_1.png",
+              "blue_captain_talk_03_0_2.png",
+              "blue_captain_talk_03_0_3.png"
+            ],
+            [
+              "blue_captain_talk_03_1_0.png",
+              "blue_captain_talk_03_1_1.png",
+              "blue_captain_talk_03_1_2.png",
+              "blue_captain_talk_03_1_3.png"
+            ],
+            [
+              "blue_captain_talk_03_2_0.png",
+              "blue_captain_talk_03_2_1.png",
+              "blue_captain_talk_03_2_2.png",
+              "blue_captain_talk_03_2_3.png"
+            ],
+            [
+              "blue_captain_talk_03_3_0.png",
+              "blue_captain_talk_03_3_1.png",
+              "blue_captain_talk_03_3_2.png",
+              "blue_captain_talk_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blue_captain_point",
+      "team": "blue",
+      "role": "captain",
+      "action": "point",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "frames": [
+        {
+          "file": "blue_captain_point_00.png",
+          "atlasRect": [
+            0,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_captain_point_00_0_0.png",
+              "blue_captain_point_00_0_1.png",
+              "blue_captain_point_00_0_2.png",
+              "blue_captain_point_00_0_3.png"
+            ],
+            [
+              "blue_captain_point_00_1_0.png",
+              "blue_captain_point_00_1_1.png",
+              "blue_captain_point_00_1_2.png",
+              "blue_captain_point_00_1_3.png"
+            ],
+            [
+              "blue_captain_point_00_2_0.png",
+              "blue_captain_point_00_2_1.png",
+              "blue_captain_point_00_2_2.png",
+              "blue_captain_point_00_2_3.png"
+            ],
+            [
+              "blue_captain_point_00_3_0.png",
+              "blue_captain_point_00_3_1.png",
+              "blue_captain_point_00_3_2.png",
+              "blue_captain_point_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_captain_point_01.png",
+          "atlasRect": [
+            32,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_captain_point_01_0_0.png",
+              "blue_captain_point_01_0_1.png",
+              "blue_captain_point_01_0_2.png",
+              "blue_captain_point_01_0_3.png"
+            ],
+            [
+              "blue_captain_point_01_1_0.png",
+              "blue_captain_point_01_1_1.png",
+              "blue_captain_point_01_1_2.png",
+              "blue_captain_point_01_1_3.png"
+            ],
+            [
+              "blue_captain_point_01_2_0.png",
+              "blue_captain_point_01_2_1.png",
+              "blue_captain_point_01_2_2.png",
+              "blue_captain_point_01_2_3.png"
+            ],
+            [
+              "blue_captain_point_01_3_0.png",
+              "blue_captain_point_01_3_1.png",
+              "blue_captain_point_01_3_2.png",
+              "blue_captain_point_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_captain_point_02.png",
+          "atlasRect": [
+            64,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "blue_captain_point_02_0_0.png",
+              "blue_captain_point_02_0_1.png",
+              "blue_captain_point_02_0_2.png",
+              "blue_captain_point_02_0_3.png"
+            ],
+            [
+              "blue_captain_point_02_1_0.png",
+              "blue_captain_point_02_1_1.png",
+              "blue_captain_point_02_1_2.png",
+              "blue_captain_point_02_1_3.png"
+            ],
+            [
+              "blue_captain_point_02_2_0.png",
+              "blue_captain_point_02_2_1.png",
+              "blue_captain_point_02_2_2.png",
+              "blue_captain_point_02_2_3.png"
+            ],
+            [
+              "blue_captain_point_02_3_0.png",
+              "blue_captain_point_02_3_1.png",
+              "blue_captain_point_02_3_2.png",
+              "blue_captain_point_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_captain_point_03.png",
+          "atlasRect": [
+            96,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_captain_point_03_0_0.png",
+              "blue_captain_point_03_0_1.png",
+              "blue_captain_point_03_0_2.png",
+              "blue_captain_point_03_0_3.png"
+            ],
+            [
+              "blue_captain_point_03_1_0.png",
+              "blue_captain_point_03_1_1.png",
+              "blue_captain_point_03_1_2.png",
+              "blue_captain_point_03_1_3.png"
+            ],
+            [
+              "blue_captain_point_03_2_0.png",
+              "blue_captain_point_03_2_1.png",
+              "blue_captain_point_03_2_2.png",
+              "blue_captain_point_03_2_3.png"
+            ],
+            [
+              "blue_captain_point_03_3_0.png",
+              "blue_captain_point_03_3_1.png",
+              "blue_captain_point_03_3_2.png",
+              "blue_captain_point_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_coach_talk",
+      "team": "red",
+      "role": "coach",
+      "action": "talk",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "frames": [
+        {
+          "file": "red_coach_talk_00.png",
+          "atlasRect": [
+            0,
+            128,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_coach_talk_00_0_0.png",
+              "red_coach_talk_00_0_1.png",
+              "red_coach_talk_00_0_2.png",
+              "red_coach_talk_00_0_3.png"
+            ],
+            [
+              "red_coach_talk_00_1_0.png",
+              "red_coach_talk_00_1_1.png",
+              "red_coach_talk_00_1_2.png",
+              "red_coach_talk_00_1_3.png"
+            ],
+            [
+              "red_coach_talk_00_2_0.png",
+              "red_coach_talk_00_2_1.png",
+              "red_coach_talk_00_2_2.png",
+              "red_coach_talk_00_2_3.png"
+            ],
+            [
+              "red_coach_talk_00_3_0.png",
+              "red_coach_talk_00_3_1.png",
+              "red_coach_talk_00_3_2.png",
+              "red_coach_talk_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_coach_talk_01.png",
+          "atlasRect": [
+            32,
+            128,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_coach_talk_01_0_0.png",
+              "red_coach_talk_01_0_1.png",
+              "red_coach_talk_01_0_2.png",
+              "red_coach_talk_01_0_3.png"
+            ],
+            [
+              "red_coach_talk_01_1_0.png",
+              "red_coach_talk_01_1_1.png",
+              "red_coach_talk_01_1_2.png",
+              "red_coach_talk_01_1_3.png"
+            ],
+            [
+              "red_coach_talk_01_2_0.png",
+              "red_coach_talk_01_2_1.png",
+              "red_coach_talk_01_2_2.png",
+              "red_coach_talk_01_2_3.png"
+            ],
+            [
+              "red_coach_talk_01_3_0.png",
+              "red_coach_talk_01_3_1.png",
+              "red_coach_talk_01_3_2.png",
+              "red_coach_talk_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_coach_talk_02.png",
+          "atlasRect": [
+            64,
+            128,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "red_coach_talk_02_0_0.png",
+              "red_coach_talk_02_0_1.png",
+              "red_coach_talk_02_0_2.png",
+              "red_coach_talk_02_0_3.png"
+            ],
+            [
+              "red_coach_talk_02_1_0.png",
+              "red_coach_talk_02_1_1.png",
+              "red_coach_talk_02_1_2.png",
+              "red_coach_talk_02_1_3.png"
+            ],
+            [
+              "red_coach_talk_02_2_0.png",
+              "red_coach_talk_02_2_1.png",
+              "red_coach_talk_02_2_2.png",
+              "red_coach_talk_02_2_3.png"
+            ],
+            [
+              "red_coach_talk_02_3_0.png",
+              "red_coach_talk_02_3_1.png",
+              "red_coach_talk_02_3_2.png",
+              "red_coach_talk_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_coach_talk_03.png",
+          "atlasRect": [
+            96,
+            128,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_coach_talk_03_0_0.png",
+              "red_coach_talk_03_0_1.png",
+              "red_coach_talk_03_0_2.png",
+              "red_coach_talk_03_0_3.png"
+            ],
+            [
+              "red_coach_talk_03_1_0.png",
+              "red_coach_talk_03_1_1.png",
+              "red_coach_talk_03_1_2.png",
+              "red_coach_talk_03_1_3.png"
+            ],
+            [
+              "red_coach_talk_03_2_0.png",
+              "red_coach_talk_03_2_1.png",
+              "red_coach_talk_03_2_2.png",
+              "red_coach_talk_03_2_3.png"
+            ],
+            [
+              "red_coach_talk_03_3_0.png",
+              "red_coach_talk_03_3_1.png",
+              "red_coach_talk_03_3_2.png",
+              "red_coach_talk_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_coach_point",
+      "team": "red",
+      "role": "coach",
+      "action": "point",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "frames": [
+        {
+          "file": "red_coach_point_00.png",
+          "atlasRect": [
+            0,
+            160,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_coach_point_00_0_0.png",
+              "red_coach_point_00_0_1.png",
+              "red_coach_point_00_0_2.png",
+              "red_coach_point_00_0_3.png"
+            ],
+            [
+              "red_coach_point_00_1_0.png",
+              "red_coach_point_00_1_1.png",
+              "red_coach_point_00_1_2.png",
+              "red_coach_point_00_1_3.png"
+            ],
+            [
+              "red_coach_point_00_2_0.png",
+              "red_coach_point_00_2_1.png",
+              "red_coach_point_00_2_2.png",
+              "red_coach_point_00_2_3.png"
+            ],
+            [
+              "red_coach_point_00_3_0.png",
+              "red_coach_point_00_3_1.png",
+              "red_coach_point_00_3_2.png",
+              "red_coach_point_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_coach_point_01.png",
+          "atlasRect": [
+            32,
+            160,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_coach_point_01_0_0.png",
+              "red_coach_point_01_0_1.png",
+              "red_coach_point_01_0_2.png",
+              "red_coach_point_01_0_3.png"
+            ],
+            [
+              "red_coach_point_01_1_0.png",
+              "red_coach_point_01_1_1.png",
+              "red_coach_point_01_1_2.png",
+              "red_coach_point_01_1_3.png"
+            ],
+            [
+              "red_coach_point_01_2_0.png",
+              "red_coach_point_01_2_1.png",
+              "red_coach_point_01_2_2.png",
+              "red_coach_point_01_2_3.png"
+            ],
+            [
+              "red_coach_point_01_3_0.png",
+              "red_coach_point_01_3_1.png",
+              "red_coach_point_01_3_2.png",
+              "red_coach_point_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_coach_point_02.png",
+          "atlasRect": [
+            64,
+            160,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "red_coach_point_02_0_0.png",
+              "red_coach_point_02_0_1.png",
+              "red_coach_point_02_0_2.png",
+              "red_coach_point_02_0_3.png"
+            ],
+            [
+              "red_coach_point_02_1_0.png",
+              "red_coach_point_02_1_1.png",
+              "red_coach_point_02_1_2.png",
+              "red_coach_point_02_1_3.png"
+            ],
+            [
+              "red_coach_point_02_2_0.png",
+              "red_coach_point_02_2_1.png",
+              "red_coach_point_02_2_2.png",
+              "red_coach_point_02_2_3.png"
+            ],
+            [
+              "red_coach_point_02_3_0.png",
+              "red_coach_point_02_3_1.png",
+              "red_coach_point_02_3_2.png",
+              "red_coach_point_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_coach_point_03.png",
+          "atlasRect": [
+            96,
+            160,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_coach_point_03_0_0.png",
+              "red_coach_point_03_0_1.png",
+              "red_coach_point_03_0_2.png",
+              "red_coach_point_03_0_3.png"
+            ],
+            [
+              "red_coach_point_03_1_0.png",
+              "red_coach_point_03_1_1.png",
+              "red_coach_point_03_1_2.png",
+              "red_coach_point_03_1_3.png"
+            ],
+            [
+              "red_coach_point_03_2_0.png",
+              "red_coach_point_03_2_1.png",
+              "red_coach_point_03_2_2.png",
+              "red_coach_point_03_2_3.png"
+            ],
+            [
+              "red_coach_point_03_3_0.png",
+              "red_coach_point_03_3_1.png",
+              "red_coach_point_03_3_2.png",
+              "red_coach_point_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_captain_talk",
+      "team": "red",
+      "role": "captain",
+      "action": "talk",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "frames": [
+        {
+          "file": "red_captain_talk_00.png",
+          "atlasRect": [
+            0,
+            192,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_captain_talk_00_0_0.png",
+              "red_captain_talk_00_0_1.png",
+              "red_captain_talk_00_0_2.png",
+              "red_captain_talk_00_0_3.png"
+            ],
+            [
+              "red_captain_talk_00_1_0.png",
+              "red_captain_talk_00_1_1.png",
+              "red_captain_talk_00_1_2.png",
+              "red_captain_talk_00_1_3.png"
+            ],
+            [
+              "red_captain_talk_00_2_0.png",
+              "red_captain_talk_00_2_1.png",
+              "red_captain_talk_00_2_2.png",
+              "red_captain_talk_00_2_3.png"
+            ],
+            [
+              "red_captain_talk_00_3_0.png",
+              "red_captain_talk_00_3_1.png",
+              "red_captain_talk_00_3_2.png",
+              "red_captain_talk_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_captain_talk_01.png",
+          "atlasRect": [
+            32,
+            192,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_captain_talk_01_0_0.png",
+              "red_captain_talk_01_0_1.png",
+              "red_captain_talk_01_0_2.png",
+              "red_captain_talk_01_0_3.png"
+            ],
+            [
+              "red_captain_talk_01_1_0.png",
+              "red_captain_talk_01_1_1.png",
+              "red_captain_talk_01_1_2.png",
+              "red_captain_talk_01_1_3.png"
+            ],
+            [
+              "red_captain_talk_01_2_0.png",
+              "red_captain_talk_01_2_1.png",
+              "red_captain_talk_01_2_2.png",
+              "red_captain_talk_01_2_3.png"
+            ],
+            [
+              "red_captain_talk_01_3_0.png",
+              "red_captain_talk_01_3_1.png",
+              "red_captain_talk_01_3_2.png",
+              "red_captain_talk_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_captain_talk_02.png",
+          "atlasRect": [
+            64,
+            192,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "red_captain_talk_02_0_0.png",
+              "red_captain_talk_02_0_1.png",
+              "red_captain_talk_02_0_2.png",
+              "red_captain_talk_02_0_3.png"
+            ],
+            [
+              "red_captain_talk_02_1_0.png",
+              "red_captain_talk_02_1_1.png",
+              "red_captain_talk_02_1_2.png",
+              "red_captain_talk_02_1_3.png"
+            ],
+            [
+              "red_captain_talk_02_2_0.png",
+              "red_captain_talk_02_2_1.png",
+              "red_captain_talk_02_2_2.png",
+              "red_captain_talk_02_2_3.png"
+            ],
+            [
+              "red_captain_talk_02_3_0.png",
+              "red_captain_talk_02_3_1.png",
+              "red_captain_talk_02_3_2.png",
+              "red_captain_talk_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_captain_talk_03.png",
+          "atlasRect": [
+            96,
+            192,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_captain_talk_03_0_0.png",
+              "red_captain_talk_03_0_1.png",
+              "red_captain_talk_03_0_2.png",
+              "red_captain_talk_03_0_3.png"
+            ],
+            [
+              "red_captain_talk_03_1_0.png",
+              "red_captain_talk_03_1_1.png",
+              "red_captain_talk_03_1_2.png",
+              "red_captain_talk_03_1_3.png"
+            ],
+            [
+              "red_captain_talk_03_2_0.png",
+              "red_captain_talk_03_2_1.png",
+              "red_captain_talk_03_2_2.png",
+              "red_captain_talk_03_2_3.png"
+            ],
+            [
+              "red_captain_talk_03_3_0.png",
+              "red_captain_talk_03_3_1.png",
+              "red_captain_talk_03_3_2.png",
+              "red_captain_talk_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_captain_point",
+      "team": "red",
+      "role": "captain",
+      "action": "point",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "frames": [
+        {
+          "file": "red_captain_point_00.png",
+          "atlasRect": [
+            0,
+            224,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_captain_point_00_0_0.png",
+              "red_captain_point_00_0_1.png",
+              "red_captain_point_00_0_2.png",
+              "red_captain_point_00_0_3.png"
+            ],
+            [
+              "red_captain_point_00_1_0.png",
+              "red_captain_point_00_1_1.png",
+              "red_captain_point_00_1_2.png",
+              "red_captain_point_00_1_3.png"
+            ],
+            [
+              "red_captain_point_00_2_0.png",
+              "red_captain_point_00_2_1.png",
+              "red_captain_point_00_2_2.png",
+              "red_captain_point_00_2_3.png"
+            ],
+            [
+              "red_captain_point_00_3_0.png",
+              "red_captain_point_00_3_1.png",
+              "red_captain_point_00_3_2.png",
+              "red_captain_point_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_captain_point_01.png",
+          "atlasRect": [
+            32,
+            224,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_captain_point_01_0_0.png",
+              "red_captain_point_01_0_1.png",
+              "red_captain_point_01_0_2.png",
+              "red_captain_point_01_0_3.png"
+            ],
+            [
+              "red_captain_point_01_1_0.png",
+              "red_captain_point_01_1_1.png",
+              "red_captain_point_01_1_2.png",
+              "red_captain_point_01_1_3.png"
+            ],
+            [
+              "red_captain_point_01_2_0.png",
+              "red_captain_point_01_2_1.png",
+              "red_captain_point_01_2_2.png",
+              "red_captain_point_01_2_3.png"
+            ],
+            [
+              "red_captain_point_01_3_0.png",
+              "red_captain_point_01_3_1.png",
+              "red_captain_point_01_3_2.png",
+              "red_captain_point_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_captain_point_02.png",
+          "atlasRect": [
+            64,
+            224,
+            32,
+            32
+          ],
+          "durationMs": 240,
+          "tiles": [
+            [
+              "red_captain_point_02_0_0.png",
+              "red_captain_point_02_0_1.png",
+              "red_captain_point_02_0_2.png",
+              "red_captain_point_02_0_3.png"
+            ],
+            [
+              "red_captain_point_02_1_0.png",
+              "red_captain_point_02_1_1.png",
+              "red_captain_point_02_1_2.png",
+              "red_captain_point_02_1_3.png"
+            ],
+            [
+              "red_captain_point_02_2_0.png",
+              "red_captain_point_02_2_1.png",
+              "red_captain_point_02_2_2.png",
+              "red_captain_point_02_2_3.png"
+            ],
+            [
+              "red_captain_point_02_3_0.png",
+              "red_captain_point_02_3_1.png",
+              "red_captain_point_02_3_2.png",
+              "red_captain_point_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_captain_point_03.png",
+          "atlasRect": [
+            96,
+            224,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_captain_point_03_0_0.png",
+              "red_captain_point_03_0_1.png",
+              "red_captain_point_03_0_2.png",
+              "red_captain_point_03_0_3.png"
+            ],
+            [
+              "red_captain_point_03_1_0.png",
+              "red_captain_point_03_1_1.png",
+              "red_captain_point_03_1_2.png",
+              "red_captain_point_03_1_3.png"
+            ],
+            [
+              "red_captain_point_03_2_0.png",
+              "red_captain_point_03_2_1.png",
+              "red_captain_point_03_2_2.png",
+              "red_captain_point_03_2_3.png"
+            ],
+            [
+              "red_captain_point_03_3_0.png",
+              "red_captain_point_03_3_1.png",
+              "red_captain_point_03_3_2.png",
+              "red_captain_point_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "previewOnly": "preview.png"
+}

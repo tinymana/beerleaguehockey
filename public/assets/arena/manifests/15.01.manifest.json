@@ -1,0 +1,479 @@
+{
+  "batch": "15.01",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    16,
+    32
+  ],
+  "atlas": "locker_atlas.png",
+  "assets": [
+    {
+      "id": "floor_clean",
+      "file": "floor_clean.png",
+      "atlasRect": [
+        0,
+        0,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "floor_clean_0_0.png",
+          "floor_clean_0_1.png"
+        ],
+        [
+          "floor_clean_1_0.png",
+          "floor_clean_1_1.png"
+        ],
+        [
+          "floor_clean_2_0.png",
+          "floor_clean_2_1.png"
+        ],
+        [
+          "floor_clean_3_0.png",
+          "floor_clean_3_1.png"
+        ]
+      ],
+      "layer": "floor"
+    },
+    {
+      "id": "floor_worn",
+      "file": "floor_worn.png",
+      "atlasRect": [
+        16,
+        0,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "floor_worn_0_0.png",
+          "floor_worn_0_1.png"
+        ],
+        [
+          "floor_worn_1_0.png",
+          "floor_worn_1_1.png"
+        ],
+        [
+          "floor_worn_2_0.png",
+          "floor_worn_2_1.png"
+        ],
+        [
+          "floor_worn_3_0.png",
+          "floor_worn_3_1.png"
+        ]
+      ],
+      "layer": "floor"
+    },
+    {
+      "id": "rubber_mat",
+      "file": "rubber_mat.png",
+      "atlasRect": [
+        32,
+        0,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "rubber_mat_0_0.png",
+          "rubber_mat_0_1.png"
+        ],
+        [
+          "rubber_mat_1_0.png",
+          "rubber_mat_1_1.png"
+        ],
+        [
+          "rubber_mat_2_0.png",
+          "rubber_mat_2_1.png"
+        ],
+        [
+          "rubber_mat_3_0.png",
+          "rubber_mat_3_1.png"
+        ]
+      ],
+      "layer": "floor"
+    },
+    {
+      "id": "rubber_mat_edge",
+      "file": "rubber_mat_edge.png",
+      "atlasRect": [
+        48,
+        0,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "rubber_mat_edge_0_0.png",
+          "rubber_mat_edge_0_1.png"
+        ],
+        [
+          "rubber_mat_edge_1_0.png",
+          "rubber_mat_edge_1_1.png"
+        ],
+        [
+          "rubber_mat_edge_2_0.png",
+          "rubber_mat_edge_2_1.png"
+        ],
+        [
+          "rubber_mat_edge_3_0.png",
+          "rubber_mat_edge_3_1.png"
+        ]
+      ],
+      "layer": "floor"
+    },
+    {
+      "id": "wall_north",
+      "file": "wall_north.png",
+      "atlasRect": [
+        64,
+        0,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "wall_north_0_0.png",
+          "wall_north_0_1.png"
+        ],
+        [
+          "wall_north_1_0.png",
+          "wall_north_1_1.png"
+        ],
+        [
+          "wall_north_2_0.png",
+          "wall_north_2_1.png"
+        ],
+        [
+          "wall_north_3_0.png",
+          "wall_north_3_1.png"
+        ]
+      ],
+      "layer": "wall"
+    },
+    {
+      "id": "wall_west",
+      "file": "wall_west.png",
+      "atlasRect": [
+        80,
+        0,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "wall_west_0_0.png",
+          "wall_west_0_1.png"
+        ],
+        [
+          "wall_west_1_0.png",
+          "wall_west_1_1.png"
+        ],
+        [
+          "wall_west_2_0.png",
+          "wall_west_2_1.png"
+        ],
+        [
+          "wall_west_3_0.png",
+          "wall_west_3_1.png"
+        ]
+      ],
+      "layer": "wall"
+    },
+    {
+      "id": "wall_east",
+      "file": "wall_east.png",
+      "atlasRect": [
+        96,
+        0,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "wall_east_0_0.png",
+          "wall_east_0_1.png"
+        ],
+        [
+          "wall_east_1_0.png",
+          "wall_east_1_1.png"
+        ],
+        [
+          "wall_east_2_0.png",
+          "wall_east_2_1.png"
+        ],
+        [
+          "wall_east_3_0.png",
+          "wall_east_3_1.png"
+        ]
+      ],
+      "layer": "wall"
+    },
+    {
+      "id": "wall_corner_nw",
+      "file": "wall_corner_nw.png",
+      "atlasRect": [
+        112,
+        0,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "wall_corner_nw_0_0.png",
+          "wall_corner_nw_0_1.png"
+        ],
+        [
+          "wall_corner_nw_1_0.png",
+          "wall_corner_nw_1_1.png"
+        ],
+        [
+          "wall_corner_nw_2_0.png",
+          "wall_corner_nw_2_1.png"
+        ],
+        [
+          "wall_corner_nw_3_0.png",
+          "wall_corner_nw_3_1.png"
+        ]
+      ],
+      "layer": "wall"
+    },
+    {
+      "id": "wall_corner_ne",
+      "file": "wall_corner_ne.png",
+      "atlasRect": [
+        0,
+        32,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "wall_corner_ne_0_0.png",
+          "wall_corner_ne_0_1.png"
+        ],
+        [
+          "wall_corner_ne_1_0.png",
+          "wall_corner_ne_1_1.png"
+        ],
+        [
+          "wall_corner_ne_2_0.png",
+          "wall_corner_ne_2_1.png"
+        ],
+        [
+          "wall_corner_ne_3_0.png",
+          "wall_corner_ne_3_1.png"
+        ]
+      ],
+      "layer": "wall"
+    },
+    {
+      "id": "doorway",
+      "file": "doorway.png",
+      "atlasRect": [
+        16,
+        32,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "doorway_0_0.png",
+          "doorway_0_1.png"
+        ],
+        [
+          "doorway_1_0.png",
+          "doorway_1_1.png"
+        ],
+        [
+          "doorway_2_0.png",
+          "doorway_2_1.png"
+        ],
+        [
+          "doorway_3_0.png",
+          "doorway_3_1.png"
+        ]
+      ],
+      "layer": "wall"
+    },
+    {
+      "id": "threshold",
+      "file": "threshold.png",
+      "atlasRect": [
+        32,
+        32,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "threshold_0_0.png",
+          "threshold_0_1.png"
+        ],
+        [
+          "threshold_1_0.png",
+          "threshold_1_1.png"
+        ],
+        [
+          "threshold_2_0.png",
+          "threshold_2_1.png"
+        ],
+        [
+          "threshold_3_0.png",
+          "threshold_3_1.png"
+        ]
+      ],
+      "layer": "floor"
+    },
+    {
+      "id": "floor_drain",
+      "file": "floor_drain.png",
+      "atlasRect": [
+        48,
+        32,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "floor_drain_0_0.png",
+          "floor_drain_0_1.png"
+        ],
+        [
+          "floor_drain_1_0.png",
+          "floor_drain_1_1.png"
+        ],
+        [
+          "floor_drain_2_0.png",
+          "floor_drain_2_1.png"
+        ],
+        [
+          "floor_drain_3_0.png",
+          "floor_drain_3_1.png"
+        ]
+      ],
+      "layer": "floor"
+    },
+    {
+      "id": "wall_trim",
+      "file": "wall_trim.png",
+      "atlasRect": [
+        64,
+        32,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "wall_trim_0_0.png",
+          "wall_trim_0_1.png"
+        ],
+        [
+          "wall_trim_1_0.png",
+          "wall_trim_1_1.png"
+        ],
+        [
+          "wall_trim_2_0.png",
+          "wall_trim_2_1.png"
+        ],
+        [
+          "wall_trim_3_0.png",
+          "wall_trim_3_1.png"
+        ]
+      ],
+      "layer": "wall"
+    },
+    {
+      "id": "floor_wet",
+      "file": "floor_wet.png",
+      "atlasRect": [
+        80,
+        32,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "floor_wet_0_0.png",
+          "floor_wet_0_1.png"
+        ],
+        [
+          "floor_wet_1_0.png",
+          "floor_wet_1_1.png"
+        ],
+        [
+          "floor_wet_2_0.png",
+          "floor_wet_2_1.png"
+        ],
+        [
+          "floor_wet_3_0.png",
+          "floor_wet_3_1.png"
+        ]
+      ],
+      "layer": "floor"
+    },
+    {
+      "id": "wall_south",
+      "file": "wall_south.png",
+      "atlasRect": [
+        96,
+        32,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "wall_south_0_0.png",
+          "wall_south_0_1.png"
+        ],
+        [
+          "wall_south_1_0.png",
+          "wall_south_1_1.png"
+        ],
+        [
+          "wall_south_2_0.png",
+          "wall_south_2_1.png"
+        ],
+        [
+          "wall_south_3_0.png",
+          "wall_south_3_1.png"
+        ]
+      ],
+      "layer": "wall"
+    },
+    {
+      "id": "wall_corner_sw",
+      "file": "wall_corner_sw.png",
+      "atlasRect": [
+        112,
+        32,
+        16,
+        32
+      ],
+      "tiles": [
+        [
+          "wall_corner_sw_0_0.png",
+          "wall_corner_sw_0_1.png"
+        ],
+        [
+          "wall_corner_sw_1_0.png",
+          "wall_corner_sw_1_1.png"
+        ],
+        [
+          "wall_corner_sw_2_0.png",
+          "wall_corner_sw_2_1.png"
+        ],
+        [
+          "wall_corner_sw_3_0.png",
+          "wall_corner_sw_3_1.png"
+        ]
+      ],
+      "layer": "wall"
+    }
+  ],
+  "previewOnly": "preview.png"
+}

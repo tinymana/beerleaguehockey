@@ -1,0 +1,779 @@
+{
+  "batch": "15.05",
+  "tileSize": [
+    8,
+    8
+  ],
+  "frameSize": [
+    32,
+    32
+  ],
+  "atlas": "beer_atlas.png",
+  "sequences": [
+    {
+      "id": "blue_standing_beer",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "pose": "standing",
+      "loop": false,
+      "frames": [
+        {
+          "file": "blue_standing_beer_00.png",
+          "atlasRect": [
+            0,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 250,
+          "tiles": [
+            [
+              "blue_standing_beer_00_0_0.png",
+              "blue_standing_beer_00_0_1.png",
+              "blue_standing_beer_00_0_2.png",
+              "blue_standing_beer_00_0_3.png"
+            ],
+            [
+              "blue_standing_beer_00_1_0.png",
+              "blue_standing_beer_00_1_1.png",
+              "blue_standing_beer_00_1_2.png",
+              "blue_standing_beer_00_1_3.png"
+            ],
+            [
+              "blue_standing_beer_00_2_0.png",
+              "blue_standing_beer_00_2_1.png",
+              "blue_standing_beer_00_2_2.png",
+              "blue_standing_beer_00_2_3.png"
+            ],
+            [
+              "blue_standing_beer_00_3_0.png",
+              "blue_standing_beer_00_3_1.png",
+              "blue_standing_beer_00_3_2.png",
+              "blue_standing_beer_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_standing_beer_01.png",
+          "atlasRect": [
+            32,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_standing_beer_01_0_0.png",
+              "blue_standing_beer_01_0_1.png",
+              "blue_standing_beer_01_0_2.png",
+              "blue_standing_beer_01_0_3.png"
+            ],
+            [
+              "blue_standing_beer_01_1_0.png",
+              "blue_standing_beer_01_1_1.png",
+              "blue_standing_beer_01_1_2.png",
+              "blue_standing_beer_01_1_3.png"
+            ],
+            [
+              "blue_standing_beer_01_2_0.png",
+              "blue_standing_beer_01_2_1.png",
+              "blue_standing_beer_01_2_2.png",
+              "blue_standing_beer_01_2_3.png"
+            ],
+            [
+              "blue_standing_beer_01_3_0.png",
+              "blue_standing_beer_01_3_1.png",
+              "blue_standing_beer_01_3_2.png",
+              "blue_standing_beer_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_standing_beer_02.png",
+          "atlasRect": [
+            64,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 650,
+          "tiles": [
+            [
+              "blue_standing_beer_02_0_0.png",
+              "blue_standing_beer_02_0_1.png",
+              "blue_standing_beer_02_0_2.png",
+              "blue_standing_beer_02_0_3.png"
+            ],
+            [
+              "blue_standing_beer_02_1_0.png",
+              "blue_standing_beer_02_1_1.png",
+              "blue_standing_beer_02_1_2.png",
+              "blue_standing_beer_02_1_3.png"
+            ],
+            [
+              "blue_standing_beer_02_2_0.png",
+              "blue_standing_beer_02_2_1.png",
+              "blue_standing_beer_02_2_2.png",
+              "blue_standing_beer_02_2_3.png"
+            ],
+            [
+              "blue_standing_beer_02_3_0.png",
+              "blue_standing_beer_02_3_1.png",
+              "blue_standing_beer_02_3_2.png",
+              "blue_standing_beer_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_standing_beer_03.png",
+          "atlasRect": [
+            96,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_standing_beer_03_0_0.png",
+              "blue_standing_beer_03_0_1.png",
+              "blue_standing_beer_03_0_2.png",
+              "blue_standing_beer_03_0_3.png"
+            ],
+            [
+              "blue_standing_beer_03_1_0.png",
+              "blue_standing_beer_03_1_1.png",
+              "blue_standing_beer_03_1_2.png",
+              "blue_standing_beer_03_1_3.png"
+            ],
+            [
+              "blue_standing_beer_03_2_0.png",
+              "blue_standing_beer_03_2_1.png",
+              "blue_standing_beer_03_2_2.png",
+              "blue_standing_beer_03_2_3.png"
+            ],
+            [
+              "blue_standing_beer_03_3_0.png",
+              "blue_standing_beer_03_3_1.png",
+              "blue_standing_beer_03_3_2.png",
+              "blue_standing_beer_03_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_standing_beer_04.png",
+          "atlasRect": [
+            128,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 250,
+          "tiles": [
+            [
+              "blue_standing_beer_04_0_0.png",
+              "blue_standing_beer_04_0_1.png",
+              "blue_standing_beer_04_0_2.png",
+              "blue_standing_beer_04_0_3.png"
+            ],
+            [
+              "blue_standing_beer_04_1_0.png",
+              "blue_standing_beer_04_1_1.png",
+              "blue_standing_beer_04_1_2.png",
+              "blue_standing_beer_04_1_3.png"
+            ],
+            [
+              "blue_standing_beer_04_2_0.png",
+              "blue_standing_beer_04_2_1.png",
+              "blue_standing_beer_04_2_2.png",
+              "blue_standing_beer_04_2_3.png"
+            ],
+            [
+              "blue_standing_beer_04_3_0.png",
+              "blue_standing_beer_04_3_1.png",
+              "blue_standing_beer_04_3_2.png",
+              "blue_standing_beer_04_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blue_seated_beer",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "pose": "seated",
+      "loop": false,
+      "frames": [
+        {
+          "file": "blue_seated_beer_00.png",
+          "atlasRect": [
+            0,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 250,
+          "tiles": [
+            [
+              "blue_seated_beer_00_0_0.png",
+              "blue_seated_beer_00_0_1.png",
+              "blue_seated_beer_00_0_2.png",
+              "blue_seated_beer_00_0_3.png"
+            ],
+            [
+              "blue_seated_beer_00_1_0.png",
+              "blue_seated_beer_00_1_1.png",
+              "blue_seated_beer_00_1_2.png",
+              "blue_seated_beer_00_1_3.png"
+            ],
+            [
+              "blue_seated_beer_00_2_0.png",
+              "blue_seated_beer_00_2_1.png",
+              "blue_seated_beer_00_2_2.png",
+              "blue_seated_beer_00_2_3.png"
+            ],
+            [
+              "blue_seated_beer_00_3_0.png",
+              "blue_seated_beer_00_3_1.png",
+              "blue_seated_beer_00_3_2.png",
+              "blue_seated_beer_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_seated_beer_01.png",
+          "atlasRect": [
+            32,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_seated_beer_01_0_0.png",
+              "blue_seated_beer_01_0_1.png",
+              "blue_seated_beer_01_0_2.png",
+              "blue_seated_beer_01_0_3.png"
+            ],
+            [
+              "blue_seated_beer_01_1_0.png",
+              "blue_seated_beer_01_1_1.png",
+              "blue_seated_beer_01_1_2.png",
+              "blue_seated_beer_01_1_3.png"
+            ],
+            [
+              "blue_seated_beer_01_2_0.png",
+              "blue_seated_beer_01_2_1.png",
+              "blue_seated_beer_01_2_2.png",
+              "blue_seated_beer_01_2_3.png"
+            ],
+            [
+              "blue_seated_beer_01_3_0.png",
+              "blue_seated_beer_01_3_1.png",
+              "blue_seated_beer_01_3_2.png",
+              "blue_seated_beer_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_seated_beer_02.png",
+          "atlasRect": [
+            64,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 650,
+          "tiles": [
+            [
+              "blue_seated_beer_02_0_0.png",
+              "blue_seated_beer_02_0_1.png",
+              "blue_seated_beer_02_0_2.png",
+              "blue_seated_beer_02_0_3.png"
+            ],
+            [
+              "blue_seated_beer_02_1_0.png",
+              "blue_seated_beer_02_1_1.png",
+              "blue_seated_beer_02_1_2.png",
+              "blue_seated_beer_02_1_3.png"
+            ],
+            [
+              "blue_seated_beer_02_2_0.png",
+              "blue_seated_beer_02_2_1.png",
+              "blue_seated_beer_02_2_2.png",
+              "blue_seated_beer_02_2_3.png"
+            ],
+            [
+              "blue_seated_beer_02_3_0.png",
+              "blue_seated_beer_02_3_1.png",
+              "blue_seated_beer_02_3_2.png",
+              "blue_seated_beer_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_seated_beer_03.png",
+          "atlasRect": [
+            96,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "blue_seated_beer_03_0_0.png",
+              "blue_seated_beer_03_0_1.png",
+              "blue_seated_beer_03_0_2.png",
+              "blue_seated_beer_03_0_3.png"
+            ],
+            [
+              "blue_seated_beer_03_1_0.png",
+              "blue_seated_beer_03_1_1.png",
+              "blue_seated_beer_03_1_2.png",
+              "blue_seated_beer_03_1_3.png"
+            ],
+            [
+              "blue_seated_beer_03_2_0.png",
+              "blue_seated_beer_03_2_1.png",
+              "blue_seated_beer_03_2_2.png",
+              "blue_seated_beer_03_2_3.png"
+            ],
+            [
+              "blue_seated_beer_03_3_0.png",
+              "blue_seated_beer_03_3_1.png",
+              "blue_seated_beer_03_3_2.png",
+              "blue_seated_beer_03_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_seated_beer_04.png",
+          "atlasRect": [
+            128,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 250,
+          "tiles": [
+            [
+              "blue_seated_beer_04_0_0.png",
+              "blue_seated_beer_04_0_1.png",
+              "blue_seated_beer_04_0_2.png",
+              "blue_seated_beer_04_0_3.png"
+            ],
+            [
+              "blue_seated_beer_04_1_0.png",
+              "blue_seated_beer_04_1_1.png",
+              "blue_seated_beer_04_1_2.png",
+              "blue_seated_beer_04_1_3.png"
+            ],
+            [
+              "blue_seated_beer_04_2_0.png",
+              "blue_seated_beer_04_2_1.png",
+              "blue_seated_beer_04_2_2.png",
+              "blue_seated_beer_04_2_3.png"
+            ],
+            [
+              "blue_seated_beer_04_3_0.png",
+              "blue_seated_beer_04_3_1.png",
+              "blue_seated_beer_04_3_2.png",
+              "blue_seated_beer_04_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_standing_beer",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "pose": "standing",
+      "loop": false,
+      "frames": [
+        {
+          "file": "red_standing_beer_00.png",
+          "atlasRect": [
+            0,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 250,
+          "tiles": [
+            [
+              "red_standing_beer_00_0_0.png",
+              "red_standing_beer_00_0_1.png",
+              "red_standing_beer_00_0_2.png",
+              "red_standing_beer_00_0_3.png"
+            ],
+            [
+              "red_standing_beer_00_1_0.png",
+              "red_standing_beer_00_1_1.png",
+              "red_standing_beer_00_1_2.png",
+              "red_standing_beer_00_1_3.png"
+            ],
+            [
+              "red_standing_beer_00_2_0.png",
+              "red_standing_beer_00_2_1.png",
+              "red_standing_beer_00_2_2.png",
+              "red_standing_beer_00_2_3.png"
+            ],
+            [
+              "red_standing_beer_00_3_0.png",
+              "red_standing_beer_00_3_1.png",
+              "red_standing_beer_00_3_2.png",
+              "red_standing_beer_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_standing_beer_01.png",
+          "atlasRect": [
+            32,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_standing_beer_01_0_0.png",
+              "red_standing_beer_01_0_1.png",
+              "red_standing_beer_01_0_2.png",
+              "red_standing_beer_01_0_3.png"
+            ],
+            [
+              "red_standing_beer_01_1_0.png",
+              "red_standing_beer_01_1_1.png",
+              "red_standing_beer_01_1_2.png",
+              "red_standing_beer_01_1_3.png"
+            ],
+            [
+              "red_standing_beer_01_2_0.png",
+              "red_standing_beer_01_2_1.png",
+              "red_standing_beer_01_2_2.png",
+              "red_standing_beer_01_2_3.png"
+            ],
+            [
+              "red_standing_beer_01_3_0.png",
+              "red_standing_beer_01_3_1.png",
+              "red_standing_beer_01_3_2.png",
+              "red_standing_beer_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_standing_beer_02.png",
+          "atlasRect": [
+            64,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 650,
+          "tiles": [
+            [
+              "red_standing_beer_02_0_0.png",
+              "red_standing_beer_02_0_1.png",
+              "red_standing_beer_02_0_2.png",
+              "red_standing_beer_02_0_3.png"
+            ],
+            [
+              "red_standing_beer_02_1_0.png",
+              "red_standing_beer_02_1_1.png",
+              "red_standing_beer_02_1_2.png",
+              "red_standing_beer_02_1_3.png"
+            ],
+            [
+              "red_standing_beer_02_2_0.png",
+              "red_standing_beer_02_2_1.png",
+              "red_standing_beer_02_2_2.png",
+              "red_standing_beer_02_2_3.png"
+            ],
+            [
+              "red_standing_beer_02_3_0.png",
+              "red_standing_beer_02_3_1.png",
+              "red_standing_beer_02_3_2.png",
+              "red_standing_beer_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_standing_beer_03.png",
+          "atlasRect": [
+            96,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_standing_beer_03_0_0.png",
+              "red_standing_beer_03_0_1.png",
+              "red_standing_beer_03_0_2.png",
+              "red_standing_beer_03_0_3.png"
+            ],
+            [
+              "red_standing_beer_03_1_0.png",
+              "red_standing_beer_03_1_1.png",
+              "red_standing_beer_03_1_2.png",
+              "red_standing_beer_03_1_3.png"
+            ],
+            [
+              "red_standing_beer_03_2_0.png",
+              "red_standing_beer_03_2_1.png",
+              "red_standing_beer_03_2_2.png",
+              "red_standing_beer_03_2_3.png"
+            ],
+            [
+              "red_standing_beer_03_3_0.png",
+              "red_standing_beer_03_3_1.png",
+              "red_standing_beer_03_3_2.png",
+              "red_standing_beer_03_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_standing_beer_04.png",
+          "atlasRect": [
+            128,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 250,
+          "tiles": [
+            [
+              "red_standing_beer_04_0_0.png",
+              "red_standing_beer_04_0_1.png",
+              "red_standing_beer_04_0_2.png",
+              "red_standing_beer_04_0_3.png"
+            ],
+            [
+              "red_standing_beer_04_1_0.png",
+              "red_standing_beer_04_1_1.png",
+              "red_standing_beer_04_1_2.png",
+              "red_standing_beer_04_1_3.png"
+            ],
+            [
+              "red_standing_beer_04_2_0.png",
+              "red_standing_beer_04_2_1.png",
+              "red_standing_beer_04_2_2.png",
+              "red_standing_beer_04_2_3.png"
+            ],
+            [
+              "red_standing_beer_04_3_0.png",
+              "red_standing_beer_04_3_1.png",
+              "red_standing_beer_04_3_2.png",
+              "red_standing_beer_04_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_seated_beer",
+      "anchorLocal": [
+        16,
+        30
+      ],
+      "pose": "seated",
+      "loop": false,
+      "frames": [
+        {
+          "file": "red_seated_beer_00.png",
+          "atlasRect": [
+            0,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 250,
+          "tiles": [
+            [
+              "red_seated_beer_00_0_0.png",
+              "red_seated_beer_00_0_1.png",
+              "red_seated_beer_00_0_2.png",
+              "red_seated_beer_00_0_3.png"
+            ],
+            [
+              "red_seated_beer_00_1_0.png",
+              "red_seated_beer_00_1_1.png",
+              "red_seated_beer_00_1_2.png",
+              "red_seated_beer_00_1_3.png"
+            ],
+            [
+              "red_seated_beer_00_2_0.png",
+              "red_seated_beer_00_2_1.png",
+              "red_seated_beer_00_2_2.png",
+              "red_seated_beer_00_2_3.png"
+            ],
+            [
+              "red_seated_beer_00_3_0.png",
+              "red_seated_beer_00_3_1.png",
+              "red_seated_beer_00_3_2.png",
+              "red_seated_beer_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_seated_beer_01.png",
+          "atlasRect": [
+            32,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_seated_beer_01_0_0.png",
+              "red_seated_beer_01_0_1.png",
+              "red_seated_beer_01_0_2.png",
+              "red_seated_beer_01_0_3.png"
+            ],
+            [
+              "red_seated_beer_01_1_0.png",
+              "red_seated_beer_01_1_1.png",
+              "red_seated_beer_01_1_2.png",
+              "red_seated_beer_01_1_3.png"
+            ],
+            [
+              "red_seated_beer_01_2_0.png",
+              "red_seated_beer_01_2_1.png",
+              "red_seated_beer_01_2_2.png",
+              "red_seated_beer_01_2_3.png"
+            ],
+            [
+              "red_seated_beer_01_3_0.png",
+              "red_seated_beer_01_3_1.png",
+              "red_seated_beer_01_3_2.png",
+              "red_seated_beer_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_seated_beer_02.png",
+          "atlasRect": [
+            64,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 650,
+          "tiles": [
+            [
+              "red_seated_beer_02_0_0.png",
+              "red_seated_beer_02_0_1.png",
+              "red_seated_beer_02_0_2.png",
+              "red_seated_beer_02_0_3.png"
+            ],
+            [
+              "red_seated_beer_02_1_0.png",
+              "red_seated_beer_02_1_1.png",
+              "red_seated_beer_02_1_2.png",
+              "red_seated_beer_02_1_3.png"
+            ],
+            [
+              "red_seated_beer_02_2_0.png",
+              "red_seated_beer_02_2_1.png",
+              "red_seated_beer_02_2_2.png",
+              "red_seated_beer_02_2_3.png"
+            ],
+            [
+              "red_seated_beer_02_3_0.png",
+              "red_seated_beer_02_3_1.png",
+              "red_seated_beer_02_3_2.png",
+              "red_seated_beer_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_seated_beer_03.png",
+          "atlasRect": [
+            96,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 180,
+          "tiles": [
+            [
+              "red_seated_beer_03_0_0.png",
+              "red_seated_beer_03_0_1.png",
+              "red_seated_beer_03_0_2.png",
+              "red_seated_beer_03_0_3.png"
+            ],
+            [
+              "red_seated_beer_03_1_0.png",
+              "red_seated_beer_03_1_1.png",
+              "red_seated_beer_03_1_2.png",
+              "red_seated_beer_03_1_3.png"
+            ],
+            [
+              "red_seated_beer_03_2_0.png",
+              "red_seated_beer_03_2_1.png",
+              "red_seated_beer_03_2_2.png",
+              "red_seated_beer_03_2_3.png"
+            ],
+            [
+              "red_seated_beer_03_3_0.png",
+              "red_seated_beer_03_3_1.png",
+              "red_seated_beer_03_3_2.png",
+              "red_seated_beer_03_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_seated_beer_04.png",
+          "atlasRect": [
+            128,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 250,
+          "tiles": [
+            [
+              "red_seated_beer_04_0_0.png",
+              "red_seated_beer_04_0_1.png",
+              "red_seated_beer_04_0_2.png",
+              "red_seated_beer_04_0_3.png"
+            ],
+            [
+              "red_seated_beer_04_1_0.png",
+              "red_seated_beer_04_1_1.png",
+              "red_seated_beer_04_1_2.png",
+              "red_seated_beer_04_1_3.png"
+            ],
+            [
+              "red_seated_beer_04_2_0.png",
+              "red_seated_beer_04_2_1.png",
+              "red_seated_beer_04_2_2.png",
+              "red_seated_beer_04_2_3.png"
+            ],
+            [
+              "red_seated_beer_04_3_0.png",
+              "red_seated_beer_04_3_1.png",
+              "red_seated_beer_04_3_2.png",
+              "red_seated_beer_04_3_3.png"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "previewOnly": "preview.png"
+}

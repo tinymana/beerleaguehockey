@@ -1,0 +1,483 @@
+{
+  "batch": "15.03",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    32,
+    32
+  ],
+  "atlas": "equipment_atlas.png",
+  "assets": [
+    {
+      "file": "bench_wood.png",
+      "atlasRect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        27
+      ],
+      "tiles": [
+        [
+          "bench_wood_0_0.png",
+          "bench_wood_0_1.png",
+          "bench_wood_0_2.png",
+          "bench_wood_0_3.png"
+        ],
+        [
+          "bench_wood_1_0.png",
+          "bench_wood_1_1.png",
+          "bench_wood_1_2.png",
+          "bench_wood_1_3.png"
+        ],
+        [
+          "bench_wood_2_0.png",
+          "bench_wood_2_1.png",
+          "bench_wood_2_2.png",
+          "bench_wood_2_3.png"
+        ],
+        [
+          "bench_wood_3_0.png",
+          "bench_wood_3_1.png",
+          "bench_wood_3_2.png",
+          "bench_wood_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "bench_blue.png",
+      "atlasRect": [
+        32,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        27
+      ],
+      "tiles": [
+        [
+          "bench_blue_0_0.png",
+          "bench_blue_0_1.png",
+          "bench_blue_0_2.png",
+          "bench_blue_0_3.png"
+        ],
+        [
+          "bench_blue_1_0.png",
+          "bench_blue_1_1.png",
+          "bench_blue_1_2.png",
+          "bench_blue_1_3.png"
+        ],
+        [
+          "bench_blue_2_0.png",
+          "bench_blue_2_1.png",
+          "bench_blue_2_2.png",
+          "bench_blue_2_3.png"
+        ],
+        [
+          "bench_blue_3_0.png",
+          "bench_blue_3_1.png",
+          "bench_blue_3_2.png",
+          "bench_blue_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "bench_red.png",
+      "atlasRect": [
+        64,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        27
+      ],
+      "tiles": [
+        [
+          "bench_red_0_0.png",
+          "bench_red_0_1.png",
+          "bench_red_0_2.png",
+          "bench_red_0_3.png"
+        ],
+        [
+          "bench_red_1_0.png",
+          "bench_red_1_1.png",
+          "bench_red_1_2.png",
+          "bench_red_1_3.png"
+        ],
+        [
+          "bench_red_2_0.png",
+          "bench_red_2_1.png",
+          "bench_red_2_2.png",
+          "bench_red_2_3.png"
+        ],
+        [
+          "bench_red_3_0.png",
+          "bench_red_3_1.png",
+          "bench_red_3_2.png",
+          "bench_red_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "gear_bag.png",
+      "atlasRect": [
+        96,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        27
+      ],
+      "tiles": [
+        [
+          "gear_bag_0_0.png",
+          "gear_bag_0_1.png",
+          "gear_bag_0_2.png",
+          "gear_bag_0_3.png"
+        ],
+        [
+          "gear_bag_1_0.png",
+          "gear_bag_1_1.png",
+          "gear_bag_1_2.png",
+          "gear_bag_1_3.png"
+        ],
+        [
+          "gear_bag_2_0.png",
+          "gear_bag_2_1.png",
+          "gear_bag_2_2.png",
+          "gear_bag_2_3.png"
+        ],
+        [
+          "gear_bag_3_0.png",
+          "gear_bag_3_1.png",
+          "gear_bag_3_2.png",
+          "gear_bag_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "stick_rack.png",
+      "atlasRect": [
+        0,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        27
+      ],
+      "tiles": [
+        [
+          "stick_rack_0_0.png",
+          "stick_rack_0_1.png",
+          "stick_rack_0_2.png",
+          "stick_rack_0_3.png"
+        ],
+        [
+          "stick_rack_1_0.png",
+          "stick_rack_1_1.png",
+          "stick_rack_1_2.png",
+          "stick_rack_1_3.png"
+        ],
+        [
+          "stick_rack_2_0.png",
+          "stick_rack_2_1.png",
+          "stick_rack_2_2.png",
+          "stick_rack_2_3.png"
+        ],
+        [
+          "stick_rack_3_0.png",
+          "stick_rack_3_1.png",
+          "stick_rack_3_2.png",
+          "stick_rack_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "helmet.png",
+      "atlasRect": [
+        32,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        27
+      ],
+      "tiles": [
+        [
+          "helmet_0_0.png",
+          "helmet_0_1.png",
+          "helmet_0_2.png",
+          "helmet_0_3.png"
+        ],
+        [
+          "helmet_1_0.png",
+          "helmet_1_1.png",
+          "helmet_1_2.png",
+          "helmet_1_3.png"
+        ],
+        [
+          "helmet_2_0.png",
+          "helmet_2_1.png",
+          "helmet_2_2.png",
+          "helmet_2_3.png"
+        ],
+        [
+          "helmet_3_0.png",
+          "helmet_3_1.png",
+          "helmet_3_2.png",
+          "helmet_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "gloves.png",
+      "atlasRect": [
+        64,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        27
+      ],
+      "tiles": [
+        [
+          "gloves_0_0.png",
+          "gloves_0_1.png",
+          "gloves_0_2.png",
+          "gloves_0_3.png"
+        ],
+        [
+          "gloves_1_0.png",
+          "gloves_1_1.png",
+          "gloves_1_2.png",
+          "gloves_1_3.png"
+        ],
+        [
+          "gloves_2_0.png",
+          "gloves_2_1.png",
+          "gloves_2_2.png",
+          "gloves_2_3.png"
+        ],
+        [
+          "gloves_3_0.png",
+          "gloves_3_1.png",
+          "gloves_3_2.png",
+          "gloves_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "skates.png",
+      "atlasRect": [
+        96,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        27
+      ],
+      "tiles": [
+        [
+          "skates_0_0.png",
+          "skates_0_1.png",
+          "skates_0_2.png",
+          "skates_0_3.png"
+        ],
+        [
+          "skates_1_0.png",
+          "skates_1_1.png",
+          "skates_1_2.png",
+          "skates_1_3.png"
+        ],
+        [
+          "skates_2_0.png",
+          "skates_2_1.png",
+          "skates_2_2.png",
+          "skates_2_3.png"
+        ],
+        [
+          "skates_3_0.png",
+          "skates_3_1.png",
+          "skates_3_2.png",
+          "skates_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "towels.png",
+      "atlasRect": [
+        0,
+        64,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        27
+      ],
+      "tiles": [
+        [
+          "towels_0_0.png",
+          "towels_0_1.png",
+          "towels_0_2.png",
+          "towels_0_3.png"
+        ],
+        [
+          "towels_1_0.png",
+          "towels_1_1.png",
+          "towels_1_2.png",
+          "towels_1_3.png"
+        ],
+        [
+          "towels_2_0.png",
+          "towels_2_1.png",
+          "towels_2_2.png",
+          "towels_2_3.png"
+        ],
+        [
+          "towels_3_0.png",
+          "towels_3_1.png",
+          "towels_3_2.png",
+          "towels_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "bottles.png",
+      "atlasRect": [
+        32,
+        64,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        27
+      ],
+      "tiles": [
+        [
+          "bottles_0_0.png",
+          "bottles_0_1.png",
+          "bottles_0_2.png",
+          "bottles_0_3.png"
+        ],
+        [
+          "bottles_1_0.png",
+          "bottles_1_1.png",
+          "bottles_1_2.png",
+          "bottles_1_3.png"
+        ],
+        [
+          "bottles_2_0.png",
+          "bottles_2_1.png",
+          "bottles_2_2.png",
+          "bottles_2_3.png"
+        ],
+        [
+          "bottles_3_0.png",
+          "bottles_3_1.png",
+          "bottles_3_2.png",
+          "bottles_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "equipment_crate.png",
+      "atlasRect": [
+        64,
+        64,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        27
+      ],
+      "tiles": [
+        [
+          "equipment_crate_0_0.png",
+          "equipment_crate_0_1.png",
+          "equipment_crate_0_2.png",
+          "equipment_crate_0_3.png"
+        ],
+        [
+          "equipment_crate_1_0.png",
+          "equipment_crate_1_1.png",
+          "equipment_crate_1_2.png",
+          "equipment_crate_1_3.png"
+        ],
+        [
+          "equipment_crate_2_0.png",
+          "equipment_crate_2_1.png",
+          "equipment_crate_2_2.png",
+          "equipment_crate_2_3.png"
+        ],
+        [
+          "equipment_crate_3_0.png",
+          "equipment_crate_3_1.png",
+          "equipment_crate_3_2.png",
+          "equipment_crate_3_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "loose_sticks.png",
+      "atlasRect": [
+        96,
+        64,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        27
+      ],
+      "tiles": [
+        [
+          "loose_sticks_0_0.png",
+          "loose_sticks_0_1.png",
+          "loose_sticks_0_2.png",
+          "loose_sticks_0_3.png"
+        ],
+        [
+          "loose_sticks_1_0.png",
+          "loose_sticks_1_1.png",
+          "loose_sticks_1_2.png",
+          "loose_sticks_1_3.png"
+        ],
+        [
+          "loose_sticks_2_0.png",
+          "loose_sticks_2_1.png",
+          "loose_sticks_2_2.png",
+          "loose_sticks_2_3.png"
+        ],
+        [
+          "loose_sticks_3_0.png",
+          "loose_sticks_3_1.png",
+          "loose_sticks_3_2.png",
+          "loose_sticks_3_3.png"
+        ]
+      ]
+    }
+  ],
+  "previewOnly": "preview.png"
+}

@@ -1,0 +1,1874 @@
+{
+  "batch": "15.04",
+  "tileSize": [
+    8,
+    8
+  ],
+  "frameSize": [
+    32,
+    32
+  ],
+  "atlas": "dressing_atlas.png",
+  "sequences": [
+    {
+      "id": "blue_tie_skates",
+      "action": "tie_skates",
+      "team": "blue",
+      "anchorLocal": [
+        16,
+        29
+      ],
+      "frames": [
+        {
+          "file": "blue_tie_skates_00.png",
+          "atlasRect": [
+            0,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_tie_skates_00_0_0.png",
+              "blue_tie_skates_00_0_1.png",
+              "blue_tie_skates_00_0_2.png",
+              "blue_tie_skates_00_0_3.png"
+            ],
+            [
+              "blue_tie_skates_00_1_0.png",
+              "blue_tie_skates_00_1_1.png",
+              "blue_tie_skates_00_1_2.png",
+              "blue_tie_skates_00_1_3.png"
+            ],
+            [
+              "blue_tie_skates_00_2_0.png",
+              "blue_tie_skates_00_2_1.png",
+              "blue_tie_skates_00_2_2.png",
+              "blue_tie_skates_00_2_3.png"
+            ],
+            [
+              "blue_tie_skates_00_3_0.png",
+              "blue_tie_skates_00_3_1.png",
+              "blue_tie_skates_00_3_2.png",
+              "blue_tie_skates_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_tie_skates_01.png",
+          "atlasRect": [
+            32,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_tie_skates_01_0_0.png",
+              "blue_tie_skates_01_0_1.png",
+              "blue_tie_skates_01_0_2.png",
+              "blue_tie_skates_01_0_3.png"
+            ],
+            [
+              "blue_tie_skates_01_1_0.png",
+              "blue_tie_skates_01_1_1.png",
+              "blue_tie_skates_01_1_2.png",
+              "blue_tie_skates_01_1_3.png"
+            ],
+            [
+              "blue_tie_skates_01_2_0.png",
+              "blue_tie_skates_01_2_1.png",
+              "blue_tie_skates_01_2_2.png",
+              "blue_tie_skates_01_2_3.png"
+            ],
+            [
+              "blue_tie_skates_01_3_0.png",
+              "blue_tie_skates_01_3_1.png",
+              "blue_tie_skates_01_3_2.png",
+              "blue_tie_skates_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_tie_skates_02.png",
+          "atlasRect": [
+            64,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_tie_skates_02_0_0.png",
+              "blue_tie_skates_02_0_1.png",
+              "blue_tie_skates_02_0_2.png",
+              "blue_tie_skates_02_0_3.png"
+            ],
+            [
+              "blue_tie_skates_02_1_0.png",
+              "blue_tie_skates_02_1_1.png",
+              "blue_tie_skates_02_1_2.png",
+              "blue_tie_skates_02_1_3.png"
+            ],
+            [
+              "blue_tie_skates_02_2_0.png",
+              "blue_tie_skates_02_2_1.png",
+              "blue_tie_skates_02_2_2.png",
+              "blue_tie_skates_02_2_3.png"
+            ],
+            [
+              "blue_tie_skates_02_3_0.png",
+              "blue_tie_skates_02_3_1.png",
+              "blue_tie_skates_02_3_2.png",
+              "blue_tie_skates_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_tie_skates_03.png",
+          "atlasRect": [
+            96,
+            0,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_tie_skates_03_0_0.png",
+              "blue_tie_skates_03_0_1.png",
+              "blue_tie_skates_03_0_2.png",
+              "blue_tie_skates_03_0_3.png"
+            ],
+            [
+              "blue_tie_skates_03_1_0.png",
+              "blue_tie_skates_03_1_1.png",
+              "blue_tie_skates_03_1_2.png",
+              "blue_tie_skates_03_1_3.png"
+            ],
+            [
+              "blue_tie_skates_03_2_0.png",
+              "blue_tie_skates_03_2_1.png",
+              "blue_tie_skates_03_2_2.png",
+              "blue_tie_skates_03_2_3.png"
+            ],
+            [
+              "blue_tie_skates_03_3_0.png",
+              "blue_tie_skates_03_3_1.png",
+              "blue_tie_skates_03_3_2.png",
+              "blue_tie_skates_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_tie_skates",
+      "action": "tie_skates",
+      "team": "red",
+      "anchorLocal": [
+        16,
+        29
+      ],
+      "frames": [
+        {
+          "file": "red_tie_skates_00.png",
+          "atlasRect": [
+            0,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_tie_skates_00_0_0.png",
+              "red_tie_skates_00_0_1.png",
+              "red_tie_skates_00_0_2.png",
+              "red_tie_skates_00_0_3.png"
+            ],
+            [
+              "red_tie_skates_00_1_0.png",
+              "red_tie_skates_00_1_1.png",
+              "red_tie_skates_00_1_2.png",
+              "red_tie_skates_00_1_3.png"
+            ],
+            [
+              "red_tie_skates_00_2_0.png",
+              "red_tie_skates_00_2_1.png",
+              "red_tie_skates_00_2_2.png",
+              "red_tie_skates_00_2_3.png"
+            ],
+            [
+              "red_tie_skates_00_3_0.png",
+              "red_tie_skates_00_3_1.png",
+              "red_tie_skates_00_3_2.png",
+              "red_tie_skates_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_tie_skates_01.png",
+          "atlasRect": [
+            32,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_tie_skates_01_0_0.png",
+              "red_tie_skates_01_0_1.png",
+              "red_tie_skates_01_0_2.png",
+              "red_tie_skates_01_0_3.png"
+            ],
+            [
+              "red_tie_skates_01_1_0.png",
+              "red_tie_skates_01_1_1.png",
+              "red_tie_skates_01_1_2.png",
+              "red_tie_skates_01_1_3.png"
+            ],
+            [
+              "red_tie_skates_01_2_0.png",
+              "red_tie_skates_01_2_1.png",
+              "red_tie_skates_01_2_2.png",
+              "red_tie_skates_01_2_3.png"
+            ],
+            [
+              "red_tie_skates_01_3_0.png",
+              "red_tie_skates_01_3_1.png",
+              "red_tie_skates_01_3_2.png",
+              "red_tie_skates_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_tie_skates_02.png",
+          "atlasRect": [
+            64,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_tie_skates_02_0_0.png",
+              "red_tie_skates_02_0_1.png",
+              "red_tie_skates_02_0_2.png",
+              "red_tie_skates_02_0_3.png"
+            ],
+            [
+              "red_tie_skates_02_1_0.png",
+              "red_tie_skates_02_1_1.png",
+              "red_tie_skates_02_1_2.png",
+              "red_tie_skates_02_1_3.png"
+            ],
+            [
+              "red_tie_skates_02_2_0.png",
+              "red_tie_skates_02_2_1.png",
+              "red_tie_skates_02_2_2.png",
+              "red_tie_skates_02_2_3.png"
+            ],
+            [
+              "red_tie_skates_02_3_0.png",
+              "red_tie_skates_02_3_1.png",
+              "red_tie_skates_02_3_2.png",
+              "red_tie_skates_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_tie_skates_03.png",
+          "atlasRect": [
+            96,
+            32,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_tie_skates_03_0_0.png",
+              "red_tie_skates_03_0_1.png",
+              "red_tie_skates_03_0_2.png",
+              "red_tie_skates_03_0_3.png"
+            ],
+            [
+              "red_tie_skates_03_1_0.png",
+              "red_tie_skates_03_1_1.png",
+              "red_tie_skates_03_1_2.png",
+              "red_tie_skates_03_1_3.png"
+            ],
+            [
+              "red_tie_skates_03_2_0.png",
+              "red_tie_skates_03_2_1.png",
+              "red_tie_skates_03_2_2.png",
+              "red_tie_skates_03_2_3.png"
+            ],
+            [
+              "red_tie_skates_03_3_0.png",
+              "red_tie_skates_03_3_1.png",
+              "red_tie_skates_03_3_2.png",
+              "red_tie_skates_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blue_put_on_jersey",
+      "action": "put_on_jersey",
+      "team": "blue",
+      "anchorLocal": [
+        16,
+        29
+      ],
+      "frames": [
+        {
+          "file": "blue_put_on_jersey_00.png",
+          "atlasRect": [
+            0,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_put_on_jersey_00_0_0.png",
+              "blue_put_on_jersey_00_0_1.png",
+              "blue_put_on_jersey_00_0_2.png",
+              "blue_put_on_jersey_00_0_3.png"
+            ],
+            [
+              "blue_put_on_jersey_00_1_0.png",
+              "blue_put_on_jersey_00_1_1.png",
+              "blue_put_on_jersey_00_1_2.png",
+              "blue_put_on_jersey_00_1_3.png"
+            ],
+            [
+              "blue_put_on_jersey_00_2_0.png",
+              "blue_put_on_jersey_00_2_1.png",
+              "blue_put_on_jersey_00_2_2.png",
+              "blue_put_on_jersey_00_2_3.png"
+            ],
+            [
+              "blue_put_on_jersey_00_3_0.png",
+              "blue_put_on_jersey_00_3_1.png",
+              "blue_put_on_jersey_00_3_2.png",
+              "blue_put_on_jersey_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_put_on_jersey_01.png",
+          "atlasRect": [
+            32,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_put_on_jersey_01_0_0.png",
+              "blue_put_on_jersey_01_0_1.png",
+              "blue_put_on_jersey_01_0_2.png",
+              "blue_put_on_jersey_01_0_3.png"
+            ],
+            [
+              "blue_put_on_jersey_01_1_0.png",
+              "blue_put_on_jersey_01_1_1.png",
+              "blue_put_on_jersey_01_1_2.png",
+              "blue_put_on_jersey_01_1_3.png"
+            ],
+            [
+              "blue_put_on_jersey_01_2_0.png",
+              "blue_put_on_jersey_01_2_1.png",
+              "blue_put_on_jersey_01_2_2.png",
+              "blue_put_on_jersey_01_2_3.png"
+            ],
+            [
+              "blue_put_on_jersey_01_3_0.png",
+              "blue_put_on_jersey_01_3_1.png",
+              "blue_put_on_jersey_01_3_2.png",
+              "blue_put_on_jersey_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_put_on_jersey_02.png",
+          "atlasRect": [
+            64,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_put_on_jersey_02_0_0.png",
+              "blue_put_on_jersey_02_0_1.png",
+              "blue_put_on_jersey_02_0_2.png",
+              "blue_put_on_jersey_02_0_3.png"
+            ],
+            [
+              "blue_put_on_jersey_02_1_0.png",
+              "blue_put_on_jersey_02_1_1.png",
+              "blue_put_on_jersey_02_1_2.png",
+              "blue_put_on_jersey_02_1_3.png"
+            ],
+            [
+              "blue_put_on_jersey_02_2_0.png",
+              "blue_put_on_jersey_02_2_1.png",
+              "blue_put_on_jersey_02_2_2.png",
+              "blue_put_on_jersey_02_2_3.png"
+            ],
+            [
+              "blue_put_on_jersey_02_3_0.png",
+              "blue_put_on_jersey_02_3_1.png",
+              "blue_put_on_jersey_02_3_2.png",
+              "blue_put_on_jersey_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_put_on_jersey_03.png",
+          "atlasRect": [
+            96,
+            64,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_put_on_jersey_03_0_0.png",
+              "blue_put_on_jersey_03_0_1.png",
+              "blue_put_on_jersey_03_0_2.png",
+              "blue_put_on_jersey_03_0_3.png"
+            ],
+            [
+              "blue_put_on_jersey_03_1_0.png",
+              "blue_put_on_jersey_03_1_1.png",
+              "blue_put_on_jersey_03_1_2.png",
+              "blue_put_on_jersey_03_1_3.png"
+            ],
+            [
+              "blue_put_on_jersey_03_2_0.png",
+              "blue_put_on_jersey_03_2_1.png",
+              "blue_put_on_jersey_03_2_2.png",
+              "blue_put_on_jersey_03_2_3.png"
+            ],
+            [
+              "blue_put_on_jersey_03_3_0.png",
+              "blue_put_on_jersey_03_3_1.png",
+              "blue_put_on_jersey_03_3_2.png",
+              "blue_put_on_jersey_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_put_on_jersey",
+      "action": "put_on_jersey",
+      "team": "red",
+      "anchorLocal": [
+        16,
+        29
+      ],
+      "frames": [
+        {
+          "file": "red_put_on_jersey_00.png",
+          "atlasRect": [
+            0,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_put_on_jersey_00_0_0.png",
+              "red_put_on_jersey_00_0_1.png",
+              "red_put_on_jersey_00_0_2.png",
+              "red_put_on_jersey_00_0_3.png"
+            ],
+            [
+              "red_put_on_jersey_00_1_0.png",
+              "red_put_on_jersey_00_1_1.png",
+              "red_put_on_jersey_00_1_2.png",
+              "red_put_on_jersey_00_1_3.png"
+            ],
+            [
+              "red_put_on_jersey_00_2_0.png",
+              "red_put_on_jersey_00_2_1.png",
+              "red_put_on_jersey_00_2_2.png",
+              "red_put_on_jersey_00_2_3.png"
+            ],
+            [
+              "red_put_on_jersey_00_3_0.png",
+              "red_put_on_jersey_00_3_1.png",
+              "red_put_on_jersey_00_3_2.png",
+              "red_put_on_jersey_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_put_on_jersey_01.png",
+          "atlasRect": [
+            32,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_put_on_jersey_01_0_0.png",
+              "red_put_on_jersey_01_0_1.png",
+              "red_put_on_jersey_01_0_2.png",
+              "red_put_on_jersey_01_0_3.png"
+            ],
+            [
+              "red_put_on_jersey_01_1_0.png",
+              "red_put_on_jersey_01_1_1.png",
+              "red_put_on_jersey_01_1_2.png",
+              "red_put_on_jersey_01_1_3.png"
+            ],
+            [
+              "red_put_on_jersey_01_2_0.png",
+              "red_put_on_jersey_01_2_1.png",
+              "red_put_on_jersey_01_2_2.png",
+              "red_put_on_jersey_01_2_3.png"
+            ],
+            [
+              "red_put_on_jersey_01_3_0.png",
+              "red_put_on_jersey_01_3_1.png",
+              "red_put_on_jersey_01_3_2.png",
+              "red_put_on_jersey_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_put_on_jersey_02.png",
+          "atlasRect": [
+            64,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_put_on_jersey_02_0_0.png",
+              "red_put_on_jersey_02_0_1.png",
+              "red_put_on_jersey_02_0_2.png",
+              "red_put_on_jersey_02_0_3.png"
+            ],
+            [
+              "red_put_on_jersey_02_1_0.png",
+              "red_put_on_jersey_02_1_1.png",
+              "red_put_on_jersey_02_1_2.png",
+              "red_put_on_jersey_02_1_3.png"
+            ],
+            [
+              "red_put_on_jersey_02_2_0.png",
+              "red_put_on_jersey_02_2_1.png",
+              "red_put_on_jersey_02_2_2.png",
+              "red_put_on_jersey_02_2_3.png"
+            ],
+            [
+              "red_put_on_jersey_02_3_0.png",
+              "red_put_on_jersey_02_3_1.png",
+              "red_put_on_jersey_02_3_2.png",
+              "red_put_on_jersey_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_put_on_jersey_03.png",
+          "atlasRect": [
+            96,
+            96,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_put_on_jersey_03_0_0.png",
+              "red_put_on_jersey_03_0_1.png",
+              "red_put_on_jersey_03_0_2.png",
+              "red_put_on_jersey_03_0_3.png"
+            ],
+            [
+              "red_put_on_jersey_03_1_0.png",
+              "red_put_on_jersey_03_1_1.png",
+              "red_put_on_jersey_03_1_2.png",
+              "red_put_on_jersey_03_1_3.png"
+            ],
+            [
+              "red_put_on_jersey_03_2_0.png",
+              "red_put_on_jersey_03_2_1.png",
+              "red_put_on_jersey_03_2_2.png",
+              "red_put_on_jersey_03_2_3.png"
+            ],
+            [
+              "red_put_on_jersey_03_3_0.png",
+              "red_put_on_jersey_03_3_1.png",
+              "red_put_on_jersey_03_3_2.png",
+              "red_put_on_jersey_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blue_adjust_gloves",
+      "action": "adjust_gloves",
+      "team": "blue",
+      "anchorLocal": [
+        16,
+        29
+      ],
+      "frames": [
+        {
+          "file": "blue_adjust_gloves_00.png",
+          "atlasRect": [
+            0,
+            128,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_adjust_gloves_00_0_0.png",
+              "blue_adjust_gloves_00_0_1.png",
+              "blue_adjust_gloves_00_0_2.png",
+              "blue_adjust_gloves_00_0_3.png"
+            ],
+            [
+              "blue_adjust_gloves_00_1_0.png",
+              "blue_adjust_gloves_00_1_1.png",
+              "blue_adjust_gloves_00_1_2.png",
+              "blue_adjust_gloves_00_1_3.png"
+            ],
+            [
+              "blue_adjust_gloves_00_2_0.png",
+              "blue_adjust_gloves_00_2_1.png",
+              "blue_adjust_gloves_00_2_2.png",
+              "blue_adjust_gloves_00_2_3.png"
+            ],
+            [
+              "blue_adjust_gloves_00_3_0.png",
+              "blue_adjust_gloves_00_3_1.png",
+              "blue_adjust_gloves_00_3_2.png",
+              "blue_adjust_gloves_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_adjust_gloves_01.png",
+          "atlasRect": [
+            32,
+            128,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_adjust_gloves_01_0_0.png",
+              "blue_adjust_gloves_01_0_1.png",
+              "blue_adjust_gloves_01_0_2.png",
+              "blue_adjust_gloves_01_0_3.png"
+            ],
+            [
+              "blue_adjust_gloves_01_1_0.png",
+              "blue_adjust_gloves_01_1_1.png",
+              "blue_adjust_gloves_01_1_2.png",
+              "blue_adjust_gloves_01_1_3.png"
+            ],
+            [
+              "blue_adjust_gloves_01_2_0.png",
+              "blue_adjust_gloves_01_2_1.png",
+              "blue_adjust_gloves_01_2_2.png",
+              "blue_adjust_gloves_01_2_3.png"
+            ],
+            [
+              "blue_adjust_gloves_01_3_0.png",
+              "blue_adjust_gloves_01_3_1.png",
+              "blue_adjust_gloves_01_3_2.png",
+              "blue_adjust_gloves_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_adjust_gloves_02.png",
+          "atlasRect": [
+            64,
+            128,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_adjust_gloves_02_0_0.png",
+              "blue_adjust_gloves_02_0_1.png",
+              "blue_adjust_gloves_02_0_2.png",
+              "blue_adjust_gloves_02_0_3.png"
+            ],
+            [
+              "blue_adjust_gloves_02_1_0.png",
+              "blue_adjust_gloves_02_1_1.png",
+              "blue_adjust_gloves_02_1_2.png",
+              "blue_adjust_gloves_02_1_3.png"
+            ],
+            [
+              "blue_adjust_gloves_02_2_0.png",
+              "blue_adjust_gloves_02_2_1.png",
+              "blue_adjust_gloves_02_2_2.png",
+              "blue_adjust_gloves_02_2_3.png"
+            ],
+            [
+              "blue_adjust_gloves_02_3_0.png",
+              "blue_adjust_gloves_02_3_1.png",
+              "blue_adjust_gloves_02_3_2.png",
+              "blue_adjust_gloves_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_adjust_gloves_03.png",
+          "atlasRect": [
+            96,
+            128,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_adjust_gloves_03_0_0.png",
+              "blue_adjust_gloves_03_0_1.png",
+              "blue_adjust_gloves_03_0_2.png",
+              "blue_adjust_gloves_03_0_3.png"
+            ],
+            [
+              "blue_adjust_gloves_03_1_0.png",
+              "blue_adjust_gloves_03_1_1.png",
+              "blue_adjust_gloves_03_1_2.png",
+              "blue_adjust_gloves_03_1_3.png"
+            ],
+            [
+              "blue_adjust_gloves_03_2_0.png",
+              "blue_adjust_gloves_03_2_1.png",
+              "blue_adjust_gloves_03_2_2.png",
+              "blue_adjust_gloves_03_2_3.png"
+            ],
+            [
+              "blue_adjust_gloves_03_3_0.png",
+              "blue_adjust_gloves_03_3_1.png",
+              "blue_adjust_gloves_03_3_2.png",
+              "blue_adjust_gloves_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_adjust_gloves",
+      "action": "adjust_gloves",
+      "team": "red",
+      "anchorLocal": [
+        16,
+        29
+      ],
+      "frames": [
+        {
+          "file": "red_adjust_gloves_00.png",
+          "atlasRect": [
+            0,
+            160,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_adjust_gloves_00_0_0.png",
+              "red_adjust_gloves_00_0_1.png",
+              "red_adjust_gloves_00_0_2.png",
+              "red_adjust_gloves_00_0_3.png"
+            ],
+            [
+              "red_adjust_gloves_00_1_0.png",
+              "red_adjust_gloves_00_1_1.png",
+              "red_adjust_gloves_00_1_2.png",
+              "red_adjust_gloves_00_1_3.png"
+            ],
+            [
+              "red_adjust_gloves_00_2_0.png",
+              "red_adjust_gloves_00_2_1.png",
+              "red_adjust_gloves_00_2_2.png",
+              "red_adjust_gloves_00_2_3.png"
+            ],
+            [
+              "red_adjust_gloves_00_3_0.png",
+              "red_adjust_gloves_00_3_1.png",
+              "red_adjust_gloves_00_3_2.png",
+              "red_adjust_gloves_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_adjust_gloves_01.png",
+          "atlasRect": [
+            32,
+            160,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_adjust_gloves_01_0_0.png",
+              "red_adjust_gloves_01_0_1.png",
+              "red_adjust_gloves_01_0_2.png",
+              "red_adjust_gloves_01_0_3.png"
+            ],
+            [
+              "red_adjust_gloves_01_1_0.png",
+              "red_adjust_gloves_01_1_1.png",
+              "red_adjust_gloves_01_1_2.png",
+              "red_adjust_gloves_01_1_3.png"
+            ],
+            [
+              "red_adjust_gloves_01_2_0.png",
+              "red_adjust_gloves_01_2_1.png",
+              "red_adjust_gloves_01_2_2.png",
+              "red_adjust_gloves_01_2_3.png"
+            ],
+            [
+              "red_adjust_gloves_01_3_0.png",
+              "red_adjust_gloves_01_3_1.png",
+              "red_adjust_gloves_01_3_2.png",
+              "red_adjust_gloves_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_adjust_gloves_02.png",
+          "atlasRect": [
+            64,
+            160,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_adjust_gloves_02_0_0.png",
+              "red_adjust_gloves_02_0_1.png",
+              "red_adjust_gloves_02_0_2.png",
+              "red_adjust_gloves_02_0_3.png"
+            ],
+            [
+              "red_adjust_gloves_02_1_0.png",
+              "red_adjust_gloves_02_1_1.png",
+              "red_adjust_gloves_02_1_2.png",
+              "red_adjust_gloves_02_1_3.png"
+            ],
+            [
+              "red_adjust_gloves_02_2_0.png",
+              "red_adjust_gloves_02_2_1.png",
+              "red_adjust_gloves_02_2_2.png",
+              "red_adjust_gloves_02_2_3.png"
+            ],
+            [
+              "red_adjust_gloves_02_3_0.png",
+              "red_adjust_gloves_02_3_1.png",
+              "red_adjust_gloves_02_3_2.png",
+              "red_adjust_gloves_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_adjust_gloves_03.png",
+          "atlasRect": [
+            96,
+            160,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_adjust_gloves_03_0_0.png",
+              "red_adjust_gloves_03_0_1.png",
+              "red_adjust_gloves_03_0_2.png",
+              "red_adjust_gloves_03_0_3.png"
+            ],
+            [
+              "red_adjust_gloves_03_1_0.png",
+              "red_adjust_gloves_03_1_1.png",
+              "red_adjust_gloves_03_1_2.png",
+              "red_adjust_gloves_03_1_3.png"
+            ],
+            [
+              "red_adjust_gloves_03_2_0.png",
+              "red_adjust_gloves_03_2_1.png",
+              "red_adjust_gloves_03_2_2.png",
+              "red_adjust_gloves_03_2_3.png"
+            ],
+            [
+              "red_adjust_gloves_03_3_0.png",
+              "red_adjust_gloves_03_3_1.png",
+              "red_adjust_gloves_03_3_2.png",
+              "red_adjust_gloves_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blue_fit_helmet",
+      "action": "fit_helmet",
+      "team": "blue",
+      "anchorLocal": [
+        16,
+        29
+      ],
+      "frames": [
+        {
+          "file": "blue_fit_helmet_00.png",
+          "atlasRect": [
+            0,
+            192,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_fit_helmet_00_0_0.png",
+              "blue_fit_helmet_00_0_1.png",
+              "blue_fit_helmet_00_0_2.png",
+              "blue_fit_helmet_00_0_3.png"
+            ],
+            [
+              "blue_fit_helmet_00_1_0.png",
+              "blue_fit_helmet_00_1_1.png",
+              "blue_fit_helmet_00_1_2.png",
+              "blue_fit_helmet_00_1_3.png"
+            ],
+            [
+              "blue_fit_helmet_00_2_0.png",
+              "blue_fit_helmet_00_2_1.png",
+              "blue_fit_helmet_00_2_2.png",
+              "blue_fit_helmet_00_2_3.png"
+            ],
+            [
+              "blue_fit_helmet_00_3_0.png",
+              "blue_fit_helmet_00_3_1.png",
+              "blue_fit_helmet_00_3_2.png",
+              "blue_fit_helmet_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_fit_helmet_01.png",
+          "atlasRect": [
+            32,
+            192,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_fit_helmet_01_0_0.png",
+              "blue_fit_helmet_01_0_1.png",
+              "blue_fit_helmet_01_0_2.png",
+              "blue_fit_helmet_01_0_3.png"
+            ],
+            [
+              "blue_fit_helmet_01_1_0.png",
+              "blue_fit_helmet_01_1_1.png",
+              "blue_fit_helmet_01_1_2.png",
+              "blue_fit_helmet_01_1_3.png"
+            ],
+            [
+              "blue_fit_helmet_01_2_0.png",
+              "blue_fit_helmet_01_2_1.png",
+              "blue_fit_helmet_01_2_2.png",
+              "blue_fit_helmet_01_2_3.png"
+            ],
+            [
+              "blue_fit_helmet_01_3_0.png",
+              "blue_fit_helmet_01_3_1.png",
+              "blue_fit_helmet_01_3_2.png",
+              "blue_fit_helmet_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_fit_helmet_02.png",
+          "atlasRect": [
+            64,
+            192,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_fit_helmet_02_0_0.png",
+              "blue_fit_helmet_02_0_1.png",
+              "blue_fit_helmet_02_0_2.png",
+              "blue_fit_helmet_02_0_3.png"
+            ],
+            [
+              "blue_fit_helmet_02_1_0.png",
+              "blue_fit_helmet_02_1_1.png",
+              "blue_fit_helmet_02_1_2.png",
+              "blue_fit_helmet_02_1_3.png"
+            ],
+            [
+              "blue_fit_helmet_02_2_0.png",
+              "blue_fit_helmet_02_2_1.png",
+              "blue_fit_helmet_02_2_2.png",
+              "blue_fit_helmet_02_2_3.png"
+            ],
+            [
+              "blue_fit_helmet_02_3_0.png",
+              "blue_fit_helmet_02_3_1.png",
+              "blue_fit_helmet_02_3_2.png",
+              "blue_fit_helmet_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_fit_helmet_03.png",
+          "atlasRect": [
+            96,
+            192,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_fit_helmet_03_0_0.png",
+              "blue_fit_helmet_03_0_1.png",
+              "blue_fit_helmet_03_0_2.png",
+              "blue_fit_helmet_03_0_3.png"
+            ],
+            [
+              "blue_fit_helmet_03_1_0.png",
+              "blue_fit_helmet_03_1_1.png",
+              "blue_fit_helmet_03_1_2.png",
+              "blue_fit_helmet_03_1_3.png"
+            ],
+            [
+              "blue_fit_helmet_03_2_0.png",
+              "blue_fit_helmet_03_2_1.png",
+              "blue_fit_helmet_03_2_2.png",
+              "blue_fit_helmet_03_2_3.png"
+            ],
+            [
+              "blue_fit_helmet_03_3_0.png",
+              "blue_fit_helmet_03_3_1.png",
+              "blue_fit_helmet_03_3_2.png",
+              "blue_fit_helmet_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_fit_helmet",
+      "action": "fit_helmet",
+      "team": "red",
+      "anchorLocal": [
+        16,
+        29
+      ],
+      "frames": [
+        {
+          "file": "red_fit_helmet_00.png",
+          "atlasRect": [
+            0,
+            224,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_fit_helmet_00_0_0.png",
+              "red_fit_helmet_00_0_1.png",
+              "red_fit_helmet_00_0_2.png",
+              "red_fit_helmet_00_0_3.png"
+            ],
+            [
+              "red_fit_helmet_00_1_0.png",
+              "red_fit_helmet_00_1_1.png",
+              "red_fit_helmet_00_1_2.png",
+              "red_fit_helmet_00_1_3.png"
+            ],
+            [
+              "red_fit_helmet_00_2_0.png",
+              "red_fit_helmet_00_2_1.png",
+              "red_fit_helmet_00_2_2.png",
+              "red_fit_helmet_00_2_3.png"
+            ],
+            [
+              "red_fit_helmet_00_3_0.png",
+              "red_fit_helmet_00_3_1.png",
+              "red_fit_helmet_00_3_2.png",
+              "red_fit_helmet_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_fit_helmet_01.png",
+          "atlasRect": [
+            32,
+            224,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_fit_helmet_01_0_0.png",
+              "red_fit_helmet_01_0_1.png",
+              "red_fit_helmet_01_0_2.png",
+              "red_fit_helmet_01_0_3.png"
+            ],
+            [
+              "red_fit_helmet_01_1_0.png",
+              "red_fit_helmet_01_1_1.png",
+              "red_fit_helmet_01_1_2.png",
+              "red_fit_helmet_01_1_3.png"
+            ],
+            [
+              "red_fit_helmet_01_2_0.png",
+              "red_fit_helmet_01_2_1.png",
+              "red_fit_helmet_01_2_2.png",
+              "red_fit_helmet_01_2_3.png"
+            ],
+            [
+              "red_fit_helmet_01_3_0.png",
+              "red_fit_helmet_01_3_1.png",
+              "red_fit_helmet_01_3_2.png",
+              "red_fit_helmet_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_fit_helmet_02.png",
+          "atlasRect": [
+            64,
+            224,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_fit_helmet_02_0_0.png",
+              "red_fit_helmet_02_0_1.png",
+              "red_fit_helmet_02_0_2.png",
+              "red_fit_helmet_02_0_3.png"
+            ],
+            [
+              "red_fit_helmet_02_1_0.png",
+              "red_fit_helmet_02_1_1.png",
+              "red_fit_helmet_02_1_2.png",
+              "red_fit_helmet_02_1_3.png"
+            ],
+            [
+              "red_fit_helmet_02_2_0.png",
+              "red_fit_helmet_02_2_1.png",
+              "red_fit_helmet_02_2_2.png",
+              "red_fit_helmet_02_2_3.png"
+            ],
+            [
+              "red_fit_helmet_02_3_0.png",
+              "red_fit_helmet_02_3_1.png",
+              "red_fit_helmet_02_3_2.png",
+              "red_fit_helmet_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_fit_helmet_03.png",
+          "atlasRect": [
+            96,
+            224,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_fit_helmet_03_0_0.png",
+              "red_fit_helmet_03_0_1.png",
+              "red_fit_helmet_03_0_2.png",
+              "red_fit_helmet_03_0_3.png"
+            ],
+            [
+              "red_fit_helmet_03_1_0.png",
+              "red_fit_helmet_03_1_1.png",
+              "red_fit_helmet_03_1_2.png",
+              "red_fit_helmet_03_1_3.png"
+            ],
+            [
+              "red_fit_helmet_03_2_0.png",
+              "red_fit_helmet_03_2_1.png",
+              "red_fit_helmet_03_2_2.png",
+              "red_fit_helmet_03_2_3.png"
+            ],
+            [
+              "red_fit_helmet_03_3_0.png",
+              "red_fit_helmet_03_3_1.png",
+              "red_fit_helmet_03_3_2.png",
+              "red_fit_helmet_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blue_adjust_pads",
+      "action": "adjust_pads",
+      "team": "blue",
+      "anchorLocal": [
+        16,
+        29
+      ],
+      "frames": [
+        {
+          "file": "blue_adjust_pads_00.png",
+          "atlasRect": [
+            0,
+            256,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_adjust_pads_00_0_0.png",
+              "blue_adjust_pads_00_0_1.png",
+              "blue_adjust_pads_00_0_2.png",
+              "blue_adjust_pads_00_0_3.png"
+            ],
+            [
+              "blue_adjust_pads_00_1_0.png",
+              "blue_adjust_pads_00_1_1.png",
+              "blue_adjust_pads_00_1_2.png",
+              "blue_adjust_pads_00_1_3.png"
+            ],
+            [
+              "blue_adjust_pads_00_2_0.png",
+              "blue_adjust_pads_00_2_1.png",
+              "blue_adjust_pads_00_2_2.png",
+              "blue_adjust_pads_00_2_3.png"
+            ],
+            [
+              "blue_adjust_pads_00_3_0.png",
+              "blue_adjust_pads_00_3_1.png",
+              "blue_adjust_pads_00_3_2.png",
+              "blue_adjust_pads_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_adjust_pads_01.png",
+          "atlasRect": [
+            32,
+            256,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_adjust_pads_01_0_0.png",
+              "blue_adjust_pads_01_0_1.png",
+              "blue_adjust_pads_01_0_2.png",
+              "blue_adjust_pads_01_0_3.png"
+            ],
+            [
+              "blue_adjust_pads_01_1_0.png",
+              "blue_adjust_pads_01_1_1.png",
+              "blue_adjust_pads_01_1_2.png",
+              "blue_adjust_pads_01_1_3.png"
+            ],
+            [
+              "blue_adjust_pads_01_2_0.png",
+              "blue_adjust_pads_01_2_1.png",
+              "blue_adjust_pads_01_2_2.png",
+              "blue_adjust_pads_01_2_3.png"
+            ],
+            [
+              "blue_adjust_pads_01_3_0.png",
+              "blue_adjust_pads_01_3_1.png",
+              "blue_adjust_pads_01_3_2.png",
+              "blue_adjust_pads_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_adjust_pads_02.png",
+          "atlasRect": [
+            64,
+            256,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_adjust_pads_02_0_0.png",
+              "blue_adjust_pads_02_0_1.png",
+              "blue_adjust_pads_02_0_2.png",
+              "blue_adjust_pads_02_0_3.png"
+            ],
+            [
+              "blue_adjust_pads_02_1_0.png",
+              "blue_adjust_pads_02_1_1.png",
+              "blue_adjust_pads_02_1_2.png",
+              "blue_adjust_pads_02_1_3.png"
+            ],
+            [
+              "blue_adjust_pads_02_2_0.png",
+              "blue_adjust_pads_02_2_1.png",
+              "blue_adjust_pads_02_2_2.png",
+              "blue_adjust_pads_02_2_3.png"
+            ],
+            [
+              "blue_adjust_pads_02_3_0.png",
+              "blue_adjust_pads_02_3_1.png",
+              "blue_adjust_pads_02_3_2.png",
+              "blue_adjust_pads_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_adjust_pads_03.png",
+          "atlasRect": [
+            96,
+            256,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_adjust_pads_03_0_0.png",
+              "blue_adjust_pads_03_0_1.png",
+              "blue_adjust_pads_03_0_2.png",
+              "blue_adjust_pads_03_0_3.png"
+            ],
+            [
+              "blue_adjust_pads_03_1_0.png",
+              "blue_adjust_pads_03_1_1.png",
+              "blue_adjust_pads_03_1_2.png",
+              "blue_adjust_pads_03_1_3.png"
+            ],
+            [
+              "blue_adjust_pads_03_2_0.png",
+              "blue_adjust_pads_03_2_1.png",
+              "blue_adjust_pads_03_2_2.png",
+              "blue_adjust_pads_03_2_3.png"
+            ],
+            [
+              "blue_adjust_pads_03_3_0.png",
+              "blue_adjust_pads_03_3_1.png",
+              "blue_adjust_pads_03_3_2.png",
+              "blue_adjust_pads_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_adjust_pads",
+      "action": "adjust_pads",
+      "team": "red",
+      "anchorLocal": [
+        16,
+        29
+      ],
+      "frames": [
+        {
+          "file": "red_adjust_pads_00.png",
+          "atlasRect": [
+            0,
+            288,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_adjust_pads_00_0_0.png",
+              "red_adjust_pads_00_0_1.png",
+              "red_adjust_pads_00_0_2.png",
+              "red_adjust_pads_00_0_3.png"
+            ],
+            [
+              "red_adjust_pads_00_1_0.png",
+              "red_adjust_pads_00_1_1.png",
+              "red_adjust_pads_00_1_2.png",
+              "red_adjust_pads_00_1_3.png"
+            ],
+            [
+              "red_adjust_pads_00_2_0.png",
+              "red_adjust_pads_00_2_1.png",
+              "red_adjust_pads_00_2_2.png",
+              "red_adjust_pads_00_2_3.png"
+            ],
+            [
+              "red_adjust_pads_00_3_0.png",
+              "red_adjust_pads_00_3_1.png",
+              "red_adjust_pads_00_3_2.png",
+              "red_adjust_pads_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_adjust_pads_01.png",
+          "atlasRect": [
+            32,
+            288,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_adjust_pads_01_0_0.png",
+              "red_adjust_pads_01_0_1.png",
+              "red_adjust_pads_01_0_2.png",
+              "red_adjust_pads_01_0_3.png"
+            ],
+            [
+              "red_adjust_pads_01_1_0.png",
+              "red_adjust_pads_01_1_1.png",
+              "red_adjust_pads_01_1_2.png",
+              "red_adjust_pads_01_1_3.png"
+            ],
+            [
+              "red_adjust_pads_01_2_0.png",
+              "red_adjust_pads_01_2_1.png",
+              "red_adjust_pads_01_2_2.png",
+              "red_adjust_pads_01_2_3.png"
+            ],
+            [
+              "red_adjust_pads_01_3_0.png",
+              "red_adjust_pads_01_3_1.png",
+              "red_adjust_pads_01_3_2.png",
+              "red_adjust_pads_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_adjust_pads_02.png",
+          "atlasRect": [
+            64,
+            288,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_adjust_pads_02_0_0.png",
+              "red_adjust_pads_02_0_1.png",
+              "red_adjust_pads_02_0_2.png",
+              "red_adjust_pads_02_0_3.png"
+            ],
+            [
+              "red_adjust_pads_02_1_0.png",
+              "red_adjust_pads_02_1_1.png",
+              "red_adjust_pads_02_1_2.png",
+              "red_adjust_pads_02_1_3.png"
+            ],
+            [
+              "red_adjust_pads_02_2_0.png",
+              "red_adjust_pads_02_2_1.png",
+              "red_adjust_pads_02_2_2.png",
+              "red_adjust_pads_02_2_3.png"
+            ],
+            [
+              "red_adjust_pads_02_3_0.png",
+              "red_adjust_pads_02_3_1.png",
+              "red_adjust_pads_02_3_2.png",
+              "red_adjust_pads_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_adjust_pads_03.png",
+          "atlasRect": [
+            96,
+            288,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_adjust_pads_03_0_0.png",
+              "red_adjust_pads_03_0_1.png",
+              "red_adjust_pads_03_0_2.png",
+              "red_adjust_pads_03_0_3.png"
+            ],
+            [
+              "red_adjust_pads_03_1_0.png",
+              "red_adjust_pads_03_1_1.png",
+              "red_adjust_pads_03_1_2.png",
+              "red_adjust_pads_03_1_3.png"
+            ],
+            [
+              "red_adjust_pads_03_2_0.png",
+              "red_adjust_pads_03_2_1.png",
+              "red_adjust_pads_03_2_2.png",
+              "red_adjust_pads_03_2_3.png"
+            ],
+            [
+              "red_adjust_pads_03_3_0.png",
+              "red_adjust_pads_03_3_1.png",
+              "red_adjust_pads_03_3_2.png",
+              "red_adjust_pads_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "blue_ready",
+      "action": "ready",
+      "team": "blue",
+      "anchorLocal": [
+        16,
+        29
+      ],
+      "frames": [
+        {
+          "file": "blue_ready_00.png",
+          "atlasRect": [
+            0,
+            320,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_ready_00_0_0.png",
+              "blue_ready_00_0_1.png",
+              "blue_ready_00_0_2.png",
+              "blue_ready_00_0_3.png"
+            ],
+            [
+              "blue_ready_00_1_0.png",
+              "blue_ready_00_1_1.png",
+              "blue_ready_00_1_2.png",
+              "blue_ready_00_1_3.png"
+            ],
+            [
+              "blue_ready_00_2_0.png",
+              "blue_ready_00_2_1.png",
+              "blue_ready_00_2_2.png",
+              "blue_ready_00_2_3.png"
+            ],
+            [
+              "blue_ready_00_3_0.png",
+              "blue_ready_00_3_1.png",
+              "blue_ready_00_3_2.png",
+              "blue_ready_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_ready_01.png",
+          "atlasRect": [
+            32,
+            320,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_ready_01_0_0.png",
+              "blue_ready_01_0_1.png",
+              "blue_ready_01_0_2.png",
+              "blue_ready_01_0_3.png"
+            ],
+            [
+              "blue_ready_01_1_0.png",
+              "blue_ready_01_1_1.png",
+              "blue_ready_01_1_2.png",
+              "blue_ready_01_1_3.png"
+            ],
+            [
+              "blue_ready_01_2_0.png",
+              "blue_ready_01_2_1.png",
+              "blue_ready_01_2_2.png",
+              "blue_ready_01_2_3.png"
+            ],
+            [
+              "blue_ready_01_3_0.png",
+              "blue_ready_01_3_1.png",
+              "blue_ready_01_3_2.png",
+              "blue_ready_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_ready_02.png",
+          "atlasRect": [
+            64,
+            320,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_ready_02_0_0.png",
+              "blue_ready_02_0_1.png",
+              "blue_ready_02_0_2.png",
+              "blue_ready_02_0_3.png"
+            ],
+            [
+              "blue_ready_02_1_0.png",
+              "blue_ready_02_1_1.png",
+              "blue_ready_02_1_2.png",
+              "blue_ready_02_1_3.png"
+            ],
+            [
+              "blue_ready_02_2_0.png",
+              "blue_ready_02_2_1.png",
+              "blue_ready_02_2_2.png",
+              "blue_ready_02_2_3.png"
+            ],
+            [
+              "blue_ready_02_3_0.png",
+              "blue_ready_02_3_1.png",
+              "blue_ready_02_3_2.png",
+              "blue_ready_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "blue_ready_03.png",
+          "atlasRect": [
+            96,
+            320,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "blue_ready_03_0_0.png",
+              "blue_ready_03_0_1.png",
+              "blue_ready_03_0_2.png",
+              "blue_ready_03_0_3.png"
+            ],
+            [
+              "blue_ready_03_1_0.png",
+              "blue_ready_03_1_1.png",
+              "blue_ready_03_1_2.png",
+              "blue_ready_03_1_3.png"
+            ],
+            [
+              "blue_ready_03_2_0.png",
+              "blue_ready_03_2_1.png",
+              "blue_ready_03_2_2.png",
+              "blue_ready_03_2_3.png"
+            ],
+            [
+              "blue_ready_03_3_0.png",
+              "blue_ready_03_3_1.png",
+              "blue_ready_03_3_2.png",
+              "blue_ready_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "red_ready",
+      "action": "ready",
+      "team": "red",
+      "anchorLocal": [
+        16,
+        29
+      ],
+      "frames": [
+        {
+          "file": "red_ready_00.png",
+          "atlasRect": [
+            0,
+            352,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_ready_00_0_0.png",
+              "red_ready_00_0_1.png",
+              "red_ready_00_0_2.png",
+              "red_ready_00_0_3.png"
+            ],
+            [
+              "red_ready_00_1_0.png",
+              "red_ready_00_1_1.png",
+              "red_ready_00_1_2.png",
+              "red_ready_00_1_3.png"
+            ],
+            [
+              "red_ready_00_2_0.png",
+              "red_ready_00_2_1.png",
+              "red_ready_00_2_2.png",
+              "red_ready_00_2_3.png"
+            ],
+            [
+              "red_ready_00_3_0.png",
+              "red_ready_00_3_1.png",
+              "red_ready_00_3_2.png",
+              "red_ready_00_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_ready_01.png",
+          "atlasRect": [
+            32,
+            352,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_ready_01_0_0.png",
+              "red_ready_01_0_1.png",
+              "red_ready_01_0_2.png",
+              "red_ready_01_0_3.png"
+            ],
+            [
+              "red_ready_01_1_0.png",
+              "red_ready_01_1_1.png",
+              "red_ready_01_1_2.png",
+              "red_ready_01_1_3.png"
+            ],
+            [
+              "red_ready_01_2_0.png",
+              "red_ready_01_2_1.png",
+              "red_ready_01_2_2.png",
+              "red_ready_01_2_3.png"
+            ],
+            [
+              "red_ready_01_3_0.png",
+              "red_ready_01_3_1.png",
+              "red_ready_01_3_2.png",
+              "red_ready_01_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_ready_02.png",
+          "atlasRect": [
+            64,
+            352,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_ready_02_0_0.png",
+              "red_ready_02_0_1.png",
+              "red_ready_02_0_2.png",
+              "red_ready_02_0_3.png"
+            ],
+            [
+              "red_ready_02_1_0.png",
+              "red_ready_02_1_1.png",
+              "red_ready_02_1_2.png",
+              "red_ready_02_1_3.png"
+            ],
+            [
+              "red_ready_02_2_0.png",
+              "red_ready_02_2_1.png",
+              "red_ready_02_2_2.png",
+              "red_ready_02_2_3.png"
+            ],
+            [
+              "red_ready_02_3_0.png",
+              "red_ready_02_3_1.png",
+              "red_ready_02_3_2.png",
+              "red_ready_02_3_3.png"
+            ]
+          ]
+        },
+        {
+          "file": "red_ready_03.png",
+          "atlasRect": [
+            96,
+            352,
+            32,
+            32
+          ],
+          "durationMs": 160,
+          "tiles": [
+            [
+              "red_ready_03_0_0.png",
+              "red_ready_03_0_1.png",
+              "red_ready_03_0_2.png",
+              "red_ready_03_0_3.png"
+            ],
+            [
+              "red_ready_03_1_0.png",
+              "red_ready_03_1_1.png",
+              "red_ready_03_1_2.png",
+              "red_ready_03_1_3.png"
+            ],
+            [
+              "red_ready_03_2_0.png",
+              "red_ready_03_2_1.png",
+              "red_ready_03_2_2.png",
+              "red_ready_03_2_3.png"
+            ],
+            [
+              "red_ready_03_3_0.png",
+              "red_ready_03_3_1.png",
+              "red_ready_03_3_2.png",
+              "red_ready_03_3_3.png"
+            ]
+          ]
+        }
+      ]
+    }
+  ]
+}

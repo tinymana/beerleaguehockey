@@ -52,7 +52,7 @@ CATEGORY = {
     '11': 'goals',
     '12': 'benches',
     '13': 'stadium',
-    '14': 'equipment',
+    '14': 'equipment', '15': 'locker',
 }
 PRESENTATION = re.compile(r'(preview|presentation|sheet|contact)', re.I)
 

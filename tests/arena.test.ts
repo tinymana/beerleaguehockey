@@ -7,6 +7,7 @@ import { IceWear, trafficPrior } from '../src/match/view/arena/iceWear';
 import { ARENA_LAYERS, benchReport, resurfacerLanes, layoutStadium, sequenceFrame, faceoffSpots, goalAlignment, goalFit, iceGrid, iceOutline, layoutArena, layoutGoals, screenY } from '../src/match/view/arena/layout';
 import { TILE, assetById, loadableAssets, textureSource } from '../src/match/view/arena/registry';
 import type { ArenaRegistry } from '../src/match/view/arena/registry';
+import { CABINET_SLOTS, LOCKER_MODES, LOCKER_SEQUENCES, SAMPLE_TROPHIES, actorIsIdle, layoutLockerRoom, sequenceFrameId } from '../src/match/view/locker/lockerRoom';
 import { projectY } from '../src/match/view/projection';
 
 const ARENA_DIR = join(__dirname, '..', 'public', 'assets', 'arena');
@@ -31,10 +32,11 @@ describe('arena asset registry', () => {
       ...Array.from({ length: 10 }, (_, i) => `12.${String(i + 1).padStart(2, '0')}`),
       ...Array.from({ length: 15 }, (_, i) => `13.${String(i + 1).padStart(2, '0')}`),
       ...Array.from({ length: 8 }, (_, i) => `14.${String(i + 1).padStart(2, '0')}`),
+      ...Array.from({ length: 10 }, (_, i) => `15.${String(i + 1).padStart(2, '0')}`),
     ];
     expect(Object.keys(registry.batches).sort()).toEqual(expected);
     expect(registry.issues.filter((i) => i.level === 'error')).toEqual([]);
-    expect(registry.assets.length).toBe(12436);
+    expect(registry.assets.length).toBe(16577);
   });
 
   it('points only at files that exist, with the recorded pixel size, on the 8-pixel grid', () => {
@@ -61,7 +63,7 @@ describe('arena asset registry', () => {
 
   it('reports what has arrived and what is still missing', () => {
     const status = Object.fromEntries(registry.slots.map((s) => [s.id, s.status]));
-    for (const id of ['ice.base', 'ice.scratches', 'markings.creaseNorth', 'logo.center', 'boards.west', 'boards.east', 'boards.north', 'boards.south', 'glass', 'glass.posts', 'glass.damage', 'boards.gates', 'boards.ads', 'goals.scored', 'goals.ripple', 'goals.knockoff', 'goals.dislodged', 'benches.reactions', 'benches.doors', 'benches.equipment', 'stadium.reactions', 'stadium.railings', 'stadium.tunnels', 'stadium.signs', 'stadium.structure', 'equipment', 'equipment.banners', 'equipment.jerseys', 'equipment.signs', 'equipment.scoreboard', 'equipment.lighting', 'equipment.debris']) {
+    for (const id of ['ice.base', 'ice.scratches', 'markings.creaseNorth', 'logo.center', 'boards.west', 'boards.east', 'boards.north', 'boards.south', 'glass', 'glass.posts', 'glass.damage', 'boards.gates', 'boards.ads', 'goals.scored', 'goals.ripple', 'goals.knockoff', 'goals.dislodged', 'benches.reactions', 'benches.doors', 'benches.equipment', 'stadium.reactions', 'stadium.railings', 'stadium.tunnels', 'stadium.signs', 'stadium.structure', 'equipment', 'equipment.banners', 'equipment.jerseys', 'equipment.signs', 'equipment.scoreboard', 'equipment.lighting', 'equipment.debris', 'locker.room', 'locker.lockers', 'locker.furniture', 'locker.players', 'locker.leaders', 'locker.whiteboard', 'locker.trophies']) {
       expect(status[id], id).toBe('supplied');
     }
     expect(status['boards.corners']).toBe('unfit');
@@ -83,7 +85,7 @@ describe('arena asset registry', () => {
     const load = loadableAssets(registry);
     expect(load.some((a) => a.role === 'tile' || a.role === 'frame')).toBe(false);
     expect(load.some((a) => a.duplicateOf)).toBe(false);
-    expect(load.length).toBeLessThan(200);
+    expect(load.length).toBeLessThan(215);
     // Every duplicate points at a file that is loaded.
     // Everything that is not a single tile resolves to a texture that is loaded, and to a cell inside it.
     const loaded = new Map(load.map((l) => [l.id, l]));
@@ -641,6 +643,86 @@ describe('equipment (batch 14)', () => {
     expect(garage?.width ?? 0).toBeGreaterThan(boardsOutside + 4);
     const body = zamboni?.bbox ? zamboni.bbox[2] - zamboni.bbox[0] + 1 : 0;
     expect(body).toBeGreaterThan(24);
+  });
+});
+
+describe('locker room fit test (batch 15)', () => {
+  const manifest = (batch: string) => JSON.parse(readFileSync(join(ARENA_DIR, 'manifests', `${batch}.manifest.json`), 'utf8')) as Record<string, unknown>;
+  type Sequence = { id: string; anchorLocal: number[]; frames: { file: string; durationMs: number }[] };
+
+  it('uses the frame names, timings and anchors written in the batch manifests', () => {
+    for (const sequence of Object.values(LOCKER_SEQUENCES)) {
+      const entries = manifest(sequence.batch).sequences as Sequence[];
+      for (const team of ['blue', 'red'] as const) {
+        const entry = entries.find((e) => e.id === `${team}_${sequence.action}`);
+        expect(entry, `${sequence.batch} ${team}_${sequence.action}`).toBeDefined();
+        expect(entry?.frames.map((f) => f.durationMs)).toEqual([...sequence.durations]);
+        expect(entry?.anchorLocal).toEqual([...sequence.anchor]);
+        sequence.durations.forEach((_, i) => {
+          const id = sequenceFrameId(sequence, team, i);
+          expect(lookup(id), id).toBeDefined();
+          expect(`${entry?.frames[i]?.file}`).toBe(`${id.split('/')[1]}.png`);
+        });
+      }
+    }
+    // Every supplied animation in the five batches is used.
+    const supplied = ['15.04', '15.05', '15.06', '15.07', '15.08'].flatMap((b) => (manifest(b).sequences as Sequence[]).map((e) => e.id.replace(/^(blue|red)_/, '')));
+    expect(new Set(supplied)).toEqual(new Set(Object.values(LOCKER_SEQUENCES).map((s) => s.action)));
+    expect(manifest('15.10').cabinetSlotTopLeft).toEqual(CABINET_SLOTS.map((s) => [...s]));
+  });
+
+  it('builds the room only from registered art, inside the screen, in both colours', () => {
+    for (const team of ['blue', 'red'] as const) {
+      const room = layoutLockerRoom(team);
+      for (const piece of room.pieces) {
+        const asset = lookup(piece.asset);
+        expect(asset, piece.asset).toBeDefined();
+        expect(piece.x).toBeGreaterThanOrEqual(0);
+        expect(piece.y).toBeGreaterThanOrEqual(room.room.y);
+        expect(piece.x + (asset?.width ?? 0)).toBeLessThanOrEqual(480);
+        expect(piece.y + (asset?.height ?? 0)).toBeLessThanOrEqual(room.room.y + room.room.height);
+      }
+      for (const id of SAMPLE_TROPHIES) expect(lookup(id), id).toBeDefined();
+      expect(room.pieces.some((p) => p.asset === `15.02/${team}_jersey`)).toBe(true);
+      expect(room.pieces.some((p) => p.asset === `15.03/bench_${team}`)).toBe(true);
+      expect(layoutLockerRoom(team)).toEqual(room);
+    }
+  });
+
+  it('covers the floor without gaps, walls the room in, and keeps lockers clear of the door', () => {
+    const room = layoutLockerRoom('blue');
+    const floor = room.pieces.filter((p) => /floor_|threshold/.test(p.asset));
+    const cells = new Set(floor.map((p) => `${p.x},${p.y}`));
+    expect(cells.size).toBe(floor.length);
+    expect(floor.length).toBe(((480 - 32) / 16) * ((room.room.height - 64) / 32));
+    expect(room.pieces.filter((p) => p.asset.includes('wall_corner')).length).toBe(4);
+    const door = room.pieces.find((p) => p.asset === '15.01/doorway');
+    expect(door).toBeDefined();
+    expect(room.pieces.some((p) => p.asset === '15.01/threshold' && p.x === door?.x)).toBe(true);
+    for (const locker of room.pieces.filter((p) => p.asset.startsWith('15.02/'))) expect(locker.x + 32).toBeLessThanOrEqual(door?.x ?? 0);
+    // The cabinet is shown empty; nothing in the layout puts a trophy in it.
+    expect(room.pieces.some((p) => /cup_|award|cabinet_full|cabinet_partial/.test(p.asset))).toBe(false);
+    expect(room.missing.length).toBe(1);
+  });
+
+  it('gives every person something to do in every mood, with a coach and a captain who speak only in the team talk', () => {
+    const room = layoutLockerRoom('blue');
+    expect(room.actors.filter((a) => a.role === 'coach').length).toBe(1);
+    expect(room.actors.filter((a) => a.role === 'captain').length).toBe(1);
+    expect(room.actors.length).toBeGreaterThanOrEqual(8);
+    for (const actor of room.actors) {
+      for (const mode of LOCKER_MODES) {
+        expect(actor.actions[mode.id].length).toBeGreaterThan(0);
+        for (const action of actor.actions[mode.id]) expect(LOCKER_SEQUENCES[action]).toBeDefined();
+      }
+      const leader = actor.role === 'coach' || actor.role === 'captain';
+      expect(actorIsIdle(actor, 'talk')).toBe(!leader);
+      expect(actorIsIdle(actor, 'win')).toBe(leader);
+      expect(actor.x > 16 && actor.x < 464 && actor.y > room.room.y + 32 && actor.y < room.room.y + room.room.height).toBe(true);
+    }
+    // Bench sitters use the seated beer art; people on the floor use the standing one.
+    expect(room.actors.filter((a) => a.role === 'bench').every((a) => a.actions.beer[0] === 'seated_beer')).toBe(true);
+    expect(room.actors.filter((a) => a.role === 'floor').every((a) => a.actions.beer[0] === 'standing_beer')).toBe(true);
   });
 });
 

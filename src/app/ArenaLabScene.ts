@@ -115,6 +115,7 @@ export class ArenaLabScene extends Phaser.Scene {
           this.arena.setLightPoolsTest(on ? 0.5 : 0);
         },
         setScoreboard: (state) => this.showScoreboard(state),
+        openLockerRoom: () => this.scene.start(SCENES.lockerRoom),
         flashLamps: () => {
           this.arena.flashLamp('north');
           this.arena.flashLamp('south');
