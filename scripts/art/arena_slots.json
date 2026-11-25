@@ -500,10 +500,85 @@
     },
     {
       "id": "equipment",
+      "layer": "actors",
+      "label": "Ice resurfacer and trail",
+      "expectedBatch": "14.01",
+      "assets": [
+        "14.01/zamboni_atlas",
+        "14.01/resurfacing_trail"
+      ],
+      "note": "Lab test only: it drives lanes and cleans the ice wear. No intermissions exist to send it out in play. See ARENA.md A24."
+    },
+    {
+      "id": "equipment.garage",
       "layer": "stadium",
-      "label": "Arena equipment and details",
-      "expectedBatch": "14",
-      "assets": []
+      "label": "Resurfacer garage",
+      "expectedBatch": "14.02",
+      "assets": [
+        "14.02/garage_atlas"
+      ],
+      "unfit": "The garage is 96 px deep; there are 55 px between the side boards and the edge of the world. The resurfacer is 28 px wide and the supplied doors open 24 px, so it also has no gate it can pass through. Not placed."
+    },
+    {
+      "id": "equipment.banners",
+      "layer": "stadium",
+      "label": "Championship banners",
+      "expectedBatch": "14.03",
+      "assets": [
+        "14.03/banner_atlas"
+      ],
+      "note": "Registered, not placed: banners come from dynasty records, which do not exist yet, and there are no rafters to hang them from. See ARENA.md A25."
+    },
+    {
+      "id": "equipment.jerseys",
+      "layer": "stadium",
+      "label": "Retired jerseys",
+      "expectedBatch": "14.04",
+      "assets": [
+        "14.04/jersey_atlas"
+      ],
+      "note": "Registered, not placed: same reasons as the banners. See ARENA.md A25."
+    },
+    {
+      "id": "equipment.signs",
+      "layer": "stadium",
+      "label": "Arena signage",
+      "expectedBatch": "14.05",
+      "assets": [
+        "14.05/sign_atlas"
+      ],
+      "note": "Registered, not placed: there are no walls outside the ice to mount signs on. See ARENA.md A25."
+    },
+    {
+      "id": "equipment.scoreboard",
+      "layer": "ui",
+      "label": "Arena scoreboard, four states",
+      "expectedBatch": "14.06",
+      "assets": [
+        "14.06/scoreboard_atlas"
+      ],
+      "note": "Lab test only, with sample numbers: there is no match clock or period yet, and nowhere outside the ice to mount a 128x64 board. See ARENA.md A26."
+    },
+    {
+      "id": "equipment.lighting",
+      "layer": "reflections",
+      "label": "Light fixtures and light pools",
+      "expectedBatch": "14.07",
+      "assets": [
+        "14.07/lighting_atlas",
+        "14.07/light_glow"
+      ],
+      "note": "Light pools are a Lab test. Fixtures are not placed: they mount on beams, and no beams are placed. See ARENA.md A27."
+    },
+    {
+      "id": "equipment.debris",
+      "layer": "actors",
+      "label": "Rink debris",
+      "expectedBatch": "14.08",
+      "assets": [
+        "14.08/debris_atlas"
+      ],
+      "note": "Lab test only: sticks do not break yet. See ARENA.md A24."
     }
   ]
 }

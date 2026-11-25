@@ -1,0 +1,699 @@
+{
+  "batch": "14.05",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    64,
+    32
+  ],
+  "atlas": "sign_atlas.png",
+  "assets": [
+    {
+      "file": "sign_ice_barn.png",
+      "label": "THE ICE BARN",
+      "atlasRect": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "anchorLocal": [
+        32,
+        5
+      ],
+      "tiles": [
+        [
+          "sign_ice_barn_0_0.png",
+          "sign_ice_barn_0_1.png",
+          "sign_ice_barn_0_2.png",
+          "sign_ice_barn_0_3.png",
+          "sign_ice_barn_0_4.png",
+          "sign_ice_barn_0_5.png",
+          "sign_ice_barn_0_6.png",
+          "sign_ice_barn_0_7.png"
+        ],
+        [
+          "sign_ice_barn_1_0.png",
+          "sign_ice_barn_1_1.png",
+          "sign_ice_barn_1_2.png",
+          "sign_ice_barn_1_3.png",
+          "sign_ice_barn_1_4.png",
+          "sign_ice_barn_1_5.png",
+          "sign_ice_barn_1_6.png",
+          "sign_ice_barn_1_7.png"
+        ],
+        [
+          "sign_ice_barn_2_0.png",
+          "sign_ice_barn_2_1.png",
+          "sign_ice_barn_2_2.png",
+          "sign_ice_barn_2_3.png",
+          "sign_ice_barn_2_4.png",
+          "sign_ice_barn_2_5.png",
+          "sign_ice_barn_2_6.png",
+          "sign_ice_barn_2_7.png"
+        ],
+        [
+          "sign_ice_barn_3_0.png",
+          "sign_ice_barn_3_1.png",
+          "sign_ice_barn_3_2.png",
+          "sign_ice_barn_3_3.png",
+          "sign_ice_barn_3_4.png",
+          "sign_ice_barn_3_5.png",
+          "sign_ice_barn_3_6.png",
+          "sign_ice_barn_3_7.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "sign_home.png",
+      "label": "HOME LOCKER",
+      "atlasRect": [
+        64,
+        0,
+        64,
+        32
+      ],
+      "anchorLocal": [
+        32,
+        5
+      ],
+      "tiles": [
+        [
+          "sign_home_0_0.png",
+          "sign_home_0_1.png",
+          "sign_home_0_2.png",
+          "sign_home_0_3.png",
+          "sign_home_0_4.png",
+          "sign_home_0_5.png",
+          "sign_home_0_6.png",
+          "sign_home_0_7.png"
+        ],
+        [
+          "sign_home_1_0.png",
+          "sign_home_1_1.png",
+          "sign_home_1_2.png",
+          "sign_home_1_3.png",
+          "sign_home_1_4.png",
+          "sign_home_1_5.png",
+          "sign_home_1_6.png",
+          "sign_home_1_7.png"
+        ],
+        [
+          "sign_home_2_0.png",
+          "sign_home_2_1.png",
+          "sign_home_2_2.png",
+          "sign_home_2_3.png",
+          "sign_home_2_4.png",
+          "sign_home_2_5.png",
+          "sign_home_2_6.png",
+          "sign_home_2_7.png"
+        ],
+        [
+          "sign_home_3_0.png",
+          "sign_home_3_1.png",
+          "sign_home_3_2.png",
+          "sign_home_3_3.png",
+          "sign_home_3_4.png",
+          "sign_home_3_5.png",
+          "sign_home_3_6.png",
+          "sign_home_3_7.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "sign_away.png",
+      "label": "AWAY LOCKER",
+      "atlasRect": [
+        128,
+        0,
+        64,
+        32
+      ],
+      "anchorLocal": [
+        32,
+        5
+      ],
+      "tiles": [
+        [
+          "sign_away_0_0.png",
+          "sign_away_0_1.png",
+          "sign_away_0_2.png",
+          "sign_away_0_3.png",
+          "sign_away_0_4.png",
+          "sign_away_0_5.png",
+          "sign_away_0_6.png",
+          "sign_away_0_7.png"
+        ],
+        [
+          "sign_away_1_0.png",
+          "sign_away_1_1.png",
+          "sign_away_1_2.png",
+          "sign_away_1_3.png",
+          "sign_away_1_4.png",
+          "sign_away_1_5.png",
+          "sign_away_1_6.png",
+          "sign_away_1_7.png"
+        ],
+        [
+          "sign_away_2_0.png",
+          "sign_away_2_1.png",
+          "sign_away_2_2.png",
+          "sign_away_2_3.png",
+          "sign_away_2_4.png",
+          "sign_away_2_5.png",
+          "sign_away_2_6.png",
+          "sign_away_2_7.png"
+        ],
+        [
+          "sign_away_3_0.png",
+          "sign_away_3_1.png",
+          "sign_away_3_2.png",
+          "sign_away_3_3.png",
+          "sign_away_3_4.png",
+          "sign_away_3_5.png",
+          "sign_away_3_6.png",
+          "sign_away_3_7.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "sign_exit.png",
+      "label": "EXIT  >",
+      "atlasRect": [
+        192,
+        0,
+        64,
+        32
+      ],
+      "anchorLocal": [
+        32,
+        5
+      ],
+      "tiles": [
+        [
+          "sign_exit_0_0.png",
+          "sign_exit_0_1.png",
+          "sign_exit_0_2.png",
+          "sign_exit_0_3.png",
+          "sign_exit_0_4.png",
+          "sign_exit_0_5.png",
+          "sign_exit_0_6.png",
+          "sign_exit_0_7.png"
+        ],
+        [
+          "sign_exit_1_0.png",
+          "sign_exit_1_1.png",
+          "sign_exit_1_2.png",
+          "sign_exit_1_3.png",
+          "sign_exit_1_4.png",
+          "sign_exit_1_5.png",
+          "sign_exit_1_6.png",
+          "sign_exit_1_7.png"
+        ],
+        [
+          "sign_exit_2_0.png",
+          "sign_exit_2_1.png",
+          "sign_exit_2_2.png",
+          "sign_exit_2_3.png",
+          "sign_exit_2_4.png",
+          "sign_exit_2_5.png",
+          "sign_exit_2_6.png",
+          "sign_exit_2_7.png"
+        ],
+        [
+          "sign_exit_3_0.png",
+          "sign_exit_3_1.png",
+          "sign_exit_3_2.png",
+          "sign_exit_3_3.png",
+          "sign_exit_3_4.png",
+          "sign_exit_3_5.png",
+          "sign_exit_3_6.png",
+          "sign_exit_3_7.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "sign_concessions.png",
+      "label": "CONCESSIONS",
+      "atlasRect": [
+        0,
+        32,
+        64,
+        32
+      ],
+      "anchorLocal": [
+        32,
+        5
+      ],
+      "tiles": [
+        [
+          "sign_concessions_0_0.png",
+          "sign_concessions_0_1.png",
+          "sign_concessions_0_2.png",
+          "sign_concessions_0_3.png",
+          "sign_concessions_0_4.png",
+          "sign_concessions_0_5.png",
+          "sign_concessions_0_6.png",
+          "sign_concessions_0_7.png"
+        ],
+        [
+          "sign_concessions_1_0.png",
+          "sign_concessions_1_1.png",
+          "sign_concessions_1_2.png",
+          "sign_concessions_1_3.png",
+          "sign_concessions_1_4.png",
+          "sign_concessions_1_5.png",
+          "sign_concessions_1_6.png",
+          "sign_concessions_1_7.png"
+        ],
+        [
+          "sign_concessions_2_0.png",
+          "sign_concessions_2_1.png",
+          "sign_concessions_2_2.png",
+          "sign_concessions_2_3.png",
+          "sign_concessions_2_4.png",
+          "sign_concessions_2_5.png",
+          "sign_concessions_2_6.png",
+          "sign_concessions_2_7.png"
+        ],
+        [
+          "sign_concessions_3_0.png",
+          "sign_concessions_3_1.png",
+          "sign_concessions_3_2.png",
+          "sign_concessions_3_3.png",
+          "sign_concessions_3_4.png",
+          "sign_concessions_3_5.png",
+          "sign_concessions_3_6.png",
+          "sign_concessions_3_7.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "sign_restrooms.png",
+      "label": "RESTROOMS",
+      "atlasRect": [
+        64,
+        32,
+        64,
+        32
+      ],
+      "anchorLocal": [
+        32,
+        5
+      ],
+      "tiles": [
+        [
+          "sign_restrooms_0_0.png",
+          "sign_restrooms_0_1.png",
+          "sign_restrooms_0_2.png",
+          "sign_restrooms_0_3.png",
+          "sign_restrooms_0_4.png",
+          "sign_restrooms_0_5.png",
+          "sign_restrooms_0_6.png",
+          "sign_restrooms_0_7.png"
+        ],
+        [
+          "sign_restrooms_1_0.png",
+          "sign_restrooms_1_1.png",
+          "sign_restrooms_1_2.png",
+          "sign_restrooms_1_3.png",
+          "sign_restrooms_1_4.png",
+          "sign_restrooms_1_5.png",
+          "sign_restrooms_1_6.png",
+          "sign_restrooms_1_7.png"
+        ],
+        [
+          "sign_restrooms_2_0.png",
+          "sign_restrooms_2_1.png",
+          "sign_restrooms_2_2.png",
+          "sign_restrooms_2_3.png",
+          "sign_restrooms_2_4.png",
+          "sign_restrooms_2_5.png",
+          "sign_restrooms_2_6.png",
+          "sign_restrooms_2_7.png"
+        ],
+        [
+          "sign_restrooms_3_0.png",
+          "sign_restrooms_3_1.png",
+          "sign_restrooms_3_2.png",
+          "sign_restrooms_3_3.png",
+          "sign_restrooms_3_4.png",
+          "sign_restrooms_3_5.png",
+          "sign_restrooms_3_6.png",
+          "sign_restrooms_3_7.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "sign_pro_shop.png",
+      "label": "PRO SHOP",
+      "atlasRect": [
+        128,
+        32,
+        64,
+        32
+      ],
+      "anchorLocal": [
+        32,
+        5
+      ],
+      "tiles": [
+        [
+          "sign_pro_shop_0_0.png",
+          "sign_pro_shop_0_1.png",
+          "sign_pro_shop_0_2.png",
+          "sign_pro_shop_0_3.png",
+          "sign_pro_shop_0_4.png",
+          "sign_pro_shop_0_5.png",
+          "sign_pro_shop_0_6.png",
+          "sign_pro_shop_0_7.png"
+        ],
+        [
+          "sign_pro_shop_1_0.png",
+          "sign_pro_shop_1_1.png",
+          "sign_pro_shop_1_2.png",
+          "sign_pro_shop_1_3.png",
+          "sign_pro_shop_1_4.png",
+          "sign_pro_shop_1_5.png",
+          "sign_pro_shop_1_6.png",
+          "sign_pro_shop_1_7.png"
+        ],
+        [
+          "sign_pro_shop_2_0.png",
+          "sign_pro_shop_2_1.png",
+          "sign_pro_shop_2_2.png",
+          "sign_pro_shop_2_3.png",
+          "sign_pro_shop_2_4.png",
+          "sign_pro_shop_2_5.png",
+          "sign_pro_shop_2_6.png",
+          "sign_pro_shop_2_7.png"
+        ],
+        [
+          "sign_pro_shop_3_0.png",
+          "sign_pro_shop_3_1.png",
+          "sign_pro_shop_3_2.png",
+          "sign_pro_shop_3_3.png",
+          "sign_pro_shop_3_4.png",
+          "sign_pro_shop_3_5.png",
+          "sign_pro_shop_3_6.png",
+          "sign_pro_shop_3_7.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "sign_penalty_box.png",
+      "label": "PENALTY BOX",
+      "atlasRect": [
+        192,
+        32,
+        64,
+        32
+      ],
+      "anchorLocal": [
+        32,
+        5
+      ],
+      "tiles": [
+        [
+          "sign_penalty_box_0_0.png",
+          "sign_penalty_box_0_1.png",
+          "sign_penalty_box_0_2.png",
+          "sign_penalty_box_0_3.png",
+          "sign_penalty_box_0_4.png",
+          "sign_penalty_box_0_5.png",
+          "sign_penalty_box_0_6.png",
+          "sign_penalty_box_0_7.png"
+        ],
+        [
+          "sign_penalty_box_1_0.png",
+          "sign_penalty_box_1_1.png",
+          "sign_penalty_box_1_2.png",
+          "sign_penalty_box_1_3.png",
+          "sign_penalty_box_1_4.png",
+          "sign_penalty_box_1_5.png",
+          "sign_penalty_box_1_6.png",
+          "sign_penalty_box_1_7.png"
+        ],
+        [
+          "sign_penalty_box_2_0.png",
+          "sign_penalty_box_2_1.png",
+          "sign_penalty_box_2_2.png",
+          "sign_penalty_box_2_3.png",
+          "sign_penalty_box_2_4.png",
+          "sign_penalty_box_2_5.png",
+          "sign_penalty_box_2_6.png",
+          "sign_penalty_box_2_7.png"
+        ],
+        [
+          "sign_penalty_box_3_0.png",
+          "sign_penalty_box_3_1.png",
+          "sign_penalty_box_3_2.png",
+          "sign_penalty_box_3_3.png",
+          "sign_penalty_box_3_4.png",
+          "sign_penalty_box_3_5.png",
+          "sign_penalty_box_3_6.png",
+          "sign_penalty_box_3_7.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "sign_first_aid.png",
+      "label": "FIRST AID +",
+      "atlasRect": [
+        0,
+        64,
+        64,
+        32
+      ],
+      "anchorLocal": [
+        32,
+        5
+      ],
+      "tiles": [
+        [
+          "sign_first_aid_0_0.png",
+          "sign_first_aid_0_1.png",
+          "sign_first_aid_0_2.png",
+          "sign_first_aid_0_3.png",
+          "sign_first_aid_0_4.png",
+          "sign_first_aid_0_5.png",
+          "sign_first_aid_0_6.png",
+          "sign_first_aid_0_7.png"
+        ],
+        [
+          "sign_first_aid_1_0.png",
+          "sign_first_aid_1_1.png",
+          "sign_first_aid_1_2.png",
+          "sign_first_aid_1_3.png",
+          "sign_first_aid_1_4.png",
+          "sign_first_aid_1_5.png",
+          "sign_first_aid_1_6.png",
+          "sign_first_aid_1_7.png"
+        ],
+        [
+          "sign_first_aid_2_0.png",
+          "sign_first_aid_2_1.png",
+          "sign_first_aid_2_2.png",
+          "sign_first_aid_2_3.png",
+          "sign_first_aid_2_4.png",
+          "sign_first_aid_2_5.png",
+          "sign_first_aid_2_6.png",
+          "sign_first_aid_2_7.png"
+        ],
+        [
+          "sign_first_aid_3_0.png",
+          "sign_first_aid_3_1.png",
+          "sign_first_aid_3_2.png",
+          "sign_first_aid_3_3.png",
+          "sign_first_aid_3_4.png",
+          "sign_first_aid_3_5.png",
+          "sign_first_aid_3_6.png",
+          "sign_first_aid_3_7.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "sign_garage.png",
+      "label": "ICE CREW",
+      "atlasRect": [
+        64,
+        64,
+        64,
+        32
+      ],
+      "anchorLocal": [
+        32,
+        5
+      ],
+      "tiles": [
+        [
+          "sign_garage_0_0.png",
+          "sign_garage_0_1.png",
+          "sign_garage_0_2.png",
+          "sign_garage_0_3.png",
+          "sign_garage_0_4.png",
+          "sign_garage_0_5.png",
+          "sign_garage_0_6.png",
+          "sign_garage_0_7.png"
+        ],
+        [
+          "sign_garage_1_0.png",
+          "sign_garage_1_1.png",
+          "sign_garage_1_2.png",
+          "sign_garage_1_3.png",
+          "sign_garage_1_4.png",
+          "sign_garage_1_5.png",
+          "sign_garage_1_6.png",
+          "sign_garage_1_7.png"
+        ],
+        [
+          "sign_garage_2_0.png",
+          "sign_garage_2_1.png",
+          "sign_garage_2_2.png",
+          "sign_garage_2_3.png",
+          "sign_garage_2_4.png",
+          "sign_garage_2_5.png",
+          "sign_garage_2_6.png",
+          "sign_garage_2_7.png"
+        ],
+        [
+          "sign_garage_3_0.png",
+          "sign_garage_3_1.png",
+          "sign_garage_3_2.png",
+          "sign_garage_3_3.png",
+          "sign_garage_3_4.png",
+          "sign_garage_3_5.png",
+          "sign_garage_3_6.png",
+          "sign_garage_3_7.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "sign_tickets.png",
+      "label": "TICKETS",
+      "atlasRect": [
+        128,
+        64,
+        64,
+        32
+      ],
+      "anchorLocal": [
+        32,
+        5
+      ],
+      "tiles": [
+        [
+          "sign_tickets_0_0.png",
+          "sign_tickets_0_1.png",
+          "sign_tickets_0_2.png",
+          "sign_tickets_0_3.png",
+          "sign_tickets_0_4.png",
+          "sign_tickets_0_5.png",
+          "sign_tickets_0_6.png",
+          "sign_tickets_0_7.png"
+        ],
+        [
+          "sign_tickets_1_0.png",
+          "sign_tickets_1_1.png",
+          "sign_tickets_1_2.png",
+          "sign_tickets_1_3.png",
+          "sign_tickets_1_4.png",
+          "sign_tickets_1_5.png",
+          "sign_tickets_1_6.png",
+          "sign_tickets_1_7.png"
+        ],
+        [
+          "sign_tickets_2_0.png",
+          "sign_tickets_2_1.png",
+          "sign_tickets_2_2.png",
+          "sign_tickets_2_3.png",
+          "sign_tickets_2_4.png",
+          "sign_tickets_2_5.png",
+          "sign_tickets_2_6.png",
+          "sign_tickets_2_7.png"
+        ],
+        [
+          "sign_tickets_3_0.png",
+          "sign_tickets_3_1.png",
+          "sign_tickets_3_2.png",
+          "sign_tickets_3_3.png",
+          "sign_tickets_3_4.png",
+          "sign_tickets_3_5.png",
+          "sign_tickets_3_6.png",
+          "sign_tickets_3_7.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "sign_blank.png",
+      "label": "",
+      "atlasRect": [
+        192,
+        64,
+        64,
+        32
+      ],
+      "anchorLocal": [
+        32,
+        5
+      ],
+      "tiles": [
+        [
+          "sign_blank_0_0.png",
+          "sign_blank_0_1.png",
+          "sign_blank_0_2.png",
+          "sign_blank_0_3.png",
+          "sign_blank_0_4.png",
+          "sign_blank_0_5.png",
+          "sign_blank_0_6.png",
+          "sign_blank_0_7.png"
+        ],
+        [
+          "sign_blank_1_0.png",
+          "sign_blank_1_1.png",
+          "sign_blank_1_2.png",
+          "sign_blank_1_3.png",
+          "sign_blank_1_4.png",
+          "sign_blank_1_5.png",
+          "sign_blank_1_6.png",
+          "sign_blank_1_7.png"
+        ],
+        [
+          "sign_blank_2_0.png",
+          "sign_blank_2_1.png",
+          "sign_blank_2_2.png",
+          "sign_blank_2_3.png",
+          "sign_blank_2_4.png",
+          "sign_blank_2_5.png",
+          "sign_blank_2_6.png",
+          "sign_blank_2_7.png"
+        ],
+        [
+          "sign_blank_3_0.png",
+          "sign_blank_3_1.png",
+          "sign_blank_3_2.png",
+          "sign_blank_3_3.png",
+          "sign_blank_3_4.png",
+          "sign_blank_3_5.png",
+          "sign_blank_3_6.png",
+          "sign_blank_3_7.png"
+        ]
+      ],
+      "decorative": true
+    }
+  ],
+  "previewOnly": "preview.png"
+}

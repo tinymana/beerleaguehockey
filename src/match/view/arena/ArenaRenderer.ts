@@ -14,7 +14,8 @@ import { TEX, buildTemporaryTextures, netLayout, netScreenAnchor } from '../text
 import type { ArenaConfig, BenchMood, BoardSide, CrowdPose, CrowdReaction, GlassState, GoalEnd, GoalState, GoalStrip } from './config';
 import { CrowdView } from './CrowdView';
 import { IceWear, trafficPrior } from './iceWear';
-import { ARENA_LAYERS, faceoffSpots, iceOutline, layerDepth, layoutArena, layoutGoals } from './layout';
+import { Rng, hashString } from '../../../core/rng';
+import { ARENA_LAYERS, faceoffSpots, iceOutline, layerDepth, layoutArena, layoutGoals, resurfacerLanes } from './layout';
 import type { ArenaLayerId, ArenaLayout, BenchSpot, GoalPlacement } from './layout';
 import { TILE, assetById, assetUrl, loadableAssets, textureKey, textureSource } from './registry';
 import type { ArenaRegistry } from './registry';
@@ -60,6 +61,8 @@ export class ArenaRenderer {
   private benchTimer: Phaser.Time.TimerEvent | null = null;
   private mood: BenchMood = 'empty';
   private crowd: CrowdView | null = null;
+  private readonly testObjects = new Map<'debris' | 'pools', Phaser.GameObjects.Image[]>();
+  private resurfacer: { objects: Phaser.GameObjects.GameObject[]; timer: Phaser.Time.TimerEvent } | null = null;
   private readonly lamps = new Map<GoalEnd, { image: Phaser.GameObjects.Image; timer: Phaser.Time.TimerEvent | null }>();
   /** Objects switched off by a state (an empty bench seat), whatever their layer says. */
   private readonly hidden = new Set<Phaser.GameObjects.GameObject>();
@@ -318,6 +321,147 @@ export class ArenaRenderer {
   }
 
   // ---- runtime controls ---------------------------------------------------
+
+  /** Texture key and frame for any registry asset, for callers that draw their own test overlays. */
+  textureFor(id: string): [string, string] | null {
+    return this.has(id) ? this.tex(id) : null;
+  }
+
+  private clearTest(kind: 'debris' | 'pools'): void {
+    for (const image of this.testObjects.get(kind) ?? []) image.destroy();
+    this.testObjects.delete(kind);
+  }
+
+  /** Lab test: scatter one of each debris piece on the ice, above the markings and below the skaters. Seeded, so it never moves. */
+  setDebrisTest(on: boolean): number {
+    this.clearTest('debris');
+    const art = this.config.equipment;
+    if (!on || !art) return 0;
+    const rng = new Rng(hashString(`debris:${this.config.id}`));
+    const images: Phaser.GameObjects.Image[] = [];
+    for (const id of art.debris) {
+      if (!this.has(id)) continue;
+      const x = Math.round(rng.range(this.rink.left + 60, this.rink.right - 60));
+      const y = Math.round(projectY(rng.range(this.rink.top + 140, this.rink.bottom - 140), this.tilt));
+      images.push(this.scene.add.image(x, y, ...this.tex(id)).setDepth(layerDepth('reflections') + 2));
+    }
+    this.testObjects.set('debris', images);
+    return images.length;
+  }
+
+  /** Lab test: soft light pools on the ice in two columns, above the ice art and below the skaters. */
+  setLightPoolsTest(alpha: number): number {
+    this.clearTest('pools');
+    const art = this.config.equipment;
+    if (alpha <= 0 || !art || !this.has(art.lightGlow)) return 0;
+    const images: Phaser.GameObjects.Image[] = [];
+    for (let y = this.rink.top + 70; y <= this.rink.bottom - 70; y += 148) {
+      for (const x of [this.rink.centerX - 85, this.rink.centerX + 85]) {
+        images.push(
+          this.scene.add
+            .image(x, Math.round(projectY(y, this.tilt)), ...this.tex(art.lightGlow))
+            .setAlpha(alpha)
+            .setMask(this.iceMask)
+            .setDepth(layerDepth('reflections') + 1),
+        );
+      }
+    }
+    this.testObjects.set('pools', images);
+    return images.length;
+  }
+
+  resurfacerRunning(): boolean {
+    return !!this.resurfacer;
+  }
+
+  stopResurfacer(): void {
+    if (!this.resurfacer) return;
+    this.resurfacer.timer.remove();
+    this.scene.tweens.killTweensOf(this.resurfacer.objects);
+    for (const o of this.resurfacer.objects) o.destroy();
+    this.resurfacer = null;
+  }
+
+  /**
+   * Lab test: drive the ice resurfacer over the sheet in lanes, cleaning the wear under it and
+   * laying the supplied trail behind it. No collision and no game rule is involved.
+   */
+  runResurfacer(onDone?: () => void): void {
+    this.stopResurfacer();
+    const art = this.config.equipment?.resurfacer;
+    if (!art) return;
+    const sprite = (dir: string): [string, string] => this.tex(`${art.frames}_${art.palette}_${dir}`);
+    if (!['north', 'east', 'south', 'west'].map((d) => this.has(`${art.frames}_${art.palette}_${d}`)).every(Boolean) || !this.has(art.trail)) return;
+    const lanes = resurfacerLanes(this.rink, this.tilt, art.laneWidth, art.size / 2 - 4);
+    const first = lanes[0];
+    if (!first) return;
+    const vehicle = this.scene.add.image(first.x, first.from, ...sprite('south'));
+    const objects: Phaser.GameObjects.GameObject[] = [vehicle];
+    const trailKey = this.tex(art.trail);
+    const trailArt = assetById(this.registry, art.trail);
+    const trailWidth = trailArt?.width ?? 32;
+    let lane = 0;
+    let y = first.from;
+    let x = first.x;
+    let trail: Phaser.GameObjects.TileSprite | null = null;
+    const { grid } = this.layout;
+    const clean = (): void => {
+      const c0 = Math.floor((x - art.laneWidth / 2 - grid.x) / TILE);
+      const c1 = Math.floor((x + art.laneWidth / 2 - 1 - grid.x) / TILE);
+      const row = Math.floor((y - grid.y) / TILE);
+      for (let c = c0; c <= c1; c++) for (let r = row - 3; r <= row + 3; r++) this.wear.clearCell(c, r);
+    };
+    let sinceRefresh = 0;
+    const timer = this.scene.time.addEvent({
+      delay: 16,
+      loop: true,
+      callback: () => {
+        const current = lanes[lane];
+        if (!current) return;
+        let step = (art.speed * 16) / 1000;
+        if (x !== current.x) {
+          // Crossing to the next lane along the end of the ice.
+          const dx = current.x - x;
+          x += Math.sign(dx) * Math.min(Math.abs(dx), step);
+          vehicle.setTexture(...sprite(dx > 0 ? 'east' : 'west'));
+        } else {
+          const dy = current.to - y;
+          step = Math.min(Math.abs(dy), step);
+          y += Math.sign(dy) * step;
+          vehicle.setTexture(...sprite(dy >= 0 ? 'south' : 'north'));
+          if (!trail) {
+            trail = this.scene.add.tileSprite(current.x - trailWidth / 2, current.from, trailWidth, 1, ...trailKey).setOrigin(0, 0).setMask(this.iceMask).setDepth(layerDepth('scratches') + 1);
+            objects.push(trail);
+          }
+          const top = Math.min(current.from, y);
+          trail.setPosition(current.x - trailWidth / 2, top).setSize(trailWidth, Math.max(1, Math.abs(y - current.from)));
+          clean();
+          if (y === current.to) {
+            // Lane done: let its trail dry off, and head for the next one.
+            this.scene.tweens.add({ targets: trail, alpha: 0, duration: 2500 });
+            trail = null;
+            lane++;
+            if (lane >= lanes.length) {
+              this.refreshWear();
+              this.scene.time.delayedCall(600, () => {
+                this.stopResurfacer();
+                onDone?.();
+              });
+              timer.paused = true;
+              return;
+            }
+          }
+        }
+        vehicle.setPosition(Math.round(x), Math.round(y)).setDepth(Math.round(y) + art.size / 2);
+        sinceRefresh += 16;
+        if (sinceRefresh >= 150) {
+          sinceRefresh = 0;
+          this.refreshWear();
+        }
+      },
+    });
+    this.resurfacer = { objects, timer };
+  }
 
   /** Number of spectators drawn, and how many are mid-reaction. */
   crowdStatus(): { fans: number; reacting: number; pose: CrowdPose } {
@@ -683,6 +827,9 @@ export class ArenaRenderer {
     this.doorTimer?.remove();
     this.crowd?.destroy();
     this.crowd = null;
+    this.stopResurfacer();
+    this.clearTest('debris');
+    this.clearTest('pools');
     for (const lamp of this.lamps.values()) lamp.timer?.remove();
     this.lamps.clear();
     this.doors.clear();

@@ -36,6 +36,9 @@ export class ArenaLabScene extends Phaser.Scene {
   private collisionOn = false;
   private wearLevel = 0;
   private glassDamage = false;
+  private debrisOn = false;
+  private poolsOn = false;
+  private scoreboard: Phaser.GameObjects.GameObject[] = [];
   private keys!: Record<'up' | 'down' | 'pageUp' | 'pageDown' | 'w' | 's', Phaser.Input.Keyboard.Key>;
 
   constructor() {
@@ -102,6 +105,16 @@ export class ArenaLabScene extends Phaser.Scene {
         setDoorsOpen: (open) => this.arena.setDoorsOpen(open),
         setCrowdPose: (pose) => this.arena.setCrowdPose(pose),
         crowdReact: (kind) => void this.arena.crowdReact(kind),
+        runResurfacer: () => this.arena.runResurfacer(),
+        setDebris: (on) => {
+          this.debrisOn = on;
+          this.arena.setDebrisTest(on);
+        },
+        setLightPools: (on) => {
+          this.poolsOn = on;
+          this.arena.setLightPoolsTest(on ? 0.5 : 0);
+        },
+        setScoreboard: (state) => this.showScoreboard(state),
         flashLamps: () => {
           this.arena.flashLamp('north');
           this.arena.flashLamp('south');
@@ -142,6 +155,8 @@ export class ArenaLabScene extends Phaser.Scene {
     this.arena.setCollisionVisible(this.collisionOn);
     if (this.wearLevel > 0) this.arena.previewWear(this.wearLevel);
     this.applyGlassDamage();
+    if (this.debrisOn) this.arena.setDebrisTest(true);
+    if (this.poolsOn) this.arena.setLightPoolsTest(0.5);
 
     this.panel.setConfigNote(this.configId);
     this.panel.setLayers(
@@ -156,6 +171,33 @@ export class ArenaLabScene extends Phaser.Scene {
     this.panel.setStadiumReport(this.arena.config.stadium ? this.arena.layout.stadium : null, this.arena.config.crowdDensity);
     this.panel.setGoalFit(goalFit(RINK, tuning.cameraTilt, this.arena.config, lookup));
     this.drawGuides();
+  }
+
+  /**
+   * Scoreboard test: one supplied state, pinned to the screen, with sample numbers in the
+   * manifest's fields. The numbers are test values, not a score: the Lab has no match.
+   */
+  private showScoreboard(state: string | null): void {
+    for (const o of this.scoreboard) o.destroy();
+    this.scoreboard = [];
+    const art = this.arena.config.equipment?.scoreboard;
+    if (!state || !art) return;
+    const texture = this.arena.textureFor(`${art.frames}_${state}`);
+    if (!texture) return;
+    const x = GAME_WIDTH / 2 - 64;
+    const y = 22;
+    this.scoreboard.push(this.add.image(x, y, ...texture).setOrigin(0, 0).setScrollFactor(0).setDepth(9002));
+    const sample: Record<keyof typeof art.fields, string> = { homeScore: '3', awayScore: '2', clock: '12:34', period: '2' };
+    for (const key of Object.keys(art.fields) as (keyof typeof art.fields)[]) {
+      const [fx, fy, fw, fh] = art.fields[key];
+      this.scoreboard.push(
+        addText(this, x + fx + Math.round(fw / 2), y + fy + Math.floor((fh - 7) / 2), sample[key], UI.gold)
+          .setOrigin(0.5, 0)
+          .setScrollFactor(0)
+          .setDepth(9003),
+      );
+    }
+    this.scoreboard.push(addText(this, GAME_WIDTH / 2, y + 66, 'Sample numbers - scoreboard test', UI.ice).setOrigin(0.5, 0).setScrollFactor(0).setDepth(9003));
   }
 
   /** A fixed pattern of damaged panes, so every damage texture can be checked in place. */

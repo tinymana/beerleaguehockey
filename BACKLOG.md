@@ -75,3 +75,7 @@ The first build you will see after approval is Milestone 0 plus a skating protot
 ## Goal bottle and dislodged nets (raised by art batch 11)
 
 Batch 11 supplies a bottle on each crossbar with a knock-off animation, and a dislodged-goal animation. Possible homes: the bottle as a skill shot or taunt in the arcade layer (Milestone 2 or later); a dislodged net as a stoppage once referees and whistles exist. Proposed home only. Not designed, not authorized.
+
+## Intermission resurfacing, stick breaks, rafters (raised by art batch 14)
+
+Batch 14 supplies a resurfacer and garage, debris for broken sticks, championship banners, retired jerseys and a four-state scoreboard. Possible homes: resurfacer pass at intermissions once periods exist (Milestone 2 or 3); stick breaks as an arcade event; banners and retired jerseys driven by dynasty history (dynasty milestones); scoreboard fed by the match clock. Proposed homes only. Not designed, not authorized.

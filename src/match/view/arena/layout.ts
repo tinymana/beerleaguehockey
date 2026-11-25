@@ -588,6 +588,36 @@ export function layoutStadium(rink: RinkGeometry, tilt: number, config: ArenaCon
   return result;
 }
 
+/** One straight run of the resurfacer: a lane centred on `x`, driven from `from` to `to` on screen. */
+export interface ResurfacerLane {
+  x: number;
+  from: number;
+  to: number;
+}
+
+/**
+ * Lanes that cover the ice edge to edge, alternating south and north, each kept inside the
+ * rounded corners by `clearance` (half the vehicle). Screen coordinates. A path for the Lab test
+ * only: nothing drives on the ice during play.
+ */
+export function resurfacerLanes(rink: RinkGeometry, tilt: number, laneWidth: number, clearance: number): ResurfacerLane[] {
+  const lanes: ResurfacerLane[] = [];
+  const width = rink.right - rink.left;
+  const count = Math.ceil(width / laneWidth);
+  const r = rink.cornerRadius;
+  for (let i = 0; i < count; i++) {
+    // Centre the outer lanes so the last one ends flush with the far boards.
+    const x = Math.round(Math.min(rink.left + laneWidth / 2 + i * laneWidth, rink.right - laneWidth / 2));
+    // How far the corner arc pushes the ice edge in at the lane's outer side.
+    const d = Math.max(0, r - (x - laneWidth / 2 - rink.left), r - (rink.right - (x + laneWidth / 2)));
+    const inset = d > 0 ? r - Math.sqrt(Math.max(0, r * r - d * d)) : 0;
+    const top = screenY(rink, tilt, rink.top + inset) + clearance;
+    const bottom = screenY(rink, tilt, rink.bottom - inset) - clearance;
+    lanes.push(i % 2 === 0 ? { x, from: top, to: bottom } : { x, from: bottom, to: top });
+  }
+  return lanes;
+}
+
 /** Frame of a one-shot or repeated sequence at time `t` ms, or null once it has finished (or not begun). */
 export function sequenceFrame(durations: readonly number[], loops: number, t: number): number | null {
   const total = durations.reduce((a, b) => a + b, 0);

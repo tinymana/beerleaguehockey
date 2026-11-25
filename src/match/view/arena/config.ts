@@ -119,6 +119,21 @@ export interface StadiumArt {
   lamp: { frames: string; count: number; frameMs: number; flashMs: number; anchor: readonly [number, number] };
 }
 
+/**
+ * Batch 14 equipment. Nothing here is drawn in play yet: each piece waits on a system
+ * (intermissions, stick breaks, a match clock) or on room in the world. The Lab tests use it.
+ */
+export interface EquipmentArt {
+  /** Ice resurfacer: `${frames}_${palette}_${direction}`, 48x48, centred. */
+  resurfacer: { frames: string; palette: number; trail: string; size: number; laneWidth: number; speed: number };
+  /** Rink debris, 32x32 each, centred. */
+  debris: readonly string[];
+  /** Soft light pool for the ice, 64x64, centred. */
+  lightGlow: string;
+  /** Scoreboard states: `${frames}_${state}`. Fields are [x, y, width, height] inside the 128x64 board. */
+  scoreboard: { frames: string; states: readonly string[]; fields: Record<'homeScore' | 'awayScore' | 'clock' | 'period', readonly [number, number, number, number]> };
+}
+
 /** One goal: every number here is copied from the batch manifests, and a test checks they still agree. */
 export interface GoalArt {
   rest: string;
@@ -175,6 +190,7 @@ export interface ArenaConfig {
   benchArea: BenchArea | null;
   /** Side seating, crowd and goal lamps. How full the seats are is `crowdDensity`. */
   stadium: StadiumArt | null;
+  equipment: EquipmentArt | null;
   /** Supplied goal nets. Null keeps the code-drawn stand-in nets, which are the size of the physics net. */
   goals: Record<GoalEnd, GoalArt> | null;
   /** Sponsor panels on the end boards. `x` is a gameplay x position for the panel's centre. */
@@ -267,6 +283,17 @@ const STADIUM: StadiumArt = {
   lamp: { frames: '13.15/goal_lamp', count: 8, frameMs: 125, flashMs: 3000, anchor: [8, 14] },
 };
 
+const EQUIPMENT: EquipmentArt = {
+  resurfacer: { frames: '14.01/zamboni', palette: 0, trail: '14.01/resurfacing_trail', size: 48, laneWidth: 26, speed: 260 },
+  debris: ['broken_shaft', 'broken_blade', 'wood_splinters', 'composite_fragments', 'loose_tape', 'ice_shavings', 'discarded_glove', 'crushed_cup'].map((n) => `14.08/${n}`),
+  lightGlow: '14.07/light_glow',
+  scoreboard: {
+    frames: '14.06/scoreboard',
+    states: ['normal', 'goal', 'intermission', 'final'],
+    fields: { homeScore: [11, 38, 24, 11], awayScore: [93, 38, 24, 11], clock: [43, 29, 42, 11], period: [50, 45, 28, 9] },
+  },
+};
+
 const STANDARD: ArenaConfig = {
   id: 'standard',
   name: 'Standard rink',
@@ -306,6 +333,7 @@ const STANDARD: ArenaConfig = {
   gates: [],
   benchArea: BENCH_AREA,
   stadium: STADIUM,
+  equipment: EQUIPMENT,
   // Supplied goals at native size. They are larger than the physics net: see goalFit() and ARENA.md A13.
   goals: GOALS,
   // Both names are approved Puck Falls locations.

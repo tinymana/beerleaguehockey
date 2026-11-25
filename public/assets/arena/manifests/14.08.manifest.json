@@ -1,0 +1,343 @@
+{
+  "batch": "14.08",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    32,
+    32
+  ],
+  "atlas": "debris_atlas.png",
+  "assets": [
+    {
+      "id": "broken_shaft",
+      "file": "broken_shaft.png",
+      "atlasRect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "broken_shaft_0_0.png",
+          "broken_shaft_0_1.png",
+          "broken_shaft_0_2.png",
+          "broken_shaft_0_3.png"
+        ],
+        [
+          "broken_shaft_1_0.png",
+          "broken_shaft_1_1.png",
+          "broken_shaft_1_2.png",
+          "broken_shaft_1_3.png"
+        ],
+        [
+          "broken_shaft_2_0.png",
+          "broken_shaft_2_1.png",
+          "broken_shaft_2_2.png",
+          "broken_shaft_2_3.png"
+        ],
+        [
+          "broken_shaft_3_0.png",
+          "broken_shaft_3_1.png",
+          "broken_shaft_3_2.png",
+          "broken_shaft_3_3.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "id": "broken_blade",
+      "file": "broken_blade.png",
+      "atlasRect": [
+        32,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "broken_blade_0_0.png",
+          "broken_blade_0_1.png",
+          "broken_blade_0_2.png",
+          "broken_blade_0_3.png"
+        ],
+        [
+          "broken_blade_1_0.png",
+          "broken_blade_1_1.png",
+          "broken_blade_1_2.png",
+          "broken_blade_1_3.png"
+        ],
+        [
+          "broken_blade_2_0.png",
+          "broken_blade_2_1.png",
+          "broken_blade_2_2.png",
+          "broken_blade_2_3.png"
+        ],
+        [
+          "broken_blade_3_0.png",
+          "broken_blade_3_1.png",
+          "broken_blade_3_2.png",
+          "broken_blade_3_3.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "id": "wood_splinters",
+      "file": "wood_splinters.png",
+      "atlasRect": [
+        64,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "wood_splinters_0_0.png",
+          "wood_splinters_0_1.png",
+          "wood_splinters_0_2.png",
+          "wood_splinters_0_3.png"
+        ],
+        [
+          "wood_splinters_1_0.png",
+          "wood_splinters_1_1.png",
+          "wood_splinters_1_2.png",
+          "wood_splinters_1_3.png"
+        ],
+        [
+          "wood_splinters_2_0.png",
+          "wood_splinters_2_1.png",
+          "wood_splinters_2_2.png",
+          "wood_splinters_2_3.png"
+        ],
+        [
+          "wood_splinters_3_0.png",
+          "wood_splinters_3_1.png",
+          "wood_splinters_3_2.png",
+          "wood_splinters_3_3.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "id": "composite_fragments",
+      "file": "composite_fragments.png",
+      "atlasRect": [
+        96,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "composite_fragments_0_0.png",
+          "composite_fragments_0_1.png",
+          "composite_fragments_0_2.png",
+          "composite_fragments_0_3.png"
+        ],
+        [
+          "composite_fragments_1_0.png",
+          "composite_fragments_1_1.png",
+          "composite_fragments_1_2.png",
+          "composite_fragments_1_3.png"
+        ],
+        [
+          "composite_fragments_2_0.png",
+          "composite_fragments_2_1.png",
+          "composite_fragments_2_2.png",
+          "composite_fragments_2_3.png"
+        ],
+        [
+          "composite_fragments_3_0.png",
+          "composite_fragments_3_1.png",
+          "composite_fragments_3_2.png",
+          "composite_fragments_3_3.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "id": "loose_tape",
+      "file": "loose_tape.png",
+      "atlasRect": [
+        0,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "loose_tape_0_0.png",
+          "loose_tape_0_1.png",
+          "loose_tape_0_2.png",
+          "loose_tape_0_3.png"
+        ],
+        [
+          "loose_tape_1_0.png",
+          "loose_tape_1_1.png",
+          "loose_tape_1_2.png",
+          "loose_tape_1_3.png"
+        ],
+        [
+          "loose_tape_2_0.png",
+          "loose_tape_2_1.png",
+          "loose_tape_2_2.png",
+          "loose_tape_2_3.png"
+        ],
+        [
+          "loose_tape_3_0.png",
+          "loose_tape_3_1.png",
+          "loose_tape_3_2.png",
+          "loose_tape_3_3.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "id": "ice_shavings",
+      "file": "ice_shavings.png",
+      "atlasRect": [
+        32,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "ice_shavings_0_0.png",
+          "ice_shavings_0_1.png",
+          "ice_shavings_0_2.png",
+          "ice_shavings_0_3.png"
+        ],
+        [
+          "ice_shavings_1_0.png",
+          "ice_shavings_1_1.png",
+          "ice_shavings_1_2.png",
+          "ice_shavings_1_3.png"
+        ],
+        [
+          "ice_shavings_2_0.png",
+          "ice_shavings_2_1.png",
+          "ice_shavings_2_2.png",
+          "ice_shavings_2_3.png"
+        ],
+        [
+          "ice_shavings_3_0.png",
+          "ice_shavings_3_1.png",
+          "ice_shavings_3_2.png",
+          "ice_shavings_3_3.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "id": "discarded_glove",
+      "file": "discarded_glove.png",
+      "atlasRect": [
+        64,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "discarded_glove_0_0.png",
+          "discarded_glove_0_1.png",
+          "discarded_glove_0_2.png",
+          "discarded_glove_0_3.png"
+        ],
+        [
+          "discarded_glove_1_0.png",
+          "discarded_glove_1_1.png",
+          "discarded_glove_1_2.png",
+          "discarded_glove_1_3.png"
+        ],
+        [
+          "discarded_glove_2_0.png",
+          "discarded_glove_2_1.png",
+          "discarded_glove_2_2.png",
+          "discarded_glove_2_3.png"
+        ],
+        [
+          "discarded_glove_3_0.png",
+          "discarded_glove_3_1.png",
+          "discarded_glove_3_2.png",
+          "discarded_glove_3_3.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "id": "crushed_cup",
+      "file": "crushed_cup.png",
+      "atlasRect": [
+        96,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "crushed_cup_0_0.png",
+          "crushed_cup_0_1.png",
+          "crushed_cup_0_2.png",
+          "crushed_cup_0_3.png"
+        ],
+        [
+          "crushed_cup_1_0.png",
+          "crushed_cup_1_1.png",
+          "crushed_cup_1_2.png",
+          "crushed_cup_1_3.png"
+        ],
+        [
+          "crushed_cup_2_0.png",
+          "crushed_cup_2_1.png",
+          "crushed_cup_2_2.png",
+          "crushed_cup_2_3.png"
+        ],
+        [
+          "crushed_cup_3_0.png",
+          "crushed_cup_3_1.png",
+          "crushed_cup_3_2.png",
+          "crushed_cup_3_3.png"
+        ]
+      ],
+      "decorative": true
+    }
+  ],
+  "previewOnly": "preview.png"
+}

@@ -1,0 +1,346 @@
+{
+  "batch": "14.07",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    32,
+    32
+  ],
+  "atlas": "lighting_atlas.png",
+  "assets": [
+    {
+      "file": "floodlight_on.png",
+      "atlasRect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        2
+      ],
+      "tiles": [
+        [
+          "floodlight_on_0_0.png",
+          "floodlight_on_0_1.png",
+          "floodlight_on_0_2.png",
+          "floodlight_on_0_3.png"
+        ],
+        [
+          "floodlight_on_1_0.png",
+          "floodlight_on_1_1.png",
+          "floodlight_on_1_2.png",
+          "floodlight_on_1_3.png"
+        ],
+        [
+          "floodlight_on_2_0.png",
+          "floodlight_on_2_1.png",
+          "floodlight_on_2_2.png",
+          "floodlight_on_2_3.png"
+        ],
+        [
+          "floodlight_on_3_0.png",
+          "floodlight_on_3_1.png",
+          "floodlight_on_3_2.png",
+          "floodlight_on_3_3.png"
+        ]
+      ],
+      "state": "on"
+    },
+    {
+      "file": "floodlight_off.png",
+      "atlasRect": [
+        32,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        2
+      ],
+      "tiles": [
+        [
+          "floodlight_off_0_0.png",
+          "floodlight_off_0_1.png",
+          "floodlight_off_0_2.png",
+          "floodlight_off_0_3.png"
+        ],
+        [
+          "floodlight_off_1_0.png",
+          "floodlight_off_1_1.png",
+          "floodlight_off_1_2.png",
+          "floodlight_off_1_3.png"
+        ],
+        [
+          "floodlight_off_2_0.png",
+          "floodlight_off_2_1.png",
+          "floodlight_off_2_2.png",
+          "floodlight_off_2_3.png"
+        ],
+        [
+          "floodlight_off_3_0.png",
+          "floodlight_off_3_1.png",
+          "floodlight_off_3_2.png",
+          "floodlight_off_3_3.png"
+        ]
+      ],
+      "state": "off"
+    },
+    {
+      "file": "fluorescent_on.png",
+      "atlasRect": [
+        64,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        2
+      ],
+      "tiles": [
+        [
+          "fluorescent_on_0_0.png",
+          "fluorescent_on_0_1.png",
+          "fluorescent_on_0_2.png",
+          "fluorescent_on_0_3.png"
+        ],
+        [
+          "fluorescent_on_1_0.png",
+          "fluorescent_on_1_1.png",
+          "fluorescent_on_1_2.png",
+          "fluorescent_on_1_3.png"
+        ],
+        [
+          "fluorescent_on_2_0.png",
+          "fluorescent_on_2_1.png",
+          "fluorescent_on_2_2.png",
+          "fluorescent_on_2_3.png"
+        ],
+        [
+          "fluorescent_on_3_0.png",
+          "fluorescent_on_3_1.png",
+          "fluorescent_on_3_2.png",
+          "fluorescent_on_3_3.png"
+        ]
+      ],
+      "state": "on"
+    },
+    {
+      "file": "fluorescent_off.png",
+      "atlasRect": [
+        96,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        2
+      ],
+      "tiles": [
+        [
+          "fluorescent_off_0_0.png",
+          "fluorescent_off_0_1.png",
+          "fluorescent_off_0_2.png",
+          "fluorescent_off_0_3.png"
+        ],
+        [
+          "fluorescent_off_1_0.png",
+          "fluorescent_off_1_1.png",
+          "fluorescent_off_1_2.png",
+          "fluorescent_off_1_3.png"
+        ],
+        [
+          "fluorescent_off_2_0.png",
+          "fluorescent_off_2_1.png",
+          "fluorescent_off_2_2.png",
+          "fluorescent_off_2_3.png"
+        ],
+        [
+          "fluorescent_off_3_0.png",
+          "fluorescent_off_3_1.png",
+          "fluorescent_off_3_2.png",
+          "fluorescent_off_3_3.png"
+        ]
+      ],
+      "state": "off"
+    },
+    {
+      "file": "light_bank_on.png",
+      "atlasRect": [
+        0,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        2
+      ],
+      "tiles": [
+        [
+          "light_bank_on_0_0.png",
+          "light_bank_on_0_1.png",
+          "light_bank_on_0_2.png",
+          "light_bank_on_0_3.png"
+        ],
+        [
+          "light_bank_on_1_0.png",
+          "light_bank_on_1_1.png",
+          "light_bank_on_1_2.png",
+          "light_bank_on_1_3.png"
+        ],
+        [
+          "light_bank_on_2_0.png",
+          "light_bank_on_2_1.png",
+          "light_bank_on_2_2.png",
+          "light_bank_on_2_3.png"
+        ],
+        [
+          "light_bank_on_3_0.png",
+          "light_bank_on_3_1.png",
+          "light_bank_on_3_2.png",
+          "light_bank_on_3_3.png"
+        ]
+      ],
+      "state": "on"
+    },
+    {
+      "file": "light_bank_off.png",
+      "atlasRect": [
+        32,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        2
+      ],
+      "tiles": [
+        [
+          "light_bank_off_0_0.png",
+          "light_bank_off_0_1.png",
+          "light_bank_off_0_2.png",
+          "light_bank_off_0_3.png"
+        ],
+        [
+          "light_bank_off_1_0.png",
+          "light_bank_off_1_1.png",
+          "light_bank_off_1_2.png",
+          "light_bank_off_1_3.png"
+        ],
+        [
+          "light_bank_off_2_0.png",
+          "light_bank_off_2_1.png",
+          "light_bank_off_2_2.png",
+          "light_bank_off_2_3.png"
+        ],
+        [
+          "light_bank_off_3_0.png",
+          "light_bank_off_3_1.png",
+          "light_bank_off_3_2.png",
+          "light_bank_off_3_3.png"
+        ]
+      ],
+      "state": "off"
+    },
+    {
+      "file": "emergency_on.png",
+      "atlasRect": [
+        64,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        2
+      ],
+      "tiles": [
+        [
+          "emergency_on_0_0.png",
+          "emergency_on_0_1.png",
+          "emergency_on_0_2.png",
+          "emergency_on_0_3.png"
+        ],
+        [
+          "emergency_on_1_0.png",
+          "emergency_on_1_1.png",
+          "emergency_on_1_2.png",
+          "emergency_on_1_3.png"
+        ],
+        [
+          "emergency_on_2_0.png",
+          "emergency_on_2_1.png",
+          "emergency_on_2_2.png",
+          "emergency_on_2_3.png"
+        ],
+        [
+          "emergency_on_3_0.png",
+          "emergency_on_3_1.png",
+          "emergency_on_3_2.png",
+          "emergency_on_3_3.png"
+        ]
+      ],
+      "state": "on"
+    },
+    {
+      "file": "emergency_off.png",
+      "atlasRect": [
+        96,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        2
+      ],
+      "tiles": [
+        [
+          "emergency_off_0_0.png",
+          "emergency_off_0_1.png",
+          "emergency_off_0_2.png",
+          "emergency_off_0_3.png"
+        ],
+        [
+          "emergency_off_1_0.png",
+          "emergency_off_1_1.png",
+          "emergency_off_1_2.png",
+          "emergency_off_1_3.png"
+        ],
+        [
+          "emergency_off_2_0.png",
+          "emergency_off_2_1.png",
+          "emergency_off_2_2.png",
+          "emergency_off_2_3.png"
+        ],
+        [
+          "emergency_off_3_0.png",
+          "emergency_off_3_1.png",
+          "emergency_off_3_2.png",
+          "emergency_off_3_3.png"
+        ]
+      ],
+      "state": "off"
+    }
+  ],
+  "overlay": {
+    "file": "light_glow.png",
+    "size": [
+      64,
+      64
+    ],
+    "anchorLocal": [
+      32,
+      32
+    ]
+  },
+  "previewOnly": "preview.png"
+}

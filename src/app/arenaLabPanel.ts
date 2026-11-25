@@ -27,6 +27,10 @@ export interface LabActions {
   setCrowdPose(pose: CrowdPose): void;
   crowdReact(kind: CrowdReaction): void;
   flashLamps(): void;
+  runResurfacer(): void;
+  setDebris(on: boolean): void;
+  setLightPools(on: boolean): void;
+  setScoreboard(state: string | null): void;
   setDoorsOpen(open: boolean): void;
   useInGame(id: string): void;
   exit(): void;
@@ -239,6 +243,23 @@ export class ArenaLabPanel {
       this.stadiumReport,
     );
     this.root.append(stands);
+
+    // Equipment
+    const gear = section('Equipment tests (batch 14)');
+    const iceRow = el('div', 'lab-buttons');
+    iceRow.append(button('RUN RESURFACER', () => actions.runResurfacer()));
+    const boardRow = el('div', 'lab-buttons');
+    boardRow.append(button('BOARD OFF', () => actions.setScoreboard(null)));
+    for (const state of ['normal', 'goal', 'intermission', 'final']) boardRow.append(button(state.toUpperCase(), () => actions.setScoreboard(state)));
+    gear.append(
+      iceRow,
+      el('p', 'lab-note', 'Set some ice wear first, then run the resurfacer: it cleans the sheet lane by lane. It is a Lab drive only; there are no intermissions yet.'),
+      check('Debris test (one of each piece, on the ice)', false, (on) => actions.setDebris(on)),
+      check('Light pools test (soft glow under the light banks)', false, (on) => actions.setLightPools(on)),
+      boardRow,
+      el('p', 'lab-note', 'Scoreboard states with sample numbers, pinned to the screen: the arena has no wall or rafters to hang it on yet. Banners, retired jerseys, signs, light fixtures and the garage are in the asset browser only.'),
+    );
+    this.root.append(gear);
 
     // Missing art
     const slots = section('Art slots');

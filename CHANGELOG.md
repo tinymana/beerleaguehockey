@@ -2,6 +2,24 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.2.5 - 2026-11-25 - Arena equipment (Lab tests)
+
+Eight more packages (batches 14.01 to 14.08) ingested: 12,436 assets from 70 packages, 0 errors. Nothing in this release changes what you see in play: every piece in batch 14 waits on a system that does not exist yet, or on room the world does not have. No gameplay physics changed.
+
+### Added (Arena Asset Lab only)
+- Run resurfacer: the supplied ice resurfacer drives the sheet in lanes, lays its trail, and cleans the ice wear under it.
+- Debris test: one of each debris piece on the ice, above the markings and below the skaters.
+- Light pools test: the supplied soft glow under two rows of lights.
+- Scoreboard test: all four states, pinned to the screen, with sample numbers in the manifest's score, clock and period fields.
+- Ingest: tile lists under any manifest key.
+
+### Known issues
+- The resurfacer garage does not fit: it is 96 px deep and there are 55 px beside the boards. The resurfacer is 28 px wide and the doors open 24 px. `ARENA.md` A24.
+- Banners, retired jerseys, arena signs and light fixtures are registered but not placed: there are no walls, rafters or beams outside the ice, and banners and jerseys must come from real dynasty records. `ARENA.md` A25, A27.
+- The scoreboard's penalty timers need a 3x5 font the game does not have; those two fields are left empty. `ARENA.md` A26.
+- The resurfacer does not reach into the rounded corners: about a tenth of the sheet keeps its wear after a pass.
+- The scoreboard and one sponsor panel name the arena "The Ice Barn". No arena name has been approved. `ARENA.md` A26.
+
 ## 0.2.4 - 2026-11-25 - Stands, crowd and goal lamps
 
 Fifteen more packages (batches 13.01 to 13.15) ingested: 9,610 assets from 62 packages, 0 errors. No gameplay physics changed.

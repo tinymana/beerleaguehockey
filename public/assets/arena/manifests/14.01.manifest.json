@@ -1,0 +1,828 @@
+{
+  "batch": "14.01",
+  "tileSize": [
+    8,
+    8
+  ],
+  "frameSize": [
+    48,
+    48
+  ],
+  "atlas": "zamboni_atlas.png",
+  "assets": [
+    {
+      "file": "zamboni_0_north.png",
+      "direction": "north",
+      "palette": 0,
+      "anchorLocal": [
+        24,
+        24
+      ],
+      "atlasRect": [
+        0,
+        0,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "zamboni_0_north_0_0.png",
+          "zamboni_0_north_0_1.png",
+          "zamboni_0_north_0_2.png",
+          "zamboni_0_north_0_3.png",
+          "zamboni_0_north_0_4.png",
+          "zamboni_0_north_0_5.png"
+        ],
+        [
+          "zamboni_0_north_1_0.png",
+          "zamboni_0_north_1_1.png",
+          "zamboni_0_north_1_2.png",
+          "zamboni_0_north_1_3.png",
+          "zamboni_0_north_1_4.png",
+          "zamboni_0_north_1_5.png"
+        ],
+        [
+          "zamboni_0_north_2_0.png",
+          "zamboni_0_north_2_1.png",
+          "zamboni_0_north_2_2.png",
+          "zamboni_0_north_2_3.png",
+          "zamboni_0_north_2_4.png",
+          "zamboni_0_north_2_5.png"
+        ],
+        [
+          "zamboni_0_north_3_0.png",
+          "zamboni_0_north_3_1.png",
+          "zamboni_0_north_3_2.png",
+          "zamboni_0_north_3_3.png",
+          "zamboni_0_north_3_4.png",
+          "zamboni_0_north_3_5.png"
+        ],
+        [
+          "zamboni_0_north_4_0.png",
+          "zamboni_0_north_4_1.png",
+          "zamboni_0_north_4_2.png",
+          "zamboni_0_north_4_3.png",
+          "zamboni_0_north_4_4.png",
+          "zamboni_0_north_4_5.png"
+        ],
+        [
+          "zamboni_0_north_5_0.png",
+          "zamboni_0_north_5_1.png",
+          "zamboni_0_north_5_2.png",
+          "zamboni_0_north_5_3.png",
+          "zamboni_0_north_5_4.png",
+          "zamboni_0_north_5_5.png"
+        ]
+      ]
+    },
+    {
+      "file": "zamboni_0_east.png",
+      "direction": "east",
+      "palette": 0,
+      "anchorLocal": [
+        24,
+        24
+      ],
+      "atlasRect": [
+        48,
+        0,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "zamboni_0_east_0_0.png",
+          "zamboni_0_east_0_1.png",
+          "zamboni_0_east_0_2.png",
+          "zamboni_0_east_0_3.png",
+          "zamboni_0_east_0_4.png",
+          "zamboni_0_east_0_5.png"
+        ],
+        [
+          "zamboni_0_east_1_0.png",
+          "zamboni_0_east_1_1.png",
+          "zamboni_0_east_1_2.png",
+          "zamboni_0_east_1_3.png",
+          "zamboni_0_east_1_4.png",
+          "zamboni_0_east_1_5.png"
+        ],
+        [
+          "zamboni_0_east_2_0.png",
+          "zamboni_0_east_2_1.png",
+          "zamboni_0_east_2_2.png",
+          "zamboni_0_east_2_3.png",
+          "zamboni_0_east_2_4.png",
+          "zamboni_0_east_2_5.png"
+        ],
+        [
+          "zamboni_0_east_3_0.png",
+          "zamboni_0_east_3_1.png",
+          "zamboni_0_east_3_2.png",
+          "zamboni_0_east_3_3.png",
+          "zamboni_0_east_3_4.png",
+          "zamboni_0_east_3_5.png"
+        ],
+        [
+          "zamboni_0_east_4_0.png",
+          "zamboni_0_east_4_1.png",
+          "zamboni_0_east_4_2.png",
+          "zamboni_0_east_4_3.png",
+          "zamboni_0_east_4_4.png",
+          "zamboni_0_east_4_5.png"
+        ],
+        [
+          "zamboni_0_east_5_0.png",
+          "zamboni_0_east_5_1.png",
+          "zamboni_0_east_5_2.png",
+          "zamboni_0_east_5_3.png",
+          "zamboni_0_east_5_4.png",
+          "zamboni_0_east_5_5.png"
+        ]
+      ]
+    },
+    {
+      "file": "zamboni_0_south.png",
+      "direction": "south",
+      "palette": 0,
+      "anchorLocal": [
+        24,
+        24
+      ],
+      "atlasRect": [
+        96,
+        0,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "zamboni_0_south_0_0.png",
+          "zamboni_0_south_0_1.png",
+          "zamboni_0_south_0_2.png",
+          "zamboni_0_south_0_3.png",
+          "zamboni_0_south_0_4.png",
+          "zamboni_0_south_0_5.png"
+        ],
+        [
+          "zamboni_0_south_1_0.png",
+          "zamboni_0_south_1_1.png",
+          "zamboni_0_south_1_2.png",
+          "zamboni_0_south_1_3.png",
+          "zamboni_0_south_1_4.png",
+          "zamboni_0_south_1_5.png"
+        ],
+        [
+          "zamboni_0_south_2_0.png",
+          "zamboni_0_south_2_1.png",
+          "zamboni_0_south_2_2.png",
+          "zamboni_0_south_2_3.png",
+          "zamboni_0_south_2_4.png",
+          "zamboni_0_south_2_5.png"
+        ],
+        [
+          "zamboni_0_south_3_0.png",
+          "zamboni_0_south_3_1.png",
+          "zamboni_0_south_3_2.png",
+          "zamboni_0_south_3_3.png",
+          "zamboni_0_south_3_4.png",
+          "zamboni_0_south_3_5.png"
+        ],
+        [
+          "zamboni_0_south_4_0.png",
+          "zamboni_0_south_4_1.png",
+          "zamboni_0_south_4_2.png",
+          "zamboni_0_south_4_3.png",
+          "zamboni_0_south_4_4.png",
+          "zamboni_0_south_4_5.png"
+        ],
+        [
+          "zamboni_0_south_5_0.png",
+          "zamboni_0_south_5_1.png",
+          "zamboni_0_south_5_2.png",
+          "zamboni_0_south_5_3.png",
+          "zamboni_0_south_5_4.png",
+          "zamboni_0_south_5_5.png"
+        ]
+      ]
+    },
+    {
+      "file": "zamboni_0_west.png",
+      "direction": "west",
+      "palette": 0,
+      "anchorLocal": [
+        24,
+        24
+      ],
+      "atlasRect": [
+        144,
+        0,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "zamboni_0_west_0_0.png",
+          "zamboni_0_west_0_1.png",
+          "zamboni_0_west_0_2.png",
+          "zamboni_0_west_0_3.png",
+          "zamboni_0_west_0_4.png",
+          "zamboni_0_west_0_5.png"
+        ],
+        [
+          "zamboni_0_west_1_0.png",
+          "zamboni_0_west_1_1.png",
+          "zamboni_0_west_1_2.png",
+          "zamboni_0_west_1_3.png",
+          "zamboni_0_west_1_4.png",
+          "zamboni_0_west_1_5.png"
+        ],
+        [
+          "zamboni_0_west_2_0.png",
+          "zamboni_0_west_2_1.png",
+          "zamboni_0_west_2_2.png",
+          "zamboni_0_west_2_3.png",
+          "zamboni_0_west_2_4.png",
+          "zamboni_0_west_2_5.png"
+        ],
+        [
+          "zamboni_0_west_3_0.png",
+          "zamboni_0_west_3_1.png",
+          "zamboni_0_west_3_2.png",
+          "zamboni_0_west_3_3.png",
+          "zamboni_0_west_3_4.png",
+          "zamboni_0_west_3_5.png"
+        ],
+        [
+          "zamboni_0_west_4_0.png",
+          "zamboni_0_west_4_1.png",
+          "zamboni_0_west_4_2.png",
+          "zamboni_0_west_4_3.png",
+          "zamboni_0_west_4_4.png",
+          "zamboni_0_west_4_5.png"
+        ],
+        [
+          "zamboni_0_west_5_0.png",
+          "zamboni_0_west_5_1.png",
+          "zamboni_0_west_5_2.png",
+          "zamboni_0_west_5_3.png",
+          "zamboni_0_west_5_4.png",
+          "zamboni_0_west_5_5.png"
+        ]
+      ]
+    },
+    {
+      "file": "zamboni_1_north.png",
+      "direction": "north",
+      "palette": 1,
+      "anchorLocal": [
+        24,
+        24
+      ],
+      "atlasRect": [
+        0,
+        48,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "zamboni_1_north_0_0.png",
+          "zamboni_1_north_0_1.png",
+          "zamboni_1_north_0_2.png",
+          "zamboni_1_north_0_3.png",
+          "zamboni_1_north_0_4.png",
+          "zamboni_1_north_0_5.png"
+        ],
+        [
+          "zamboni_1_north_1_0.png",
+          "zamboni_1_north_1_1.png",
+          "zamboni_1_north_1_2.png",
+          "zamboni_1_north_1_3.png",
+          "zamboni_1_north_1_4.png",
+          "zamboni_1_north_1_5.png"
+        ],
+        [
+          "zamboni_1_north_2_0.png",
+          "zamboni_1_north_2_1.png",
+          "zamboni_1_north_2_2.png",
+          "zamboni_1_north_2_3.png",
+          "zamboni_1_north_2_4.png",
+          "zamboni_1_north_2_5.png"
+        ],
+        [
+          "zamboni_1_north_3_0.png",
+          "zamboni_1_north_3_1.png",
+          "zamboni_1_north_3_2.png",
+          "zamboni_1_north_3_3.png",
+          "zamboni_1_north_3_4.png",
+          "zamboni_1_north_3_5.png"
+        ],
+        [
+          "zamboni_1_north_4_0.png",
+          "zamboni_1_north_4_1.png",
+          "zamboni_1_north_4_2.png",
+          "zamboni_1_north_4_3.png",
+          "zamboni_1_north_4_4.png",
+          "zamboni_1_north_4_5.png"
+        ],
+        [
+          "zamboni_1_north_5_0.png",
+          "zamboni_1_north_5_1.png",
+          "zamboni_1_north_5_2.png",
+          "zamboni_1_north_5_3.png",
+          "zamboni_1_north_5_4.png",
+          "zamboni_1_north_5_5.png"
+        ]
+      ]
+    },
+    {
+      "file": "zamboni_1_east.png",
+      "direction": "east",
+      "palette": 1,
+      "anchorLocal": [
+        24,
+        24
+      ],
+      "atlasRect": [
+        48,
+        48,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "zamboni_1_east_0_0.png",
+          "zamboni_1_east_0_1.png",
+          "zamboni_1_east_0_2.png",
+          "zamboni_1_east_0_3.png",
+          "zamboni_1_east_0_4.png",
+          "zamboni_1_east_0_5.png"
+        ],
+        [
+          "zamboni_1_east_1_0.png",
+          "zamboni_1_east_1_1.png",
+          "zamboni_1_east_1_2.png",
+          "zamboni_1_east_1_3.png",
+          "zamboni_1_east_1_4.png",
+          "zamboni_1_east_1_5.png"
+        ],
+        [
+          "zamboni_1_east_2_0.png",
+          "zamboni_1_east_2_1.png",
+          "zamboni_1_east_2_2.png",
+          "zamboni_1_east_2_3.png",
+          "zamboni_1_east_2_4.png",
+          "zamboni_1_east_2_5.png"
+        ],
+        [
+          "zamboni_1_east_3_0.png",
+          "zamboni_1_east_3_1.png",
+          "zamboni_1_east_3_2.png",
+          "zamboni_1_east_3_3.png",
+          "zamboni_1_east_3_4.png",
+          "zamboni_1_east_3_5.png"
+        ],
+        [
+          "zamboni_1_east_4_0.png",
+          "zamboni_1_east_4_1.png",
+          "zamboni_1_east_4_2.png",
+          "zamboni_1_east_4_3.png",
+          "zamboni_1_east_4_4.png",
+          "zamboni_1_east_4_5.png"
+        ],
+        [
+          "zamboni_1_east_5_0.png",
+          "zamboni_1_east_5_1.png",
+          "zamboni_1_east_5_2.png",
+          "zamboni_1_east_5_3.png",
+          "zamboni_1_east_5_4.png",
+          "zamboni_1_east_5_5.png"
+        ]
+      ]
+    },
+    {
+      "file": "zamboni_1_south.png",
+      "direction": "south",
+      "palette": 1,
+      "anchorLocal": [
+        24,
+        24
+      ],
+      "atlasRect": [
+        96,
+        48,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "zamboni_1_south_0_0.png",
+          "zamboni_1_south_0_1.png",
+          "zamboni_1_south_0_2.png",
+          "zamboni_1_south_0_3.png",
+          "zamboni_1_south_0_4.png",
+          "zamboni_1_south_0_5.png"
+        ],
+        [
+          "zamboni_1_south_1_0.png",
+          "zamboni_1_south_1_1.png",
+          "zamboni_1_south_1_2.png",
+          "zamboni_1_south_1_3.png",
+          "zamboni_1_south_1_4.png",
+          "zamboni_1_south_1_5.png"
+        ],
+        [
+          "zamboni_1_south_2_0.png",
+          "zamboni_1_south_2_1.png",
+          "zamboni_1_south_2_2.png",
+          "zamboni_1_south_2_3.png",
+          "zamboni_1_south_2_4.png",
+          "zamboni_1_south_2_5.png"
+        ],
+        [
+          "zamboni_1_south_3_0.png",
+          "zamboni_1_south_3_1.png",
+          "zamboni_1_south_3_2.png",
+          "zamboni_1_south_3_3.png",
+          "zamboni_1_south_3_4.png",
+          "zamboni_1_south_3_5.png"
+        ],
+        [
+          "zamboni_1_south_4_0.png",
+          "zamboni_1_south_4_1.png",
+          "zamboni_1_south_4_2.png",
+          "zamboni_1_south_4_3.png",
+          "zamboni_1_south_4_4.png",
+          "zamboni_1_south_4_5.png"
+        ],
+        [
+          "zamboni_1_south_5_0.png",
+          "zamboni_1_south_5_1.png",
+          "zamboni_1_south_5_2.png",
+          "zamboni_1_south_5_3.png",
+          "zamboni_1_south_5_4.png",
+          "zamboni_1_south_5_5.png"
+        ]
+      ]
+    },
+    {
+      "file": "zamboni_1_west.png",
+      "direction": "west",
+      "palette": 1,
+      "anchorLocal": [
+        24,
+        24
+      ],
+      "atlasRect": [
+        144,
+        48,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "zamboni_1_west_0_0.png",
+          "zamboni_1_west_0_1.png",
+          "zamboni_1_west_0_2.png",
+          "zamboni_1_west_0_3.png",
+          "zamboni_1_west_0_4.png",
+          "zamboni_1_west_0_5.png"
+        ],
+        [
+          "zamboni_1_west_1_0.png",
+          "zamboni_1_west_1_1.png",
+          "zamboni_1_west_1_2.png",
+          "zamboni_1_west_1_3.png",
+          "zamboni_1_west_1_4.png",
+          "zamboni_1_west_1_5.png"
+        ],
+        [
+          "zamboni_1_west_2_0.png",
+          "zamboni_1_west_2_1.png",
+          "zamboni_1_west_2_2.png",
+          "zamboni_1_west_2_3.png",
+          "zamboni_1_west_2_4.png",
+          "zamboni_1_west_2_5.png"
+        ],
+        [
+          "zamboni_1_west_3_0.png",
+          "zamboni_1_west_3_1.png",
+          "zamboni_1_west_3_2.png",
+          "zamboni_1_west_3_3.png",
+          "zamboni_1_west_3_4.png",
+          "zamboni_1_west_3_5.png"
+        ],
+        [
+          "zamboni_1_west_4_0.png",
+          "zamboni_1_west_4_1.png",
+          "zamboni_1_west_4_2.png",
+          "zamboni_1_west_4_3.png",
+          "zamboni_1_west_4_4.png",
+          "zamboni_1_west_4_5.png"
+        ],
+        [
+          "zamboni_1_west_5_0.png",
+          "zamboni_1_west_5_1.png",
+          "zamboni_1_west_5_2.png",
+          "zamboni_1_west_5_3.png",
+          "zamboni_1_west_5_4.png",
+          "zamboni_1_west_5_5.png"
+        ]
+      ]
+    },
+    {
+      "file": "zamboni_2_north.png",
+      "direction": "north",
+      "palette": 2,
+      "anchorLocal": [
+        24,
+        24
+      ],
+      "atlasRect": [
+        0,
+        96,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "zamboni_2_north_0_0.png",
+          "zamboni_2_north_0_1.png",
+          "zamboni_2_north_0_2.png",
+          "zamboni_2_north_0_3.png",
+          "zamboni_2_north_0_4.png",
+          "zamboni_2_north_0_5.png"
+        ],
+        [
+          "zamboni_2_north_1_0.png",
+          "zamboni_2_north_1_1.png",
+          "zamboni_2_north_1_2.png",
+          "zamboni_2_north_1_3.png",
+          "zamboni_2_north_1_4.png",
+          "zamboni_2_north_1_5.png"
+        ],
+        [
+          "zamboni_2_north_2_0.png",
+          "zamboni_2_north_2_1.png",
+          "zamboni_2_north_2_2.png",
+          "zamboni_2_north_2_3.png",
+          "zamboni_2_north_2_4.png",
+          "zamboni_2_north_2_5.png"
+        ],
+        [
+          "zamboni_2_north_3_0.png",
+          "zamboni_2_north_3_1.png",
+          "zamboni_2_north_3_2.png",
+          "zamboni_2_north_3_3.png",
+          "zamboni_2_north_3_4.png",
+          "zamboni_2_north_3_5.png"
+        ],
+        [
+          "zamboni_2_north_4_0.png",
+          "zamboni_2_north_4_1.png",
+          "zamboni_2_north_4_2.png",
+          "zamboni_2_north_4_3.png",
+          "zamboni_2_north_4_4.png",
+          "zamboni_2_north_4_5.png"
+        ],
+        [
+          "zamboni_2_north_5_0.png",
+          "zamboni_2_north_5_1.png",
+          "zamboni_2_north_5_2.png",
+          "zamboni_2_north_5_3.png",
+          "zamboni_2_north_5_4.png",
+          "zamboni_2_north_5_5.png"
+        ]
+      ]
+    },
+    {
+      "file": "zamboni_2_east.png",
+      "direction": "east",
+      "palette": 2,
+      "anchorLocal": [
+        24,
+        24
+      ],
+      "atlasRect": [
+        48,
+        96,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "zamboni_2_east_0_0.png",
+          "zamboni_2_east_0_1.png",
+          "zamboni_2_east_0_2.png",
+          "zamboni_2_east_0_3.png",
+          "zamboni_2_east_0_4.png",
+          "zamboni_2_east_0_5.png"
+        ],
+        [
+          "zamboni_2_east_1_0.png",
+          "zamboni_2_east_1_1.png",
+          "zamboni_2_east_1_2.png",
+          "zamboni_2_east_1_3.png",
+          "zamboni_2_east_1_4.png",
+          "zamboni_2_east_1_5.png"
+        ],
+        [
+          "zamboni_2_east_2_0.png",
+          "zamboni_2_east_2_1.png",
+          "zamboni_2_east_2_2.png",
+          "zamboni_2_east_2_3.png",
+          "zamboni_2_east_2_4.png",
+          "zamboni_2_east_2_5.png"
+        ],
+        [
+          "zamboni_2_east_3_0.png",
+          "zamboni_2_east_3_1.png",
+          "zamboni_2_east_3_2.png",
+          "zamboni_2_east_3_3.png",
+          "zamboni_2_east_3_4.png",
+          "zamboni_2_east_3_5.png"
+        ],
+        [
+          "zamboni_2_east_4_0.png",
+          "zamboni_2_east_4_1.png",
+          "zamboni_2_east_4_2.png",
+          "zamboni_2_east_4_3.png",
+          "zamboni_2_east_4_4.png",
+          "zamboni_2_east_4_5.png"
+        ],
+        [
+          "zamboni_2_east_5_0.png",
+          "zamboni_2_east_5_1.png",
+          "zamboni_2_east_5_2.png",
+          "zamboni_2_east_5_3.png",
+          "zamboni_2_east_5_4.png",
+          "zamboni_2_east_5_5.png"
+        ]
+      ]
+    },
+    {
+      "file": "zamboni_2_south.png",
+      "direction": "south",
+      "palette": 2,
+      "anchorLocal": [
+        24,
+        24
+      ],
+      "atlasRect": [
+        96,
+        96,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "zamboni_2_south_0_0.png",
+          "zamboni_2_south_0_1.png",
+          "zamboni_2_south_0_2.png",
+          "zamboni_2_south_0_3.png",
+          "zamboni_2_south_0_4.png",
+          "zamboni_2_south_0_5.png"
+        ],
+        [
+          "zamboni_2_south_1_0.png",
+          "zamboni_2_south_1_1.png",
+          "zamboni_2_south_1_2.png",
+          "zamboni_2_south_1_3.png",
+          "zamboni_2_south_1_4.png",
+          "zamboni_2_south_1_5.png"
+        ],
+        [
+          "zamboni_2_south_2_0.png",
+          "zamboni_2_south_2_1.png",
+          "zamboni_2_south_2_2.png",
+          "zamboni_2_south_2_3.png",
+          "zamboni_2_south_2_4.png",
+          "zamboni_2_south_2_5.png"
+        ],
+        [
+          "zamboni_2_south_3_0.png",
+          "zamboni_2_south_3_1.png",
+          "zamboni_2_south_3_2.png",
+          "zamboni_2_south_3_3.png",
+          "zamboni_2_south_3_4.png",
+          "zamboni_2_south_3_5.png"
+        ],
+        [
+          "zamboni_2_south_4_0.png",
+          "zamboni_2_south_4_1.png",
+          "zamboni_2_south_4_2.png",
+          "zamboni_2_south_4_3.png",
+          "zamboni_2_south_4_4.png",
+          "zamboni_2_south_4_5.png"
+        ],
+        [
+          "zamboni_2_south_5_0.png",
+          "zamboni_2_south_5_1.png",
+          "zamboni_2_south_5_2.png",
+          "zamboni_2_south_5_3.png",
+          "zamboni_2_south_5_4.png",
+          "zamboni_2_south_5_5.png"
+        ]
+      ]
+    },
+    {
+      "file": "zamboni_2_west.png",
+      "direction": "west",
+      "palette": 2,
+      "anchorLocal": [
+        24,
+        24
+      ],
+      "atlasRect": [
+        144,
+        96,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "zamboni_2_west_0_0.png",
+          "zamboni_2_west_0_1.png",
+          "zamboni_2_west_0_2.png",
+          "zamboni_2_west_0_3.png",
+          "zamboni_2_west_0_4.png",
+          "zamboni_2_west_0_5.png"
+        ],
+        [
+          "zamboni_2_west_1_0.png",
+          "zamboni_2_west_1_1.png",
+          "zamboni_2_west_1_2.png",
+          "zamboni_2_west_1_3.png",
+          "zamboni_2_west_1_4.png",
+          "zamboni_2_west_1_5.png"
+        ],
+        [
+          "zamboni_2_west_2_0.png",
+          "zamboni_2_west_2_1.png",
+          "zamboni_2_west_2_2.png",
+          "zamboni_2_west_2_3.png",
+          "zamboni_2_west_2_4.png",
+          "zamboni_2_west_2_5.png"
+        ],
+        [
+          "zamboni_2_west_3_0.png",
+          "zamboni_2_west_3_1.png",
+          "zamboni_2_west_3_2.png",
+          "zamboni_2_west_3_3.png",
+          "zamboni_2_west_3_4.png",
+          "zamboni_2_west_3_5.png"
+        ],
+        [
+          "zamboni_2_west_4_0.png",
+          "zamboni_2_west_4_1.png",
+          "zamboni_2_west_4_2.png",
+          "zamboni_2_west_4_3.png",
+          "zamboni_2_west_4_4.png",
+          "zamboni_2_west_4_5.png"
+        ],
+        [
+          "zamboni_2_west_5_0.png",
+          "zamboni_2_west_5_1.png",
+          "zamboni_2_west_5_2.png",
+          "zamboni_2_west_5_3.png",
+          "zamboni_2_west_5_4.png",
+          "zamboni_2_west_5_5.png"
+        ]
+      ]
+    }
+  ],
+  "trail": {
+    "file": "resurfacing_trail.png",
+    "size": [
+      32,
+      32
+    ],
+    "tiles": [
+      [
+        "trail_0_0.png",
+        "trail_0_1.png",
+        "trail_0_2.png",
+        "trail_0_3.png"
+      ],
+      [
+        "trail_1_0.png",
+        "trail_1_1.png",
+        "trail_1_2.png",
+        "trail_1_3.png"
+      ],
+      [
+        "trail_2_0.png",
+        "trail_2_1.png",
+        "trail_2_2.png",
+        "trail_2_3.png"
+      ],
+      [
+        "trail_3_0.png",
+        "trail_3_1.png",
+        "trail_3_2.png",
+        "trail_3_3.png"
+      ]
+    ]
+  },
+  "previewOnly": "preview.png"
+}

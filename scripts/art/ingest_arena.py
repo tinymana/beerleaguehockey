@@ -147,8 +147,8 @@ def main():
                     for key, value in node.items():
                         collect(value, inside_tiles or key == 'tiles')
 
-            for key in ('assets', 'entries', 'frames', 'sequences'):
-                collect(manifest.get(key))
+            # Tile lists can sit under any key (assets, frames, sequences, trail...): walk everything but the top-level list.
+            collect({k: v for k, v in manifest.items() if k != 'tiles'})
             # Animation frames: whole-frame files that are also cells of one of the batch's strips.
             # 'file' sits in the goal atlas; 'net' and 'bottle' layers sit in their own strips.
             frame_entries = {}

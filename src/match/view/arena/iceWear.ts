@@ -59,6 +59,12 @@ export class IceWear {
     }
   }
 
+  /** Clean one tile, as the resurfacer passes over it. */
+  clearCell(col: number, row: number): void {
+    if (col < 0 || row < 0 || col >= this.cols || row >= this.rows) return;
+    this.values[this.index(col, row)] = 0;
+  }
+
   /** The Zamboni. `fraction` 1 clears the sheet; less leaves some wear behind. */
   resurface(fraction = 1): void {
     const keep = 1 - Math.min(1, Math.max(0, fraction));

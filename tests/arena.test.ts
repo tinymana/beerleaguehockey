@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { RINK, goalLineY } from '../src/match/sim/rink';
 import { ARENA_CONFIGS, arenaConfig } from '../src/match/view/arena/config';
 import { IceWear, trafficPrior } from '../src/match/view/arena/iceWear';
-import { ARENA_LAYERS, benchReport, layoutStadium, sequenceFrame, faceoffSpots, goalAlignment, goalFit, iceGrid, iceOutline, layoutArena, layoutGoals, screenY } from '../src/match/view/arena/layout';
+import { ARENA_LAYERS, benchReport, resurfacerLanes, layoutStadium, sequenceFrame, faceoffSpots, goalAlignment, goalFit, iceGrid, iceOutline, layoutArena, layoutGoals, screenY } from '../src/match/view/arena/layout';
 import { TILE, assetById, loadableAssets, textureSource } from '../src/match/view/arena/registry';
 import type { ArenaRegistry } from '../src/match/view/arena/registry';
 import { projectY } from '../src/match/view/projection';
@@ -13,6 +13,7 @@ const ARENA_DIR = join(__dirname, '..', 'public', 'assets', 'arena');
 const registry = JSON.parse(readFileSync(join(ARENA_DIR, 'manifests', 'registry.json'), 'utf8')) as ArenaRegistry;
 const lookup = (id: string) => assetById(registry, id);
 const TILT = 0.74;
+const FRAMES = registry.assets.filter((a) => a.role === 'frame').length;
 
 /** Width and height from a PNG header. */
 function pngSize(file: string): { width: number; height: number } {
@@ -29,10 +30,11 @@ describe('arena asset registry', () => {
       ...Array.from({ length: 10 }, (_, i) => `11.${String(i + 1).padStart(2, '0')}`),
       ...Array.from({ length: 10 }, (_, i) => `12.${String(i + 1).padStart(2, '0')}`),
       ...Array.from({ length: 15 }, (_, i) => `13.${String(i + 1).padStart(2, '0')}`),
+      ...Array.from({ length: 8 }, (_, i) => `14.${String(i + 1).padStart(2, '0')}`),
     ];
     expect(Object.keys(registry.batches).sort()).toEqual(expected);
     expect(registry.issues.filter((i) => i.level === 'error')).toEqual([]);
-    expect(registry.assets.length).toBe(9610);
+    expect(registry.assets.length).toBe(12436);
   });
 
   it('points only at files that exist, with the recorded pixel size, on the 8-pixel grid', () => {
@@ -59,16 +61,18 @@ describe('arena asset registry', () => {
 
   it('reports what has arrived and what is still missing', () => {
     const status = Object.fromEntries(registry.slots.map((s) => [s.id, s.status]));
-    for (const id of ['ice.base', 'ice.scratches', 'markings.creaseNorth', 'logo.center', 'boards.west', 'boards.east', 'boards.north', 'boards.south', 'glass', 'glass.posts', 'glass.damage', 'boards.gates', 'boards.ads', 'goals.scored', 'goals.ripple', 'goals.knockoff', 'goals.dislodged', 'benches.reactions', 'benches.doors', 'benches.equipment', 'stadium.reactions', 'stadium.railings', 'stadium.tunnels', 'stadium.signs', 'stadium.structure']) {
+    for (const id of ['ice.base', 'ice.scratches', 'markings.creaseNorth', 'logo.center', 'boards.west', 'boards.east', 'boards.north', 'boards.south', 'glass', 'glass.posts', 'glass.damage', 'boards.gates', 'boards.ads', 'goals.scored', 'goals.ripple', 'goals.knockoff', 'goals.dislodged', 'benches.reactions', 'benches.doors', 'benches.equipment', 'stadium.reactions', 'stadium.railings', 'stadium.tunnels', 'stadium.signs', 'stadium.structure', 'equipment', 'equipment.banners', 'equipment.jerseys', 'equipment.signs', 'equipment.scoreboard', 'equipment.lighting', 'equipment.debris']) {
       expect(status[id], id).toBe('supplied');
     }
     expect(status['boards.corners']).toBe('unfit');
+    // The resurfacer garage is deeper than the space beside the boards.
+    expect(status['equipment.garage']).toBe('unfit');
     // Goal art has arrived but is larger than the physics net, so it stays provisional until that is ruled on.
     expect(status['goals.north']).toBe('provisional');
     expect(status['goals.south']).toBe('provisional');
     // Benches and boxes are placed as a proposal: the packages call every placement provisional.
     for (const id of ['benches', 'penaltyBox', 'benches.timekeeper', 'benches.players', 'stadium', 'spectators', 'stadium.lamps']) expect(status[id], id).toBe('provisional');
-    for (const id of ['glass.corners', 'equipment']) {
+    for (const id of ['glass.corners']) {
       expect(status[id], id).toBe('missing');
     }
   });
@@ -77,7 +81,7 @@ describe('arena asset registry', () => {
     const load = loadableAssets(registry);
     expect(load.some((a) => a.role === 'tile' || a.role === 'frame')).toBe(false);
     expect(load.some((a) => a.duplicateOf)).toBe(false);
-    expect(load.length).toBeLessThan(190);
+    expect(load.length).toBeLessThan(200);
     // Every duplicate points at a file that is loaded.
     // Everything that is not a single tile resolves to a texture that is loaded, and to a cell inside it.
     const loaded = new Map(load.map((l) => [l.id, l]));
@@ -342,7 +346,7 @@ describe('goal nets', () => {
 
   it('files every single animation frame against a strip that holds the same pixels', () => {
     const frames = registry.assets.filter((a) => a.role === 'frame');
-    expect(frames.length).toBe(1050);
+    expect(frames.length).toBe(FRAMES);
     for (const f of frames) {
       const strip = lookup(f.atlas ?? '');
       expect(strip, f.id).toBeDefined();
@@ -568,6 +572,70 @@ describe('stands, crowd and goal lamps', () => {
     expect(sequenceFrame(d, 2, 999)).toBe(3);
     expect(sequenceFrame(d, 2, 1000)).toBeNull();
     expect(sequenceFrame([], 1, 0)).toBeNull();
+  });
+});
+
+describe('equipment (batch 14)', () => {
+  const art = arenaConfig('standard').equipment;
+  if (!art) throw new Error('standard arena has no equipment');
+  const manifest = (batch: string) => JSON.parse(readFileSync(join(ARENA_DIR, 'manifests', `${batch}.manifest.json`), 'utf8')) as Record<string, unknown>;
+
+  it('has every piece the Lab tests draw, at the sizes the manifests give', () => {
+    for (const dir of ['north', 'east', 'south', 'west']) {
+      const a = lookup(`${art.resurfacer.frames}_${art.resurfacer.palette}_${dir}`);
+      expect([a?.width, a?.height], dir).toEqual([art.resurfacer.size, art.resurfacer.size]);
+    }
+    expect(lookup(art.resurfacer.trail)).toBeDefined();
+    expect(art.debris.length).toBe((manifest('14.08').assets as unknown[]).length);
+    for (const id of art.debris) expect(lookup(id), id).toBeDefined();
+    expect(lookup(art.lightGlow)).toBeDefined();
+    const board = manifest('14.06');
+    expect((board.assets as { state: string }[]).map((a) => a.state)).toEqual([...art.scoreboard.states]);
+    for (const state of art.scoreboard.states) expect(lookup(`${art.scoreboard.frames}_${state}`), state).toBeDefined();
+    const fields = board.dynamicFields as Record<string, number[]>;
+    for (const [key, rect] of Object.entries(art.scoreboard.fields)) expect(fields[key], key).toEqual([...rect]);
+  });
+
+  it('drives resurfacer lanes that cover the ice edge to edge, alternate direction and stay inside the rounded corners', () => {
+    const lane = art.resurfacer.laneWidth;
+    for (const tilt of [0.6, 0.74, 1]) {
+      const lanes = resurfacerLanes(RINK, tilt, lane, 20);
+      expect(lanes[0]?.x).toBe(RINK.left + lane / 2);
+      expect(lanes[lanes.length - 1]?.x).toBe(RINK.right - lane / 2);
+      for (let i = 1; i < lanes.length; i++) {
+        expect((lanes[i]?.x ?? 0) - (lanes[i - 1]?.x ?? 0)).toBeLessThanOrEqual(lane);
+        expect(Math.sign((lanes[i]?.to ?? 0) - (lanes[i]?.from ?? 0))).toBe(-Math.sign((lanes[i - 1]?.to ?? 0) - (lanes[i - 1]?.from ?? 0)));
+      }
+      const top = screenY(RINK, tilt, RINK.top);
+      const bottom = screenY(RINK, tilt, RINK.bottom);
+      const mid = lanes[Math.floor(lanes.length / 2)];
+      for (const l of lanes) {
+        expect(Math.min(l.from, l.to)).toBeGreaterThanOrEqual(top + 20);
+        expect(Math.max(l.from, l.to)).toBeLessThanOrEqual(bottom - 20);
+      }
+      // The outer lanes are shorter than the middle ones: the corners push them in.
+      expect(Math.abs((lanes[0]?.to ?? 0) - (lanes[0]?.from ?? 0))).toBeLessThan(Math.abs((mid?.to ?? 0) - (mid?.from ?? 0)));
+    }
+  });
+
+  it('cleans one tile of ice wear at a time', () => {
+    const wear = new IceWear(10, 10);
+    wear.addTraffic(4, 4, 1);
+    expect(wear.wearAt(4, 4)).toBeGreaterThan(0);
+    wear.clearCell(4, 4);
+    expect(wear.wearAt(4, 4)).toBe(0);
+    expect(wear.wearAt(5, 4)).toBeGreaterThan(0);
+    wear.clearCell(-1, 99);
+  });
+
+  it('reports the garage as not fitting, with the numbers', () => {
+    const garage = lookup('14.02/garage_west_open');
+    const zamboni = lookup('14.01/zamboni_0_north');
+    const l = layoutArena(RINK, TILT, arenaConfig('standard'), lookup);
+    const boardsOutside = Math.min(...l.strips.filter((s) => s.role === 'westBoards').map((s) => s.x));
+    expect(garage?.width ?? 0).toBeGreaterThan(boardsOutside + 4);
+    const body = zamboni?.bbox ? zamboni.bbox[2] - zamboni.bbox[0] + 1 : 0;
+    expect(body).toBeGreaterThan(24);
   });
 });
 
