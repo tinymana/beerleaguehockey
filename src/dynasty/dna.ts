@@ -11,8 +11,10 @@ import type { AttributeKey, PlayerAttributes, Position, Ratings } from './attrib
 import { EXPERIENCE_ATTRIBUTES, RATING_MAX, RATING_MIN, attributesFor, clampRating } from './attributes';
 import { backgroundById } from './backgrounds';
 import { influenceById, influenceWeight } from './influences';
+import { playStyleById, playStyleWeight } from './playStyles';
 
-export const DNA_VERSION = 1;
+/** Version 2 added the chosen play style. Version 1 records are read as having none. */
+export const DNA_VERSION = 2;
 
 /** Generation settings. Proposed balancing values: data, not rules. */
 export interface DnaConfig {
@@ -35,6 +37,10 @@ export interface DnaConfig {
   /** How many strengths and weaknesses are named. */
   highlights: number;
   maxTendencies: number;
+  /** Decision 48: the share of the starting attribute spread that comes from the chosen play style, taken proportionally from the influences. */
+  playStyleShare: number;
+  /** Decision 48: how much faster a play style's attributes develop. Stored for progression, which is not built yet. */
+  playStyleDevelopment: number;
 }
 
 export const DNA_CONFIG: DnaConfig = {
@@ -51,6 +57,8 @@ export const DNA_CONFIG: DnaConfig = {
   minimumGrowth: 4,
   highlights: 3,
   maxTendencies: 4,
+  playStyleShare: 0.25,
+  playStyleDevelopment: 0.2,
 };
 
 export const MAX_SECONDARY_INFLUENCES = 2;
@@ -62,6 +70,8 @@ export interface DnaInput {
   primary: string;
   /** Zero, one or two. */
   secondaries: readonly string[];
+  /** The chosen play style, or null for none (every player made before version 2). */
+  playStyle?: string | null;
 }
 
 export interface PlayerDNA extends DnaInput {
@@ -89,6 +99,11 @@ export function dnaInputProblems(input: DnaInput): string[] {
     if (!influence) problems.push(`unknown influence ${id}`);
     else if ((influence.position === 'goalie') !== (input.position === 'goalie')) problems.push(`${id} is not an influence for a ${input.position}`);
   }
+  if (input.playStyle != null) {
+    const style = playStyleById(input.playStyle);
+    if (!style) problems.push(`unknown play style ${input.playStyle}`);
+    else if (!style.positions.includes(input.position)) problems.push(`${style.name} is not a play style for a ${input.position}`);
+  }
   return problems;
 }
 
@@ -100,6 +115,21 @@ export function influenceBias(input: DnaInput, config: DnaConfig = DNA_CONFIG): 
   const raw = keys.map((key) => picks.reduce((sum, influence, i) => sum + (influence ? influenceWeight(influence, key) * (shares[i] ?? 0) : 0), 0));
   const mean = raw.reduce((a, b) => a + b, 0) / keys.length;
   return Object.fromEntries(keys.map((key, i) => [key, (raw[i] ?? 0) - mean]));
+}
+
+/**
+ * The spread used for starting ratings: the influences, with the chosen play style taking its share of the same budget.
+ * Still averages zero, so a style moves ability around and never adds any. Natural ceilings do not use this.
+ */
+export function startingBias(input: DnaInput, config: DnaConfig = DNA_CONFIG): Record<string, number> {
+  const influences = influenceBias(input, config);
+  const style = input.playStyle != null ? playStyleById(input.playStyle) : undefined;
+  if (!style) return influences;
+  const keys = attributesFor(input.position);
+  const raw = keys.map((key) => playStyleWeight(style, key));
+  const mean = raw.reduce((a, b) => a + b, 0) / keys.length;
+  const share = config.playStyleShare;
+  return Object.fromEntries(keys.map((key, i) => [key, (1 - share) * (influences[key] ?? 0) + share * ((raw[i] ?? 0) - mean)]));
 }
 
 function experienceShift(key: AttributeKey, experience: number, config: DnaConfig): number {
@@ -118,6 +148,7 @@ export function generateDNA(input: DnaInput, config: DnaConfig = DNA_CONFIG): Pl
   if (!background) throw new Error('unreachable');
   const keys = attributesFor(input.position);
   const bias = influenceBias(input, config);
+  const startBias = startingBias(input, config);
   const root = new Rng(input.seed);
   const level = background.level + vary(root.fork('level'), background.spread);
   const talent = config.talentMean + vary(root.fork('talent'), config.talentSpread);
@@ -128,10 +159,13 @@ export function generateDNA(input: DnaInput, config: DnaConfig = DNA_CONFIG): Pl
   const potential: Ratings = {};
   for (const key of keys) {
     const b = bias[key] ?? 0;
-    const current = clampRating(level + b * config.currentScale + experienceShift(key, background.experience, config) + vary(currentRng, config.currentNoise));
+    const base = level + experienceShift(key, background.experience, config) + vary(currentRng, config.currentNoise);
     const ceiling = talent + b * config.potentialScale + vary(potentialRng, config.potentialNoise);
-    start[key] = current;
-    potential[key] = clampRating(Math.max(current + config.minimumGrowth, ceiling));
+    // The ceiling is set from the influences alone, exactly as it was before play styles existed,
+    // and the play style can only move the starting rating underneath it.
+    potential[key] = clampRating(Math.max(clampRating(base + b * config.currentScale) + config.minimumGrowth, ceiling));
+    const styled = clampRating(base + (startBias[key] ?? 0) * config.currentScale);
+    start[key] = startBias === bias ? styled : Math.max(RATING_MIN, Math.min(styled, (potential[key] ?? RATING_MAX) - config.minimumGrowth));
   }
 
   // Natural strengths and weaknesses: where the ceiling is highest and lowest. Ties keep attribute order.
@@ -150,6 +184,7 @@ export function generateDNA(input: DnaInput, config: DnaConfig = DNA_CONFIG): Pl
     background: input.background,
     primary: input.primary,
     secondaries: [...input.secondaries],
+    playStyle: input.playStyle ?? null,
     talent: Math.round(talent * 10) / 10,
     start,
     potential,
@@ -169,14 +204,18 @@ export function attributeBounds(input: DnaInput, key: AttributeKey, config: DnaC
   const background = backgroundById(input.background);
   if (!background) throw new Error(`unknown background ${input.background}`);
   const b = influenceBias(input, config)[key] ?? 0;
-  const centre = background.level + b * config.currentScale + experienceShift(key, background.experience, config);
+  const centre = background.level + (startingBias(input, config)[key] ?? 0) * config.currentScale + experienceShift(key, background.experience, config);
   const reach = background.spread + config.currentNoise;
-  const current: [number, number] = [clampRating(centre - reach), clampRating(centre + reach)];
+  // Starting ratings: the styled spread, never closer to the ceiling than the minimum growth (so widen the low end by it).
+  const plainCentre = background.level + b * config.currentScale + experienceShift(key, background.experience, config);
+  const styledInput = input.playStyle != null;
+  const current: [number, number] = [clampRating(Math.min(centre, plainCentre) - reach - (styledInput ? config.minimumGrowth : 0)), clampRating(centre + reach)];
+  const plain: [number, number] = [clampRating(plainCentre - reach), clampRating(plainCentre + reach)];
   const talentCentre = config.talentMean + b * config.potentialScale;
   const talentReach = config.talentSpread + config.potentialNoise;
   return {
     current,
-    potential: [clampRating(Math.max(current[0] + config.minimumGrowth, talentCentre - talentReach)), clampRating(Math.max(current[1] + config.minimumGrowth, talentCentre + talentReach))],
+    potential: [clampRating(Math.max(plain[0] + config.minimumGrowth, talentCentre - talentReach)), clampRating(Math.max(plain[1] + config.minimumGrowth, talentCentre + talentReach))],
   };
 }
 
@@ -193,6 +232,11 @@ export function serializeDNA(dna: PlayerDNA): string {
 /** Read DNA back from a save. Refuses anything it does not fully understand rather than guessing. */
 export function parseDNA(text: string): PlayerDNA {
   const raw = JSON.parse(text) as Partial<PlayerDNA>;
+  if (raw.version === 1) {
+    // Migration 1 -> 2: play styles did not exist, so the player has none. Nothing else changes.
+    raw.version = 2;
+    raw.playStyle = null;
+  }
   if (raw.version !== DNA_VERSION) throw new Error(`Player DNA version ${String(raw.version)} is not supported (expected ${DNA_VERSION})`);
   const input: DnaInput = {
     seed: raw.seed as number,
@@ -200,6 +244,7 @@ export function parseDNA(text: string): PlayerDNA {
     background: raw.background as string,
     primary: raw.primary as string,
     secondaries: raw.secondaries ?? [],
+    playStyle: raw.playStyle ?? null,
   };
   if (input.position !== 'forward' && input.position !== 'defense' && input.position !== 'goalie') throw new Error('Player DNA has no valid position');
   const problems = dnaInputProblems(input);

@@ -1,6 +1,6 @@
 {
   "name": "beer-league-hockey",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "private": true,
   "description": "Beer League Hockey - a recreational hockey universe by Tiny Mana Studios",
   "type": "module",
@@ -14,7 +14,8 @@
     "build:site": "npm run build && node scripts/build-site.mjs",
     "preview:site": "vite preview --outDir dist-site",
     "assets:ingest": "python3 scripts/art/ingest_arena.py",
-    "data:influences": "python3 scripts/data/build_influences.py"
+    "data:influences": "python3 scripts/data/build_influences.py",
+    "data:audit": "python3 -I scripts/data/audit_stats.py"
   },
   "dependencies": {
     "phaser": "3.90.0"

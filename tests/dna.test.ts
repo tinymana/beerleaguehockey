@@ -4,7 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { GOALIE_ATTRIBUTES, SKATER_ATTRIBUTES, applyPermanentChange, attributesFor, effectiveRating, overall, withTemporary, withoutTemporary } from '../src/dynasty/attributes';
 import type { AttributeKey, Position } from '../src/dynasty/attributes';
 import { BACKGROUNDS, CREATED_PLAYER_AGE, backgroundsForAge } from '../src/dynasty/backgrounds';
-import { DNA_CONFIG, DNA_VERSION, attributeBounds, dnaInputProblems, generateDNA, influenceBias, parseDNA, serializeDNA, startingAttributes } from '../src/dynasty/dna';
+import { DNA_CONFIG, DNA_VERSION, attributeBounds, dnaInputProblems, generateDNA, influenceBias, parseDNA, serializeDNA, startingAttributes, startingBias } from '../src/dynasty/dna';
+import { PLAY_STYLES, developsFaster, playStyleById, playStylesFor } from '../src/dynasty/playStyles';
 import type { DnaInput } from '../src/dynasty/dna';
 import { INFLUENCES, influenceById, influenceName, influencesFor, missingAliases, registryProblems } from '../src/dynasty/influences';
 
@@ -229,5 +230,88 @@ describe('Player DNA generation', () => {
     expect(() => parseDNA(JSON.stringify({ ...dna, start: { ...dna.start, reflexes: 140 } }))).toThrow();
     // Saves carry neutral ids only, never a real name.
     for (const i of INFLUENCES) expect(serializeDNA(dna).includes(i.name)).toBe(false);
+  });
+});
+
+describe('play styles (Decision 48)', () => {
+  const sum = (r: Record<string, number | undefined>) => Object.values(r).reduce<number>((a, b) => a + (b ?? 0), 0);
+
+  it('registers 17 styles, each for real positions and real attributes, none leaning both ways', () => {
+    expect(PLAY_STYLES.length).toBe(17);
+    expect(new Set(PLAY_STYLES.map((s) => s.id)).size).toBe(17);
+    for (const style of PLAY_STYLES) {
+      for (const position of style.positions) {
+        const keys = position === 'goalie' ? GOALIE_ATTRIBUTES : SKATER_ATTRIBUTES;
+        for (const key of [...style.toward, ...style.away]) expect(keys, `${style.id} ${key}`).toContain(key);
+      }
+      expect(style.toward.filter((k) => style.away.includes(k))).toEqual([]);
+      expect(developsFaster(style, style.toward[0]!)).toBe(true);
+    }
+    expect(playStylesFor('forward').length).toBe(9);
+    expect(playStylesFor('defense').length).toBe(7);
+    expect(playStylesFor('goalie').length).toBe(4);
+  });
+
+  it('is a quarter of the starting spread and faster development by a fifth, as settings', () => {
+    expect(DNA_CONFIG.playStyleShare).toBe(0.25);
+    expect(DNA_CONFIG.playStyleDevelopment).toBe(0.2);
+    const none = startingBias(skater());
+    const styled = startingBias(skater({ playStyle: 'PS01' }));
+    expect(none).toEqual(influenceBias(skater()));
+    expect(Math.abs(sum(styled))).toBeLessThan(1e-9);
+    // With the share at zero the style does nothing; at one the influences do nothing.
+    expect(startingBias(skater({ playStyle: 'PS01' }), { ...DNA_CONFIG, playStyleShare: 0 })).toEqual(none);
+    const all = startingBias(skater({ playStyle: 'PS01' }), { ...DNA_CONFIG, playStyleShare: 1 });
+    expect(all).toEqual(startingBias(skater({ playStyle: 'PS01', primary: 'F08' }), { ...DNA_CONFIG, playStyleShare: 1 }));
+    for (const key of SKATER_ATTRIBUTES) expect(styled[key]).toBeCloseTo(0.75 * (none[key] ?? 0) + 0.25 * (all[key] ?? 0), 9);
+  });
+
+  it('reshapes the starting player inside the same budget and never moves a ceiling', () => {
+    for (const style of PLAY_STYLES) {
+      const position = style.positions[0]!;
+      const primary = position === 'goalie' ? 'G01' : position === 'defense' ? 'D01' : 'F01';
+      let plainTotal = 0, styledTotal = 0, toward = 0, away = 0;
+      for (let seed = 1; seed <= 150; seed++) {
+        const base = { seed, position, background: 'youth', primary, secondaries: [] } as DnaInput;
+        const plain = generateDNA(base);
+        const styled = generateDNA({ ...base, playStyle: style.id });
+        expect(styled.potential).toEqual(plain.potential);
+        expect(styled.talent).toBe(plain.talent);
+        for (const key of attributesFor(position)) expect(styled.start[key]!).toBeLessThanOrEqual(styled.potential[key]!);
+        plainTotal += sum(plain.start);
+        styledTotal += sum(styled.start);
+        toward += styled.start[style.toward[0]!]! - plain.start[style.toward[0]!]!;
+        away += styled.start[style.away[0]!]! - plain.start[style.away[0]!]!;
+      }
+      const attributes = (position === 'goalie' ? GOALIE_ATTRIBUTES : SKATER_ATTRIBUTES).length;
+      // Same budget: the average rating moves by well under a point (rounding and the ceiling cap only).
+      expect(Math.abs(styledTotal - plainTotal) / 150 / attributes, style.id).toBeLessThan(0.5);
+      // The style's own attribute gains on the one it leans away from. (A style that matches the influence adds little on top: that is intended.)
+      expect((toward - away) / 150, style.id).toBeGreaterThan(0.8);
+    }
+  });
+
+  it('stays inside the published range, refuses a style for the wrong position, and reads old saves', () => {
+    for (let seed = 1; seed <= 60; seed++) {
+      const input = skater({ seed, playStyle: 'PS04', primary: 'F33', secondaries: ['F08'] });
+      const dna = generateDNA(input);
+      for (const key of SKATER_ATTRIBUTES) {
+        const bounds = attributeBounds(input, key);
+        expect(dna.start[key]!).toBeGreaterThanOrEqual(bounds.current[0]);
+        expect(dna.start[key]!).toBeLessThanOrEqual(bounds.current[1]);
+        expect(dna.potential[key]!).toBeGreaterThanOrEqual(bounds.potential[0]);
+        expect(dna.potential[key]!).toBeLessThanOrEqual(bounds.potential[1]);
+      }
+    }
+    expect(dnaInputProblems(skater({ playStyle: 'PS14' })).join()).toMatch(/not a play style/);
+    expect(dnaInputProblems(skater({ playStyle: 'PS99' })).join()).toMatch(/unknown play style/);
+    expect(playStyleById('PS07')?.positions).toEqual(['forward', 'defense']);
+    const styled = generateDNA(skater({ playStyle: 'PS02' }));
+    expect(parseDNA(serializeDNA(styled))).toEqual(styled);
+    const old = generateDNA(skater());
+    const { playStyle: _dropped, ...v1 } = old;
+    const migrated = parseDNA(JSON.stringify({ ...v1, version: 1 }));
+    expect(migrated).toEqual(old);
+    expect(migrated.playStyle).toBeNull();
   });
 });

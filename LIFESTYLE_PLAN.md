@@ -107,3 +107,11 @@ Written for the approved off-ice design space, **960x540** (Decision 38).
 | Packaging | One ZIP per location: named PNGs, `manifest.json` with stable ids, positions, layers, anchors, animation strips with durations, hotspot shapes; a preview image. Real brands never |
 
 For Top Shelf Hockey specifically, the scene needs: the counter and till, a skate sharpening machine (idle and running), stick racks, a glove wall, a helmet shelf, a secondhand bin, a clearance rack, a notice board, the door, and at least the shopkeeper and one loiterer.
+
+## Rulings and proposed rulings of Nov 25 (second set)
+
+- **Direction (Decision 52):** every scene off the ice is a point-and-click adventure scene. Clicking a character opens an RPG-style talk window: in the pro shop, click the skate-sharpening guy and his window opens.
+- **Batch 18 (Decision 50):** the reference artwork is the locked visual direction. Not yet delivered to development.
+- **Proposed by the creative director, awaiting final confirmation (P28):** the equipment numbers in this document as initial balancing values; premium equipment lasts longer and never rates higher; the Equipment Guy archetype gets dialogue and warnings only; goalie equipment costs more, with communal loaner gear through teams; injury modifiers are capped and do not multiply across slots; maintenance removes temporary penalties; everything configurable. Adventure scenes: data-driven; a smart contextual cursor with a secondary inspect action; mouse, keyboard and gamepad; no walking or pathfinding; time advances through meaningful career actions; build order Top Shelf Hockey, Ice Barn front desk, locker room, Penalty Box; 960x540.
+- Nothing here is built. The lifestyle locations still need their own go-ahead (CLAUDE.md, current state).
+

@@ -2,6 +2,24 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.3.2 - 2026-11-25 - Play style in the DNA engine; NHL statistics audit
+
+Nothing visible in the game changed. 132 tests.
+
+### Added
+- **Play Style in player generation (Decision 48):** a chosen style takes 25% of the starting attribute spread, proportionally from the influences, inside the same budget. Natural ceilings are set from the influences alone and never move. A 20% faster-development setting is stored for progression. Both are settings in `DNA_CONFIG`.
+- **Play style registry** (`src/dynasty/playStyles.ts`): the 17 proposed styles and their leanings as provisional data.
+- **Player DNA version 2:** records the play style. Version 1 records are read as having none, with a tested migration; a player with no style generates exactly as before.
+- **NHL statistics audit** (`npm run data:audit`): matches the delivered career statistics against the biographical file without ever merging on a name alone, and writes review files to `data/derived/`. Results in `INFLUENCE_ENGINE.md`.
+- **Documents:** `CARD_ART_SPEC.md` (batch 16.10 card art), `REGISTRIES.md` section 3 rewritten for review, Decisions 47 to 52 and P28.
+
+### Known issues
+- The creator screen does not offer a play style yet (Creator V1, Play Style tab).
+- Generated influence profiles are not active, by ruling. The dataset supports one tendency for skaters and none for goalies; see the recommendation in `INFLUENCE_ENGINE.md` section 8.
+- The dataset's licence is unknown. Raw files are for internal development only.
+- 479 statistics records are unmerged pending a person's decision.
+- Creator V1 (960x540 off-ice profile, interface kit, appearance) has not been started.
+
 ## 0.3.1 - 2026-11-25 - Locker room art (fit test)
 
 Ten more packages (batches 15.01 to 15.10) ingested: 16,577 assets from 80 packages, 0 errors. Nothing in play changed.

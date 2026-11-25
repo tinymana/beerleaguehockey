@@ -2,6 +2,17 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.3.2",
+      "date": "2026-11-25",
+      "title": "How do you play?",
+      "items": [
+        {
+          "tag": "improved",
+          "text": "Under the hood, players now have a play style as well as heroes: Sniper, Grinder, Puck-Handling Goalie and fourteen more. It shapes where a new player starts, not how good they can become. You will be able to pick one when the full Create a Player arrives."
+        }
+      ]
+    },
+    {
       "version": "0.3.1",
       "date": "2026-11-25",
       "title": "A peek in the room",

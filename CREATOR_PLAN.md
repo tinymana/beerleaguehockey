@@ -195,3 +195,11 @@ Steps 1 and 2 come first because everything else is drawn with them.
 12. **Branded equipment thumbnails.** Several 16.07 helmets and gloves carry real brand names. Decision 39 allows the references as a temporary stand-in; rule 9 does not allow real brands. I plan to leave the branded items out of V1 and show the rest. Confirm, or say to include them for development only.
 13. **Play style strength.** Proposed: a quarter of the attribute spread, and 20% faster development in the style's attributes (`REGISTRIES.md` section 2).
 14. **Archetype thresholds and the starting list** in `REGISTRIES.md` section 3: approve or amend.
+
+## 10. Rulings of Nov 25 (second set)
+
+- **Branded equipment (Decision 49):** equipment thumbnails that carry real manufacturer branding are excluded from Creator V1 and stay out of the production asset registry; the originals remain in `art/character_packages/`. Creator V1 does not wait for replacements: affected slots show the unbranded items only.
+- **Play Style (Decision 48):** the Play Style tab reads `src/dynasty/playStyles.ts`; the engine side is built (25% of the starting spread).
+- **Cards (batch 16.10):** specification in `CARD_ART_SPEC.md`. Archetype cards on hold until the registry review.
+- **Branding (Decision 50):** the official Beer League Hockey crest on every creator screen that carries game branding.
+
