@@ -11,9 +11,10 @@ import { SIM_DT, SkatingSim } from '../match/sim/skatingSim';
 import type { SimEvent } from '../match/sim/skatingSim';
 import { cameraTargetY, stepCamera } from '../match/view/cameraModel';
 import { projectY, worldScreenHeight } from '../match/view/projection';
-import { SKATER_CELL, SKATER_FEET, TEX, buildTemporaryTextures, netLayout, netScreenAnchor, texturesTilt } from '../match/view/textures';
+import { SKATER_SHEET, choosePose, skaterFrame } from '../match/view/skaterSprite';
+import { TEX, buildTemporaryTextures, netLayout, netScreenAnchor, texturesTilt } from '../match/view/textures';
 
-const STRIDE_LENGTH = 9;
+const STRIDE_LENGTH = 11;
 const DEPTH_FRONT_BOARDS = 5000;
 const DEPTH_HUD = 9000;
 
@@ -30,13 +31,14 @@ export class SkatingScene extends Phaser.Scene {
   private worldHeight = 0;
 
   private skater!: Phaser.GameObjects.Image;
-  private shadow!: Phaser.GameObjects.Image;
   private puck!: Phaser.GameObjects.Image;
   private hudSpeed!: Phaser.GameObjects.BitmapText;
   private hudGoals!: Phaser.GameObjects.BitmapText;
   private banner!: Phaser.GameObjects.BitmapText;
   private chargeBar!: Phaser.GameObjects.Graphics;
   private bannerTimer = 0;
+  private sinceShot = 10;
+  private lastInput: SimInput = { moveX: 0, moveY: 0, shoot: false };
 
   private keys!: Record<'up' | 'down' | 'left' | 'right' | 'w' | 'a' | 's' | 'd' | 'space' | 'j' | 'x', Phaser.Input.Keyboard.Key>;
   private readonly padSelect = new Edge();
@@ -71,9 +73,10 @@ export class SkatingScene extends Phaser.Scene {
         .setOrigin(0, 0)
         .setDepth(end === 'top' ? anchor.y : nearEdge);
     }
-    this.shadow = this.add.image(0, 0, TEX.shadow).setAlpha(0.35).setDepth(-1);
     this.puck = this.add.image(0, 0, TEX.puck);
-    this.skater = this.add.image(0, 0, TEX.skater, 6).setOrigin(SKATER_FEET.x / SKATER_CELL, SKATER_FEET.y / SKATER_CELL);
+    this.skater = this.add
+      .image(0, 0, SKATER_SHEET.key, 0)
+      .setOrigin(SKATER_SHEET.feet.x / SKATER_SHEET.cell, SKATER_SHEET.feet.y / SKATER_SHEET.cell);
 
     this.cameras.main.setBounds(0, 0, rink.worldWidth, this.worldHeight);
     this.camY = projectY(this.sim.skater.y, this.tilt);
@@ -135,6 +138,8 @@ export class SkatingScene extends Phaser.Scene {
     }
 
     const input = this.readInput(pad.x, pad.y, pad.action);
+    this.lastInput = input;
+    this.sinceShot += deltaMs / 1000;
     // Clamp long frames (tab switches) so the sim never spirals.
     this.accumulator += Math.min(deltaMs, 100) / 1000;
     while (this.accumulator >= SIM_DT) {
@@ -175,8 +180,9 @@ export class SkatingScene extends Phaser.Scene {
         this.banner.setText(fontText('Goal!')).setVisible(true);
         this.bannerTimer = 1.2;
         this.cameras.main.shake(180, 0.006);
-      } else if (e.type === 'shot' && e.power > 0.8) {
-        this.cameras.main.shake(60, 0.002);
+      } else if (e.type === 'shot') {
+        this.sinceShot = 0;
+        if (e.power > 0.8) this.cameras.main.shake(60, 0.002);
       }
     }
   }
@@ -196,11 +202,18 @@ export class SkatingScene extends Phaser.Scene {
     const puckX = Math.round(px);
     const puckY = Math.round(projectY(py, k));
 
-    const moving = Math.hypot(skater.vx, skater.vy) > 25;
-    const frame = moving ? Math.floor(skater.stride / STRIDE_LENGTH) % 2 : 0;
-    this.skater.setFrame(directionIndex8(skater.facing) + frame * 8);
+    const speed = Math.hypot(skater.vx, skater.vy);
+    const { moveX, moveY } = this.lastInput;
+    const pose = choosePose({
+      speed,
+      pushing: moveX !== 0 || moveY !== 0,
+      againstTravel: moveX * skater.vx + moveY * skater.vy < 0,
+      charging: skater.hasPuck && skater.charge > 0,
+      sinceShot: this.sinceShot,
+    });
+    const look = skaterFrame(directionIndex8(skater.facing), pose, skater.stride / STRIDE_LENGTH);
+    this.skater.setFrame(look.frame).setFlipX(look.flip);
     this.skater.setPosition(skaterX, skaterY).setDepth(skaterY);
-    this.shadow.setPosition(skaterX, skaterY);
     // A carried puck sits on the blade; draw it just in front of or behind the body as the stick points.
     this.puck.setPosition(puckX, puckY).setDepth(puck.state === 'carried' ? skaterY + (puckY >= skaterY ? 0.5 : -0.5) : puckY - 0.5);
 
@@ -229,9 +242,8 @@ export class SkatingScene extends Phaser.Scene {
     this.camY = stepCamera(this.camY, target, tuning.cameraFollow, dt);
     this.cameras.main.setScroll(0, Math.round(this.camY - GAME_HEIGHT / 2));
 
-    const speed = Math.round(Math.hypot(skater.vx, skater.vy));
     const puckSpeed = Math.round(Math.hypot(puck.vx, puck.vy));
-    this.hudSpeed.setText(fontText(`Skater ${speed}  Puck ${puckSpeed}`));
+    this.hudSpeed.setText(fontText(`Skater ${Math.round(speed)}  Puck ${puckSpeed}`));
     this.hudGoals.setText(fontText(`Goals ${this.sim.goals}`));
 
     if (this.bannerTimer > 0) {

@@ -44,6 +44,7 @@ The first build you will see after approval is Milestone 0 plus a skating protot
 - League commissioner interactions
 - Player reputation system
 - League disciplinary hearings
+- Referee knock-out: referee can be hurt for about 10 seconds and cannot make calls (Milestone 2, with penalties)
 - Playable fighting minigame
 - League newspaper with headlines generated from real simulation events
 - Championship banners and rings

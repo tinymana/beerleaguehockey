@@ -176,3 +176,24 @@ These need creative decisions first (`DECISIONS.md`). Listed only so the art ses
 ## 8. What to expect
 
 Image models drift between frames and rarely land on a perfect pixel grid. That is workable: each sheet gets snapped to the grid, re-palettized to section 3 and aligned in code before it goes in the game, and anything that cannot be rescued is sent back with a specific note. The two things that cannot be fixed afterwards are a character that changes size or design between cells, and painterly, blurred or gradient-shaded output. If a result has either, regenerate rather than deliver.
+
+---
+
+## 9. Round 2 requests (after reviewing batch 01)
+
+Batch 01 worked: the skater sheet is in the game. These are the gaps and fixes, most important first.
+
+1. **Rink over the templates** (section 1.4), once the camera tilt is approved. The batch 01 rinks were drawn in converging perspective, like a photo. The game needs a **parallel projection**: the left and right boards are vertical and parallel, never converging, and the rink is much taller than the screen. Paint over the three templates exactly. Deliver real transparency, not a painted checkerboard.
+2. **Nets, puck, shadow** as separate sprites (section 1.5).
+3. **Controlled-player marker, two meters, menu panel frame, menu cursor** (sections 1.6 and 1.7).
+4. **Referee back view:** one more row of the referee sheet, facing north (seen from behind): skate x4, glide, stop, arm up, point.
+5. **Skater sheet corrections**, same layout and character:
+   - North row and the check pose hold a stick.
+   - Pass frames show no puck.
+   - No shadows painted under the figure, and no ice spray in the stop frame (both are separate effects).
+   - Keep the jersey body plain white; put red only on the hem, socks and number, so teams can be recolored.
+   - Make the four skating frames in the south and north rows clearly different: left leg forward, both together, right leg forward, both together.
+6. **Small UI font as solid letters** (not outlines), white on transparent.
+7. **League crests for Tin League and Puck League** in the same style as Gold, Silver and Bronze. An **original championship trophy** that does not resemble any real trophy.
+
+One rule to restate for every request: hard pixel edges, no blur, no soft shading, and a truly transparent background.

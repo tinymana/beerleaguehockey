@@ -2,6 +2,23 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.1.2 - 2026-11-25 - Supplied skater art
+
+### Added
+- The skater uses the creative director's supplied sprite sheet (art batch 01), processed to game resolution by `scripts/art/process_skater.py` into `public/assets/skater_base.png` (10 poses x 5 directions, 48x48 cells, feet-aligned, hard-edged, 28 colors).
+- Pose selection: stride cycle, glide, brake, wind-up, shot. West-side directions mirror the east-side rows.
+- Art batch 01 filed under `art/source/generated-batch-01/` (21 unique files; 11 duplicate uploads dropped). Review and gap list in `ASSET_MANIFEST.md`.
+- Design: referee knock-out mechanic recorded (`GAME_DESIGN.md`, `DECISIONS.md` #26). Not implemented; it belongs with penalties in Milestone 2.
+
+### Removed
+- Code-drawn temporary skater.
+
+### Known issues
+- The carried puck follows the simulated stick blade, which does not line up exactly with the drawn stick in every direction.
+- Feet alignment between frames is automatic and wobbles by a pixel or two in places.
+- Mirrored directions flip the stick hand.
+- Rink, nets, puck and font are still temporary code-drawn art.
+
 ## 0.1.1 - 2026-11-25 - Angled overhead camera
 
 Requested by the creative director after playing v0.1.0. View-only change: the skating simulation and its tests are untouched.

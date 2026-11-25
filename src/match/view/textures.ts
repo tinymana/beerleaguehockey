@@ -1,5 +1,6 @@
 /**
- * TEMPORARY ART: code-drawn rink, nets and skater for the style test.
+ * TEMPORARY ART: code-drawn rink, nets, puck and shadow for the style test.
+ * (The skater now uses supplied art; see skaterSprite.ts.)
  *
  * Everything here is a stand-in, drawn pixel by pixel on the gameplay grid,
  * so the creative director can judge camera angle, readability and palette.
@@ -13,7 +14,6 @@ import Phaser from 'phaser';
 import { Rng } from '../../core/rng';
 import { goalLineY, netBox } from '../sim/rink';
 import type { RinkGeometry } from '../sim/rink';
-import { FEEL } from '../sim/tuning';
 import { HEIGHTS, projectY, riseOf, worldScreenHeight } from './projection';
 
 export const TEX = {
@@ -21,15 +21,9 @@ export const TEX = {
   rinkFront: 'tmp-rink-front',
   netTop: 'tmp-net-top',
   netBottom: 'tmp-net-bottom',
-  skater: 'tmp-skater',
   puck: 'tmp-puck',
   shadow: 'tmp-shadow',
 } as const;
-
-export const SKATER_CELL = 48;
-export const SKATER_FRAMES = 2;
-/** Where the skates touch the ice inside a skater cell. */
-export const SKATER_FEET = { x: 24, y: 34 };
 
 const PAL = {
   outside: '#0b1030',
@@ -307,160 +301,6 @@ function drawNets(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
   }
 }
 
-/** Tiny pixel grid with an outline pass, used to build each skater frame. */
-class Sprite {
-  readonly cells: (string | null)[];
-  constructor(readonly size: number) {
-    this.cells = new Array<string | null>(size * size).fill(null);
-  }
-  set(x: number, y: number, color: string): void {
-    const px = Math.round(x);
-    const py = Math.round(y);
-    if (px < 0 || py < 0 || px >= this.size || py >= this.size) return;
-    this.cells[py * this.size + px] = color;
-  }
-  box(x0: number, y0: number, x1: number, y1: number, color: string): void {
-    for (let y = Math.round(Math.min(y0, y1)); y <= Math.round(Math.max(y0, y1)); y++) {
-      for (let x = Math.round(Math.min(x0, x1)); x <= Math.round(Math.max(x0, x1)); x++) this.set(x, y, color);
-    }
-  }
-  disc(cx: number, cy: number, r: number, color: string): void {
-    for (let y = Math.floor(cy - r); y <= Math.ceil(cy + r); y++) {
-      for (let x = Math.floor(cx - r); x <= Math.ceil(cx + r); x++) {
-        if ((x - cx) ** 2 + (y - cy) ** 2 <= r * r) this.set(x, y, color);
-      }
-    }
-  }
-  line(x0: number, y0: number, x1: number, y1: number, color: string, thick = false): void {
-    const steps = Math.ceil(Math.max(Math.abs(x1 - x0), Math.abs(y1 - y0))) * 2 + 1;
-    for (let i = 0; i <= steps; i++) {
-      const t = i / steps;
-      const x = x0 + (x1 - x0) * t;
-      const y = y0 + (y1 - y0) * t;
-      this.set(x, y, color);
-      if (thick) this.set(x + 1, y, color);
-    }
-  }
-  outline(color: string): void {
-    const src = this.cells.slice();
-    const at = (x: number, y: number): string | null =>
-      x < 0 || y < 0 || x >= this.size || y >= this.size ? null : (src[y * this.size + x] ?? null);
-    for (let y = 0; y < this.size; y++) {
-      for (let x = 0; x < this.size; x++) {
-        if (at(x, y) !== null) continue;
-        if (at(x - 1, y) || at(x + 1, y) || at(x, y - 1) || at(x, y + 1)) this.cells[y * this.size + x] = color;
-      }
-    }
-  }
-  blit(ctx: CanvasRenderingContext2D, ox: number, oy: number): void {
-    for (let y = 0; y < this.size; y++) {
-      for (let x = 0; x < this.size; x++) {
-        const c = this.cells[y * this.size + x];
-        if (c) {
-          ctx.fillStyle = c;
-          ctx.fillRect(ox + x, oy + y, 1, 1);
-        }
-      }
-    }
-  }
-}
-
-/**
- * Upright skater seen from the angled camera, facing one of eight directions.
- * Feet are at SKATER_FEET; the body rises up the screen from there.
- * White jersey, red hem, blue helmet, yoke, gloves and pants.
- */
-function drawSkaterFrame(direction: number, frame: number, tilt: number): Sprite {
-  const s = new Sprite(SKATER_CELL);
-  const a = direction * (Math.PI / 4);
-  const fx = Math.cos(a);
-  const fy = Math.sin(a);
-  const ox = SKATER_FEET.x;
-  const oy = SKATER_FEET.y;
-  // A point on or above the ice: `forward`/`side` along the ice, `up` off it.
-  const at = (forward: number, side: number, up: number): [number, number] => [
-    ox + fx * forward - fy * side,
-    oy + (fy * forward + fx * side) * tilt - up,
-  ];
-  const away = fy < -0.3;
-  const sideOn = Math.abs(fx) > 0.9;
-  const stride = frame === 0 ? 2.5 : -2.5;
-  const lean = 2;
-
-  // Stick first, so the body covers the shaft where they overlap.
-  const hands = at(4, 1.5, 9);
-  const blade = at(FEEL.stickReach, 0, 0);
-  const heel = at(FEEL.stickReach - 0.5, -3, 0);
-  s.line(hands[0], hands[1], blade[0], blade[1], PAL.stick);
-  s.line(blade[0], blade[1], heel[0], heel[1], PAL.blade);
-
-  // Legs: skate, sock with trim, pants. The far leg is drawn first.
-  const legs: Array<[number, number]> = [
-    [stride, -2.5],
-    [-stride, 2.5],
-  ];
-  legs.sort((l, r) => at(l[0], l[1], 0)[1] - at(r[0], r[1], 0)[1]);
-  for (const [forward, side] of legs) {
-    const foot = at(forward, side, 0);
-    const toe = at(forward + 2, side, 0);
-    const knee = at(forward * 0.5, side, 5);
-    const hip = at(0, side * 0.8, 10);
-    s.line(foot[0], foot[1], toe[0], toe[1], PAL.skate, true);
-    s.line(foot[0], foot[1] - 1, knee[0], knee[1], PAL.jersey, true);
-    s.set(foot[0], foot[1] - 3, PAL.trim);
-    s.set(foot[0] + 1, foot[1] - 3, PAL.trim);
-    s.line(knee[0], knee[1], hip[0], hip[1], PAL.pants, true);
-  }
-
-  // Torso, leaning into the stride. Narrower when seen side-on.
-  const half = sideOn ? 3 : 4.5;
-  const hipC = at(0, 0, 10);
-  const chest = at(lean, 0, 19);
-  for (let i = 0; i <= 9; i++) {
-    const t = i / 9;
-    const cxr = hipC[0] + (chest[0] - hipC[0]) * t;
-    const cyr = hipC[1] + (chest[1] - hipC[1]) * t;
-    const color = i === 0 ? PAL.trim : i >= 7 ? PAL.helmet : PAL.jersey;
-    s.box(cxr - half, cyr, cxr + half, cyr, color);
-    if (i > 0 && i < 7) s.set(cxr + (fx >= 0 ? -half : half), cyr, PAL.jerseyShade);
-  }
-  if (away && !sideOn) {
-    // A blank number patch on the back.
-    s.box(chest[0] - 1, chest[1] + 4, chest[0] + 1, chest[1] + 6, PAL.trim);
-  }
-
-  // Arms reach from the shoulders to the stick.
-  for (const side of [-1, 1]) {
-    const shoulder: [number, number] = [chest[0] + side * half, chest[1] + 2];
-    s.line(shoulder[0], shoulder[1], hands[0] + side, hands[1], PAL.jerseyShade, true);
-  }
-  s.disc(hands[0], hands[1], 1.6, PAL.glove);
-
-  // Head: helmet, with a face when not skating away from the camera.
-  const head = at(lean + 1, 0, 23);
-  s.disc(head[0], head[1], 3.2, PAL.helmet);
-  s.set(head[0] - 1, head[1] - 2, PAL.helmetShine);
-  if (!away) {
-    const faceX = head[0] + fx * 1.6;
-    s.box(faceX - 1, head[1] + 1, faceX + 1, head[1] + 2, PAL.skin);
-  }
-
-  s.outline(PAL.outline);
-  return s;
-}
-
-function drawSkater(scene: Phaser.Scene, tilt: number): void {
-  const tex = makeCanvas(scene, TEX.skater, SKATER_CELL * 8, SKATER_CELL * SKATER_FRAMES);
-  const ctx = tex.getContext();
-  for (let d = 0; d < 8; d++) {
-    for (let f = 0; f < SKATER_FRAMES; f++) {
-      drawSkaterFrame(d, f, tilt).blit(ctx, d * SKATER_CELL, f * SKATER_CELL);
-      tex.add(d + f * 8, 0, d * SKATER_CELL, f * SKATER_CELL, SKATER_CELL, SKATER_CELL);
-    }
-  }
-  tex.refresh();
-}
-
 function drawPuckAndShadow(scene: Phaser.Scene, tilt: number): void {
   const ph = tilt < 0.9 ? 4 : 5;
   const puck = makeCanvas(scene, TEX.puck, 6, ph);
@@ -496,7 +336,6 @@ export function texturesTilt(): number | null {
 export function buildTemporaryTextures(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
   drawRink(scene, rink, tilt);
   drawNets(scene, rink, tilt);
-  drawSkater(scene, tilt);
   drawPuckAndShadow(scene, tilt);
   builtTilt = tilt;
 }

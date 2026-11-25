@@ -2,6 +2,21 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.1.2",
+      "date": "2026-11-25",
+      "title": "A real skater",
+      "items": [
+        {
+          "tag": "new",
+          "text": "The skater now uses Tiny Mana Studios' own sprite art: five drawn directions mirrored to eight, with a four-step stride, glide, hockey stop, wind-up and shot."
+        },
+        {
+          "tag": "improved",
+          "text": "The pose follows what you are doing: push to stride, let go to glide, push against your travel to throw up a hockey stop."
+        }
+      ]
+    },
+    {
       "version": "0.1.1",
       "date": "2026-11-25",
       "title": "The classic camera",

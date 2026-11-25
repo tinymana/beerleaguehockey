@@ -41,6 +41,20 @@ The creative DNA is NHL '94 (arcade feel), NBA 2K dynasty (franchise depth and p
 - **Styles:** archetypes drive AI behavior and comedy, for example Sniper, Grinder, Dangler, Stay-at-home D, Ex-junior ringer, and Guy Who Never Passes.
 - **Presentation:** original scorebug, period summaries, three stars, goal replays and a public-access-style broadcast voice in text.
 
+### Referees can get hurt (approved direction, Nov 25; details proposed)
+
+Inspired by Arch Rivals: the referee is a body on the ice, and a referee who is down cannot call anything.
+
+- **How he goes down:** a body check, a high-speed collision or a hard shot knocks the referee over.
+- **How long:** about 10 seconds by default, a league-rule value. He sits dazed, then gets up.
+- **While he is down:** no penalties are called. The puck stays live and goals still count.
+- **He remembers (proposal):** the first hit reads as an accident. Flatten him again and that team gets a tighter whistle for the rest of the period.
+- **By division (proposal):** lower divisions have one referee, so one hit means open season; Gold League has two, so one can still call.
+- **In the dynasty (proposal):** repeat referee abuse feeds disciplinary hearings and the franchise's sportsmanship reputation, and makes the newspaper.
+- **Art:** the supplied referee sheet already has hit, down, dazed and helped-up frames.
+
+Arrives with penalties in Milestone 2. Not implemented.
+
 ### Dynasty simulation
 
 - **Structure:** five divisions from Puck League up to Gold League, with promotion and relegation each season (see decisions 6 to 8).

@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { SKATER_SHEET } from '../match/view/skaterSprite';
 import { SCENES } from './config';
 import { registerPixelFont } from './pixelFont';
 
@@ -6,6 +7,10 @@ import { registerPixelFont } from './pixelFont';
 export class BootScene extends Phaser.Scene {
   constructor() {
     super(SCENES.boot);
+  }
+
+  preload(): void {
+    this.load.spritesheet(SKATER_SHEET.key, SKATER_SHEET.url, { frameWidth: SKATER_SHEET.cell, frameHeight: SKATER_SHEET.cell });
   }
 
   create(): void {

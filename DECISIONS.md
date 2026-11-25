@@ -61,7 +61,7 @@ All **Open**: they need the creative director's review of the playable build.
 | # | Question | What the prototype does | Notes |
 | --- | --- | --- | --- |
 | P1 | Gameplay resolution and aspect (decision 9) | 480x320 grid (3:2, matching the supplied art), scaled by whole numbers only; key art shown at full resolution behind the canvas | Alternative: 16:9 (480x270), which crops the 3:2 art |
-| P2 | Skater size on screen | Upright figure about 28 px tall in a 48x48 cell (v0.1.1) | Larger sprites read better but shrink the visible ice |
+| P2 | Skater size on screen | Supplied sprite, about 34 px tall in a 48x48 cell (v0.1.2) | Larger sprites read better but shrink the visible ice |
 | P3 | Default skating feel | See `src/match/sim/tuning.ts` defaults | Tune live in the panel, then send back the values with COPY VALUES |
 | P4 | Eight-way analog quantization | Stick input snaps to eight directions | True to the reference; could be loosened |
 | P5 | Shot control | Hold to wind up, release to shoot; tap is a quick wrist shot | Pass button and one-timers come in Milestones 1 and 2 |
@@ -69,3 +69,7 @@ All **Open**: they need the creative director's review of the playable build.
 | P7 | Menu placement and temporary pixel font | Menu panel sits in the open area of the title art | Final type and frame art need approval |
 | P8 | Engine version (decision 25) | Phaser 3.90.0, the final 3.x release. Phaser 4 is now the current major version | Evaluate Phaser 4 before Milestone 1 closes |
 | P9 | Camera angle | **Direction approved:** angled overhead view in the style of NHL '94 (creative director, Nov 25). **Open:** the exact tilt. v0.1.1 defaults to 0.78 with a live slider | Rink art depends on this number, so settle it before commissioning rink art |
+| 26 | Referee knock-out | **Direction approved** (creative director, Nov 25): Arch Rivals-style, the referee can be hurt for about 10 seconds and cannot make calls. **Proposed details:** triggers, the grudge rule, one referee in lower divisions and two in Gold, dynasty consequences. See `GAME_DESIGN.md` | Lands with penalties in Milestone 2. Not implemented |
+| P10 | League crests in art batch 01 | The supplied crests show Gold, Silver, Bronze, a "Rec League" and four geographic divisions; the approved ladder is Gold, Silver, Bronze, Tin, Puck | Open: redraw to the ladder, or change the ladder |
+| P11 | Pro-league badges in art batch 01 | Draft, Trade Deadline, Free Agency and All-Star Game badges were supplied, but none of these exist in the design | Open: add them to the design or drop the badges |
+| P12 | Trophy art | The supplied cup closely resembles a real, famous hockey trophy | Proposed: redraw as an original trophy, in line with the all-original rule |
