@@ -255,7 +255,7 @@ export class CreatorScene extends Phaser.Scene {
     this.text(RIGHT + 96, 22, `Ceiling ${overall(dna.potential, keys).toFixed(1)}`, UI.ice);
     this.text(GAME_WIDTH - 6, 22, 'Now / potential', UI.dim, 1);
     const top = 36;
-    const rowHeight = keys.length > 17 ? 10 : 11;
+    const rowHeight = keys.length > 17 ? 9 : 11;
     keys.forEach((key, i) => {
       const ry = top + i * rowHeight;
       const now = dna.start[key] ?? 0;

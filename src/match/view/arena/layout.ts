@@ -704,7 +704,9 @@ export function goalFit(rink: RinkGeometry, tilt: number, config: ArenaConfig, l
     const asset = need(lookup, goal.art.rest);
     const [, top, , bottom] = asset.bbox ?? [0, 0, asset.width - 1, asset.height - 1];
     const artDepth = goal.end === 'north' ? goal.art.mouth[1] - top : bottom - goal.art.mouth[1];
-    const physicsDepth = Math.round(rink.netDepth * tilt);
+    // Measured the way the renderer places things, so it agrees with the collision overlay to the pixel.
+    const line = goalLineY(rink, goal.end === 'north' ? 'top' : 'bottom');
+    const physicsDepth = Math.abs(screenY(rink, tilt, line) - screenY(rink, tilt, goal.end === 'north' ? line - rink.netDepth : line + rink.netDepth));
     const toBoards = Math.round(rink.goalLineInset * tilt);
     return {
       end: goal.end,

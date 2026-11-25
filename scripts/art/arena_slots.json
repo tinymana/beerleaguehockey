@@ -255,7 +255,7 @@
         "11.01/goal_north_net",
         "11.01/goal_north_bottle_layer"
       ],
-      "unfit": "Larger than the gameplay net: 37 px between the posts against a 24 px mouth, and about 25 px deep against 10 px. Ruling (Decision 34): the art is redrawn to the gameplay size; the net does not change. Spec in ART_BRIEF.md section 10. Shown only in the goal fit test arena."
+      "unfit": "Larger than the gameplay net: 37 px between the posts against a 24 px mouth, and about 25 px deep against 11 px. Ruling (Decision 34): the art is redrawn to the gameplay size; the net does not change. Spec in ART_BRIEF.md section 10. Shown only in the goal fit test arena."
     },
     {
       "id": "goals.south",
@@ -267,7 +267,7 @@
         "11.02/goal_south_net",
         "11.02/goal_south_bottle_layer"
       ],
-      "unfit": "Larger than the gameplay net: 37 px between the posts against a 24 px mouth, and about 25 px deep against 10 px. Ruling (Decision 34): the art is redrawn to the gameplay size; the net does not change. Spec in ART_BRIEF.md section 10. Shown only in the goal fit test arena."
+      "unfit": "Larger than the gameplay net: 37 px between the posts against a 24 px mouth, and about 25 px deep against 11 px. Ruling (Decision 34): the art is redrawn to the gameplay size; the net does not change. Spec in ART_BRIEF.md section 10. Shown only in the goal fit test arena."
     },
     {
       "id": "goals.scored",
