@@ -12,7 +12,7 @@ Read this first. It lets a new session resume without losing creative direction 
 - **Two tracks (approved Nov 25, Decision 34).** Track A is arcade hockey on the ice. Track B is career, dynasty, player creation and statistical simulation.
 - **Track B: authorized and under way.** Authorized so far: revised main menu, Hockey Influences registry, Player DNA architecture, attribute generation, player creator foundation, automated generation and balance tests. Delivered in v0.3.0. Anything else in Track B (league, calendar, saves, aging, recruitment, collectibles, cinematics, fighting, Celly Packs, online play) still needs its own go-ahead.
 - **Track A: gated.** Do not begin on-ice match development (Milestone 1) until the creative director explicitly approves the hands-on skating checkpoint.
-- **Art integration:** delivered through batch 15 (v0.3.1). Batch 15 is locker room art, shown only in a developer fit test; the locker room is not a game location yet. Goal art is being redrawn to the gameplay size (`ART_BRIEF.md` section 10).
+- **Art integration:** delivered through batch 15 (v0.3.1). Batch 15 is locker room art, shown only in a developer fit test; the locker room is not a game location yet. Goal art is being redrawn to the gameplay size (`ART_BRIEF.md` section 10). All supplied art so far is base art that will be re-supplied at higher fidelity (Decision 35).
 - **Settled decisions are not reopened** unless a new technical conflict is found. The register is `DECISIONS.md`; open items are listed at its end.
 
 ## Priorities

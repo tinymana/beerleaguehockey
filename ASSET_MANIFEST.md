@@ -48,6 +48,8 @@ Three pieces of approved art exist today; everything else is either a code-drawn
 
 ## Arena and locker room art (batches 09 to 15)
 
+**All of this is base art (Decision 35).** The creative director will re-supply the same assets at higher fidelity. Keeping file names, pixel sizes and anchors the same makes the swap a re-ingest with no code change.
+
 Modular rink tiles arrive as `BLH_Batch_*.zip` packages in `art/packages/` and are ingested into `public/assets/arena/`. The full inventory, validation notes and missing slots live in the generated registry (`public/assets/arena/manifests/registry.json`) and are browsable in the Arena Asset Lab. See `ARENA.md`.
 
 As of v0.3.1: 16,577 assets from 80 packages, 0 errors; batch 15 (locker room) adds 7 slots, all supplied and used in the fit test only. As of v0.2.5: 12,436 assets from 70 packages, 0 errors; 42 slots supplied (batch 14 as Lab tests or registered only), 2 unfit (corner boards; resurfacer garage), 1 missing (curved corner glass). Earlier count, v0.2.4: 9,610 assets from 62 packages; 35 slots supplied, 9 provisional (goals larger than the gameplay net; bench area placement and colours; side seating that only partly fits the world; crowd; goal lamps), 1 unfit (corner boards: wrong radius for the rink), 2 missing (curved corner glass, arena equipment). Still wanted and not in any batch: seating for the ends and corners.
