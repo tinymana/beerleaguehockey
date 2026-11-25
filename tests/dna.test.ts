@@ -199,7 +199,15 @@ describe('Player DNA generation', () => {
     expect(blended.checking).toBeGreaterThan(solo.checking ?? 0);
     expect(blended.checking).toBeLessThan(enforcer.checking ?? 0);
     expect(blended.passing).toBeGreaterThan(enforcer.passing ?? 0);
-    expect(DNA_CONFIG.shares.map((s) => s.reduce((a, b) => a + b, 0))).toEqual([1, 1, 1]);
+    for (const shares of DNA_CONFIG.shares) expect(shares.reduce((a, b) => a + b, 0)).toBeCloseTo(1, 9);
+    // Decision 41: 60 / 25 / 15, and the same 60:25 ratio when there is only one secondary.
+    expect(DNA_CONFIG.shares[2]).toEqual([0.6, 0.25, 0.15]);
+    expect((DNA_CONFIG.shares[1]?.[0] ?? 0) / (DNA_CONFIG.shares[1]?.[1] ?? 1)).toBeCloseTo(60 / 25, 9);
+    // The first secondary counts for more than the second: order matters.
+    const ab = influenceBias(skater({ primary: 'F01', secondaries: ['F33', 'F04'] }));
+    const ba = influenceBias(skater({ primary: 'F01', secondaries: ['F04', 'F33'] }));
+    expect(ab.checking).toBeGreaterThan(ba.checking ?? 0);
+    expect(ba.skatingSpeed).toBeGreaterThan(ab.skatingSpeed ?? 0);
   });
 
   it('does not make copies: two players with the same hero differ, and none is elite at 18', () => {

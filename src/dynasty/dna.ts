@@ -16,7 +16,7 @@ export const DNA_VERSION = 1;
 
 /** Generation settings. Proposed balancing values: data, not rules. */
 export interface DnaConfig {
-  /** How much each influence counts: primary first. Indexed by number of secondaries (0, 1, 2). */
+  /** How much each influence counts: primary first, then the secondaries in the order chosen. Indexed by number of secondaries (0, 1, 2). */
   shares: readonly (readonly number[])[];
   /** Rating points per unit of influence weight at the start of a career. */
   currentScale: number;
@@ -38,7 +38,9 @@ export interface DnaConfig {
 }
 
 export const DNA_CONFIG: DnaConfig = {
-  shares: [[1], [0.7, 0.3], [0.6, 0.2, 0.2]],
+  // Decision 41: primary 60%, first secondary 25%, second secondary 15%, for review.
+  // With one secondary the 60 and 25 are scaled up to fill the whole: 60/85 and 25/85.
+  shares: [[1], [60 / 85, 25 / 85], [0.6, 0.25, 0.15]],
   currentScale: 4,
   currentNoise: 4,
   experienceScale: 4,

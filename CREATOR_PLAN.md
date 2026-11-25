@@ -120,7 +120,7 @@ Proposed: 12 archetypes from the brief's examples, `REGISTRIES.md` section 3, wi
 
 ## 8. Batch 17 technical specifications (Create a Team)
 
-These assume the character models stay at the 16.01 size (64x96). If question 1 changes the presentation resolution, the pixel sizes change with it and I will reissue this section.
+These assume the character models stay at the 16.01 size (64x96). At the approved 960x540 the model is shown at five times size (480 px tall), so these pixel sizes stand.
 
 | Item | Specification |
 | --- | --- |
@@ -153,16 +153,45 @@ These assume the character models stay at the 16.01 size (64x96). If question 1 
 
 Steps 3 to 5 are creator work beyond the "foundation" you authorized, so they need your go-ahead.
 
+## 9a. Rulings received Nov 25, and the Creator V1 plan
+
+**Rulings (Decisions 38 to 45):** off-ice screens use a **960x540**, 16:9 design space, with the on-ice resolution and engine untouched; **Create a Player V1 and Create a Team V1 are approved**, with preset faces and equipment references as temporary stand-ins and the modular architecture preserved; influence cards are **illustrated, not photographic**, with generic illustrations or silhouettes for the wider database and a fictional fallback registry; influences expand beyond 64 with data-derived profiles (`INFLUENCE_ENGINE.md`); weights **60 / 25 / 15** (built); **play style is chosen**; **archetypes evolve**; **personality is separate**.
+
+**Creator V1 plan**
+
+| Step | What | Temporary in V1 |
+| --- | --- | --- |
+| 1 | **Off-ice rendering profile.** One game, two profiles: ice at 480x320, off-ice at 960x540. The canvas switches profile when a scene starts; each profile scales by whole numbers where the window allows, letterboxes the rest, and keeps pixel-art filtering. The on-ice engine is not touched | The title screen and its 3:2 art stay 3:2, shown with side bars inside the 16:9 frame until widescreen versions exist. Nothing is stretched or cropped |
+| 2 | **Interface kit** from batch 16.11: nine-slice panels, buttons, card frames, bars, arrows; focus handling for keyboard, mouse and gamepad; text fields; a scrolling list with search | Text uses the temporary 5x7 font at double size until a real font is supplied |
+| 3 | **Appearance record v1 and compositor**, with the fallback chain, in `src/dynasty`; headless tests | - |
+| 4 | **Character art category** in the pipeline and a **Character Asset Lab** | - |
+| 5 | **Profile tab:** first and last name, nickname, number, hometown, height, weight, handedness, position. Age fixed at 18 | Name filtering is not built (question 11) |
+| 6 | **Appearance tab:** the 56 preset portraits; the grey base model, rotatable through the four supplied views; body type and skin tone stored but not yet drawn | Preset faces instead of layered heads, hair and beards; labelled as such on screen |
+| 7 | **Equipment tab:** choose by slot from the reference thumbnails | Thumbnails only: nothing is drawn on the model. Items showing real brand marks are left out (question 12) |
+| 8 | **Nationality tab:** 249 flags, searchable, plus "unspecified" | - |
+| 9 | **Influence tab:** searchable list; one primary, two secondary, 60 / 25 / 15; gold card frame with name, flag, position, era and tendencies | No portrait: a silhouette panel. 64 curated entries until the database work lands |
+| 10 | **Play Style and Archetype tabs:** pick from the proposed registries, position- and background-appropriate | Play style is stored and shown but moves no numbers until you approve its strength |
+| 11 | **Attributes tab:** all attributes with icons where one matches, now against potential | 12 attributes have no matching icon and show a plain marker |
+| 12 | **Summary and confirm.** Confirming locks the DNA: the seed and choices are stored and can never be re-rolled by reopening the creator. Appearance stays editable | - |
+| 13 | **Created-player store:** a small versioned record in the browser, with a migration test. This is the first thing the game saves | Local to one browser, with export and import. Not a career save |
+| 14 | **Randomize** (whole appearance or one feature, with locks) and **appearance presets** (save, load, reset) | - |
+| 15 | **Create a Team V1** | Waits for batch 17. The team identity record (name, place, four colours, crest, patterns, lettering) can be built and tested first |
+
+Steps 1 and 2 come first because everything else is drawn with them.
+
 ## 10. Questions for the creative director
 
-1. **Presentation resolution.** The reference screen is 1672x941 and widescreen; the game is 480x320. The reference cannot be reproduced at 480x320: there is room for roughly a third of it at a readable size. Decision 9 (resolution) is still open, and Decision 16 already says "32-bit menus, 16-bit ice". My recommendation: menus, creator, cinematics and off-ice scenes at **960x640**, with the rink kept at 480x320 and shown doubled. At 960x640 the 64x96 model shows at five times size, as in the reference. The alternative is to keep 480x320 everywhere and split the creator across more tabs. Also: stay 3:2, or go widescreen like the reference?
-2. **Go-ahead for creator v1** (sequence steps 3 to 5) with preset faces while modular art is produced?
-3. **Likenesses.** Gold cards with real players' portraits, or an illustrated stand-in (a silhouette in era gear) with the name and flag?
-4. **How many influences.** Stay at a curated set and grow it by hand; or supply career statistics so profiles can be derived for many more; or let players pick anyone from the 8,662 as a name-only influence with no gameplay effect?
-5. **Play style:** a label worked out from DNA, or a choice that nudges attributes (a new mechanic)?
-6. **Archetypes at 18:** chosen once, or a starting persona that changes as the career does? And should personality traits fold into archetypes?
+1. **Presentation resolution.** *Answered (Decision 38):* 960x540, 16:9, for all off-ice scenes and interfaces; the ice keeps its resolution.
+2. **Go-ahead for creator v1** *Answered (Decision 39):* approved, for Create a Player V1 and Create a Team V1.
+3. **Likenesses.** *Answered (Decision 40):* illustrated cards; individual illustrations for featured influences subject to rights review; generic illustrations or silhouettes for the rest; a fictional fallback registry.
+4. **How many influences.** *Answered (Decision 41):* not limited to 64; expand with data-derived profiles. See `INFLUENCE_ENGINE.md`; the dataset has not been reachable yet.
+5. **Play style:** *Answered (Decision 43):* chosen by the player, inside the existing attribute budget, able to evolve.
+6. **Archetypes at 18:** *Answered (Decisions 44 and 45):* a starting archetype is chosen and then evolves, with history kept; personality is a separate system.
 7. **Attribute display.** The reference shows 12 summary rows; the game has 21 attributes. Show all 21 with icons, or 12 grouped rows that expand?
 8. **Body type names.** The art uses rookie, slim, average, athletic, stocky, power, wide, dad bod, beer belly, heavyweight, tall, large; the brief lists nine others. Which set?
 9. **Height and weight:** cosmetic only, as body type is, or allowed to matter?
 10. **Hometown:** free text, or a list?
 11. **Nicknames and names:** free text needs a profanity position, especially once online play exists.
+12. **Branded equipment thumbnails.** Several 16.07 helmets and gloves carry real brand names. Decision 39 allows the references as a temporary stand-in; rule 9 does not allow real brands. I plan to leave the branded items out of V1 and show the rest. Confirm, or say to include them for development only.
+13. **Play style strength.** Proposed: a quarter of the attribute spread, and 20% faster development in the style's attributes (`REGISTRIES.md` section 2).
+14. **Archetype thresholds and the starting list** in `REGISTRIES.md` section 3: approve or amend.

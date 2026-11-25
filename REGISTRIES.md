@@ -1,5 +1,7 @@
 # Registries: influences, play styles, archetypes, backgrounds, personality traits
 
+*Revised Nov 25 after the creative director's decisions: play style is chosen (Decision 43), archetypes evolve (Decision 44), personality is its own system (Decision 45).*
+
 Beer League Hockey - Tiny Mana Studios. Requested by the batch 16 brief (section 8) so that card art for batch 16.10 can be commissioned against approved entries.
 
 **Status words used here.** *Implemented*: in the game and tested (v0.3.0). *Designed*: written in `GAME_DESIGN.md`, no code. *Proposed*: my suggestion, not approved. Nothing below adds a gameplay mechanic; where an entry would need one, it says so.
@@ -77,57 +79,85 @@ Ids are stable and never shown to players. Display names can change without touc
 | G09 | Carey Price | G | 1987 | hybrid | **positioning, composure, rebounds**; puck handling, glove, hockey IQ | durability, recovery | So calm it looks easy. |
 | G10 | Ron Hextall | G | 1964 | puck-handler, competitor | **puck handling, strength, leadership**; reflexes, composure, endurance | discipline, rebounds, positioning | Shoots the puck, swings the stick, owns the crease. |
 
-## 2. Play Styles (ice blue cards): proposed
+## 2. Play Styles (ice blue cards): proposed registry, chosen by the player (Decision 43)
 
-**What exists today:** play style is not a choice. Each influence carries tendency tags (the Tendencies column above), and a created player inherits them. The tags in use are: playmaker, vision, dangler, power, sniper, two-way, speed, breakaway, leader, shooter, complete, competitor, net-front, grinder, enforcer, offensive-d, stay-home, puck-mover, physical, butterfly, acrobatic, hybrid, stand-up, puck-handler.
+**Ruling:** Play Style is a player-selected gameplay identity. It influences attribute allocation tendencies, development priorities and AI behaviour, works inside the existing attribute budget, is position-appropriate, and can evolve over a career.
 
-**Proposed registry: 18 styles.** Gameplay effect: **none implemented.** Two ways it could work, both needing your approval (question 5 in `CREATOR_PLAN.md`): (a) a label worked out from the player's DNA and shown on a blue card, with no new mechanic; or (b) a choice that nudges the attribute spread the way a small extra influence does. The "attribute tendencies" column is what (b) would lean toward and what (a) would be detected from. On the ice, a style would later steer AI decisions; that belongs to Track A and is not designed.
+**What exists today:** not a choice yet. Tendency tags come from influences.
 
-| Id | Display name | Eligible | Description | Attribute tendencies | Overlaps with | Status | Art |
+**Proposed gameplay implications, for approval before balancing:**
+
+- **Allocation:** a style has its own small set of leanings (the "leans toward" and "leans away" columns). They are blended into the same zero-sum spread the influences use, so a style reshapes a player and never adds rating points. Proposed strength: a quarter of the total, taken proportionally from the influences.
+- **Development:** when progression exists, experience flows a little faster into the style's attributes. Proposed: 20% faster there, the same amount slower elsewhere.
+- **AI behaviour:** on the ice, AI-controlled players act their style. Track A work, not designed yet.
+- **Evolving:** the chosen style can be changed between seasons; the change affects development from then on and never rewrites ratings already earned.
+- **Chosen against observed:** the game can also work out an *observed style* from what the player actually does (shots, passes, hits). Show both: "Chosen: Playmaker. Plays like: Sniper." Observed style is a label only.
+
+| Id | Display name | Eligible | Description | Leans toward | Leans away | Status | Art |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| PS01 | Sniper | F, D | Lives to shoot. Finds a lane and lets it go. | wrist accuracy, wrist power, off. awareness | Influence tag *sniper* | Proposed | Blue card |
-| PS02 | Playmaker | F, D | Pass first, pass second, look annoyed when nobody finishes. | passing, hockey IQ, off. awareness | Tags *playmaker*, *vision* | Proposed | Blue card |
-| PS03 | Dangler | F | Tries to go through everyone. Sometimes does. | puck control, agility | Tag *dangler* | Proposed | Blue card |
-| PS04 | Power Forward | F | Drives the net with a defender on his back. | strength, balance, checking, wrist power | Tags *power*, *net-front* | Proposed | Blue card |
-| PS05 | Two-Way Player | F, D | Back before the puck is. Coaches love him; nobody else notices. | def. awareness, hockey IQ, discipline | Tag *two-way* | Proposed | Blue card |
-| PS06 | Grinder | F | Wins the corner, loses a tooth, goes back in. | endurance, checking, composure | Tag *grinder* | Proposed | Blue card |
-| PS07 | Speedster | F, D | One move: faster. | speed, acceleration | Tags *speed*, *breakaway* | Proposed | Blue card |
-| PS08 | One-Timer Guy | F, D | Stands at the circle with his stick in the air, all game. | slap power, slap accuracy | Tag *shooter* | Proposed | Blue card |
-| PS09 | Enforcer | F, D | Here so nobody touches the good players. | strength, checking, durability | Tag *enforcer*; the fighting system | Proposed | Blue card |
-| PS10 | Faceoff Specialist | F | Takes the draw and goes to the bench. | faceoffs, strength | none | Proposed | Blue card |
-| PS11 | Offensive Defenseman | D | A fourth forward who sometimes remembers. | speed, passing, off. awareness | Tag *offensive-d* | Proposed | Blue card |
-| PS12 | Stay-at-Home Defenseman | D | Has not crossed the red line since 2009. | def. awareness, strength, discipline | Tag *stay-home* | Proposed | Blue card |
-| PS13 | Puck Mover | D | First pass on the tape, every time. | passing, hockey IQ, composure | Tag *puck-mover* | Proposed | Blue card |
-| PS14 | Bruiser | D | Clears the crease by any means. | checking, strength, balance | Tag *physical* | Proposed | Blue card |
-| PS15 | Butterfly Goalie | G | Drops early, covers the bottom, dares you to go high. | positioning, pads | Tag *butterfly* | Proposed | Blue card |
-| PS16 | Stand-Up Goalie | G | Old school. Stays on his skates and plays the angles. | positioning, glove, balance | Tag *stand-up* | Proposed | Blue card |
-| PS17 | Acrobat | G | No technique. Somehow stops it. | reflexes, recovery, agility | Tag *acrobatic* | Proposed | Blue card |
-| PS18 | Puck-Handling Goalie | G | Thinks he is a defenseman. Is occasionally right. | puck handling, composure | Tag *puck-handler* | Proposed | Blue card |
+| PS01 | Sniper | F | Lives to shoot. Finds a lane and lets it go. | wrist accuracy, wrist power, off. awareness | passing, def. awareness | Proposed | Blue card |
+| PS02 | Playmaker | F | Pass first, pass second, look annoyed when nobody finishes. | passing, hockey IQ, off. awareness | wrist power, checking | Proposed | Blue card |
+| PS03 | Dangler | F | Tries to go through everyone. Sometimes does. | puck control, agility, composure | passing, def. awareness | Proposed | Blue card |
+| PS04 | Power Forward | F | Drives the net with a defender on his back. | strength, balance, checking, wrist power | agility, discipline | Proposed | Blue card |
+| PS05 | Two-Way Forward | F | Back before the puck is. Coaches love him; nobody else notices. | def. awareness, hockey IQ, discipline, faceoffs | wrist accuracy, slap power | Proposed | Blue card |
+| PS06 | Grinder | F | Wins the corner, loses a tooth, goes back in. | endurance, checking, durability | puck control, wrist accuracy | Proposed | Blue card |
+| PS07 | Speedster | F, D | One move: faster. | speed, acceleration | strength, checking | Proposed | Blue card |
+| PS08 | One-Timer Guy | F, D | Stands at the circle with his stick in the air, all game. | slap power, slap accuracy | def. awareness, endurance | Proposed | Blue card |
+| PS09 | Enforcer | F, D | Here so nobody touches the good players. | strength, checking, durability | discipline, puck control | Proposed | Blue card |
+| PS10 | Offensive Defenseman | D | A fourth forward who sometimes remembers. | speed, passing, off. awareness | def. awareness, checking | Proposed | Blue card |
+| PS11 | Shutdown Defenseman | D | Has not crossed the red line since 2009. | def. awareness, strength, discipline | off. awareness, speed | Proposed | Blue card |
+| PS12 | Puck Mover | D | First pass on the tape, every time. | passing, hockey IQ, composure | checking, strength | Proposed | Blue card |
+| PS13 | Bruiser | D | Clears the crease by any means. | checking, strength, balance | agility, discipline | Proposed | Blue card |
+| PS14 | Butterfly Goalie | G | Drops early, covers the bottom, dares you to go high. | positioning, pad saves | glove, puck handling | Proposed | Blue card |
+| PS15 | Stand-Up Goalie | G | Old school. Stays on his skates and plays the angles. | positioning, glove, balance | pad saves, recovery | Proposed | Blue card |
+| PS16 | Acrobat | G | No technique. Somehow stops it. | reflexes, recovery, agility | positioning, rebounds | Proposed | Blue card |
+| PS17 | Puck-Handling Goalie | G | Thinks he is a defenseman. Is occasionally right. | puck handling, composure | pad saves, discipline | Proposed | Blue card |
 
-A Hybrid goalie style (tag *hybrid*) is left out on purpose: it is the absence of a style. Say if you want it as a card.
+Dropped since the first draft: Faceoff Specialist (too narrow to be an identity; faceoffs now sit under Two-Way Forward). Left out on purpose: a Hybrid goalie, which is the absence of a style.
 
-## 3. Beer League Archetypes (green cards): proposed
+## 3. Beer League Archetypes (green cards): proposed registry, evolving (Decision 44)
 
-**What exists today:** nothing in code. The design mentions archetypes in one list that mixes play styles and personalities (Sniper, Grinder, Dangler, Stay-at-home D, Ex-junior ringer, Guy Who Never Passes).
+**Ruling:** an archetype is a player's identity within beer league culture. The player picks an eligible starting archetype in the creator; it then evolves with age, experience, memberships, leadership, attendance, loyalty, decisions, discipline, achievements and events. Age-dependent archetypes respect the player's actual age. History is kept, never overwritten. Transitions may trigger dialogue, milestones, cinematics and relationship changes.
 
-**Gameplay effect: none implemented, and none proposed here beyond flavour.** The brief suggests archetypes could later influence dialogue, attendance, recruitment, personality, chemistry and career events; each of those would be its own approved design. No bonuses, rarity or packs.
+**Gameplay implications:** none on attributes, by design (Decision 45 keeps modifiers from stacking across systems). An archetype changes how people talk to you and about you, which invitations and events you see, and what the newspaper calls you. Each of those hooks is specified when its system is built.
 
-**The main issue to settle (question 6):** a created player starts at 18, and half of these describe someone older. Suggested reading: an archetype is who you are in the room right now. A created player starts with one that fits an 18-year-old and can grow into others; generated league players can have any.
+**Proposed rules, for approval:**
 
-| Id | Display name | Eligible | At 18? | Description | Overlaps with | Status | Art |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| AR01 | Beer Leaguer | All | Yes | The default setting. Here for the hockey, mostly. | none: the baseline | Proposed | Green card |
-| AR02 | Rookie | All | Yes | New skates, no idea where to stand, tapes his stick wrong. | Career stage "Rookie" (the same word for two things) | Proposed | Green card |
-| AR03 | Pond Hockey Kid | Skaters | Yes | Learned outdoors. Great hands, has never heard of offside. | Background *Pond hockey* | Proposed | Green card |
-| AR04 | Washed-Up Junior | All | Borderline | Played junior, will tell you, peaked at 17. | Background *Junior*; personality *Washed-Up Legend* | Proposed | Green card |
-| AR05 | Weekend Warrior | All | Yes | Desk job all week, Game 7 every Sunday night. | Team culture *Just Here for the Exercise* | Proposed | Green card |
-| AR06 | Journeyman | All | No | Eleven teams in nine years. Knows everyone, owes most of them. | Team history (should be earned, not chosen) | Proposed | Green card |
-| AR07 | Old Timer | All | No | Slower every year, somehow always open. | Career stages "Veteran" and "Aging veteran" | Proposed | Green card |
-| AR08 | Hockey Dad | All | No | Leaves early for the kid's practice. Brings orange slices by mistake. | Availability (kids are already a reason to miss games) | Proposed | Green card |
-| AR09 | Equipment Guy | All | Yes | Four sticks, three hundred dollars each. Cannot raise the puck. | Personality *Equipment Snob*; the equipment life meter | Proposed | Green card |
-| AR10 | Locker Room Legend | All | Borderline | Average on the ice. Undefeated in the room. | Leadership, team chemistry | Proposed | Green card |
-| AR11 | Emergency Goalie | Goalies | Yes | Not a goalie. Owns the gear. Gets the call anyway. | The emergency substitute system; position | Proposed | Green card |
-| AR12 | No-Show | All | Yes | "On my way." He is not on his way. | Availability, fee reliability; personality *Unreliable Goalie* | Proposed | Green card |
+- A person has exactly **one current archetype** and a **history**: each entry records the archetype, the date it began and the reason.
+- Transitions are checked **between seasons**, and when a named event happens (captaincy, a fifth team).
+- When more than one is earned, the **rarer one wins** (the order of the evolved table, top first). The player is told, with a card reveal, and it goes in the history.
+- An earned archetype is **not lost** when its condition lapses, except where the table says so (Captain, No-Show).
+- Generated league players get an archetype by the same rules, applied to their generated history.
+
+### 3a. Starting archetypes (selectable at 18)
+
+| Id | Display name | Eligible | Description | Status | Art |
+| --- | --- | --- | --- | --- | --- |
+| AR01 | Rookie | Anyone | New skates, no idea where to stand, tapes his stick wrong. The default. | Proposed | Green card |
+| AR02 | Pond Hockey Kid | Background: Pond hockey | Learned outdoors. Great hands, has never heard of offside. | Proposed | Green card |
+| AR03 | Washed-Up Junior | Background: Junior | Played junior, will tell you, peaked at 17. | Proposed | Green card |
+| AR04 | Rink Rat | Background: Youth hockey or High school | Has been at this rink since he was six. Knows which shower works. | Proposed (new) | Green card |
+| AR05 | Roller Kid | Background: Roller hockey convert | Dangles for days. Cannot stop. | Proposed (new) | Green card |
+| AR06 | Equipment Guy | Anyone | Four sticks, three hundred dollars each. Cannot raise the puck. | Proposed | Green card |
+| AR07 | Emergency Goalie | Position: goalie | Not really a goalie. Owns the gear. Gets the call anyway. | Proposed | Green card |
+
+### 3b. Career-evolved archetypes (earned, never chosen)
+
+Rarest first. All thresholds are proposals.
+
+| Id | Display name | Earned when | Lost when | Description | Art |
+| --- | --- | --- | --- | --- | --- |
+| AR20 | Hall of Famer | Inducted | Never | They put your picture up by the snack bar. | Green card |
+| AR21 | Locker Room Legend | Age 30+, 40 seasons played, leadership in the top tenth of the league, attendance above 85% | Never | Average on the ice. Undefeated in the room. | Green card |
+| AR22 | Captain | Named captain of a team | Captaincy ends (returns to previous) | Wears the C. Collects the fees. Regrets both. | Green card |
+| AR23 | Old Timer | Age 45+ | Never | Slower every year, somehow always open. | Green card |
+| AR24 | Iron Man | 100 consecutive league games without missing one | The streak ends (kept in history) | Has not missed a game in a decade. Nobody asked him to. | Green card |
+| AR25 | Journeyman | Member of a 5th different team | Never | Eleven teams in nine years. Knows everyone, owes most of them. | Green card |
+| AR26 | Hockey Dad | Age 28+ and the "kids" life event | Never | Leaves early for the kid's practice. Brings orange slices by mistake. | Green card |
+| AR27 | Ringer | Plays two or more divisions below his rating for a season | Stops doing it | Says he is "just getting back into it". Scores six. | Green card |
+| AR28 | No-Show | Attendance under 50% across two seasons | Attendance above 75% for two seasons | "On my way." He is not on his way. | Green card |
+| AR29 | Weekend Warrior | Age 25+, 12 seasons played | Never | Desk job all week, Game 7 every Sunday night. | Green card |
+| AR30 | Beer Leaguer | 4 seasons played | Never | Here for the hockey. Mostly. | Green card |
 
 ## 4. Player Backgrounds: implemented
 
@@ -148,23 +178,44 @@ Ten entries in `src/dynasty/backgrounds.ts`. **Gameplay effect, implemented:** s
 
 The mockup's "Ex-junior ringer" is the *Junior* background under a funnier name. Display names are yours to change.
 
-## 5. Personality Traits: designed, not built
+## 5. Personality Traits: proposed registry, a separate system (Decision 45)
 
-From `GAME_DESIGN.md`: personality types "change how a player behaves", and each player also has loyalty, ambition, fee reliability and an availability pattern. No code. **Gameplay effect:** none implemented; the design intends effects on dialogue, attendance, fees and chemistry, all still to be specified. **Art:** none required unless traits get cards.
+**Ruling:** personality is behavioural tendencies that influence dialogue, relationships and decisions. It is not embedded in archetypes and can develop through career events under approved rules. No duplicate or conflicting attribute modifiers across systems.
 
-| Id | Display name | Description | Overlaps with | Status |
+**Gameplay implications:** none on attributes. A trait changes which lines a person says, how they react to events, and what they decide when the simulation gives them a choice (show up, pay, pass, fight, stay, leave). **Proposed rules:** each person has two or three traits; opposites cannot be held together; a trait can change only through a named career event. **Art:** none required; a small icon each if traits are shown.
+
+| Id | Display name | Opposite | Shows up as | Replaces (old design) | Status |
+| --- | --- | --- | --- | --- | --- |
+| PT01 | Reliable | Flaky | Confirms early, shows up, brings both jerseys | - | Proposed |
+| PT02 | Flaky | Reliable | "Probably." Late or absent; goalies are worst | The Unreliable Goalie | Proposed |
+| PT03 | Puck Hog | Team Player | Shoots from everywhere; linemates complain | The Guy Who Never Passes | Proposed |
+| PT04 | Team Player | Puck Hog | Passes, covers a shift, celebrates other people's goals | - | Proposed |
+| PT05 | Deadbeat | Pays Up | Owes fees; has a story every time | The Guy Who Always Owes Money | Proposed |
+| PT06 | Pays Up | Deadbeat | First to settle; sometimes covers a teammate | - | Proposed |
+| PT07 | Hothead | Even-Keeled | Takes the bait; first into a scrum | - | Proposed |
+| PT08 | Even-Keeled | Hothead | Skates away; talks the captain down | - | Proposed |
+| PT09 | Gear Snob | - | Judges your tape job; always knows what stick you should have bought | The Equipment Snob | Proposed |
+| PT10 | Storyteller | - | Was somebody once. The story gets better every year | The Washed-Up Legend | Proposed |
+| PT11 | Chirper | - | Never stops talking, on the bench or in the chat | - | Proposed |
+| PT12 | Loyal | Mercenary | Stays through bad seasons; takes it personally when others leave | - | Proposed |
+| PT13 | Mercenary | Loyal | Goes where the wins or the free beer are | - | Proposed |
+| PT14 | Competitive | Just Here for Fun | Keeps score in warm-ups | - | Proposed |
+| PT15 | Just Here for Fun | Competitive | Does not know the score. Had a great time | - | Proposed |
+
+One overlap to watch: **Hothead** and the **discipline** attribute describe nearby things. Proposed split: discipline is how often you take penalties in play; Hothead is how you react off the puck and in dialogue. Neither modifies the other.
+
+## 6. How the five systems stay distinct (Decision 45)
+
+| System | Answers | Chosen or earned | Changes over a career | Touches attributes |
 | --- | --- | --- | --- | --- |
-| PT01 | The Guy Who Never Passes | Has not completed a pass since joining. Leads the team in shots and in complaints about him. | Play styles Sniper and Dangler | Designed |
-| PT02 | The Unreliable Goalie | Brilliant when he shows up. | Archetypes No-Show, Emergency Goalie | Designed |
-| PT03 | The Guy Who Always Owes Money | "I'll get you next week." | Fee reliability; archetype Journeyman | Designed |
-| PT04 | The Equipment Snob | Judges your tape job. | Archetype Equipment Guy (near duplicate) | Designed |
-| PT05 | The Washed-Up Legend | Was somebody once. Still is, to hear him tell it. | Archetype Washed-Up Junior (near duplicate) | Designed |
+| Hockey Influence | Who did you grow up watching? | Chosen once | No | Yes: distribution and potential |
+| Play Style | How do you play? | Chosen, can be changed | Yes, by choice | Yes: distribution and development focus, inside the same budget |
+| Background | Where did you come from? | Chosen once | No | Yes: starting level and experience |
+| Archetype | Who are you in the room? | Starting one chosen, the rest earned | Yes, by what you do | No |
+| Personality | How do you behave? | Assigned or lightly chosen | Rarely, through events | No |
 
-## 6. Where the five registries overlap
-
-- **Archetype against background:** Pond Hockey Kid and Washed-Up Junior restate a background as a persona. Either drop them as archetypes, or let the background suggest the archetype.
-- **Archetype against personality:** Equipment Guy and Washed-Up Junior are the same jokes as The Equipment Snob and The Washed-Up Legend. I would fold personality traits into archetypes: one green registry, one card each.
-- **Archetype against career state:** Rookie, Journeyman, Old Timer and Hockey Dad describe age or history. They read better as things you become than things you pick at 18.
-- **Archetype against other systems:** No-Show and Emergency Goalie sit on top of availability and the substitute system. If they are chosen labels, they must not contradict what the simulation actually has the player do.
-- **Play style against influence:** every proposed style already exists as an influence tendency. If style becomes a separate choice, a player could pick a playmaker hero and a Sniper style; that is fine if intended, and should be said so.
-- **Words used twice:** "Rookie" is a career stage and an archetype; "archetype" in the old design meant play style. Each needs one meaning.
+- **Only three systems move numbers**, and each moves a different thing: background sets the level, influences and play style share one zero-sum spread, influences alone set potential.
+- **Archetype and personality never grant a modifier.** Where an archetype sounds like a number (Iron Man, Enforcer), the number is the cause, not the effect.
+- **Words with one meaning each:** "Rookie" is an archetype; the career stage is "first-year player". "Archetype" no longer means play style anywhere.
+- **Background can gate a starting archetype** (Pond Hockey Kid), and that is the only link between those two.
+- **Featured Hockey Influences** are the 64 curated profiles in section 1. The wider database joins them in separate classes (`INFLUENCE_ENGINE.md`).
