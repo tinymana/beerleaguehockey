@@ -87,3 +87,7 @@ Career, player DNA, dynasty, presentation and fighting: see `EXPANSION_PLAN.md` 
 ## Equipment wear, skate sharpening, adventure-style screens (direction, Nov 25)
 
 Equipment life and skate sharpening meters with pro shop visits; point-and-click adventure presentation for interaction screens. Proposed home: the lifestyle track, with the pro shop as the first adventure-style screen because the equipment meters give it a job in the weekly loop. Proposed home only. Not authorized.
+
+## Annual membership renewal (storyline, Nov 25)
+
+Yearly membership renewal with rink staff who never stop asking. Proposed home: the lifestyle track, tied to the calendar year. Proposed home only. Not authorized.

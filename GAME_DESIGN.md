@@ -240,3 +240,10 @@ Two briefs from the creative director extend this document: *Career, Player DNA,
 - The references are for feel and structure only. All scenes, characters and writing stay original.
 - How it fits what exists: this is the presentation for the lifestyle layer and side missions. The batch 15 locker room is drawn top-down for the fit test; an adventure-style screen is a different kind of art (a staged, side-on scene with larger characters).
 - Needs design before it is built: which locations get screens, the verb set (a single smart cursor or several verbs), mouse plus gamepad control, and the art format.
+
+### Annual membership renewal (storyline direction, Nov 25; nothing built)
+
+- Once a calendar year (every four seasons) you have to renew your national hockey membership.
+- It is a running joke as much as a rule: rink staff ask you about it constantly, whether or not it is due.
+- How it fits what exists: a yearly fee in the personal finances (integer cents) on the calendar-year clock that also drives aging; nagging lines for rink staff in the dialogue system and group chat; a natural errand for a point-and-click front desk screen.
+- To settle before it is built: what the organisation is called (the real one is a real brand, so it needs a fictional name unless you approve an exception), the fee, and what happens if you let it lapse (cannot register for a season, cannot play, or just more nagging).
