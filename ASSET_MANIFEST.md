@@ -48,6 +48,8 @@ Three pieces of approved art exist today; everything else is either a code-drawn
 
 ## Arena and locker room art (batches 09 to 15)
 
+**Status of all of it: base graphics (Decision 35, Nov 25).** The creative director will raise the fidelity from batch 16 forward and re-issue batches 09 to 15. Open fit issues to fold into the re-issue: goals at gameplay size (`ART_BRIEF.md` section 10), corner boards at the rink's corner radius (`ARENA.md` A8), a south-east locker room wall corner (A29), and anything else listed as unfit or missing in the registry.
+
 **All of this is base art (Decision 35).** The creative director will re-supply the same assets at higher fidelity. Keeping file names, pixel sizes and anchors the same makes the swap a re-ingest with no code change.
 
 Modular rink tiles arrive as `BLH_Batch_*.zip` packages in `art/packages/` and are ingested into `public/assets/arena/`. The full inventory, validation notes and missing slots live in the generated registry (`public/assets/arena/manifests/registry.json`) and are browsable in the Arena Asset Lab. See `ARENA.md`.
