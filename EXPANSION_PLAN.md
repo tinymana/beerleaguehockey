@@ -134,7 +134,8 @@ In rough order of how much work they block.
 20. **Pick window.** *Answered Nov 25 (Decisions 28 and 29):* up to 2 seconds; a pick closes the window and starts the animation at once; no pick plays the default; automatic mode skips the window; the animation is skippable.
 21. **Pack size and cadence.** You have reserved these for your approval; they also set the monthly art workload (two formats per celebration).
 
-22. **Overtime (Decision 30).** *Answered Nov 25:* regular season is 3-on-3 sudden death for five simulated minutes, then a three-round shootout; playoffs are 5-on-5 sudden death in 20-minute periods with no shootout. Still open: what an overtime or shootout loss is worth in the standings (the same as a regulation loss, or a point), and the regulation period length the 20-minute playoff overtime is modelled on.
+22. **Overtime (Decision 30).** *Answered Nov 25:* regular season is 3-on-3 sudden death for five simulated minutes, then a three-round shootout; playoffs are 5-on-5 sudden death in 20-minute periods with no shootout. Standings credit and regulation length are settled by Decision 31.
+23. **Calibrating played games against simulated ones (Decision 31).** A played game keeps its real statistics, and its real length depends on the setting: 6 minutes of play on Quick, 15 on Classic, 30 on Extended, 60 on Simulation. More real minutes means more shots and goals, so the same skater scores about five times as much per game on Extended as on Quick, while the simulated league around them does not change. That skews scoring races, awards and records toward whoever plays longer periods. Proposal: tune the on-ice game so a Classic game produces the same totals the statistical simulation does, treat Classic as the reference, and decide whether leaderboards and records note the period setting or are limited to it.
 
 ## 7. What I would not do without your ruling
 
