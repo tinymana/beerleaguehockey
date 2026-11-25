@@ -1,0 +1,55 @@
+{
+  "batch": "10.02",
+  "name": "East straight boards",
+  "tileSize": [
+    8,
+    8
+  ],
+  "atlas": "east_board_atlas.png",
+  "columns": 3,
+  "rows": 4,
+  "moduleSize": [
+    24,
+    32
+  ],
+  "repeatAxis": "y",
+  "iceSide": "west",
+  "iceBoundaryLocalX": 4,
+  "tiles": [
+    [
+      "east_board_0_0.png",
+      "east_board_0_1.png",
+      "east_board_0_2.png"
+    ],
+    [
+      "east_board_1_0.png",
+      "east_board_1_1.png",
+      "east_board_1_2.png"
+    ],
+    [
+      "east_board_2_0.png",
+      "east_board_2_1.png",
+      "east_board_2_2.png"
+    ],
+    [
+      "east_board_3_0.png",
+      "east_board_3_1.png",
+      "east_board_3_2.png"
+    ]
+  ],
+  "layers": {
+    "body": "east_board_body.png",
+    "bodyOffset": [
+      8,
+      0
+    ],
+    "kickplate": "east_kickplate.png",
+    "kickplateOffset": [
+      0,
+      0
+    ]
+  },
+  "previewOnly": [
+    "preview.png"
+  ]
+}

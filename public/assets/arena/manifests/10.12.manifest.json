@@ -1,0 +1,156 @@
+{
+  "batch": "10.12",
+  "name": "Player entrance gates",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    24,
+    32
+  ],
+  "atlas": "gate_atlas.png",
+  "assets": {
+    "gate_west_closed": {
+      "file": "gate_west_closed.png",
+      "atlasRect": [
+        0,
+        0,
+        24,
+        32
+      ],
+      "iceBoundaryLocalX": 19,
+      "openingLocalY": null,
+      "tiles": [
+        [
+          "gate_west_closed_0_0.png",
+          "gate_west_closed_0_1.png",
+          "gate_west_closed_0_2.png"
+        ],
+        [
+          "gate_west_closed_1_0.png",
+          "gate_west_closed_1_1.png",
+          "gate_west_closed_1_2.png"
+        ],
+        [
+          "gate_west_closed_2_0.png",
+          "gate_west_closed_2_1.png",
+          "gate_west_closed_2_2.png"
+        ],
+        [
+          "gate_west_closed_3_0.png",
+          "gate_west_closed_3_1.png",
+          "gate_west_closed_3_2.png"
+        ]
+      ]
+    },
+    "gate_east_closed": {
+      "file": "gate_east_closed.png",
+      "atlasRect": [
+        24,
+        0,
+        24,
+        32
+      ],
+      "iceBoundaryLocalX": 5,
+      "openingLocalY": null,
+      "tiles": [
+        [
+          "gate_east_closed_0_0.png",
+          "gate_east_closed_0_1.png",
+          "gate_east_closed_0_2.png"
+        ],
+        [
+          "gate_east_closed_1_0.png",
+          "gate_east_closed_1_1.png",
+          "gate_east_closed_1_2.png"
+        ],
+        [
+          "gate_east_closed_2_0.png",
+          "gate_east_closed_2_1.png",
+          "gate_east_closed_2_2.png"
+        ],
+        [
+          "gate_east_closed_3_0.png",
+          "gate_east_closed_3_1.png",
+          "gate_east_closed_3_2.png"
+        ]
+      ]
+    },
+    "gate_west_open": {
+      "file": "gate_west_open.png",
+      "atlasRect": [
+        48,
+        0,
+        24,
+        32
+      ],
+      "iceBoundaryLocalX": 19,
+      "openingLocalY": [
+        4,
+        28
+      ],
+      "tiles": [
+        [
+          "gate_west_open_0_0.png",
+          "gate_west_open_0_1.png",
+          "gate_west_open_0_2.png"
+        ],
+        [
+          "gate_west_open_1_0.png",
+          "gate_west_open_1_1.png",
+          "gate_west_open_1_2.png"
+        ],
+        [
+          "gate_west_open_2_0.png",
+          "gate_west_open_2_1.png",
+          "gate_west_open_2_2.png"
+        ],
+        [
+          "gate_west_open_3_0.png",
+          "gate_west_open_3_1.png",
+          "gate_west_open_3_2.png"
+        ]
+      ]
+    },
+    "gate_east_open": {
+      "file": "gate_east_open.png",
+      "atlasRect": [
+        72,
+        0,
+        24,
+        32
+      ],
+      "iceBoundaryLocalX": 5,
+      "openingLocalY": [
+        4,
+        28
+      ],
+      "tiles": [
+        [
+          "gate_east_open_0_0.png",
+          "gate_east_open_0_1.png",
+          "gate_east_open_0_2.png"
+        ],
+        [
+          "gate_east_open_1_0.png",
+          "gate_east_open_1_1.png",
+          "gate_east_open_1_2.png"
+        ],
+        [
+          "gate_east_open_2_0.png",
+          "gate_east_open_2_1.png",
+          "gate_east_open_2_2.png"
+        ],
+        [
+          "gate_east_open_3_0.png",
+          "gate_east_open_3_1.png",
+          "gate_east_open_3_2.png"
+        ]
+      ]
+    }
+  },
+  "previewOnly": [
+    "preview.png"
+  ]
+}

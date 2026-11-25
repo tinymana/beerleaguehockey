@@ -25,12 +25,16 @@ export interface ArenaAsset {
   bbox: [number, number, number, number] | null;
   hash: string;
   tileIndex?: number;
+  /** Pixel position of a single tile inside its batch atlas, when it was found there. */
+  atlasX?: number;
+  atlasY?: number;
   columns?: number;
   rows?: number;
   duplicateOf?: string;
 }
 
-export type SlotStatus = 'supplied' | 'provisional' | 'missing';
+/** `unfit`: art arrived but cannot be used as drawn (for example, the wrong size for the rink). */
+export type SlotStatus = 'supplied' | 'provisional' | 'unfit' | 'missing';
 
 export interface ArenaSlot {
   id: string;
@@ -40,6 +44,7 @@ export interface ArenaSlot {
   assets: string[];
   status: SlotStatus;
   note?: string;
+  unfit?: string;
 }
 
 export interface ArenaIssue {
@@ -80,7 +85,15 @@ export function assetUrl(asset: ArenaAsset): string {
  * the same pixels are already inside their batch's atlas.
  */
 export function loadableAssets(registry: ArenaRegistry): ArenaAsset[] {
-  return registry.assets.filter((a) => a.role !== 'tile');
+  return registry.assets.filter((a) => a.role !== 'tile' && !a.duplicateOf);
+}
+
+/**
+ * Texture key for an asset. Files with identical pixels share one texture:
+ * a module that duplicates its batch atlas is drawn from the atlas.
+ */
+export function textureKey(registry: ArenaRegistry, id: string): string {
+  return assetById(registry, id)?.duplicateOf ?? id;
 }
 
 /** Centre of an asset's visible pixels, in its own pixel coordinates. */

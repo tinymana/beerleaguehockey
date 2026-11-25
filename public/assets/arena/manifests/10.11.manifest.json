@@ -1,0 +1,420 @@
+{
+  "batch": "10.11",
+  "name": "Yellow kickplates",
+  "tileSize": [
+    8,
+    8
+  ],
+  "atlas": "kickplate_atlas.png",
+  "atlasSize": [
+    128,
+    128
+  ],
+  "entries": [
+    {
+      "file": "west_kickplate.png",
+      "sourceBatch": "10.01",
+      "atlasRect": [
+        0,
+        0,
+        8,
+        32
+      ],
+      "offset": [
+        16,
+        0
+      ],
+      "tiles": [
+        [
+          "west_kickplate_0_0.png"
+        ],
+        [
+          "west_kickplate_1_0.png"
+        ],
+        [
+          "west_kickplate_2_0.png"
+        ],
+        [
+          "west_kickplate_3_0.png"
+        ]
+      ]
+    },
+    {
+      "file": "east_kickplate.png",
+      "sourceBatch": "10.02",
+      "atlasRect": [
+        8,
+        0,
+        8,
+        32
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "tiles": [
+        [
+          "east_kickplate_0_0.png"
+        ],
+        [
+          "east_kickplate_1_0.png"
+        ],
+        [
+          "east_kickplate_2_0.png"
+        ],
+        [
+          "east_kickplate_3_0.png"
+        ]
+      ]
+    },
+    {
+      "file": "north_kickplate.png",
+      "sourceBatch": "10.03",
+      "atlasRect": [
+        16,
+        0,
+        32,
+        8
+      ],
+      "offset": [
+        0,
+        16
+      ],
+      "tiles": [
+        [
+          "north_kickplate_0_0.png",
+          "north_kickplate_0_1.png",
+          "north_kickplate_0_2.png",
+          "north_kickplate_0_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "south_kickplate.png",
+      "sourceBatch": "10.04",
+      "atlasRect": [
+        16,
+        8,
+        32,
+        8
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "tiles": [
+        [
+          "south_kickplate_0_0.png",
+          "south_kickplate_0_1.png",
+          "south_kickplate_0_2.png",
+          "south_kickplate_0_3.png"
+        ]
+      ]
+    },
+    {
+      "file": "nw_corner_kickplate.png",
+      "sourceBatch": "10.05",
+      "atlasRect": [
+        0,
+        32,
+        64,
+        48
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "tiles": [
+        [
+          "nw_corner_kickplate_0_0.png",
+          "nw_corner_kickplate_0_1.png",
+          "nw_corner_kickplate_0_2.png",
+          "nw_corner_kickplate_0_3.png",
+          "nw_corner_kickplate_0_4.png",
+          "nw_corner_kickplate_0_5.png",
+          "nw_corner_kickplate_0_6.png",
+          "nw_corner_kickplate_0_7.png"
+        ],
+        [
+          "nw_corner_kickplate_1_0.png",
+          "nw_corner_kickplate_1_1.png",
+          "nw_corner_kickplate_1_2.png",
+          "nw_corner_kickplate_1_3.png",
+          "nw_corner_kickplate_1_4.png",
+          "nw_corner_kickplate_1_5.png",
+          "nw_corner_kickplate_1_6.png",
+          "nw_corner_kickplate_1_7.png"
+        ],
+        [
+          "nw_corner_kickplate_2_0.png",
+          "nw_corner_kickplate_2_1.png",
+          "nw_corner_kickplate_2_2.png",
+          "nw_corner_kickplate_2_3.png",
+          "nw_corner_kickplate_2_4.png",
+          "nw_corner_kickplate_2_5.png",
+          "nw_corner_kickplate_2_6.png",
+          "nw_corner_kickplate_2_7.png"
+        ],
+        [
+          "nw_corner_kickplate_3_0.png",
+          "nw_corner_kickplate_3_1.png",
+          "nw_corner_kickplate_3_2.png",
+          "nw_corner_kickplate_3_3.png",
+          "nw_corner_kickplate_3_4.png",
+          "nw_corner_kickplate_3_5.png",
+          "nw_corner_kickplate_3_6.png",
+          "nw_corner_kickplate_3_7.png"
+        ],
+        [
+          "nw_corner_kickplate_4_0.png",
+          "nw_corner_kickplate_4_1.png",
+          "nw_corner_kickplate_4_2.png",
+          "nw_corner_kickplate_4_3.png",
+          "nw_corner_kickplate_4_4.png",
+          "nw_corner_kickplate_4_5.png",
+          "nw_corner_kickplate_4_6.png",
+          "nw_corner_kickplate_4_7.png"
+        ],
+        [
+          "nw_corner_kickplate_5_0.png",
+          "nw_corner_kickplate_5_1.png",
+          "nw_corner_kickplate_5_2.png",
+          "nw_corner_kickplate_5_3.png",
+          "nw_corner_kickplate_5_4.png",
+          "nw_corner_kickplate_5_5.png",
+          "nw_corner_kickplate_5_6.png",
+          "nw_corner_kickplate_5_7.png"
+        ]
+      ]
+    },
+    {
+      "file": "ne_corner_kickplate.png",
+      "sourceBatch": "10.06",
+      "atlasRect": [
+        64,
+        32,
+        64,
+        48
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "tiles": [
+        [
+          "ne_corner_kickplate_0_0.png",
+          "ne_corner_kickplate_0_1.png",
+          "ne_corner_kickplate_0_2.png",
+          "ne_corner_kickplate_0_3.png",
+          "ne_corner_kickplate_0_4.png",
+          "ne_corner_kickplate_0_5.png",
+          "ne_corner_kickplate_0_6.png",
+          "ne_corner_kickplate_0_7.png"
+        ],
+        [
+          "ne_corner_kickplate_1_0.png",
+          "ne_corner_kickplate_1_1.png",
+          "ne_corner_kickplate_1_2.png",
+          "ne_corner_kickplate_1_3.png",
+          "ne_corner_kickplate_1_4.png",
+          "ne_corner_kickplate_1_5.png",
+          "ne_corner_kickplate_1_6.png",
+          "ne_corner_kickplate_1_7.png"
+        ],
+        [
+          "ne_corner_kickplate_2_0.png",
+          "ne_corner_kickplate_2_1.png",
+          "ne_corner_kickplate_2_2.png",
+          "ne_corner_kickplate_2_3.png",
+          "ne_corner_kickplate_2_4.png",
+          "ne_corner_kickplate_2_5.png",
+          "ne_corner_kickplate_2_6.png",
+          "ne_corner_kickplate_2_7.png"
+        ],
+        [
+          "ne_corner_kickplate_3_0.png",
+          "ne_corner_kickplate_3_1.png",
+          "ne_corner_kickplate_3_2.png",
+          "ne_corner_kickplate_3_3.png",
+          "ne_corner_kickplate_3_4.png",
+          "ne_corner_kickplate_3_5.png",
+          "ne_corner_kickplate_3_6.png",
+          "ne_corner_kickplate_3_7.png"
+        ],
+        [
+          "ne_corner_kickplate_4_0.png",
+          "ne_corner_kickplate_4_1.png",
+          "ne_corner_kickplate_4_2.png",
+          "ne_corner_kickplate_4_3.png",
+          "ne_corner_kickplate_4_4.png",
+          "ne_corner_kickplate_4_5.png",
+          "ne_corner_kickplate_4_6.png",
+          "ne_corner_kickplate_4_7.png"
+        ],
+        [
+          "ne_corner_kickplate_5_0.png",
+          "ne_corner_kickplate_5_1.png",
+          "ne_corner_kickplate_5_2.png",
+          "ne_corner_kickplate_5_3.png",
+          "ne_corner_kickplate_5_4.png",
+          "ne_corner_kickplate_5_5.png",
+          "ne_corner_kickplate_5_6.png",
+          "ne_corner_kickplate_5_7.png"
+        ]
+      ]
+    },
+    {
+      "file": "sw_corner_kickplate.png",
+      "sourceBatch": "10.07",
+      "atlasRect": [
+        0,
+        80,
+        64,
+        48
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "tiles": [
+        [
+          "sw_corner_kickplate_0_0.png",
+          "sw_corner_kickplate_0_1.png",
+          "sw_corner_kickplate_0_2.png",
+          "sw_corner_kickplate_0_3.png",
+          "sw_corner_kickplate_0_4.png",
+          "sw_corner_kickplate_0_5.png",
+          "sw_corner_kickplate_0_6.png",
+          "sw_corner_kickplate_0_7.png"
+        ],
+        [
+          "sw_corner_kickplate_1_0.png",
+          "sw_corner_kickplate_1_1.png",
+          "sw_corner_kickplate_1_2.png",
+          "sw_corner_kickplate_1_3.png",
+          "sw_corner_kickplate_1_4.png",
+          "sw_corner_kickplate_1_5.png",
+          "sw_corner_kickplate_1_6.png",
+          "sw_corner_kickplate_1_7.png"
+        ],
+        [
+          "sw_corner_kickplate_2_0.png",
+          "sw_corner_kickplate_2_1.png",
+          "sw_corner_kickplate_2_2.png",
+          "sw_corner_kickplate_2_3.png",
+          "sw_corner_kickplate_2_4.png",
+          "sw_corner_kickplate_2_5.png",
+          "sw_corner_kickplate_2_6.png",
+          "sw_corner_kickplate_2_7.png"
+        ],
+        [
+          "sw_corner_kickplate_3_0.png",
+          "sw_corner_kickplate_3_1.png",
+          "sw_corner_kickplate_3_2.png",
+          "sw_corner_kickplate_3_3.png",
+          "sw_corner_kickplate_3_4.png",
+          "sw_corner_kickplate_3_5.png",
+          "sw_corner_kickplate_3_6.png",
+          "sw_corner_kickplate_3_7.png"
+        ],
+        [
+          "sw_corner_kickplate_4_0.png",
+          "sw_corner_kickplate_4_1.png",
+          "sw_corner_kickplate_4_2.png",
+          "sw_corner_kickplate_4_3.png",
+          "sw_corner_kickplate_4_4.png",
+          "sw_corner_kickplate_4_5.png",
+          "sw_corner_kickplate_4_6.png",
+          "sw_corner_kickplate_4_7.png"
+        ],
+        [
+          "sw_corner_kickplate_5_0.png",
+          "sw_corner_kickplate_5_1.png",
+          "sw_corner_kickplate_5_2.png",
+          "sw_corner_kickplate_5_3.png",
+          "sw_corner_kickplate_5_4.png",
+          "sw_corner_kickplate_5_5.png",
+          "sw_corner_kickplate_5_6.png",
+          "sw_corner_kickplate_5_7.png"
+        ]
+      ]
+    },
+    {
+      "file": "se_corner_kickplate.png",
+      "sourceBatch": "10.08",
+      "atlasRect": [
+        64,
+        80,
+        64,
+        48
+      ],
+      "offset": [
+        0,
+        0
+      ],
+      "tiles": [
+        [
+          "se_corner_kickplate_0_0.png",
+          "se_corner_kickplate_0_1.png",
+          "se_corner_kickplate_0_2.png",
+          "se_corner_kickplate_0_3.png",
+          "se_corner_kickplate_0_4.png",
+          "se_corner_kickplate_0_5.png",
+          "se_corner_kickplate_0_6.png",
+          "se_corner_kickplate_0_7.png"
+        ],
+        [
+          "se_corner_kickplate_1_0.png",
+          "se_corner_kickplate_1_1.png",
+          "se_corner_kickplate_1_2.png",
+          "se_corner_kickplate_1_3.png",
+          "se_corner_kickplate_1_4.png",
+          "se_corner_kickplate_1_5.png",
+          "se_corner_kickplate_1_6.png",
+          "se_corner_kickplate_1_7.png"
+        ],
+        [
+          "se_corner_kickplate_2_0.png",
+          "se_corner_kickplate_2_1.png",
+          "se_corner_kickplate_2_2.png",
+          "se_corner_kickplate_2_3.png",
+          "se_corner_kickplate_2_4.png",
+          "se_corner_kickplate_2_5.png",
+          "se_corner_kickplate_2_6.png",
+          "se_corner_kickplate_2_7.png"
+        ],
+        [
+          "se_corner_kickplate_3_0.png",
+          "se_corner_kickplate_3_1.png",
+          "se_corner_kickplate_3_2.png",
+          "se_corner_kickplate_3_3.png",
+          "se_corner_kickplate_3_4.png",
+          "se_corner_kickplate_3_5.png",
+          "se_corner_kickplate_3_6.png",
+          "se_corner_kickplate_3_7.png"
+        ],
+        [
+          "se_corner_kickplate_4_0.png",
+          "se_corner_kickplate_4_1.png",
+          "se_corner_kickplate_4_2.png",
+          "se_corner_kickplate_4_3.png",
+          "se_corner_kickplate_4_4.png",
+          "se_corner_kickplate_4_5.png",
+          "se_corner_kickplate_4_6.png",
+          "se_corner_kickplate_4_7.png"
+        ],
+        [
+          "se_corner_kickplate_5_0.png",
+          "se_corner_kickplate_5_1.png",
+          "se_corner_kickplate_5_2.png",
+          "se_corner_kickplate_5_3.png",
+          "se_corner_kickplate_5_4.png",
+          "se_corner_kickplate_5_5.png",
+          "se_corner_kickplate_5_6.png",
+          "se_corner_kickplate_5_7.png"
+        ]
+      ]
+    }
+  ],
+  "previewOnly": "preview.png"
+}

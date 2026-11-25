@@ -46,7 +46,7 @@ Three pieces of approved art exist today; everything else is either a code-drawn
 
 Modular rink tiles arrive as `BLH_Batch_*.zip` packages in `art/packages/` and are ingested into `public/assets/arena/`. The full inventory, validation notes and missing slots live in the generated registry (`public/assets/arena/manifests/registry.json`) and are browsable in the Arena Asset Lab. See `ARENA.md`.
 
-As of v0.2.0: 201 assets from 14 packages, 0 errors; 14 slots supplied, 12 missing (east, end and corner boards, glass, nets, benches, penalty boxes, stadium, spectators, equipment).
+As of v0.2.1: 991 assets from 27 packages, 0 errors; 23 slots supplied, 1 unfit (corner boards: wrong radius for the rink), 8 missing (curved corner glass, nets, benches, penalty boxes, stadium, spectators, equipment).
 
 ## Art batch 01 (received Nov 25): review
 

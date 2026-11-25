@@ -23,11 +23,13 @@ function pngSize(file: string): { width: number; height: number } {
 
 describe('arena asset registry', () => {
   it('ingested every supplied package with no errors', () => {
-    expect(Object.keys(registry.batches).sort()).toEqual([
-      '09.01', '09.02', '09.03', '09.04', '09.05', '09.06', '09.07', '09.08', '09.09', '09.10', '09.11', '09.12', '09.13', '10.01',
-    ]);
+    const expected = [
+      ...Array.from({ length: 13 }, (_, i) => `09.${String(i + 1).padStart(2, '0')}`),
+      ...Array.from({ length: 14 }, (_, i) => `10.${String(i + 1).padStart(2, '0')}`),
+    ];
+    expect(Object.keys(registry.batches).sort()).toEqual(expected);
     expect(registry.issues.filter((i) => i.level === 'error')).toEqual([]);
-    expect(registry.assets.length).toBeGreaterThan(150);
+    expect(registry.assets.length).toBe(991);
   });
 
   it('points only at files that exist, with the recorded pixel size, on the 8-pixel grid', () => {
@@ -54,18 +56,24 @@ describe('arena asset registry', () => {
 
   it('reports what has arrived and what is still missing', () => {
     const status = Object.fromEntries(registry.slots.map((s) => [s.id, s.status]));
-    for (const id of ['ice.base', 'ice.scratches', 'ice.reflections', 'markings.creaseNorth', 'markings.creaseSouth', 'logo.center', 'boards.west']) {
+    for (const id of ['ice.base', 'ice.scratches', 'markings.creaseNorth', 'logo.center', 'boards.west', 'boards.east', 'boards.north', 'boards.south', 'glass', 'glass.posts', 'glass.damage', 'boards.gates', 'boards.ads']) {
       expect(status[id], id).toBe('supplied');
     }
-    for (const id of ['boards.east', 'boards.north', 'boards.corners', 'glass', 'goals.north', 'goals.south', 'benches', 'stadium', 'spectators', 'equipment']) {
+    expect(status['boards.corners']).toBe('unfit');
+    for (const id of ['glass.corners', 'goals.north', 'goals.south', 'benches', 'penaltyBox', 'stadium', 'spectators', 'equipment']) {
       expect(status[id], id).toBe('missing');
     }
   });
 
-  it('loads atlases and whole images, not the 160 single tiles they already contain', () => {
+  it('loads atlases and whole images once each, not the 876 single tiles or duplicate files', () => {
     const load = loadableAssets(registry);
     expect(load.some((a) => a.role === 'tile')).toBe(false);
-    expect(load.length).toBeLessThan(60);
+    expect(load.some((a) => a.duplicateOf)).toBe(false);
+    expect(load.length).toBeLessThan(100);
+    // Every duplicate points at a file that is loaded.
+    for (const a of registry.assets.filter((x) => x.duplicateOf && x.role !== 'tile')) {
+      expect(load.some((l) => l.id === a.duplicateOf), a.id).toBe(true);
+    }
   });
 
   it('every arena configuration asks only for assets that exist', () => {
@@ -152,20 +160,94 @@ describe('arena layout', () => {
     expect(Number.isInteger(circle?.scale)).toBe(true);
   });
 
-  it('butts the boards against the ice edge and spans the straight section', () => {
-    const west = layout.boards.find((b) => b.role === 'west');
-    const east = layout.boards.find((b) => b.role === 'east');
-    const module = lookup('10.01/west_board_module');
-    const ink = module?.bbox as [number, number, number, number];
-    expect((west?.x ?? 0) + ink[2] + 1).toBe(RINK.left); // last board pixel is the one before the ice
-    expect((east?.x ?? 0) + ((module?.width ?? 0) - 1 - ink[2])).toBe(RINK.right); // mirrored: first board pixel is the one after the ice
-    expect(east?.provisional).toBe(true);
-    expect(west?.height).toBe(screenY(RINK, TILT, RINK.bottom - RINK.cornerRadius) - screenY(RINK, TILT, RINK.top + RINK.cornerRadius));
+  it('butts all four straight boards against the ice edge', () => {
+    const edge = (role: string) => layout.strips.find((b) => b.role === role);
+    const ink = (id: string) => lookup(id)?.bbox as [number, number, number, number];
+    const west = edge('westBoards');
+    const east = edge('eastBoards');
+    const north = edge('northBoards');
+    const south = edge('southBoards');
+    const top = screenY(RINK, TILT, RINK.top);
+    const bottom = screenY(RINK, TILT, RINK.bottom);
+    expect((west?.x ?? 0) + ink('10.01/west_board_module')[2] + 1).toBe(RINK.left); // last board pixel is the one before the ice
+    expect((east?.x ?? 0) + ink('10.02/east_board_module')[0]).toBe(RINK.right); // first board pixel is the one after the ice
+    expect((north?.y ?? 0) + ink('10.03/north_board_module')[3] + 1).toBe(top);
+    expect((south?.y ?? 0) + ink('10.04/south_board_module')[1]).toBe(bottom);
+    expect(south?.layer).toBe('frontBoards');
+    expect(north?.layer).toBe('backBoards');
   });
 
-  it('shows no east boards in the supplied-art-only arena', () => {
-    const bare = layoutArena(RINK, TILT, arenaConfig('supplied-only'), lookup);
-    expect(bare.boards.map((b) => b.role)).toEqual(['west']);
+  it('runs straight boards exactly between the corners the physics uses', () => {
+    expect(layout.extents.x0).toBe(RINK.left + RINK.cornerRadius);
+    expect(layout.extents.x1).toBe(RINK.right - RINK.cornerRadius);
+    expect(layout.extents.y0).toBe(screenY(RINK, TILT, RINK.top + RINK.cornerRadius));
+    expect(layout.extents.y1).toBe(screenY(RINK, TILT, RINK.bottom - RINK.cornerRadius));
+    expect(layout.boardImages.some((i) => i.role.startsWith('corner:'))).toBe(false);
+  });
+
+  it('replaces whole board modules with gates, leaving no overlap and no gap', () => {
+    for (const side of ['west', 'east'] as const) {
+      const strips = layout.strips.filter((s) => s.role === `${side}Boards`).map((s) => [s.y, s.y + s.height] as const);
+      const gates = layout.boardImages.filter((i) => i.role.startsWith(`gate:${side}`)).map((g) => [g.y, g.y + 32] as const);
+      expect(gates).toHaveLength(2);
+      const spans = [...strips, ...gates].sort((a, b) => a[0] - b[0]);
+      expect(spans[0]?.[0]).toBe(layout.extents.y0);
+      expect(spans[spans.length - 1]?.[1]).toBe(layout.extents.y1);
+      for (let i = 1; i < spans.length; i++) expect(spans[i]?.[0]).toBe(spans[i - 1]?.[1]);
+      for (const [y] of gates) expect((y - layout.extents.y0) % 32).toBe(0);
+    }
+  });
+
+  it('stands glass and posts along every straight run, with a post at each seam', () => {
+    for (const side of ['north', 'south', 'west', 'east'] as const) {
+      const panes = layout.glass.filter((g) => g.side === side);
+      const posts = layout.boardImages.filter((i) => i.role === `post:${side}`);
+      expect(panes.length, side).toBeGreaterThan(0);
+      expect(posts.length, side).toBe(panes.length - 1);
+    }
+    expect(new Set(layout.glass.map((g) => g.id)).size).toBe(layout.glass.length);
+    const north = layout.glass.filter((g) => g.side === 'north');
+    const covered = north.reduce((sum, g) => sum + (g.cropW ?? 0), 0);
+    expect(covered).toBe(layout.extents.x1 - layout.extents.x0);
+  });
+
+  it('clips sponsor panels to the board face and keeps them on the straight run', () => {
+    const ads = layout.boardImages.filter((i) => i.role.startsWith('ad:'));
+    expect(ads).toHaveLength(2);
+    for (const ad of ads) {
+      expect(ad.cropH).toBe(15);
+      expect(ad.x).toBeGreaterThanOrEqual(layout.extents.x0);
+      expect(ad.x + 64).toBeLessThanOrEqual(layout.extents.x1);
+    }
+  });
+
+  it('removes glass over an open gate but keeps it over a closed one', () => {
+    const test = layoutArena(RINK, TILT, arenaConfig('corner-fit-test'), lookup);
+    const gate = test.boardImages.find((i) => i.role === 'gate:west:open');
+    expect(gate).toBeDefined();
+    expect(test.glass.some((g) => g.side === 'west' && g.y === gate?.y)).toBe(false);
+    const closed = layout.boardImages.find((i) => i.role === 'gate:west:closed');
+    expect(layout.glass.some((g) => g.side === 'west' && g.y === closed?.y)).toBe(true);
+  });
+
+  it('places supplied corners only in the fit test, mirrored left to right and top to bottom', () => {
+    const test = layoutArena(RINK, TILT, arenaConfig('corner-fit-test'), lookup);
+    const c = (name: string) => test.boardImages.find((i) => i.role === `corner:${name}`);
+    const top = screenY(RINK, TILT, RINK.top);
+    const bottom = screenY(RINK, TILT, RINK.bottom);
+    const visible = (name: string, id: string) => {
+      const img = c(name);
+      const ink = lookup(id)?.bbox as [number, number, number, number];
+      return { left: (img?.x ?? 0) + ink[0], right: (img?.x ?? 0) + ink[2], top: (img?.y ?? 0) + ink[1], bottom: (img?.y ?? 0) + ink[3] };
+    };
+    const nw = visible('nw', '10.05/nw_corner_module');
+    const ne = visible('ne', '10.06/ne_corner_module');
+    const sw = visible('sw', '10.07/sw_corner_module');
+    expect(RINK.left - nw.left).toBe(ne.right - (RINK.right - 1));
+    expect(top - nw.top).toBe(sw.bottom - (bottom - 1));
+    // The supplied corner turns in 37 px; the rink's real corner needs 112.
+    expect(test.extents.x0 - RINK.left).toBe(37);
+    expect(RINK.cornerRadius).toBe(112);
   });
 });
 

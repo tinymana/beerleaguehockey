@@ -2,6 +2,27 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.2.1 - 2026-11-25 - Boards, glass, gates and sponsor panels
+
+Thirteen more packages (batches 10.02 to 10.14) dropped into `art/packages/` and ingested with the same pipeline: 991 assets from 27 packages, 0 errors.
+
+### Added
+- Supplied straight boards on all four sides (east, north and south join west); the south boards are a foreground layer.
+- Glass panes and support posts along every straight run, each pane with its own damage state (intact, cracked, shattered, missing). Visual only.
+- Player gates that replace whole side-board modules, closed or open; glass is removed over an open gate.
+- Sponsor panels on the end boards, clipped to the board face.
+- "Corner art fit test" arena and a glass damage test in the Arena Asset Lab.
+- Ingest: new folders (`boards/corners`, `boards/gates`, `boards/ads`, `boards/kickplates`, `glass`), multi-asset manifests, and an "unfit" slot status for art that arrived but cannot be used as drawn.
+- Identical files now share one texture; the game loads 76 files for 991 assets.
+
+### Changed
+- Stand-in boards are drawn only in the corners, where no supplied art fits.
+- The east boards are the supplied module, no longer a mirrored west module.
+
+### Known issues
+- The supplied corner boards do not fit the rink's corner radius and are not used outside the fit test. See `ARENA.md` A8.
+- Curved corner glass, nets, benches, penalty boxes, stands, spectators and equipment are still missing.
+
 ## 0.2.0 - 2026-11-25 - Modular arena and Arena Asset Lab
 
 Scope: integration of supplied arena art only. No gameplay physics changed; the simulation and its tests are untouched.

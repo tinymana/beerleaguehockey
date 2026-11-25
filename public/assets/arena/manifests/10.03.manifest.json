@@ -1,0 +1,49 @@
+{
+  "batch": "10.03",
+  "name": "North straight boards",
+  "tileSize": [
+    8,
+    8
+  ],
+  "atlas": "north_board_atlas.png",
+  "columns": 4,
+  "rows": 3,
+  "moduleSize": [
+    32,
+    24
+  ],
+  "repeatAxis": "x",
+  "iceSide": "south",
+  "iceBoundaryLocalY": 19,
+  "tiles": [
+    [
+      "north_board_0_0.png",
+      "north_board_0_1.png",
+      "north_board_0_2.png",
+      "north_board_0_3.png"
+    ],
+    [
+      "north_board_1_0.png",
+      "north_board_1_1.png",
+      "north_board_1_2.png",
+      "north_board_1_3.png"
+    ],
+    [
+      "north_board_2_0.png",
+      "north_board_2_1.png",
+      "north_board_2_2.png",
+      "north_board_2_3.png"
+    ]
+  ],
+  "layers": {
+    "body": "north_board_body.png",
+    "kickplate": "north_kickplate.png",
+    "kickplateOffset": [
+      0,
+      16
+    ]
+  },
+  "previewOnly": [
+    "preview.png"
+  ]
+}

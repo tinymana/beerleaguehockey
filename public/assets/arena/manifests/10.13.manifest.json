@@ -1,0 +1,241 @@
+{
+  "batch": "10.13",
+  "tileSize": [
+    8,
+    8
+  ],
+  "atlas": "ad_atlas.png",
+  "atlasSize": [
+    128,
+    64
+  ],
+  "assets": [
+    {
+      "id": "ad_penalty_box",
+      "file": "ad_penalty_box.png",
+      "atlasRect": [
+        0,
+        0,
+        64,
+        16
+      ],
+      "tiles": [
+        "ad_penalty_box_0_0.png",
+        "ad_penalty_box_0_1.png",
+        "ad_penalty_box_0_2.png",
+        "ad_penalty_box_0_3.png",
+        "ad_penalty_box_0_4.png",
+        "ad_penalty_box_0_5.png",
+        "ad_penalty_box_0_6.png",
+        "ad_penalty_box_0_7.png",
+        "ad_penalty_box_1_0.png",
+        "ad_penalty_box_1_1.png",
+        "ad_penalty_box_1_2.png",
+        "ad_penalty_box_1_3.png",
+        "ad_penalty_box_1_4.png",
+        "ad_penalty_box_1_5.png",
+        "ad_penalty_box_1_6.png",
+        "ad_penalty_box_1_7.png"
+      ]
+    },
+    {
+      "id": "ad_top_shelf",
+      "file": "ad_top_shelf.png",
+      "atlasRect": [
+        64,
+        0,
+        64,
+        16
+      ],
+      "tiles": [
+        "ad_top_shelf_0_0.png",
+        "ad_top_shelf_0_1.png",
+        "ad_top_shelf_0_2.png",
+        "ad_top_shelf_0_3.png",
+        "ad_top_shelf_0_4.png",
+        "ad_top_shelf_0_5.png",
+        "ad_top_shelf_0_6.png",
+        "ad_top_shelf_0_7.png",
+        "ad_top_shelf_1_0.png",
+        "ad_top_shelf_1_1.png",
+        "ad_top_shelf_1_2.png",
+        "ad_top_shelf_1_3.png",
+        "ad_top_shelf_1_4.png",
+        "ad_top_shelf_1_5.png",
+        "ad_top_shelf_1_6.png",
+        "ad_top_shelf_1_7.png"
+      ]
+    },
+    {
+      "id": "ad_ice_barn",
+      "file": "ad_ice_barn.png",
+      "atlasRect": [
+        0,
+        16,
+        64,
+        16
+      ],
+      "tiles": [
+        "ad_ice_barn_0_0.png",
+        "ad_ice_barn_0_1.png",
+        "ad_ice_barn_0_2.png",
+        "ad_ice_barn_0_3.png",
+        "ad_ice_barn_0_4.png",
+        "ad_ice_barn_0_5.png",
+        "ad_ice_barn_0_6.png",
+        "ad_ice_barn_0_7.png",
+        "ad_ice_barn_1_0.png",
+        "ad_ice_barn_1_1.png",
+        "ad_ice_barn_1_2.png",
+        "ad_ice_barn_1_3.png",
+        "ad_ice_barn_1_4.png",
+        "ad_ice_barn_1_5.png",
+        "ad_ice_barn_1_6.png",
+        "ad_ice_barn_1_7.png"
+      ]
+    },
+    {
+      "id": "ad_five_hole",
+      "file": "ad_five_hole.png",
+      "atlasRect": [
+        64,
+        16,
+        64,
+        16
+      ],
+      "tiles": [
+        "ad_five_hole_0_0.png",
+        "ad_five_hole_0_1.png",
+        "ad_five_hole_0_2.png",
+        "ad_five_hole_0_3.png",
+        "ad_five_hole_0_4.png",
+        "ad_five_hole_0_5.png",
+        "ad_five_hole_0_6.png",
+        "ad_five_hole_0_7.png",
+        "ad_five_hole_1_0.png",
+        "ad_five_hole_1_1.png",
+        "ad_five_hole_1_2.png",
+        "ad_five_hole_1_3.png",
+        "ad_five_hole_1_4.png",
+        "ad_five_hole_1_5.png",
+        "ad_five_hole_1_6.png",
+        "ad_five_hole_1_7.png"
+      ]
+    },
+    {
+      "id": "ad_puck_falls",
+      "file": "ad_puck_falls.png",
+      "atlasRect": [
+        0,
+        32,
+        64,
+        16
+      ],
+      "tiles": [
+        "ad_puck_falls_0_0.png",
+        "ad_puck_falls_0_1.png",
+        "ad_puck_falls_0_2.png",
+        "ad_puck_falls_0_3.png",
+        "ad_puck_falls_0_4.png",
+        "ad_puck_falls_0_5.png",
+        "ad_puck_falls_0_6.png",
+        "ad_puck_falls_0_7.png",
+        "ad_puck_falls_1_0.png",
+        "ad_puck_falls_1_1.png",
+        "ad_puck_falls_1_2.png",
+        "ad_puck_falls_1_3.png",
+        "ad_puck_falls_1_4.png",
+        "ad_puck_falls_1_5.png",
+        "ad_puck_falls_1_6.png",
+        "ad_puck_falls_1_7.png"
+      ]
+    },
+    {
+      "id": "ad_cold_one",
+      "file": "ad_cold_one.png",
+      "atlasRect": [
+        64,
+        32,
+        64,
+        16
+      ],
+      "tiles": [
+        "ad_cold_one_0_0.png",
+        "ad_cold_one_0_1.png",
+        "ad_cold_one_0_2.png",
+        "ad_cold_one_0_3.png",
+        "ad_cold_one_0_4.png",
+        "ad_cold_one_0_5.png",
+        "ad_cold_one_0_6.png",
+        "ad_cold_one_0_7.png",
+        "ad_cold_one_1_0.png",
+        "ad_cold_one_1_1.png",
+        "ad_cold_one_1_2.png",
+        "ad_cold_one_1_3.png",
+        "ad_cold_one_1_4.png",
+        "ad_cold_one_1_5.png",
+        "ad_cold_one_1_6.png",
+        "ad_cold_one_1_7.png"
+      ]
+    },
+    {
+      "id": "ad_sofa_kings",
+      "file": "ad_sofa_kings.png",
+      "atlasRect": [
+        0,
+        48,
+        64,
+        16
+      ],
+      "tiles": [
+        "ad_sofa_kings_0_0.png",
+        "ad_sofa_kings_0_1.png",
+        "ad_sofa_kings_0_2.png",
+        "ad_sofa_kings_0_3.png",
+        "ad_sofa_kings_0_4.png",
+        "ad_sofa_kings_0_5.png",
+        "ad_sofa_kings_0_6.png",
+        "ad_sofa_kings_0_7.png",
+        "ad_sofa_kings_1_0.png",
+        "ad_sofa_kings_1_1.png",
+        "ad_sofa_kings_1_2.png",
+        "ad_sofa_kings_1_3.png",
+        "ad_sofa_kings_1_4.png",
+        "ad_sofa_kings_1_5.png",
+        "ad_sofa_kings_1_6.png",
+        "ad_sofa_kings_1_7.png"
+      ]
+    },
+    {
+      "id": "ad_blank",
+      "file": "ad_blank.png",
+      "atlasRect": [
+        64,
+        48,
+        64,
+        16
+      ],
+      "tiles": [
+        "ad_blank_0_0.png",
+        "ad_blank_0_1.png",
+        "ad_blank_0_2.png",
+        "ad_blank_0_3.png",
+        "ad_blank_0_4.png",
+        "ad_blank_0_5.png",
+        "ad_blank_0_6.png",
+        "ad_blank_0_7.png",
+        "ad_blank_1_0.png",
+        "ad_blank_1_1.png",
+        "ad_blank_1_2.png",
+        "ad_blank_1_3.png",
+        "ad_blank_1_4.png",
+        "ad_blank_1_5.png",
+        "ad_blank_1_6.png",
+        "ad_blank_1_7.png"
+      ]
+    }
+  ],
+  "renderLayer": "board_ad_overlay",
+  "placement": "horizontal board faces; side boards require separate projected art",
+  "previewOnly": "preview.png"
+}

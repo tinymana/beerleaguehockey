@@ -72,11 +72,17 @@ Open it by pressing **L** on the title screen, or by loading the game with `#are
 - Asset browser: every registered asset at native size and enlarged, on a real checkerboard, with its facts.
 - Ingestion report: counts and every warning.
 
-## Status (v0.2.0)
+## Status (v0.2.1)
 
-Registered: 201 assets from 14 packages (batches 09.01 to 09.13 and 10.01). Errors: 0. Rejected: 0. Excluded: 14 preview images.
+Registered: 991 assets from 27 packages (batches 09.01 to 09.13 and 10.01 to 10.14). Errors: 0. Rejected: 0. Excluded: 27 preview images. The game loads 76 of the files: one per atlas and one per distinct whole image (single tiles and byte-identical duplicates are served from those).
 
-Missing (12 slots): east straight boards, north end boards, south end boards, four corner boards, protective glass, north and south goal nets, player benches, penalty boxes, stadium and seating, animated spectators, arena equipment.
+In the standard arena now: ice, scratches, reflections, all markings, centre logo, straight boards on all four sides, glass panes and posts on the straight runs, four closed gates, and two sponsor panels. Glass damage states (cracked, shattered, missing) can be set per pane and are shown by the Lab's glass damage test.
+
+Not usable as drawn (1 slot): the four corner boards. See A8.
+
+Missing (8 slots): curved corner glass, north and south goal nets, player benches, penalty boxes, stadium and seating, animated spectators, arena equipment.
+
+Arena configurations: Standard rink; Supplied art only (no stand-ins); Corner art fit test; Practice sheet.
 
 ### Open issues for the creative director
 
@@ -85,7 +91,12 @@ Missing (12 slots): east straight boards, north end boards, south end boards, fo
 | A1 | **Circles are drawn at a smaller scale than the rink.** The faceoff and centre circles are 32 px wide; the game's circles are 120 px (15 ft radius at 4 px per foot). The package notes call the footprint provisional | Shows them at 4x, which lands exactly on the gameplay width but makes their lines 4 px blocks next to 1 px art | Redraw both circles at 120x88 native (15x11 tiles); or accept the chunky look |
 | A2 | **Camera tilt implied by the art.** The supplied circles are 30x22, a ratio of 0.73 | Default tilt changed from 0.78 to 0.74 so circle heights agree with gameplay distances. The slider still works | Approve 0.74 (or the value you prefer) so tall art (boards, nets, glass) can be drawn to it |
 | A3 | **Ice width is not a whole number of tiles.** The playable ice is 340 px wide: 42.5 tiles | The last half-column is clipped by the ice mask; nothing is visibly wrong | Leave as is; or approve changing the rink to 336 or 344 px wide (a physics change, so it needs your yes) |
-| A4 | **East boards are missing** | Standard arena shows the west module mirrored, marked provisional; "supplied art only" shows the gap | Supply east boards, or approve mirroring as final |
+| A4 | ~~East boards are missing~~ | Resolved by batch 10.02 | |
 | A5 | **Scale of the smaller markings.** Crease (32x16), faceoff marks, dots and lines fit the game at native size. The referee crease and centre logo are shown at 2x | Config values; easy to change | Confirm or adjust in the Lab |
 | A6 | **Reflections layout.** The package does not say how the 16 reflection tiles combine | One light is a three-tile vertical streak, repeated sparsely and staggered | Tell me the intended arrangement if different |
-| A7 | **Unused variants.** Scuff and snow ice tiles and the alternate line styles are registered but only used by the practice-sheet arena or not at all | Available in the Lab's browser | Say where you want them |
+| A7 | **Unused variants.** Scuff and snow ice tiles, alternate line styles, six of the eight sponsor panels and the separate kickplate layers are registered but not placed | Available in the Lab's browser | Say where you want them |
+| A8 | **Corner boards do not fit the rink.** The four corner modules turn in 37x21 px. The rink's corners, which the puck and players follow, turn in 112 px (28 ft): 112x83 on screen. The corners are also plain grey where the straight boards are panelled white | Standard arena keeps code-drawn stand-in corners that follow the physics. The "Corner art fit test" arena shows the supplied corners in place; turn on Collision geometry to see the gap | Redraw the corners to span 112x83 px in the straight boards' style (recommended); or approve shrinking the rink's corner radius to about 9 ft, which changes how the puck rounds the boards and makes a boxier rink |
+| A9 | **Glass anchors.** The south glass and posts hang below the board cap as their manifest anchors say, and the side glass is a thin strip outside the boards | Placed exactly by the manifest | Review in the Lab; anchors are one number each to adjust |
+| A10 | **Gate positions are my proposal.** No benches or penalty boxes exist yet to say where doors go | Two closed gates per side, either side of centre ice | Confirm or move when batch 12 arrives |
+| A11 | **Sponsor panels.** Shown: Penalty Box Sports Bar (north) and Top Shelf Hockey (south), both approved town names, clipped by one pixel row to the 15 px board face. Not shown pending your say: Five Hole Nightclub, Ice Barn Arena, Puck Falls Auto Repair, Cold One Brewing (a new name), Sofa Kings Furniture (uses an unapproved team name). The "Penalty Box" lettering has a malformed L | Two panels placed | Approve names; fix the lettering in the art |
+| A12 | **Supplied boards and stand-in corners do not match** where they meet | Visible seam at each corner | Goes away with A8 |

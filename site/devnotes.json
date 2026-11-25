@@ -2,6 +2,21 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.2.1",
+      "date": "2026-11-25",
+      "title": "Boards and glass",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Real boards on all four sides, with glass, support posts and player gates."
+        },
+        {
+          "tag": "new",
+          "text": "Sponsor boards behind each net, starting with The Penalty Box and Top Shelf Hockey."
+        }
+      ]
+    },
+    {
       "version": "0.2.0",
       "date": "2026-11-25",
       "title": "A proper sheet of ice",

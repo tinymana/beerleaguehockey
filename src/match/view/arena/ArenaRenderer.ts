@@ -11,11 +11,11 @@ import type { RinkGeometry } from '../../sim/rink';
 import { goalLineY, netBox } from '../../sim/rink';
 import { projectY, worldScreenHeight } from '../projection';
 import { TEX, buildTemporaryTextures, netLayout, netScreenAnchor } from '../textures';
-import type { ArenaConfig } from './config';
+import type { ArenaConfig, BoardSide, GlassState } from './config';
 import { IceWear, trafficPrior } from './iceWear';
 import { ARENA_LAYERS, faceoffSpots, iceOutline, layerDepth, layoutArena } from './layout';
 import type { ArenaLayerId, ArenaLayout } from './layout';
-import { TILE, assetById, assetUrl, loadableAssets } from './registry';
+import { TILE, assetById, assetUrl, loadableAssets, textureKey } from './registry';
 import type { ArenaRegistry } from './registry';
 
 type Drawable = Phaser.GameObjects.GameObject & Phaser.GameObjects.Components.Visible & Phaser.GameObjects.Components.Depth;
@@ -27,6 +27,11 @@ interface Item {
 }
 
 const TEST_LOGO_KEY = 'arena-lab-test-logo';
+/**
+ * The whole-image frame. Identical files share a texture, and that texture may be an atlas cut
+ * into 8x8 frames, so whole images always ask for the full frame by name.
+ */
+const WHOLE = '__BASE';
 
 export class ArenaRenderer {
   readonly layout: ArenaLayout;
@@ -47,6 +52,7 @@ export class ArenaRenderer {
   private readonly iceMask: Phaser.Display.Masks.GeometryMask;
   private readonly maskShape: Phaser.GameObjects.Graphics;
   private readonly maps: Phaser.Tilemaps.Tilemap[] = [];
+  private readonly glassPanels = new Map<string, { image: Phaser.GameObjects.Image; side: BoardSide; cropW: number; cropH: number }>();
 
   /** Queue every registry texture on a scene's loader. Call from preload. */
   static queueAssets(loader: Phaser.Loader.LoaderPlugin, registry: ArenaRegistry): void {
@@ -79,7 +85,11 @@ export class ArenaRenderer {
     this.maskShape.fillPoints(iceOutline(rink, tilt) as Phaser.Types.Math.Vector2Like[], true);
     this.iceMask = this.maskShape.createGeometryMask();
 
-    buildTemporaryTextures(scene, rink, tilt);
+    // Stand-in boards are drawn only where no supplied board covers the stretch.
+    buildTemporaryTextures(scene, rink, tilt, {
+      noBoards: config.corners.mode === 'art',
+      suppliedSides: { north: !!config.boards.north, south: !!config.boards.south, west: !!config.boards.west, east: !!config.boards.east },
+    });
     this.buildIce();
     this.buildMarkings();
     this.buildSurroundings();
@@ -89,8 +99,13 @@ export class ArenaRenderer {
 
   // ---- construction -------------------------------------------------------
 
+  /** Texture key for an asset id (identical files share one texture). */
+  private key(id: string): string {
+    return textureKey(this.registry, id);
+  }
+
   private has(id: string): boolean {
-    const ok = this.scene.textures.exists(id);
+    const ok = this.scene.textures.exists(this.key(id));
     if (!ok && !this.missing.includes(id)) this.missing.push(id);
     return ok;
   }
@@ -152,7 +167,7 @@ export class ArenaRenderer {
     }
     for (const p of this.layout.images) {
       if (!this.has(p.asset)) continue;
-      const image = this.scene.add.image(p.x, p.y, p.asset, p.frame).setOrigin(p.originX, p.originY).setScale(p.scale);
+      const image = this.scene.add.image(p.x, p.y, this.key(p.asset), p.frame ?? WHOLE).setOrigin(p.originX, p.originY).setScale(p.scale);
       if (p.flipX) image.setFlipX(true);
       image.setMask(this.iceMask);
       // Lines sit under circles and creases; give images a hair more depth within their layer.
@@ -168,13 +183,28 @@ export class ArenaRenderer {
     this.add(this.scene.add.image(0, 0, TEX.rink).setOrigin(0, 0), 'backBoards', true);
     this.add(this.scene.add.image(0, 0, TEX.rinkFront).setOrigin(0, 0), 'frontBoards', true);
 
-    // Supplied straight boards, repeated along the side.
-    for (const run of this.layout.boards) {
-      const asset = assetById(this.registry, run.asset);
-      if (!asset || !this.has(run.asset)) continue;
-      const strip = this.scene.add.tileSprite(run.x, run.y, asset.width, run.height, run.asset).setOrigin(0, 0);
-      if (run.flipX) strip.setFlipX(true);
-      this.add(strip, 'backBoards', false, layerDepth('backBoards') + 1);
+    // Supplied boards, repeated along each straight stretch.
+    for (const run of this.layout.strips) {
+      if (!this.has(run.asset)) continue;
+      const strip = this.scene.add.tileSprite(run.x, run.y, run.width, run.height, this.key(run.asset), WHOLE).setOrigin(0, 0);
+      this.add(strip, run.layer, false, layerDepth(run.layer) + run.z);
+    }
+    // Corners, gates, sponsor panels and posts.
+    for (const p of this.layout.boardImages) {
+      if (!this.has(p.asset)) continue;
+      const image = this.scene.add.image(p.x, p.y, this.key(p.asset), WHOLE).setOrigin(0, 0);
+      if (p.cropW !== undefined && p.cropH !== undefined) image.setCrop(0, 0, p.cropW, p.cropH);
+      this.add(image, p.layer, false, layerDepth(p.layer) + p.z);
+    }
+    // Glass, one pane at a time so each can crack on its own.
+    for (const pane of this.layout.glass) {
+      if (!this.has(pane.asset)) continue;
+      const image = this.scene.add.image(pane.x, pane.y, this.key(pane.asset), WHOLE).setOrigin(0, 0);
+      const cropW = pane.cropW ?? image.width;
+      const cropH = pane.cropH ?? image.height;
+      image.setCrop(0, 0, cropW, cropH);
+      this.add(image, pane.layer, false, layerDepth(pane.layer) + pane.z);
+      this.glassPanels.set(pane.id, { image, side: pane.side, cropW, cropH });
     }
   }
 
@@ -284,19 +314,19 @@ export class ArenaRenderer {
     if (key === null) {
       this.logo?.setVisible(false);
       if (!this.centerDot && this.has(this.config.centerDot.asset)) {
-        this.centerDot = this.scene.add.image(cx, cy, this.config.centerDot.asset).setMask(this.iceMask);
+        this.centerDot = this.scene.add.image(cx, cy, this.key(this.config.centerDot.asset), WHOLE).setMask(this.iceMask);
         this.add(this.centerDot, 'markings', false, layerDepth('markings') + 0.5);
       }
       this.centerDot?.setVisible(this.isLayerVisible('markings'));
       return;
     }
-    const texture = key === 'test' ? this.testLogoTexture() : key;
+    const texture = key === 'test' ? this.testLogoTexture() : this.key(key);
     if (!this.scene.textures.exists(texture)) return;
     if (!this.logo) {
-      this.logo = this.scene.add.image(cx, cy, texture).setMask(this.iceMask);
+      this.logo = this.scene.add.image(cx, cy, texture, WHOLE).setMask(this.iceMask);
       this.add(this.logo, 'centerLogo', false, layerDepth('centerLogo') + 0.5);
     }
-    this.logo.setTexture(texture).setOrigin(0.5, 0.5).setPosition(cx, cy);
+    this.logo.setTexture(texture, WHOLE).setOrigin(0.5, 0.5).setPosition(cx, cy);
     this.logo.setScale(scale ?? this.config.centerLogo?.scale ?? 2);
     this.logo.setVisible(this.isLayerVisible('centerLogo'));
     this.centerDot?.setVisible(false);
@@ -320,6 +350,21 @@ export class ArenaRenderer {
       }
     }
     return TEST_LOGO_KEY;
+  }
+
+  /** Ids of every glass pane, such as 'north:2' or 'west:7'. */
+  glassPanelIds(): string[] {
+    return [...this.glassPanels.keys()];
+  }
+
+  /** Swap one pane between intact, cracked, shattered and missing. Visual only: no collision changes. */
+  setGlassState(id: string, state: GlassState): void {
+    const pane = this.glassPanels.get(id);
+    const glass = this.config.glass;
+    if (!pane || !glass) return;
+    const asset = state === 'intact' ? glass.panels[pane.side] : `${glass.damageBatch}/glass_${pane.side}_${state}`;
+    if (!this.has(asset)) return;
+    pane.image.setTexture(this.key(asset), WHOLE).setCrop(0, 0, pane.cropW, pane.cropH);
   }
 
   setGridVisible(on: boolean): void {
@@ -365,5 +410,6 @@ export class ArenaRenderer {
     this.logo = null;
     this.centerDot = null;
     this.scratchLayer = null;
+    this.glassPanels.clear();
   }
 }

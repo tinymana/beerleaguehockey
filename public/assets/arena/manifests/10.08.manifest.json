@@ -1,0 +1,97 @@
+{
+  "batch": "10.08",
+  "name": "Southeast curved corner",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    64,
+    48
+  ],
+  "atlas": "se_corner_atlas.png",
+  "columns": 8,
+  "rows": 6,
+  "tiles": [
+    [
+      "se_corner_0_0.png",
+      "se_corner_0_1.png",
+      "se_corner_0_2.png",
+      "se_corner_0_3.png",
+      "se_corner_0_4.png",
+      "se_corner_0_5.png",
+      "se_corner_0_6.png",
+      "se_corner_0_7.png"
+    ],
+    [
+      "se_corner_1_0.png",
+      "se_corner_1_1.png",
+      "se_corner_1_2.png",
+      "se_corner_1_3.png",
+      "se_corner_1_4.png",
+      "se_corner_1_5.png",
+      "se_corner_1_6.png",
+      "se_corner_1_7.png"
+    ],
+    [
+      "se_corner_2_0.png",
+      "se_corner_2_1.png",
+      "se_corner_2_2.png",
+      "se_corner_2_3.png",
+      "se_corner_2_4.png",
+      "se_corner_2_5.png",
+      "se_corner_2_6.png",
+      "se_corner_2_7.png"
+    ],
+    [
+      "se_corner_3_0.png",
+      "se_corner_3_1.png",
+      "se_corner_3_2.png",
+      "se_corner_3_3.png",
+      "se_corner_3_4.png",
+      "se_corner_3_5.png",
+      "se_corner_3_6.png",
+      "se_corner_3_7.png"
+    ],
+    [
+      "se_corner_4_0.png",
+      "se_corner_4_1.png",
+      "se_corner_4_2.png",
+      "se_corner_4_3.png",
+      "se_corner_4_4.png",
+      "se_corner_4_5.png",
+      "se_corner_4_6.png",
+      "se_corner_4_7.png"
+    ],
+    [
+      "se_corner_5_0.png",
+      "se_corner_5_1.png",
+      "se_corner_5_2.png",
+      "se_corner_5_3.png",
+      "se_corner_5_4.png",
+      "se_corner_5_5.png",
+      "se_corner_5_6.png",
+      "se_corner_5_7.png"
+    ]
+  ],
+  "iceSide": "northwest",
+  "layers": {
+    "body": "se_corner_body.png",
+    "kickplate": "se_corner_kickplate.png"
+  },
+  "anchors": {
+    "southTangent": [
+      8,
+      29
+    ],
+    "eastTangent": [
+      45,
+      8
+    ]
+  },
+  "previewOnly": [
+    "preview.png"
+  ],
+  "renderLayer": "foreground",
+  "sourceTransform": "horizontal flip of 10.07"
+}

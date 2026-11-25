@@ -38,6 +38,16 @@ CATEGORY = {
     '09.03': 'ice/reflections',
     '09.13': 'ice/logos',
     '09': 'ice/markings',
+    '10.05': 'boards/corners',
+    '10.06': 'boards/corners',
+    '10.07': 'boards/corners',
+    '10.08': 'boards/corners',
+    '10.09': 'glass',
+    '10.10': 'glass',
+    '10.11': 'boards/kickplates',
+    '10.12': 'boards/gates',
+    '10.13': 'boards/ads',
+    '10.14': 'glass',
     '10': 'boards/straight',
     '11': 'goals',
     '12': 'benches',
@@ -123,6 +133,23 @@ def main():
                 elif isinstance(t, list):  # rows of file names
                     for j, f in enumerate(t):
                         tile_entries[os.path.basename(f)] = i * len(t) + j
+            # Multi-asset manifests list tiles per asset, with no atlas-wide index.
+            loose_tiles = set()
+
+            def collect(node, inside_tiles=False):
+                if isinstance(node, str):
+                    if inside_tiles and node.endswith('.png'):
+                        loose_tiles.add(os.path.basename(node))
+                elif isinstance(node, list):
+                    for item in node:
+                        collect(item, inside_tiles)
+                elif isinstance(node, dict):
+                    for key, value in node.items():
+                        collect(value, inside_tiles or key == 'tiles')
+
+            for key in ('assets', 'entries'):
+                collect(manifest.get(key))
+            loose_tiles -= set(tile_entries)
             atlas_name = os.path.basename(manifest['atlas']) if manifest.get('atlas') else None
             composites = set()
             for key in ('composite', 'dot'):
@@ -131,7 +158,7 @@ def main():
             for value in (manifest.get('layers') or {}).values():
                 if isinstance(value, str) and value.endswith('.png'):
                     composites.add(os.path.basename(value))
-            declared = set(tile_entries) | composites | ({atlas_name} if atlas_name else set())
+            declared = set(tile_entries) | loose_tiles | composites | ({atlas_name} if atlas_name else set())
             preview_only = {os.path.basename(p) for p in manifest.get('previewOnly', [])}
 
             batch_assets = []
@@ -155,7 +182,8 @@ def main():
                 arr = np.array(image.convert('RGBA'))
                 height, width = arr.shape[:2]
                 asset_id = f'{batch}/{base[:-4]}'
-                role = 'atlas' if base == atlas_name else 'tile' if base in tile_entries else 'composite' if base in composites else 'module'
+                role = ('atlas' if base == atlas_name else 'tile' if base in tile_entries or base in loose_tiles
+                        else 'composite' if base in composites else 'module')
                 ok = True
                 if width % TILE or height % TILE:
                     issue('error', f'{base}: {width}x{height} is not a multiple of {TILE}; rejected', batch, asset_id)
@@ -194,7 +222,7 @@ def main():
                     'bbox': bbox,
                     'hash': digest,
                 }
-                if role == 'tile':
+                if role == 'tile' and base in tile_entries:
                     entry['tileIndex'] = int(tile_entries[base])
                 if role == 'atlas':
                     entry['columns'] = width // TILE
@@ -215,11 +243,21 @@ def main():
             if atlas:
                 entry, arr = atlas
                 cols = entry['columns']
-                for tile, tile_arr in ((e, a) for e, a in batch_assets if e['role'] == 'tile'):
+                for tile, tile_arr in ((e, a) for e, a in batch_assets if e['role'] == 'tile' and 'tileIndex' in e):
                     idx = tile['tileIndex']
                     cx, cy = (idx % cols) * TILE, (idx // cols) * TILE
                     if cy + TILE > arr.shape[0] or not (arr[cy:cy + TILE, cx:cx + TILE] == tile_arr).all():
                         issue('warn', f'{tile["name"]}: differs from atlas cell {idx}', batch, tile['id'])
+                    else:
+                        tile['atlasX'], tile['atlasY'] = cx, cy
+                # Tiles listed without an index: find where each sits in the atlas, so tools can show it from there.
+                for tile, tile_arr in ((e, a) for e, a in batch_assets if e['role'] == 'tile' and 'tileIndex' not in e):
+                    for cy in range(0, arr.shape[0] - TILE + 1, TILE):
+                        hit = next((cx for cx in range(0, arr.shape[1] - TILE + 1, TILE)
+                                    if (arr[cy:cy + TILE, cx:cx + TILE] == tile_arr).all()), None)
+                        if hit is not None:
+                            tile['atlasX'], tile['atlasY'] = hit, cy
+                            break
             elif tile_entries:
                 issue('warn', 'Tiles supplied without an atlas', batch)
 
@@ -258,6 +296,9 @@ def main():
         slot['status'] = 'supplied' if wanted and len(have) == len(wanted) else 'missing'
         if slot['status'] == 'supplied' and slot.get('provisional'):
             slot['status'] = 'provisional'
+        if slot['status'] == 'supplied' and slot.get('unfit'):
+            slot['status'] = 'unfit'
+            issue('warn', f'Art does not fit: {slot["label"]}. {slot["unfit"]}')
         if slot['status'] == 'missing':
             issue('warn', f'Missing art: {slot["label"]} (expected in batch {slot.get("expectedBatch", "?")})')
 

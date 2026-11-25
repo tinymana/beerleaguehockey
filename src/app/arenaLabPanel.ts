@@ -20,6 +20,7 @@ export interface LabActions {
   setGuides(on: boolean): void;
   setLogo(choice: 'supplied' | 'none' | 'test'): void;
   setWear(level: number): void;
+  setGlassDamage(on: boolean): void;
   useInGame(id: string): void;
   exit(): void;
 }
@@ -131,7 +132,7 @@ export class ArenaLabPanel {
     this.root.append(view);
 
     // Tests
-    const tests = section('Centre logo and ice wear');
+    const tests = section('Centre logo, ice wear and glass');
     const logo = el('div', 'lab-buttons');
     logo.append(
       button('SUPPLIED LOGO', () => actions.setLogo('supplied')),
@@ -152,7 +153,12 @@ export class ArenaLabPanel {
     wear.addEventListener('change', () => wear.blur());
     wear.addEventListener('keydown', (e) => e.preventDefault());
     wearRow.append(el('span', undefined, 'Ice wear'), wearValue, wear);
-    tests.append(logo, wearRow, el('p', 'lab-note', '0% is a fresh sheet; 100% is the end of a hard period. Wear is cosmetic only.'));
+    tests.append(
+      logo,
+      wearRow,
+      el('p', 'lab-note', '0% is a fresh sheet; 100% is the end of a hard period. Wear is cosmetic only.'),
+      check('Glass damage test (cracked, shattered, missing panes)', false, (on) => actions.setGlassDamage(on)),
+    );
     this.root.append(tests);
 
     // Missing art
@@ -162,6 +168,7 @@ export class ArenaLabPanel {
       const item = el('li', `slot-${slot.status}`);
       item.append(el('b', undefined, slot.status.toUpperCase()), el('span', undefined, ` ${slot.label}`));
       if (slot.status === 'missing') item.append(el('em', undefined, ` batch ${slot.expectedBatch}`));
+      if (slot.status === 'unfit' && slot.unfit) item.append(el('em', undefined, ` ${slot.unfit}`));
       list.append(item);
     }
     slots.append(list);
@@ -211,7 +218,8 @@ export class ArenaLabPanel {
 
   private renderPreview(target: HTMLElement, asset: ArenaAsset): void {
     target.replaceChildren();
-    const url = assetUrl(asset);
+    // A byte-identical duplicate is shown from the file it duplicates: same pixels, one file to load.
+    const url = assetUrl(this.registry.assets.find((x) => x.id === asset.duplicateOf) ?? asset);
     const big = Math.max(1, Math.min(8, Math.floor(256 / Math.max(asset.width, asset.height))));
     const frames = el('div', 'lab-frames');
     // Single tiles are shown straight from their batch atlas: the same pixels, one file to load.
@@ -221,12 +229,12 @@ export class ArenaLabPanel {
       [`${big}x`, big],
     ] as const) {
       const cell = el('figure');
-      if (atlas && asset.tileIndex !== undefined && atlas.columns) {
+      if (atlas && asset.atlasX !== undefined && asset.atlasY !== undefined) {
         const canvas = el('canvas');
         canvas.width = asset.width * scale;
         canvas.height = asset.height * scale;
-        const sx = (asset.tileIndex % atlas.columns) * asset.width;
-        const sy = Math.floor(asset.tileIndex / atlas.columns) * asset.height;
+        const sx = asset.atlasX;
+        const sy = asset.atlasY;
         const source = new Image();
         source.addEventListener('load', () => {
           const ctx = canvas.getContext('2d');

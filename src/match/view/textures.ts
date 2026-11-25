@@ -114,7 +114,14 @@ const BOARD_THICKNESS = 3;
  * the boards behind the players, and the near boards in front of them.
  * The ice itself is left transparent: supplied arena tiles draw it.
  */
-function drawStandInBoards(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
+export interface StandInOptions {
+  /** Sides whose straight boards are covered by supplied art: no stand-in is drawn there. */
+  suppliedSides?: Partial<Record<'north' | 'south' | 'west' | 'east', boolean>>;
+  /** Draw no stand-in boards at all (corners included). */
+  noBoards?: boolean;
+}
+
+function drawStandInBoards(scene: Phaser.Scene, rink: RinkGeometry, tilt: number, options: StandInOptions): void {
   const w = rink.worldWidth;
   const h = worldScreenHeight(rink.worldHeight, tilt);
   const surroundTex = makeCanvas(scene, TEX.surround, w, h);
@@ -149,6 +156,12 @@ function drawStandInBoards(scene: Phaser.Scene, rink: RinkGeometry, tilt: number
       const d = boardDistance(px, y, rink);
       if (d <= 0) continue;
       if (d <= BOARD_THICKNESS) {
+        if (options.noBoards) continue;
+        // Straight stretches with supplied boards need no stand-in; corners still do.
+        const inStraightX = px >= rink.left + rink.cornerRadius && px <= rink.right - rink.cornerRadius;
+        const inStraightY = y >= rink.top + rink.cornerRadius && y <= rink.bottom - rink.cornerRadius;
+        const side = inStraightX ? (y < rink.centerY ? 'north' : 'south') : inStraightY ? (px < rink.centerX ? 'west' : 'east') : null;
+        if (side && options.suppliedSides?.[side]) continue;
         back.set(x, sy, C.boardBase);
         const ny = boardDistance(px, y + 0.5, rink) - boardDistance(px, y - 0.5, rink);
         footprint.push({ x, sy, d, ny });
@@ -297,8 +310,8 @@ export function texturesTilt(): number | null {
 }
 
 /** Build every temporary gameplay texture for a camera tilt. Safe to call again. */
-export function buildTemporaryTextures(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
-  drawStandInBoards(scene, rink, tilt);
+export function buildTemporaryTextures(scene: Phaser.Scene, rink: RinkGeometry, tilt: number, options: StandInOptions = {}): void {
+  drawStandInBoards(scene, rink, tilt, options);
   drawNets(scene, rink, tilt);
   drawPuckAndShadow(scene, tilt);
   builtTilt = tilt;

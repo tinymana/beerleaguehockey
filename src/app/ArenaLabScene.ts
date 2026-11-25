@@ -35,6 +35,7 @@ export class ArenaLabScene extends Phaser.Scene {
   private gridOn = false;
   private collisionOn = false;
   private wearLevel = 0;
+  private glassDamage = false;
   private keys!: Record<'up' | 'down' | 'pageUp' | 'pageDown' | 'w' | 's', Phaser.Input.Keyboard.Key>;
 
   constructor() {
@@ -51,6 +52,7 @@ export class ArenaLabScene extends Phaser.Scene {
     this.gridOn = false;
     this.collisionOn = false;
     this.wearLevel = 0;
+    this.glassDamage = false;
 
     const banner = this.add.graphics().setScrollFactor(0).setDepth(9000);
     banner.fillStyle(UI.navy, 0.85);
@@ -88,6 +90,10 @@ export class ArenaLabScene extends Phaser.Scene {
           this.wearLevel = level;
           this.arena.previewWear(level);
         },
+        setGlassDamage: (on) => {
+          this.glassDamage = on;
+          this.applyGlassDamage();
+        },
         useInGame: (id) => {
           arenaChoice.id = id;
         },
@@ -123,6 +129,7 @@ export class ArenaLabScene extends Phaser.Scene {
     this.arena.setGridVisible(this.gridOn);
     this.arena.setCollisionVisible(this.collisionOn);
     if (this.wearLevel > 0) this.arena.previewWear(this.wearLevel);
+    this.applyGlassDamage();
 
     this.panel.setConfigNote(this.configId);
     this.panel.setLayers(
@@ -134,6 +141,15 @@ export class ArenaLabScene extends Phaser.Scene {
     const mirrored = this.arenaRegistry.issues.some((i) => i.message === 'North and south creases are exact vertical mirrors');
     this.panel.setAlignment(goalAlignment(RINK, tuning.cameraTilt, this.arena.layout, lookup), mirrored);
     this.drawGuides();
+  }
+
+  /** A fixed pattern of damaged panes, so every damage texture can be checked in place. */
+  private applyGlassDamage(): void {
+    const states = ['cracked', 'shattered', 'missing'] as const;
+    this.arena.glassPanelIds().forEach((id, i) => {
+      const damaged = this.glassDamage && i % 3 === 1;
+      this.arena.setGlassState(id, damaged ? (states[Math.floor(i / 3) % states.length] as (typeof states)[number]) : 'intact');
+    });
   }
 
   private rebuild(id: string): void {

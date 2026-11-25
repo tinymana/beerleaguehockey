@@ -1,0 +1,53 @@
+{
+  "batch": "10.04",
+  "name": "South straight boards",
+  "tileSize": [
+    8,
+    8
+  ],
+  "atlas": "south_board_atlas.png",
+  "columns": 4,
+  "rows": 3,
+  "moduleSize": [
+    32,
+    24
+  ],
+  "repeatAxis": "x",
+  "iceSide": "north",
+  "iceBoundaryLocalY": 5,
+  "tiles": [
+    [
+      "south_board_0_0.png",
+      "south_board_0_1.png",
+      "south_board_0_2.png",
+      "south_board_0_3.png"
+    ],
+    [
+      "south_board_1_0.png",
+      "south_board_1_1.png",
+      "south_board_1_2.png",
+      "south_board_1_3.png"
+    ],
+    [
+      "south_board_2_0.png",
+      "south_board_2_1.png",
+      "south_board_2_2.png",
+      "south_board_2_3.png"
+    ]
+  ],
+  "layers": {
+    "body": "south_board_body.png",
+    "bodyOffset": [
+      0,
+      8
+    ],
+    "kickplate": "south_kickplate.png",
+    "kickplateOffset": [
+      0,
+      0
+    ]
+  },
+  "previewOnly": [
+    "preview.png"
+  ]
+}

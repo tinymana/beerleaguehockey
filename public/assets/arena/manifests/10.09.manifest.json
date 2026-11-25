@@ -1,0 +1,152 @@
+{
+  "batch": "10.09",
+  "name": "Protective glass panels",
+  "tileSize": [
+    8,
+    8
+  ],
+  "atlas": "glass_atlas.png",
+  "atlasSize": [
+    80,
+    32
+  ],
+  "assets": [
+    {
+      "name": "north",
+      "module": "glass_north.png",
+      "moduleSize": [
+        32,
+        16
+      ],
+      "repeatAxis": "x",
+      "boardContactLocal": [
+        0,
+        14
+      ],
+      "tiles": [
+        [
+          "glass_north_0_0.png",
+          "glass_north_0_1.png",
+          "glass_north_0_2.png",
+          "glass_north_0_3.png"
+        ],
+        [
+          "glass_north_1_0.png",
+          "glass_north_1_1.png",
+          "glass_north_1_2.png",
+          "glass_north_1_3.png"
+        ]
+      ],
+      "layer": "background",
+      "atlasRect": [
+        0,
+        0,
+        32,
+        16
+      ]
+    },
+    {
+      "name": "south",
+      "module": "glass_south.png",
+      "moduleSize": [
+        32,
+        16
+      ],
+      "repeatAxis": "x",
+      "boardContactLocal": [
+        0,
+        2
+      ],
+      "tiles": [
+        [
+          "glass_south_0_0.png",
+          "glass_south_0_1.png",
+          "glass_south_0_2.png",
+          "glass_south_0_3.png"
+        ],
+        [
+          "glass_south_1_0.png",
+          "glass_south_1_1.png",
+          "glass_south_1_2.png",
+          "glass_south_1_3.png"
+        ]
+      ],
+      "layer": "foreground",
+      "atlasRect": [
+        32,
+        0,
+        32,
+        16
+      ]
+    },
+    {
+      "name": "west",
+      "module": "glass_west.png",
+      "moduleSize": [
+        8,
+        32
+      ],
+      "repeatAxis": "y",
+      "boardContactLocal": [
+        7,
+        0
+      ],
+      "tiles": [
+        [
+          "glass_west_0_0.png"
+        ],
+        [
+          "glass_west_1_0.png"
+        ],
+        [
+          "glass_west_2_0.png"
+        ],
+        [
+          "glass_west_3_0.png"
+        ]
+      ],
+      "layer": "background",
+      "atlasRect": [
+        64,
+        0,
+        8,
+        32
+      ]
+    },
+    {
+      "name": "east",
+      "module": "glass_east.png",
+      "moduleSize": [
+        8,
+        32
+      ],
+      "repeatAxis": "y",
+      "boardContactLocal": [
+        1,
+        0
+      ],
+      "tiles": [
+        [
+          "glass_east_0_0.png"
+        ],
+        [
+          "glass_east_1_0.png"
+        ],
+        [
+          "glass_east_2_0.png"
+        ],
+        [
+          "glass_east_3_0.png"
+        ]
+      ],
+      "layer": "background",
+      "atlasRect": [
+        72,
+        0,
+        8,
+        32
+      ]
+    }
+  ],
+  "previewOnly": "preview.png"
+}

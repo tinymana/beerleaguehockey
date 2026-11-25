@@ -6,7 +6,7 @@
 import { goalLineY } from '../../sim/rink';
 import type { RinkGeometry } from '../../sim/rink';
 import { projectY } from '../projection';
-import type { ArenaConfig } from './config';
+import type { ArenaConfig, BoardSide } from './config';
 import { TILE, visibleCentre } from './registry';
 import type { ArenaAsset } from './registry';
 
@@ -139,21 +139,56 @@ export interface ImagePlacement {
   flipX?: boolean;
 }
 
-export interface BoardRun {
-  role: 'west' | 'east';
+/** A module repeated along a straight stretch of boards. */
+export interface StripRun {
+  role: string;
+  layer: ArenaLayerId;
+  /** Order within the layer: boards, then ads, then glass, then posts. */
+  z: number;
   asset: string;
   x: number;
   y: number;
+  width: number;
   height: number;
-  flipX: boolean;
-  provisional: boolean;
+}
+
+/** One image beside the ice: a corner, gate, ad or post. */
+export interface BoardImage {
+  role: string;
+  layer: ArenaLayerId;
+  z: number;
+  asset: string;
+  x: number;
+  y: number;
+  /** Show only the top-left part of the image, in pixels. */
+  cropW?: number;
+  cropH?: number;
+}
+
+/** One pane of glass. Each has an id so its state (intact, cracked...) can be swapped. */
+export interface GlassPanel extends BoardImage {
+  id: string;
+  side: BoardSide;
+}
+
+/** Where straight boards end and corners begin, on screen. */
+export interface StraightExtents {
+  /** North and south boards run between these x positions. */
+  x0: number;
+  x1: number;
+  /** West and east boards run between these y positions. */
+  y0: number;
+  y1: number;
 }
 
 export interface ArenaLayout {
   grid: TileGrid;
   lines: LineRow[];
   images: ImagePlacement[];
-  boards: BoardRun[];
+  strips: StripRun[];
+  boardImages: BoardImage[];
+  glass: GlassPanel[];
+  extents: StraightExtents;
 }
 
 type Lookup = (id: string) => ArenaAsset | undefined;
@@ -233,27 +268,153 @@ export function layoutArena(rink: RinkGeometry, tilt: number, config: ArenaConfi
     centred('centerDot', 'markings', config.centerDot.asset, config.centerDot.scale, rink.centerX, rink.centerY);
   }
 
-  // Straight boards run between the corner curves.
-  const top = sy(rink.top + rink.cornerRadius);
-  const bottom = sy(rink.bottom - rink.cornerRadius);
-  const boards: BoardRun[] = [];
-  const west = need(lookup, config.boards.west.asset);
-  boards.push({ role: 'west', asset: west.id, x: rink.left - config.boards.west.iceBoundaryLocalX, y: top, height: bottom - top, flipX: false, provisional: false });
-  if (config.boards.east) {
-    const east = need(lookup, config.boards.east.asset);
-    boards.push({
-      role: 'east',
-      asset: east.id,
-      x: rink.right - (east.width - config.boards.east.iceBoundaryLocalX),
-      y: top,
-      height: bottom - top,
-      flipX: true,
-      provisional: true,
-    });
+  return { grid, lines, images, ...layoutBoards(rink, tilt, config, lookup) };
+}
+
+/** Reach of the supplied corner modules, from their manifests: 37 px along the ends, 21 px along the sides. */
+export const ART_CORNER = Object.freeze({ reachX: 37, reachY: 21, west: 19, east: 45, north: 19, south: 29 });
+const MODULE = 32;
+const Z = { board: 1, ad: 2, glass: 3, post: 4 };
+
+/** Boards, corners, gates, ads, glass and posts around the ice. */
+export function layoutBoards(
+  rink: RinkGeometry,
+  tilt: number,
+  config: ArenaConfig,
+  lookup: Lookup,
+): Pick<ArenaLayout, 'strips' | 'boardImages' | 'glass' | 'extents'> {
+  const sy = (y: number): number => screenY(rink, tilt, y);
+  const topS = sy(rink.top);
+  const bottomS = sy(rink.bottom);
+  const artCorners = config.corners.mode === 'art';
+  const extents: StraightExtents = artCorners
+    ? { x0: rink.left + ART_CORNER.reachX, x1: rink.right - ART_CORNER.reachX, y0: topS + ART_CORNER.reachY, y1: bottomS - ART_CORNER.reachY }
+    : { x0: rink.left + rink.cornerRadius, x1: rink.right - rink.cornerRadius, y0: sy(rink.top + rink.cornerRadius), y1: sy(rink.bottom - rink.cornerRadius) };
+
+  const strips: StripRun[] = [];
+  const boardImages: BoardImage[] = [];
+  const glass: GlassPanel[] = [];
+  const layerOf = (side: BoardSide): ArenaLayerId => (side === 'south' ? 'frontBoards' : 'backBoards');
+
+  // Top-left corner of each side's board module, from the boundary pixel its manifest names.
+  const origin: Partial<Record<BoardSide, { x: number; y: number; asset: ArenaAsset }>> = {};
+  for (const side of ['north', 'south', 'west', 'east'] as const) {
+    const b = config.boards[side];
+    if (!b) continue;
+    const asset = need(lookup, b.asset);
+    if (side === 'west') origin.west = { x: rink.left - b.boundary, y: extents.y0, asset };
+    if (side === 'east') origin.east = { x: rink.right - 1 - b.boundary, y: extents.y0, asset };
+    if (side === 'north') origin.north = { x: extents.x0, y: topS - b.boundary, asset };
+    if (side === 'south') origin.south = { x: extents.x0, y: bottomS - b.boundary, asset };
   }
 
-  return { grid, lines, images, boards };
+  // End boards: one strip each.
+  for (const side of ['north', 'south'] as const) {
+    const o = origin[side];
+    if (!o) continue;
+    strips.push({ role: `${side}Boards`, layer: layerOf(side), z: Z.board, asset: o.asset.id, x: o.x, y: o.y, width: extents.x1 - extents.x0, height: o.asset.height });
+  }
+
+  // Side boards: strips broken wherever a gate replaces a module.
+  const gateRows: Record<'west' | 'east', Map<number, 'closed' | 'open'>> = { west: new Map(), east: new Map() };
+  const sideLength = extents.y1 - extents.y0;
+  for (const gate of config.gates) {
+    const k = Math.floor((sy(gate.at) - extents.y0) / MODULE);
+    if (k >= 0 && (k + 1) * MODULE <= sideLength) gateRows[gate.side].set(k, gate.state);
+  }
+  for (const side of ['west', 'east'] as const) {
+    const o = origin[side];
+    if (!o) continue;
+    let start = 0;
+    const flush = (end: number): void => {
+      if (end > start) {
+        strips.push({ role: `${side}Boards`, layer: 'backBoards', z: Z.board, asset: o.asset.id, x: o.x, y: extents.y0 + start, width: o.asset.width, height: end - start });
+      }
+    };
+    for (const k of [...gateRows[side].keys()].sort((a, b) => a - b)) {
+      flush(k * MODULE);
+      const state = gateRows[side].get(k) as 'closed' | 'open';
+      boardImages.push({ role: `gate:${side}:${state}`, layer: 'backBoards', z: Z.board, asset: `10.12/gate_${side}_${state}`, x: o.x, y: extents.y0 + k * MODULE });
+      start = (k + 1) * MODULE;
+    }
+    flush(sideLength);
+  }
+
+  // Supplied corners, only in the fit test: they do not follow the rink's real corner radius.
+  if (artCorners) {
+    const c = config.corners;
+    boardImages.push({ role: 'corner:nw', layer: 'backBoards', z: Z.board, asset: c.nw, x: rink.left - ART_CORNER.west, y: topS - ART_CORNER.north });
+    boardImages.push({ role: 'corner:ne', layer: 'backBoards', z: Z.board, asset: c.ne, x: rink.right - ART_CORNER.east, y: topS - ART_CORNER.north });
+    boardImages.push({ role: 'corner:sw', layer: 'frontBoards', z: Z.board, asset: c.sw, x: rink.left - ART_CORNER.west, y: bottomS - ART_CORNER.south });
+    boardImages.push({ role: 'corner:se', layer: 'frontBoards', z: Z.board, asset: c.se, x: rink.right - ART_CORNER.east, y: bottomS - ART_CORNER.south });
+  }
+
+  // Sponsor panels sit on the flat face of the end boards, clipped to it.
+  for (const ad of config.boardAds) {
+    const o = origin[ad.side];
+    if (!o) continue;
+    const art = need(lookup, ad.asset);
+    const faceTop = ad.side === 'north' ? o.y + (o.asset.bbox?.[1] ?? 0) : o.y + (o.asset.bbox?.[3] ?? o.asset.height) + 1 - BOARD_FACE;
+    const x = Math.round(Math.min(Math.max(ad.x - art.width / 2, extents.x0), extents.x1 - art.width));
+    boardImages.push({ role: `ad:${ad.side}`, layer: layerOf(ad.side), z: Z.ad, asset: ad.asset, x, y: faceTop, cropW: art.width, cropH: Math.min(art.height, BOARD_FACE) });
+  }
+
+  // Glass panels and posts stand on the board cap along each straight run.
+  if (config.glass) {
+    for (const side of ['north', 'south', 'west', 'east'] as const) {
+      const o = origin[side];
+      if (!o) continue;
+      const pane = need(lookup, config.glass.panels[side]);
+      const post = need(lookup, config.glass.posts[side]);
+      const ink = o.asset.bbox ?? [0, 0, o.asset.width - 1, o.asset.height - 1];
+      const horizontal = side === 'north' || side === 'south';
+      const length = horizontal ? extents.x1 - extents.x0 : sideLength;
+      // The cap is the board's outer edge: its top row on the ends, its outermost column on the sides.
+      const contact = GLASS_CONTACT[side];
+      const postAnchor = POST_ANCHOR[side];
+      const cap = side === 'north' || side === 'south' ? o.y + ink[1] : side === 'west' ? o.x + ink[0] : o.x + ink[2];
+      const count = Math.ceil(length / MODULE);
+      for (let k = 0; k < count; k++) {
+        const along = k * MODULE;
+        const remaining = Math.min(MODULE, length - along);
+        const isOpenGate = !horizontal && gateRows[side as 'west' | 'east'].get(k) === 'open';
+        if (!isOpenGate) {
+          glass.push({
+            id: `${side}:${k}`,
+            side,
+            role: 'glass',
+            layer: layerOf(side),
+            z: Z.glass,
+            asset: pane.id,
+            x: horizontal ? extents.x0 + along : cap - contact.x,
+            y: horizontal ? cap - contact.y : extents.y0 + along,
+            cropW: horizontal ? remaining : pane.width,
+            cropH: horizontal ? pane.height : remaining,
+          });
+        }
+        if (k > 0) {
+          boardImages.push({
+            role: `post:${side}`,
+            layer: layerOf(side),
+            z: Z.post,
+            asset: post.id,
+            x: horizontal ? extents.x0 + along - postAnchor.x : cap - postAnchor.x,
+            y: horizontal ? cap - postAnchor.y : extents.y0 + along - postAnchor.y,
+          });
+        }
+      }
+    }
+  }
+
+  return { strips, boardImages, glass, extents };
 }
+
+/** Height of the flat face of an end board, between its cap and its kickplate. */
+const BOARD_FACE = 15;
+/** Local pixel of each glass module that sits on the board cap (batch 10.09 manifest). */
+const GLASS_CONTACT: Record<BoardSide, { x: number; y: number }> = { north: { x: 0, y: 14 }, south: { x: 0, y: 2 }, west: { x: 7, y: 0 }, east: { x: 1, y: 0 } };
+/** Local pixel of each post that sits on the board cap at a panel seam (batch 10.10 manifest). */
+const POST_ANCHOR: Record<BoardSide, { x: number; y: number }> = { north: { x: 4, y: 14 }, south: { x: 4, y: 1 }, west: { x: 7, y: 8 }, east: { x: 0, y: 8 } };
 
 export interface GoalAlignment {
   end: 'north' | 'south';

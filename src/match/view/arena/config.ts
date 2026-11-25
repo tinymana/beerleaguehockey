@@ -7,6 +7,9 @@
  * (ads, banners, crowd, prestige). They are carried in the config but not
  * drawn yet, and they do not authorize any career mechanics.
  */
+export type BoardSide = 'north' | 'south' | 'west' | 'east';
+export type GlassState = 'intact' | 'cracked' | 'shattered' | 'missing';
+
 export interface ScaledAsset {
   asset: string;
   /** Whole-number scale. 1 is the art's native size. */
@@ -36,13 +39,19 @@ export interface ArenaConfig {
   /** Null shows the plain centre dot instead of a logo. */
   centerLogo: ScaledAsset | null;
   centerDot: ScaledAsset;
-  boards: {
-    west: { asset: string; iceBoundaryLocalX: number };
-    /** Mirrored west module until east boards are supplied. */
-    east: { asset: string; iceBoundaryLocalX: number; mirrored: true } | null;
-  };
+  /** Straight board modules. `boundary` is the module's local pixel that sits on the ice boundary (from its manifest). */
+  boards: Record<BoardSide, { asset: string; boundary: number } | null>;
+  /**
+   * Corner boards. 'stand-in' keeps code-drawn corners that follow the physics.
+   * 'art' places the supplied corner modules at their own (smaller) radius: a fit test, not a playable arena.
+   */
+  corners: { mode: 'stand-in' | 'art'; nw: string; ne: string; sw: string; se: string };
+  glass: { panels: Record<BoardSide, string>; posts: Record<BoardSide, string>; damageBatch: string } | null;
+  /** Gates replace one side-board module each. `at` is a gameplay y position along the boards. */
+  gates: { side: 'west' | 'east'; at: number; state: 'closed' | 'open' }[];
+  /** Sponsor panels on the end boards. `x` is a gameplay x position for the panel's centre. */
+  boardAds: { asset: string; side: 'north' | 'south'; x: number }[];
   // Extension points: carried, not yet drawn.
-  boardAds: string[];
   banners: { kind: 'championship' | 'retired-jersey' | 'tournament'; label: string }[];
   crowdDensity: number;
   palette: string | null;
@@ -74,10 +83,29 @@ const STANDARD: ArenaConfig = {
   centerLogo: { asset: '09.13/center_logo', scale: 2 },
   centerDot: { asset: '09.09/center_dot', scale: 1 },
   boards: {
-    west: { asset: '10.01/west_board_module', iceBoundaryLocalX: 19 },
-    east: { asset: '10.01/west_board_module', iceBoundaryLocalX: 19, mirrored: true },
+    west: { asset: '10.01/west_board_module', boundary: 19 },
+    east: { asset: '10.02/east_board_module', boundary: 4 },
+    north: { asset: '10.03/north_board_module', boundary: 19 },
+    south: { asset: '10.04/south_board_module', boundary: 5 },
   },
-  boardAds: [],
+  corners: { mode: 'stand-in', nw: '10.05/nw_corner_module', ne: '10.06/ne_corner_module', sw: '10.07/sw_corner_module', se: '10.08/se_corner_module' },
+  glass: {
+    panels: { north: '10.09/glass_north', south: '10.09/glass_south', west: '10.09/glass_west', east: '10.09/glass_east' },
+    posts: { north: '10.10/glass_post_north', south: '10.10/glass_post_south', west: '10.10/glass_post_west', east: '10.10/glass_post_east' },
+    damageBatch: '10.14',
+  },
+  // Proposal: closed gates either side of centre ice, where bench and penalty-box doors would be.
+  gates: [
+    { side: 'west', at: 376, state: 'closed' },
+    { side: 'west', at: 504, state: 'closed' },
+    { side: 'east', at: 376, state: 'closed' },
+    { side: 'east', at: 504, state: 'closed' },
+  ],
+  // Both names are approved Puck Falls locations.
+  boardAds: [
+    { asset: '10.13/ad_penalty_box', side: 'north', x: 240 },
+    { asset: '10.13/ad_top_shelf', side: 'south', x: 240 },
+  ],
   banners: [],
   crowdDensity: 0,
   palette: null,
@@ -91,9 +119,16 @@ export const ARENA_CONFIGS: readonly ArenaConfig[] = [
     ...STANDARD,
     id: 'supplied-only',
     name: 'Supplied art only',
-    description: 'Exactly what has been delivered. No stand-ins and no mirrored east boards, so gaps show.',
+    description: 'Exactly what has been delivered and fits. No stand-ins, so the corners, nets and stands show as gaps.',
     standIns: false,
-    boards: { ...STANDARD.boards, east: null },
+  },
+  {
+    ...STANDARD,
+    id: 'corner-fit-test',
+    name: 'Corner art fit test',
+    description: 'Places the supplied corner boards at their own radius. Turn on Collision geometry to see how far they sit from the corners the puck actually follows. Not a playable arena.',
+    corners: { ...STANDARD.corners, mode: 'art' },
+    gates: [{ side: 'west', at: 440, state: 'open' }, { side: 'east', at: 440, state: 'open' }],
   },
   {
     ...STANDARD,
@@ -105,6 +140,9 @@ export const ARENA_CONFIGS: readonly ArenaConfig[] = [
     goalLine: { ...STANDARD.goalLine, tile: 2 },
     centerLine: { ...STANDARD.centerLine, pattern: [0] },
     centerLogo: null,
+    glass: null,
+    gates: [],
+    boardAds: [{ asset: '10.13/ad_blank', side: 'north', x: 240 }],
   },
 ];
 
