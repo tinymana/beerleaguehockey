@@ -25,7 +25,7 @@ The brief asks to preserve the existing working hockey gameplay. That is safe, b
 | --- | --- | --- | --- |
 | C1 | Four seasons a year (Winter, Spring, Summer, Fall), 20 games each | Decision 8: two seasons a year. Decision 7: 14-game seasons. Both Approved | The brief replaces them; recorded as revised. Open: with eight teams there are seven opponents, so 20 games cannot be an even round robin (21 would be three each) |
 | C2 | Careers start at 18 and can run 50 years, into the late 60s | Design: develop into the late twenties, decline through the forties, retire | Aging curves, retirement and rookie intake are redesigned around a 50-year span |
-| C3 | Two career paths: Player and Team Manager | Three roles: Player, Manager, Player-Manager with transitions; Decision 20 proposes shipping Player-Manager first | Open: is Player-Manager gone, or is it what happens when a player career becomes captain |
+| C3 | *Resolved Nov 25.* The first brief listed two career paths | Three roles on file: Player, Manager, Player-Manager | Your follow-up ruling keeps all three, with Player-Manager available from the start and free movement between roles. Decision 27 |
 | C4 | A player may be on several teams at once | Milestone 5 exit test: "no player is ever on two teams" | The integrity rule becomes "never in two games that overlap". Stats, fees and relationships are kept per membership |
 | C5 | Hockey Influences set randomized starting attributes | Decision 13 (Proposed): a point budget sized by hockey background | Two systems shaping the same numbers. Open: do influences replace the background, or sit beside it |
 | C6 | Influences are named after real professional players | Rule 9: all teams, players, places and brands are original and fictional | The brief already asks for a swappable registry. Open: which names ship (section 6, Q1) |
@@ -41,9 +41,10 @@ The brief asks to preserve the existing working hockey gameplay. That is safe, b
 ## 3. What changes in the design
 
 - **Main menu:** Pick-Up, League Dynasty, Create, Leaderboard, Options. Pick-Up takes over from Exhibition. Credits moves inside Options unless you want it kept.
-- **Universe:** one simulated league shared by both career paths, unchanged in principle. Five divisions of eight stays. The calendar becomes four seasons a year.
+- **Universe:** one simulated league shared by all three career modes, unchanged in principle. Five divisions of eight stays. The calendar becomes four seasons a year.
 - **People:** permanent DNA (influences, potential, seed) stored in the save; current ability, potential, temporary modifiers and permanent changes kept as four separate things.
 - **Memberships:** a person holds zero or more team memberships plus one-night guest and substitute appearances. Each has its own fees, schedule and stats.
+- **Career modes (Decision 27):** Player, Player-Manager and Manager are starting points, not limits. The save keeps separate records for people, managers, franchises, team memberships, management appointments and founders. A franchise never depends on its founder: "founder" is a fact in its history, and "current manager" is an appointment that can end, pass to a successor or be vacant. Leaving, resigning or retiring changes appointments and memberships and never deletes or resets anything.
 - **Presentation:** a cinematic framework that listens to match and career events and never writes to them. Fighting is a separate game state that the match hands off to and gets one result back from.
 
 ## 4. Proposed roadmap
@@ -108,10 +109,10 @@ In rough order of how much work they block.
 2. **Order of work.** Do you accept the two-track plan in section 4, with the hockey match (A1 to A3) built alongside the career universe? The alternative, following the 14 steps alone, produces a deep character system with no hockey to play.
 3. **Skating checkpoint.** Track A is still waiting on your review of the skating prototype and on the arena rulings (goal size A13, world width A20).
 4. **Season maths.** 20 games against seven opponents: 21 games (three each), or 20 with an uneven schedule? How many teams make the playoffs, and does promotion and relegation happen after every season (four times a year) or once a year?
-5. **Career paths.** Is Player-Manager retired as a mode? Can a Player Career become a Team Manager Career without starting over?
+5. **Career paths.** *Answered Nov 25: three modes (Player, Player-Manager, Manager), see Decision 27.* Still open, and flagged by you as needing separate approval: managing more than one franchise, franchise transfers and succession. One new question: the Manager mode says "simulate hockey games". Can a Manager also choose to play a game with whole-team control, as the earlier design allowed, or is Manager strictly simulation?
 6. **Influences and background.** Do influences replace the hockey-background field, or do both apply? How many secondary influences?
 7. **Online.** Is online multiplayer in scope for the first release? It needs servers, accounts and an anti-cheat position, and it is the one item here that changes the cost of running the game.
-8. **Create a Team.** Does a created team take a league slot, join a division as an extra, or exist for Pick-Up and tournaments only?
+8. **Create a Team.** A Player-Manager founds a team at the start of a career (Decision 27). Where does it enter: taking a slot in Puck League, joining as an extra team, or replacing a generated one? Does a team made in the Create menu follow the same rule?
 9. **Multiple teams.** Is there a cap on memberships? Can a player be on two teams in the same division?
 10. **Age 18 and the bar.** Careers start at 18 and the alcohol system (Decision 10) is part of the tone. Should under-age characters be kept out of drinking content, or is Puck Falls somewhere 18 is legal?
 11. **Fighting rules of the world.** Fighting earns penalties, ejections and suspensions. Is it tolerated in every division, or stricter higher up (Decision 4 already varies enforcement by division)? What does declining a challenge cost?

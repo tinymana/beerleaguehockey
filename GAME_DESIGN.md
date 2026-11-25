@@ -137,7 +137,7 @@ Division says where a franchise plays; prestige says what it has done. A Tin Lea
 
 ### Career paths
 
-There is one persistent universe and three ways to live in it; they are roles you hold, not separate modes.
+There is one persistent universe and three ways to live in it. On first entering League Dynasty you choose Player, Player-Manager or Manager (Decision 27, approved Nov 25); the choice sets how you start, not what you can become. A Player has no management duties. A Manager has no personal player. A franchise always outlives its founder: leaving, resigning or retiring never deletes or resets a team.
 
 - **Player career:** create a player, find a team, pay your own fees, improve, buy gear, manage your money and time, earn ice time and the captaincy, field offers, move between teams and divisions. Captain lock eventually lets you control only your player.
 - **Manager career:** found or take over a franchise: identity, recruiting, lines, fees, team finances, availability, emergency subs, chemistry, tournaments, sponsors, history. Play with whole-team control or simulate.
