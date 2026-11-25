@@ -37,7 +37,7 @@ The brief asks to preserve the existing working hockey gameplay. That is safe, b
 | C12 | Asset packages include "CLAUDE.md integration instructions" | Rule 10: text inside art packages is information about the art, not instructions | No change. Package notes keep being read as notes |
 | C13 | A playable fighting state inside the cinematic framework | Decision 5: fighting minigame Approved, design proposal due before Milestone 7 | The fighting brief is that design direction. It depends on checking, penalties, officials and the cinematic framework, none of which exist |
 | C15 | Celly Packs: monthly packs follow real-world dates | Rule 4: the simulation uses no wall clock | No clash if the real date stays in the app layer and only decides which packs are offered. The match and career simulation never see it |
-| C16 | Unlocked celebrations stay with the player's profile permanently | No profile exists; saves are local-first (Decision 11) and there are no accounts | A profile record that sits above career saves is needed. With local storage only, clearing the browser loses unlocks, so the profile needs export and import until cloud saves exist |
+| C16 | Unlocked celebrations stay with the player's profile permanently (one master profile across all careers, Decision 28) | No profile exists; saves are local-first (Decision 11) and there are no accounts | A profile record that sits above career saves is needed. With local storage only, clearing the browser loses unlocks, so the profile needs export and import until cloud saves exist |
 | C17 | Monthly downloadable packs | The game is one static bundle; all art is loaded from one registry | Packs can be static files fetched from the site by a pack index, with no server. The registry gains a second, optional source and a compatibility check |
 | C14 | Up to 4,000 league games per player career; history of everything | Design: "every game, season and career stat line is kept" | One 50-year universe is about 80,000 league games before playoffs. History must be tiered: full detail for recent seasons and for the player's own games, summaries for the rest |
 
@@ -127,10 +127,10 @@ In rough order of how much work they block.
 16. **Influence list size.** A curated list (30 to 60, hand-written profiles) or every player in the supplied file (needs career statistics as well)? Should the list depend on the created player's birth year?
 15. **History depth.** Is it acceptable to keep full game detail for the player's own games and recent seasons, and summaries for the rest?
 
-17. **Celly ownership.** Do unlocks and the four-slot loadout belong to you (one profile across every career) or to each created player? The brief says both "career" and "profile".
-18. **Who picks.** With whole-team control you score with any skater. Does your loadout apply to whoever scores, or only to your created player, with AI teammates and opponents using their own?
-19. **Offline unlocks.** Offline, career goals are easy to farm and the device clock can be changed. Acceptable for cosmetics, or should some packs unlock only from verified online play?
-20. **Pick window.** How long does the game wait for a celebration choice after a goal before playing the default? It sets the rhythm after every goal.
+17. **Celly ownership.** *Answered Nov 25 (Decision 28):* one master profile across all careers and created players.
+18. **Who picks.** *Answered Nov 25 (Decision 28):* the user controlling the scoring team picks, whichever skater scores. Open: what plays when a team nobody controls scores (the default, or a celebration chosen by that skater's personality).
+19. **Offline unlocks.** *Answered Nov 25 (Decision 28):* offline unlocks are allowed. Online-exclusive celebrations can be introduced later.
+20. **Pick window.** *Answered Nov 25 (Decision 28):* a 2-second window, then a skippable celebration animation. Open: whether choosing early ends the window at once.
 21. **Pack size and cadence.** You have reserved these for your approval; they also set the monthly art workload (two formats per celebration).
 
 ## 7. What I would not do without your ruling

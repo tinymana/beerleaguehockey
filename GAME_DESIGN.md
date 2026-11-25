@@ -204,7 +204,8 @@ Two briefs from the creative director extend this document: *Career, Player DNA,
 ### Celly Packs and goal emotes (direction, Nov 25; nothing built)
 
 - **What it is:** collectible goal celebrations you unlock, collect, equip and perform across a career. Purely cosmetic: no effect on attributes, scoring or results.
-- **After a goal:** once the goal is confirmed, the scorer gets a brief window to pick one of four equipped celebrations by direction (keyboard or gamepad). No pick plays the default.
+- **After a goal (Decision 28, approved):** once the goal is confirmed, the user controlling the scoring team has 2 seconds to pick one of four equipped celebrations by direction (keyboard or gamepad), whichever skater scored. No pick plays the default. The celebration animation that follows can be skipped.
+- **Ownership (Decision 28, approved):** one master profile holds every unlock and the loadout, across all careers and created players. Offline play unlocks celebrations; online-exclusive ones may come later.
 - **Two formats:** an on-ice overhead sprite animation, and a full-screen 32-bit cinematic that shows the created player's appearance, jersey colours, number and team. Each celebration supports both where practical.
 - **Monthly packs:** released by Tiny Mana Studios on real-world dates, independent of the in-game calendar. Each pack has an ID, name, release date, preview art, celebration IDs, animation assets, unlock requirements, a compatibility version and a manifest. Installing a pack never needs a code change and never invalidates a save.
 - **Unlocks:** configurable, from career goals, assists, games played, hat tricks, overtime winners, league championships, tournament wins, monthly challenges, milestones and special events. Once unlocked, a celebration stays with the profile for good, including after its event ends.
