@@ -136,7 +136,7 @@ In rough order of how much work they block.
 21. **Pack size and cadence.** You have reserved these for your approval; they also set the monthly art workload (two formats per celebration).
 
 22. **Overtime (Decision 30).** *Answered Nov 25:* regular season is 3-on-3 sudden death for five simulated minutes, then a three-round shootout; playoffs are 5-on-5 sudden death in 20-minute periods with no shootout. Standings credit and regulation length are settled by Decision 31.
-23. **Calibrating played games against simulated ones.** *Answered Nov 25 (Decision 32):* Classic is the reference; actual statistics are kept untouched and a second, Classic-equivalent set drives scoring races, awards, recruitment and time-based XP; leaderboards are split by format. The normalization model comes to you for review before it is final. One edge to settle then: the standings tiebreakers "goal differential" and "goals scored" (Decision 31) use actual goals, so a team whose user plays Extended periods gains an edge in those two tiebreakers only.
+23. **Calibrating played games against simulated ones.** *Answered Nov 25 (Decision 32):* Classic is the reference; actual statistics are kept untouched and a second, Classic-equivalent set drives scoring races, awards, recruitment and time-based XP; leaderboards are split by format. The normalization model comes to you for review before it is final. The tiebreaker edge (goal differential and goals scored use actual goals) is an accepted limitation, Decision 33; phase B9 soak tests report how often those two tiebreakers decide playoff places, promotion or relegation.
 
 ## 7. What I would not do without your ruling
 
