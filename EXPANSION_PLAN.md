@@ -92,6 +92,14 @@ Nothing below exists yet unless noted.
 | Scoreboard and banners | A 3x5 digit font; a place to hang banners and jerseys | Art supplied in batch 14, waiting on the world-width ruling (A20) |
 | Injuries, recruitment, substitutes | Small icons and chat stickers | |
 
+### Supplied reference data: `data/reference/nhl_players.csv`
+
+Received Nov 25 for player DNA: 8,662 professional players with position (forward, defence, goalie), shooting side, birthday, nationality, height, weight and draft position. All twelve example influences are in it. It is kept outside the build and nothing reads it yet.
+
+- **Useful for:** offering influences by era (who was in their prime when your created player was a kid), giving each influence a body type and shooting side, and realistic height, weight and handedness for generated players.
+- **Not enough for:** playing style. The file has no statistics, so "vision and passing" or "explosive acceleration" cannot be computed from it. Either each influence's style profile is written by hand (practical for a curated list of 30 to 60), or a statistics file is added so profiles can be derived for many more.
+- **Proposal:** a curated influence list with hand-written style profiles, using this file for era, body and handedness. All 8,662 as selectable influences would need the statistics.
+
 ## 6. Questions for the creative director
 
 In rough order of how much work they block.
@@ -110,6 +118,7 @@ In rough order of how much work they block.
 12. **Fighting and co-ed leagues.** Decision 14 (men's league or co-ed) is still open and changes fight art and matchmaking.
 13. **Cinematic frequency.** Roughly how often should a normal game cut to a full-screen scene? This sets how many of the 55 are needed first.
 14. **The bottle.** "Water bottle knocked off the net" is in the cinematic list. What knocks it off in play: any goal under the bar, only a shot that hits it?
+16. **Influence list size.** A curated list (30 to 60, hand-written profiles) or every player in the supplied file (needs career statistics as well)? Should the list depend on the created player's birth year?
 15. **History depth.** Is it acceptable to keep full game detail for the player's own games and recent seasons, and summaries for the rest?
 
 ## 7. What I would not do without your ruling
