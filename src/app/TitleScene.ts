@@ -8,23 +8,23 @@ import { setTitleArtVisible } from './stage';
 interface MenuItem {
   label: string;
   /** Scene or overlay to open; absent means the mode is not built yet. */
-  action?: 'skating' | 'credits';
+  action?: 'skating' | 'creator' | 'credits';
   note: string;
 }
 
 const MENU: readonly MenuItem[] = [
-  { label: 'New Career', note: 'Coming soon' },
-  { label: 'Continue Career', note: 'Coming soon' },
-  { label: 'Exhibition', action: 'skating', note: 'Skating prototype' },
-  { label: 'Multiplayer', note: 'Coming soon' },
-  { label: 'Options', note: 'Coming soon' },
-  { label: 'Credits', action: 'credits', note: 'Who made this' },
+  { label: 'Pick-Up', action: 'skating', note: 'Skating prototype' },
+  { label: 'League Dynasty', note: 'Coming soon' },
+  { label: 'Create', action: 'creator', note: 'Create a player' },
+  { label: 'Leaderboard', note: 'Coming soon' },
+  // Settings are not built; until they are, Options holds the credits.
+  { label: 'Options', action: 'credits', note: 'Credits' },
 ];
 
 const MENU_X = 242;
 const MENU_Y = 177;
 const LINE = 13;
-const PANEL = { x: 180, y: 169, w: 124, h: 104 };
+const PANEL = { x: 180, y: 169, w: 124, h: 91 };
 
 /**
  * Main menu: an interactive layer drawn over the supplied title art, which
@@ -36,7 +36,7 @@ export class TitleScene extends Phaser.Scene {
   private cursorRight!: Phaser.GameObjects.BitmapText;
   private status!: Phaser.GameObjects.BitmapText;
   private credits: Phaser.GameObjects.Container | null = null;
-  private selected = 2;
+  private selected = 0;
   private readonly padUp = new Edge();
   private readonly padDown = new Edge();
   private readonly padAction = new Edge();
@@ -150,6 +150,8 @@ export class TitleScene extends Phaser.Scene {
     }
     if (item.action === 'skating') {
       this.scene.start(SCENES.skating);
+    } else if (item.action === 'creator') {
+      this.scene.start(SCENES.creator);
     } else {
       this.openCredits();
     }

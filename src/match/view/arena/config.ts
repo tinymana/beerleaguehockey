@@ -334,8 +334,9 @@ const STANDARD: ArenaConfig = {
   benchArea: BENCH_AREA,
   stadium: STADIUM,
   equipment: EQUIPMENT,
-  // Supplied goals at native size. They are larger than the physics net: see goalFit() and ARENA.md A13.
-  goals: GOALS,
+  // Decision 34: the gameplay net keeps its size and the goal art is being redrawn to fit it.
+  // Until that art arrives the standard arena shows stand-in nets at the size the puck actually hits.
+  goals: null,
   // Both names are approved Puck Falls locations.
   boardAds: [
     { asset: '10.13/ad_penalty_box', side: 'north', x: 240 },
@@ -355,7 +356,7 @@ export const ARENA_CONFIGS: readonly ArenaConfig[] = [
     ...STANDARD,
     id: 'supplied-only',
     name: 'Supplied art only',
-    description: 'Exactly what has been delivered and fits. No stand-ins, so the corners and stands show as gaps.',
+    description: 'Exactly what has been delivered and fits. No stand-ins, so the corners, nets and end stands show as gaps.',
     standIns: false,
   },
   {
@@ -370,10 +371,16 @@ export const ARENA_CONFIGS: readonly ArenaConfig[] = [
   },
   {
     ...STANDARD,
+    id: 'goal-fit-test',
+    name: 'Goal art fit test',
+    description: 'Places the supplied batch 11 goals, which are larger than the gameplay net and are being redrawn. Turn on Collision geometry to compare. Goal state buttons work here. Not a playable arena.',
+    goals: GOALS,
+  },
+  {
+    ...STANDARD,
     id: 'practice-sheet',
     name: 'Practice sheet',
-    description: 'A plainer rink from the same parts: no logo, no light pools, faded blue lines, worn goal lines, and the stand-in nets (the size of the physics net) for comparison.',
-    goals: null,
+    description: 'A plainer rink from the same parts: no logo, no light pools, faded blue lines, worn goal lines, no benches or stands.',
     reflections: { ...STANDARD.reflections, enabled: false },
     blueLine: { ...STANDARD.blueLine, tile: 3 },
     goalLine: { ...STANDARD.goalLine, tile: 2 },

@@ -186,7 +186,7 @@ export class ArenaLabPanel {
     this.goalFit = el('div', 'lab-readout');
     tests.append(
       goalRow,
-      el('p', 'lab-note', 'Goal states play on both nets. They are pictures only: none of them changes scoring or collision, and bottle knock-off and dislodged goals are not game mechanics yet.'),
+      el('p', 'lab-note', 'Choose the Goal art fit test arena first: the standard arena shows stand-in nets until redrawn goals arrive. Goal states play on both nets. They are pictures only: none of them changes scoring or collision, and bottle knock-off and dislodged goals are not game mechanics yet.'),
       this.goalFit,
     );
     this.root.append(tests);
@@ -406,11 +406,11 @@ export class ArenaLabPanel {
     const lines = [
       `${seating} seating modules and ${stadium.modules.length - seating} stairs, west and east sides only`,
       `${stadium.seatsVisible} seats on screen, ${stadium.fans.length} taken (${Math.round(density * 100)}% house)`,
-      `${stadium.seatsOffWorld} seats fall outside the world: ${stadium.seatsOffWorld === 0 ? 'all four tiers fit' : 'the outer tier of each side does not fit'}`,
+      `Three tiers a side show (approved); the art's fourth tier, ${stadium.seatsOffWorld} seats, is off screen`,
       `Goal lamps: ${stadium.lamps.length}`,
     ];
     this.stadiumReport.textContent = lines.join('\n');
-    this.stadiumReport.className = `lab-readout ${stadium.seatsOffWorld === 0 ? 'good' : 'bad'}`;
+    this.stadiumReport.className = 'lab-readout good';
   }
 
   /** Where each bench-side structure landed, and whether its doors and footprint check out. */

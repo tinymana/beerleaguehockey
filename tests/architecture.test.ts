@@ -43,8 +43,12 @@ describe('module boundaries', () => {
     expect(pure.filter((f) => /from 'phaser'/.test(readFileSync(f, 'utf8'))).map((f) => relative(SRC, f))).toEqual([]);
   });
 
+  it('dynasty never touches Phaser, the screen layer, the match internals or lifestyle', () => {
+    expect(offenders('dynasty', /phaser|\/(app|lifestyle|match\/view|match\/sim)\//)).toEqual([]);
+  });
+
   it('simulation code uses no wall clock or unseeded randomness', () => {
-    const bad = [...files(join(SRC, 'core')), ...files(join(SRC, 'match', 'sim'))].filter((file) =>
+    const bad = [...files(join(SRC, 'core')), ...files(join(SRC, 'match', 'sim')), ...files(join(SRC, 'dynasty'))].filter((file) =>
       /Math\.random|Date\.now|performance\.now|new Date\(/.test(readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/.*$/gm, '')),
     );
     expect(bad.map((f) => relative(SRC, f))).toEqual([]);

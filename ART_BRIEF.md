@@ -199,3 +199,38 @@ Batch 01 worked: the skater sheet is in the game. These are the gaps and fixes, 
 7. **League crests for Tin League and Puck League** in the same style as Gold, Silver and Bronze. An **original championship trophy** that does not resemble any real trophy.
 
 One rule to restate for every request: hard pixel edges, no blur, no soft shading, and a truly transparent background.
+
+## 10. Goal nets: redraw to gameplay size (Decision 34, Nov 25)
+
+The batch 11 goals are larger than the net the puck hits. The ruling is to redraw the art; the gameplay net does not change. These are the exact numbers.
+
+**The gameplay net, on screen**
+
+| | Value |
+| --- | --- |
+| Outside width, post to post | **24 px** (6 ft at 4 px per foot) |
+| Depth behind the goal line | **10 px** (3.5 ft of depth, drawn at the camera tilt of 0.74) |
+| North goal, on the 480-wide rink | x 228 to 251; goal line at screen y 62; net back at y 52 |
+| South goal | x 228 to 251; goal line at screen y 589; net back at y 599 |
+
+**Resting goal sprite: 32 x 16 px, transparent background**
+
+| | North goal (mouth faces down the screen) | South goal (mouth faces up the screen) |
+| --- | --- | --- |
+| Canvas | 32 x 16 | 32 x 16 |
+| Goal mouth anchor (sits on the centre of the goal line) | `[16, 13]` | `[16, 2]` |
+| Post anchors (outside edge of each post, on the goal line) | `[4, 13]` and `[27, 13]` | `[4, 2]` and `[27, 2]` |
+| Posts | 2 px wide: columns 4-5 and 26-27 | columns 4-5 and 26-27 |
+| Opening between the posts | 20 px: columns 6 to 25 | columns 6 to 25 |
+| Net and frame | rows 3 to 13 (back bar at row 3) | rows 2 to 12 (back bar at row 12) |
+| Free rows for the bottle | rows 0 to 2, above the back bar | rows 13 to 15, below the back bar |
+| Nothing but the bottle may fall outside | columns 4 to 27 | columns 4 to 27 |
+
+**Variants, same anchors**
+
+- Empty goal with bottle; net alone; bottle layer alone (as batch 11.01 and 11.02).
+- Scored: puck layer inside the net (11.03, 11.04).
+- Net ripple: 8 frames of 32 x 16 in one strip, 256 x 16 (11.07, 11.08).
+- Bottle knock-off and dislodged goal: 8 frames of 48 x 32 in one strip, 384 x 32, with the 32 x 16 goal at offset `[8, 8]` in every frame (11.05, 11.06, 11.09, 11.10). A dislodged goal should move no more than 8 px in any direction.
+
+Package format as before: named PNGs, the strip as the atlas, `manifest.json` carrying these anchors, a preview image, one ZIP per batch. If the camera tilt changes (decision P13), the 10 px depth changes with it and I will reissue this table.

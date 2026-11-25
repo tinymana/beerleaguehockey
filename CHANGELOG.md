@@ -2,6 +2,29 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.3.0 - 2026-11-25 - Track B begins: menu, Hockey Influences, Player DNA, creator foundation
+
+First career-side release, authorized by Decision 34. Track A (the hockey match) is still gated on the skating checkpoint; nothing on the ice changed except the nets (below).
+
+### Added
+- **Main menu:** Pick-Up, League Dynasty, Create, Leaderboard, Options. Pick-Up opens the skating prototype; Create opens the player creator; League Dynasty and Leaderboard say they are not built. Options holds the credits until there are settings.
+- **Hockey Influences registry:** 64 curated professionals (40 forwards, 14 defencemen, 10 goalies) with hand-written style profiles in `data/influences/curated.tsv`. Position, birth year, country, shooting side, height and weight come from the supplied reference file at build time. Ids are neutral ("F07"); every display name can be replaced by a fictional alias.
+- **Player attributes:** the 21 skater attributes from the brief and a proposed goalie set of 17; current ability, potential, temporary modifiers and permanent changes are separate.
+- **Player DNA:** one seed, a position, a hockey background, one primary and up to two secondary influences produce starting ratings, natural potential, strengths, weaknesses and tendencies. Background sets level and experience; influences move ability around without adding any. The same choices and seed always give the same player. DNA serializes with a version number.
+- **Create a Player (foundation):** choose position, background and influences, re-roll, and see every attribute as now-against-potential. Keyboard and gamepad.
+- 18 new automated tests (124 in all): registry soundness, determinism, range and balance checks over thousands of generated players, save round trip, module boundaries.
+
+### Changed
+- **Goals (Decision 34):** the gameplay net keeps its size and the goal art is being redrawn to fit it (`ART_BRIEF.md` section 10). The standard arena shows stand-in nets again, at the size the puck hits; the batch 11 goals and their goal states are in the new "Goal art fit test" arena only. The net ripple on a goal is therefore off in play until redrawn art arrives; the goal lamp and crowd celebration still fire.
+- **Stands (Decision 34):** three seating tiers a side is the approved look; no longer reported as a fit problem.
+
+### Known issues
+- The creator is a foundation: no name, appearance, gear, nationality or jersey number, and nothing is saved. The player you make lasts until the page closes.
+- With 54 skater influences, choosing one by stepping left and right is slow. A proper picker comes with the full creator.
+- Every balancing number (background levels, influence strength, talent spread) is a proposal awaiting your review.
+- Four of the ten hockey backgrounds cannot apply to an 18-year-old and are not offered in the creator (`EXPANSION_PLAN.md` Q24).
+- No fictional aliases are written yet: real names cannot be switched off until all 64 exist.
+
 ## 0.2.5 - 2026-11-25 - Arena equipment (Lab tests)
 
 Eight more packages (batches 14.01 to 14.08) ingested: 12,436 assets from 70 packages, 0 errors. Nothing in this release changes what you see in play: every piece in batch 14 waits on a system that does not exist yet, or on room the world does not have. No gameplay physics changed.

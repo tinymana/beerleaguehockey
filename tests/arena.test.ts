@@ -67,11 +67,13 @@ describe('arena asset registry', () => {
     expect(status['boards.corners']).toBe('unfit');
     // The resurfacer garage is deeper than the space beside the boards.
     expect(status['equipment.garage']).toBe('unfit');
-    // Goal art has arrived but is larger than the physics net, so it stays provisional until that is ruled on.
-    expect(status['goals.north']).toBe('provisional');
-    expect(status['goals.south']).toBe('provisional');
+    // Goal art is larger than the gameplay net. Ruling (Decision 34): redraw the art; the net does not change.
+    expect(status['goals.north']).toBe('unfit');
+    expect(status['goals.south']).toBe('unfit');
     // Benches and boxes are placed as a proposal: the packages call every placement provisional.
-    for (const id of ['benches', 'penaltyBox', 'benches.timekeeper', 'benches.players', 'stadium', 'spectators', 'stadium.lamps']) expect(status[id], id).toBe('provisional');
+    for (const id of ['benches', 'penaltyBox', 'benches.timekeeper', 'benches.players', 'spectators', 'stadium.lamps']) expect(status[id], id).toBe('provisional');
+    // Three seating tiers a side is the approved look (Decision 34).
+    expect(status['stadium']).toBe('supplied');
     for (const id of ['glass.corners']) {
       expect(status[id], id).toBe('missing');
     }
@@ -276,12 +278,13 @@ describe('arena layout', () => {
 });
 
 describe('goal nets', () => {
-  const standard = arenaConfig('standard');
+  // The supplied goals are larger than the gameplay net and are being redrawn (Decision 34): they live in the fit test only.
+  const standard = arenaConfig('goal-fit-test');
   const manifest = (batch: string) => JSON.parse(readFileSync(join(ARENA_DIR, 'manifests', `${batch}.manifest.json`), 'utf8')) as Record<string, unknown> & { frames?: { durationMs: number; atlasRect: number[] }[] };
 
   it('uses the anchors, frame sizes and timings written in the batch manifests', () => {
     const goals = standard.goals;
-    if (!goals) throw new Error('standard arena has no goals');
+    if (!goals) throw new Error('goal fit test has no goals');
     for (const [end, rest, ripple, knockoff, dislodged] of [
       ['north', '11.01', '11.07', '11.05', '11.09'],
       ['south', '11.02', '11.08', '11.06', '11.10'],
@@ -340,7 +343,9 @@ describe('goal nets', () => {
     expect([RINK.netHalfWidth, RINK.netDepth, RINK.goalLineInset]).toEqual([12, 14, 44]);
   });
 
-  it('keeps stand-in nets on the practice sheet, where no goal art is asked for', () => {
+  it('keeps stand-in nets, at the size the puck hits, in the standard arena until redrawn goals arrive', () => {
+    expect(arenaConfig('standard').goals).toBeNull();
+    expect(layoutGoals(RINK, TILT, arenaConfig('standard'), lookup)).toEqual([]);
     expect(layoutGoals(RINK, TILT, arenaConfig('practice-sheet'), lookup)).toEqual([]);
   });
 

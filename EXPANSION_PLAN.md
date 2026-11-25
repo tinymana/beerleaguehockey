@@ -2,7 +2,7 @@
 
 Beer League Hockey - Tiny Mana Studios. Part of the project knowledge base (see `CLAUDE.md`).
 
-This answers the briefs received from the creative director on Nov 25, including the later *Celly Packs & Goal Emotes* brief (summarised in `GAME_DESIGN.md`). The first two were: *Career, Player DNA, Dynasty & Presentation Expansion* (kept verbatim in `docs/briefs/`) and *Arcade Fighting System* (summarised in `GAME_DESIGN.md`). It is an audit and a proposal. **Nothing in it is built, and nothing in it is authorized to build.** Statuses follow the usual key: Approved, Proposed, Open.
+This answers the briefs received from the creative director on Nov 25, including the later *Celly Packs & Goal Emotes* brief (summarised in `GAME_DESIGN.md`). The first two were: *Career, Player DNA, Dynasty & Presentation Expansion* (kept verbatim in `docs/briefs/`) and *Arcade Fighting System* (summarised in `GAME_DESIGN.md`). It began as an audit and a proposal. **Update, Nov 25 (Decision 34):** the two-track roadmap is approved and the first Track B work (menu, influences, DNA, attribute generation, creator foundation, tests) is authorized and delivered in v0.3.0. Everything else here is still unbuilt and unauthorized. Statuses follow the usual key: Approved, Proposed, Open.
 
 ## 1. Audit: what exists today (v0.2.5)
 
@@ -112,13 +112,13 @@ Received Nov 25 for player DNA: 8,662 professional players with position (forwar
 
 In rough order of how much work they block.
 
-1. **Real names in Hockey Influences.** Ship with the twelve real players, with fictional stand-ins, or build with fictional names from day one and keep the real list as an option? Real athletes' names in a commercial game are a legal question for a lawyer, not for me; the registry makes either choice cheap to change.
-2. **Order of work.** Do you accept the two-track plan in section 4, with the hockey match (A1 to A3) built alongside the career universe? The alternative, following the 14 steps alone, produces a deep character system with no hockey to play.
+1. **Real names in Hockey Influences.** *Answered (Decision 34):* real names during development, registry supports fictional replacements.
+2. **Order of work.** *Answered (Decision 34):* the two-track plan is approved; Track B proceeds, Track A stays gated.
 3. **Skating checkpoint.** Track A is still waiting on your review of the skating prototype and on the arena rulings (goal size A13, world width A20).
-4. **Season maths.** 20 games against seven opponents: 21 games (three each), or 20 with an uneven schedule? How many teams make the playoffs, and does promotion and relegation happen after every season (four times a year) or once a year?
+4. **Season maths.** *Answered (Decision 34):* 21 games, top four to the playoffs, promotion and relegation after every season. Open: series lengths and the exact promotion and relegation criteria.
 5. **Career paths.** *Answered Nov 25: three modes (Player, Player-Manager, Manager), see Decision 27.* Still open, and flagged by you as needing separate approval: managing more than one franchise, franchise transfers and succession. One new question: the Manager mode says "simulate hockey games". Can a Manager also choose to play a game with whole-team control, as the earlier design allowed, or is Manager strictly simulation?
-6. **Influences and background.** Do influences replace the hockey-background field, or do both apply? How many secondary influences?
-7. **Online.** Is online multiplayer in scope for the first release? It needs servers, accounts and an anti-cheat position, and it is the one item here that changes the cost of running the game.
+6. **Influences and background.** *Answered (Decision 34):* both apply, as separate systems; one primary and up to two secondary influences.
+7. **Online.** *Answered (Decision 34):* online multiplayer is Phase 2.
 8. **Create a Team.** A Player-Manager founds a team at the start of a career (Decision 27). Where does it enter: taking a slot in Puck League, joining as an extra team, or replacing a generated one? Does a team made in the Create menu follow the same rule?
 9. **Multiple teams.** Is there a cap on memberships? Can a player be on two teams in the same division?
 10. **Age 18 and the bar.** Careers start at 18 and the alcohol system (Decision 10) is part of the tone. Should under-age characters be kept out of drinking content, or is Puck Falls somewhere 18 is legal?
@@ -126,7 +126,7 @@ In rough order of how much work they block.
 12. **Fighting and co-ed leagues.** Decision 14 (men's league or co-ed) is still open and changes fight art and matchmaking.
 13. **Cinematic frequency.** Roughly how often should a normal game cut to a full-screen scene? This sets how many of the 55 are needed first.
 14. **The bottle.** "Water bottle knocked off the net" is in the cinematic list. What knocks it off in play: any goal under the bar, only a shot that hits it?
-16. **Influence list size.** A curated list (30 to 60, hand-written profiles) or every player in the supplied file (needs career statistics as well)? Should the list depend on the created player's birth year?
+16. **Influence list size.** *Answered (Decision 34):* about 60 curated players with hand-written profiles (64 built); the CSV stays as reference.
 15. **History depth.** Is it acceptable to keep full game detail for the player's own games and recent seasons, and summaries for the rest?
 
 17. **Celly ownership.** *Answered Nov 25 (Decision 28):* one master profile across all careers and created players.
@@ -137,6 +137,9 @@ In rough order of how much work they block.
 
 22. **Overtime (Decision 30).** *Answered Nov 25:* regular season is 3-on-3 sudden death for five simulated minutes, then a three-round shootout; playoffs are 5-on-5 sudden death in 20-minute periods with no shootout. Standings credit and regulation length are settled by Decision 31.
 23. **Calibrating played games against simulated ones.** *Answered Nov 25 (Decision 32):* Classic is the reference; actual statistics are kept untouched and a second, Classic-equivalent set drives scoring races, awards, recruitment and time-based XP; leaderboards are split by format. The normalization model comes to you for review before it is final. The tiebreaker edge (goal differential and goals scored use actual goals) is an accepted limitation, Decision 33; phase B9 soak tests report how often those two tiebreakers decide playoff places, promotion or relegation.
+
+24. **Backgrounds at 18 (new technical conflict).** Careers start at 18, but four of the ten hockey backgrounds on file (college, returning rec veteran, former minor-league pro, former pro) cannot describe an 18-year-old. The creator offers the six that can; the other four are kept for generated league players. Confirm, or say if a created player may start older.
+25. **Goalie attributes.** The brief asks for a goaltending set without listing one. Built as a proposal: reflexes, positioning, glove hand, blocker, pad saves, rebound control, recovery, puck handling, plus nine attributes shared with skaters.
 
 ## 7. What I would not do without your ruling
 

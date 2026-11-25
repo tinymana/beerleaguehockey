@@ -14,3 +14,9 @@ export function tuningPanel(): TuningPanel {
   if (!panel) panel = new TuningPanel(tuning);
   return panel;
 }
+
+/**
+ * The player made in Create a Player this session. Held in memory only:
+ * there is no save system yet, so it is gone when the page closes.
+ */
+export const createdPlayer: { dna: import('../dynasty/dna').PlayerDNA | null } = { dna: null };

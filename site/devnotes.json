@@ -2,6 +2,25 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.3.0",
+      "date": "2026-11-25",
+      "title": "Who did you grow up watching?",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Create a Player, first cut: pick the players you idolised as a kid and see what kind of beer leaguer that makes you. Spoiler: not a very good one. Yet."
+        },
+        {
+          "tag": "improved",
+          "text": "New main menu: Pick-Up, League Dynasty, Create, Leaderboard, Options."
+        },
+        {
+          "tag": "improved",
+          "text": "The nets are back to honest size while proper goals are redrawn."
+        }
+      ]
+    },
+    {
       "version": "0.2.4",
       "date": "2026-11-25",
       "title": "Somebody showed up",

@@ -42,6 +42,10 @@ Three pieces of approved art exist today; everything else is either a code-drawn
 | `site/assets/*` | Web-sized copies and crops of the supplied art, plus real prototype screenshots | Derived; for the website |
 | `site/fonts/*` | Tiny5 and Jersey 15 web fonts (SIL Open Font License), carried over from the Ryan's Road site | Third-party, open license |
 
+## Hockey Influences data
+
+`data/influences/curated.tsv` holds the 64 hand-written influence profiles; `data/reference/nhl_players.csv` is the supplied reference file they take their facts from. Neither is art, and the reference file is never shipped. Still needed: 64 fictional aliases, and a card or icon per influence if the creator is to show one.
+
 ## Arena art (batches 09 to 14)
 
 Modular rink tiles arrive as `BLH_Batch_*.zip` packages in `art/packages/` and are ingested into `public/assets/arena/`. The full inventory, validation notes and missing slots live in the generated registry (`public/assets/arena/manifests/registry.json`) and are browsable in the Arena Asset Lab. See `ARENA.md`.

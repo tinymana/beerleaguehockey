@@ -218,3 +218,10 @@ Two briefs from the creative director extend this document: *Career, Player DNA,
 - **Multiplayer:** send the celebration ID, never the files; fall back to the default if the other client lacks the pack.
 - **Technical:** fires only after a confirmed goal; never duplicates a goal, changes a result or interrupts scoring. Assets are kept apart from core player animation. Manifests are versioned and backward compatible.
 - **Needs approval:** any paid purchase, loot box or real-money transaction; pack size, unlock difficulty and release cadence.
+
+### Hockey Influences and Player DNA (Decision 34, approved Nov 25; foundation built in v0.3.0)
+
+- A created player picks one primary influence and up to two optional secondary influences from about 60 curated professionals. Real names are used during development; the registry can swap every name for a fictional one before public release.
+- **Hockey background and influences are separate.** Background decides starting experience and general starting ability. Influences decide how ability is distributed, playing tendencies, natural strengths and weaknesses, and development potential.
+- Starting attributes are randomized inside ranges set by those choices. An influence is an inspiration: picking a great playmaker gives a beginner who leans toward passing, not a great playmaker.
+- The rolled DNA (seed, choices, starting ratings, potential) is permanent and goes into the player's save.

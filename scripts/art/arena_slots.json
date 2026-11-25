@@ -255,8 +255,7 @@
         "11.01/goal_north_net",
         "11.01/goal_north_bottle_layer"
       ],
-      "provisional": true,
-      "note": "Drawn at native size and larger than the gameplay net: the opening between the posts is 37 px against a 24 px physics mouth, and it reaches about 26 px behind the goal line against 10 px. Needs a ruling: see ARENA.md A13."
+      "unfit": "Larger than the gameplay net: 37 px between the posts against a 24 px mouth, and about 25 px deep against 10 px. Ruling (Decision 34): the art is redrawn to the gameplay size; the net does not change. Spec in ART_BRIEF.md section 10. Shown only in the goal fit test arena."
     },
     {
       "id": "goals.south",
@@ -268,8 +267,7 @@
         "11.02/goal_south_net",
         "11.02/goal_south_bottle_layer"
       ],
-      "provisional": true,
-      "note": "Drawn at native size and larger than the gameplay net: the opening between the posts is 37 px against a 24 px physics mouth, and it reaches about 26 px behind the goal line against 10 px. Needs a ruling: see ARENA.md A13."
+      "unfit": "Larger than the gameplay net: 37 px between the posts against a 24 px mouth, and about 25 px deep against 10 px. Ruling (Decision 34): the art is redrawn to the gameplay size; the net does not change. Spec in ART_BRIEF.md section 10. Shown only in the goal fit test arena."
     },
     {
       "id": "goals.scored",
@@ -282,7 +280,7 @@
         "11.04/goal_south_scored_bottle",
         "11.04/goal_south_puck_layer"
       ],
-      "note": "Lab test only. In play the live puck is drawn instead, so it is never shown twice."
+      "note": "Drawn at the old goal size; needs redrawing with the goals (ART_BRIEF.md section 10). Lab test in the goal fit test arena only."
     },
     {
       "id": "goals.ripple",
@@ -295,7 +293,7 @@
         "11.08/goal_atlas",
         "11.08/net_atlas"
       ],
-      "note": "Plays once when the sim reports a goal."
+      "note": "Drawn at the old goal size; needs redrawing with the goals (ART_BRIEF.md section 10). Lab test in the goal fit test arena only."
     },
     {
       "id": "goals.knockoff",
@@ -308,7 +306,7 @@
         "11.06/goal_atlas",
         "11.06/bottle_atlas"
       ],
-      "note": "Lab test only: no bottle mechanic exists or is authorized."
+      "note": "Drawn at the old goal size; needs redrawing with the goals (ART_BRIEF.md section 10). Lab test in the goal fit test arena only."
     },
     {
       "id": "goals.dislodged",
@@ -323,7 +321,7 @@
         "11.10/net_atlas",
         "11.10/bottle_atlas"
       ],
-      "note": "Lab test only: the gameplay net does not move."
+      "note": "Drawn at the old goal size; needs redrawing with the goals (ART_BRIEF.md section 10). Lab test in the goal fit test arena only."
     },
     {
       "id": "benches",
@@ -417,8 +415,7 @@
         "13.01/seating_atlas",
         "13.02/aisle_atlas"
       ],
-      "provisional": true,
-      "note": "West and east sides only, and only three of the four tiers fit: the world is 480 px wide and the outer tier falls outside it. No seating exists for the ends or corners. See ARENA.md A20."
+      "note": "West and east sides. Three of the four drawn tiers show, which is the approved look (Decision 34): no sideways camera scroll. No seating exists for the ends or corners."
     },
     {
       "id": "spectators",

@@ -8,7 +8,7 @@ Beer League Hockey - Tiny Mana Studios. Part of the project knowledge base (see 
 - **Proposed**: the developer's recommendation. Not approved; do not build on it without sign-off.
 - **Open**: unresolved; needs a prototype or a decision.
 
-Current authorization: **Milestone 0 and the skating prototype only.**
+Current authorization (Decision 34, Nov 25): **two tracks.** Track B (career, dynasty, player creation, statistical simulation) is under way with the menu, Hockey Influences, Player DNA, attribute generation and the creator foundation. Track A (the milestones below, from Milestone 1) stays gated on the hands-on skating checkpoint. The Track B phases are in `EXPANSION_PLAN.md` section 4.
 
 The roadmap follows your nine milestones in order, with a short setup step in front, and each milestone ends at a playable build you approve before the next begins. No dates are set yet; I will estimate after Milestone 1 shows our real pace.
 
@@ -25,8 +25,8 @@ The roadmap follows your nine milestones in order, with a short setup step in fr
 | 8 | History and dynasty progression | Records, trophies, banners, retired jerseys, Hall of Fame, season recaps | A 20-season save shows a coherent, browsable history | New systems |
 | 9 | Balance and long-run testing | 50-season soak tests, economy and rating balance, difficulty tuning, save migration tests, polish | Soak runs show stable rating distributions, solvent leagues and no integrity failures | Scope additions |
 
-**Current authorization: Milestone 0 and the skating prototype only.** Work stops at that playable checkpoint for your approval.
+**Track A is still gated:** Milestone 1 does not start until the skating checkpoint is explicitly approved.
 
-**Nov 25 expansion briefs.** A proposed re-phasing that adds a career track (menu, Hockey Influences, attributes, four-season calendar, aging, recruitment, collectibles, Pick-Up, leaderboards, cinematics, fighting) beside Milestones 1 to 3 is in `EXPANSION_PLAN.md` section 4. It is a proposal: the table above stays the approved roadmap until the creative director rules.
+**Nov 25 expansion briefs.** A proposed re-phasing that adds a career track (menu, Hockey Influences, attributes, four-season calendar, aging, recruitment, collectibles, Pick-Up, leaderboards, cinematics, fighting) beside Milestones 1 to 3 is in `EXPANSION_PLAN.md` section 4. Approved as the order of work by Decision 34; each Track B phase beyond the first still needs its own go-ahead.
 
 See `BACKLOG.md` for where later systems are proposed to land.

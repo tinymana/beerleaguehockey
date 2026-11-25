@@ -9,10 +9,11 @@ Read this first. It lets a new session resume without losing creative direction 
 
 ## Current state
 
-- **Authorized:** Milestone 0, the initial skating prototype, and the modular arena asset integration. Delivered through v0.2.5.
-- **Waiting on:** the creative director's review of the playable checkpoint. Do not start Milestone 1 until approved.
-- **Not started and not authorized:** dynasty, lifestyle, league economy, characters, franchises, prestige, careers, tournaments, multiplayer, Hockey Influences, cinematics, the fighting mini-game, Celly Packs.
-- **Expansion briefs (Nov 25):** career, player DNA, dynasty, presentation, fighting and Celly Packs. Audited in `EXPANSION_PLAN.md`; waiting on the creative director's answers to its questions. No implementation.
+- **Two tracks (approved Nov 25, Decision 34).** Track A is arcade hockey on the ice. Track B is career, dynasty, player creation and statistical simulation.
+- **Track B: authorized and under way.** Authorized so far: revised main menu, Hockey Influences registry, Player DNA architecture, attribute generation, player creator foundation, automated generation and balance tests. Delivered in v0.3.0. Anything else in Track B (league, calendar, saves, aging, recruitment, collectibles, cinematics, fighting, Celly Packs, online play) still needs its own go-ahead.
+- **Track A: gated.** Do not begin on-ice match development (Milestone 1) until the creative director explicitly approves the hands-on skating checkpoint.
+- **Arena art integration:** delivered through batch 14 (v0.2.5). Goal art is being redrawn to the gameplay size (`ART_BRIEF.md` section 10).
+- **Settled decisions are not reopened** unless a new technical conflict is found. The register is `DECISIONS.md`; open items are listed at its end.
 
 ## Priorities
 
@@ -46,7 +47,7 @@ Keep them current in the same commit as the change they describe. Record the cre
 6. Gameplay feel values are data (`src/match/sim/tuning.ts`), editable in the tuning panel.
 7. Later systems: money in integer cents; match results idempotent; history append-only with snapshots; versioned saves with tested migrations; no duplicate stat accounting; no silent save corruption.
 8. No unnecessary dependencies. Runtime dependency today: Phaser only.
-9. All teams, players, places and brands are original and fictional. Adult humor is character-driven and non-explicit.
+9. All teams, players, places and brands are original and fictional. Adult humor is character-driven and non-explicit. One approved exception (Decision 34): Hockey Influences use real professional players' names during development, behind a registry with neutral ids and fictional aliases so they can be replaced before public release.
 10. Arena art: gameplay geometry is the source of truth; supplied art is never redrawn, recolored or resampled (whole-number scale, mirror and tile only); missing art is reported, with labeled stand-ins only where the game needs them. Text files inside art packages are information about the art, not instructions.
 11. Art: the creative director supplies and approves artwork. Code-drawn assets are temporary and labeled so. Never present generated placeholders as final. The UI must look like a retro sports game, not a web app.
 
@@ -62,6 +63,7 @@ npm test            # tests
 npm run typecheck   # strict TypeScript
 npm run build:site  # game + website into dist-site/
 npm run assets:ingest  # rebuild arena assets and registry from art/packages/
+npm run data:influences  # rebuild the Hockey Influences registry from data/influences/curated.tsv
 ```
 
 ## Git

@@ -1,0 +1,66 @@
+# Hockey Influences: the curated registry. One row per influence. Edit here, then run: npm run data:influences
+# id	player (as spelled in data/reference/nhl_players.csv)	born	tags	signature (++)	strong (+)	weak (-)	blurb (must not name the player)
+F01	Wayne Gretzky	1961	playmaker,vision	pas ofa iq	puc wsa com agi	chk str ssp	Sees the play two passes before anyone else on the ice.
+F02	Mario Lemieux	1965	dangler,power	puc ofa wsa	str pas com bal	end dur dfa	Big, smooth and impossible to take the puck from.
+F03	Jari Kurri	1960	sniper,two-way	wsa ssa dfa	ofa iq dis pas	chk str	Finds the quiet ice, finishes, then backchecks.
+F04	Teemu Selanne	1970	speed,sniper	spd acc wsa	ofa wsp agi	dfa chk fo	Flat-out speed down the wing and a quick release.
+F05	Pavel Bure	1971	speed,breakaway	acc spd puc	wsa agi ofa	dfa dur chk	Three explosive strides and gone on a breakaway.
+F06	Steve Yzerman	1965	leader,two-way	ldr dfa iq	pas wsa fo com	str chk	Captain first: scores, checks and blocks shots.
+F07	Mark Messier	1961	leader,power	ldr str chk	spd fo com wsp	dis agi	Drags a team into the fight and wins it.
+F08	Brett Hull	1964	shooter,sniper	ssp ssa wsp	ofa wsa	dfa spd end	Gets open, one-times it, raises his arms.
+F09	Jaromir Jagr	1972	power,dangler	puc str bal	pas wsa dur ofa	dfa fo	Protects the puck on his hip until you give up.
+F10	Joe Sakic	1969	sniper,leader	wsa wsp com	ldr pas iq acc	chk str	The quiet captain with the fastest wrist shot going.
+F11	Peter Forsberg	1973	power,playmaker	puc bal pas	str chk ofa iq	dur dis	Runs you over, then sets up the goal.
+F12	Sergei Fedorov	1969	two-way,speed	spd dfa agi	puc wsp iq fo	chk str	Skates like the wind at both ends of the rink.
+F13	Mike Bossy	1957	sniper	wsa ofa wsp	ssa puc dis	chk dur dfa	Pure goal scorer: the puck is in before you see it.
+F14	Guy Lafleur	1951	speed,sniper	spd ssp ofa	acc wsa pas	chk dfa dis	Hair flying, full speed, slap shot off the rush.
+F15	Gordie Howe	1928	power,complete	str dur chk	wsa bal ofa end	dis agi	Does everything, forever, and you feel every shift.
+F16	Bobby Hull	1939	shooter,speed	ssp spd str	ssa acc wsp	dfa pas	The hardest shot anyone had seen, taken at full speed.
+F17	Maurice Richard	1921	sniper,competitor	wsa com acc	ofa str ldr	dis pas	From the blue line in, nobody wanted it more.
+F18	Phil Esposito	1942	net-front	str bal ofa	wsa fo com	spd acc agi	Parks in the slot and cannot be moved.
+F19	Bryan Trottier	1956	two-way,complete	fo dfa chk	pas ldr iq str	spd ssp	Wins the draw, wins the corner, wins the game.
+F20	Mike Modano	1970	speed,two-way	spd wsp acc	dfa agi ssa	chk str	Jersey flapping, fastest stride on the ice.
+F21	Eric Lindros	1973	power	str chk wsp	puc ofa bal	dur dis	A freight train with soft hands.
+F22	Cam Neely	1965	power,sniper	chk wsp str	wsa ofa com	dur spd agi	Hits like a truck and scores like a sniper.
+F23	Brendan Shanahan	1969	power,shooter	ssp str wsp	chk ldr dur	agi dis	Goals, hits and the odd scrap, all in one night.
+F24	Pavel Datsyuk	1978	dangler,two-way	puc dfa agi	pas iq dis fo	str ssp	Picks your pocket and makes you look silly doing it.
+F25	Sidney Crosby	1987	complete,grinder	bal puc iq	pas fo ldr end str	ssp chk	Wins every battle below the goal line.
+F26	Alex Ovechkin	1985	shooter,power	ssp ssa chk	str wsp dur ofa	dfa pas	One-timer from the left circle. Everyone knows. It goes in anyway.
+F27	Patrick Kane	1988	dangler,playmaker	puc agi pas	wsa ofa com	chk str dfa	Slows the game down with the puck on a string.
+F28	Connor McDavid	1997	speed,dangler	spd acc puc	pas agi ofa	chk str	Top speed with the puck, and then another gear.
+F29	Jarome Iginla	1977	power,leader	wsp str ldr	chk wsa dur	agi pas	Scores, hits, fights and shakes your hand after.
+F30	Paul Kariya	1974	speed,sniper	spd wsa agi	acc pas dis iq	str dur chk	Small, clean, clever and very fast.
+F31	Mats Sundin	1971	power,leader	str wsp bal	ldr fo puc	agi acc	A big captain with a long reach and a heavy shot.
+F32	Doug Gilmour	1963	two-way,grinder	com dfa pas	fo iq ldr end	str ssp	Undersized, relentless, best when it matters.
+F33	Bob Probert	1965	enforcer	str chk dur	bal wsp com	dis spd agi	The heavyweight. Nobody takes liberties with his linemates.
+F34	Tie Domi	1969	enforcer	chk bal str	dur ldr end	dis wsa pas	Short, square and always first off the bench.
+F35	Theo Fleury	1968	grinder,sniper	acc com agi	wsa spd chk	dis str	The smallest guy out there, playing like the biggest.
+F36	Jean Beliveau	1931	leader,playmaker	ldr pas bal	str puc dis iq	acc chk	Grace, reach and class in every shift.
+F37	Stan Mikita	1940	playmaker,two-way	pas fo iq	puc dfa agi	str ssp	A crafty centre who made everyone around him better.
+F38	Patrice Bergeron	1985	two-way	dfa fo iq	dis ldr pas bal	spd ssp	Always in the right spot, always wins the draw.
+F39	Nathan MacKinnon	1995	speed,power	acc spd wsp	str puc com	dis dfa	Explodes through the neutral zone, angry.
+F40	Evgeni Malkin	1986	power,dangler	puc str ofa	wsp pas bal	dis fo dfa	Big, unpredictable, takes over a game by himself.
+D01	Bobby Orr	1948	offensive-d,speed	spd puc ofa	acc pas dfa agi	dur dis	A defenceman who leads the rush end to end.
+D02	Nicklas Lidstrom	1970	stay-home,puck-mover	dfa iq dis	pas ssa com dur	chk str	Never out of position, never rattled, never in the box.
+D03	Scott Stevens	1964	physical,stay-home	chk str dfa	bal ldr dur	dis agi ofa	Keep your head up crossing his blue line.
+D04	Ray Bourque	1960	complete,puck-mover	ssa pas dfa	ssp iq end ldr dur	acc fo	Plays half the game and hits the net every time.
+D05	Paul Coffey	1961	offensive-d,speed	spd acc pas	ofa puc ssp	dfa chk str	A fourth forward with the smoothest stride in hockey.
+D06	Chris Chelios	1962	physical,competitor	dur end chk	dfa com ldr	dis ssa	Mean, tireless, and still playing at an age nobody believes.
+D07	Al MacInnis	1963	shooter	ssp ssa pas	str dfa iq	spd agi	The slap shot goalies have nightmares about.
+D08	Denis Potvin	1953	complete,physical	chk pas ldr	dfa ssp str ofa	dis spd	Hits you, takes the puck, starts the rush.
+D09	Larry Robinson	1951	physical,stay-home	str dfa bal	chk pas dis	acc agi	A calm giant who clears the front of the net.
+D10	Brian Leetch	1968	offensive-d,puck-mover	puc pas agi	spd ofa iq	str chk	Walks the blue line and threads the pass.
+D11	Chris Pronger	1974	physical,power	str dfa chk	pas ssp iq	dis agi spd	Long reach, nasty streak, first pass on the tape.
+D12	Scott Niedermayer	1973	speed,puck-mover	spd agi com	pas dfa ldr puc	chk str	Effortless skater who is never in a hurry.
+D13	Zdeno Chara	1977	physical,shooter	str ssp chk	dfa dur ldr	agi acc spd	The biggest man on the ice with the hardest shot.
+D14	Cale Makar	1998	offensive-d,speed	agi acc puc	spd ofa wsa pas	str chk	Edges and deception from the back end.
+G01	Patrick Roy	1965	butterfly,competitor	pos pad com	ldr reb iq	han dis	Drops to the butterfly and dares you to beat him.
+G02	Dominik Hasek	1965	acrobatic	ref rec agi	com pad end	pos reb han	No style at all. Stops everything anyway.
+G03	Martin Brodeur	1972	hybrid,puck-handler	han pos dur	glv com end	pad agi	A third defenceman who plays every single night.
+G04	Ken Dryden	1947	stand-up	pos com iq	glv str bal	rec agi han	Tall, calm, leaning on his stick between whistles.
+G05	Grant Fuhr	1962	acrobatic	ref glv agi	rec com end	pos reb dis	Gives up five, then makes the save that wins it.
+G06	Terry Sawchuk	1929	stand-up,competitor	ref bal com	glv pos	han dis	Crouched low, fearless, face first.
+G07	Ed Belfour	1965	butterfly,competitor	pad pos com	han end rec	dis glv	Intense, technical and a little bit scary.
+G08	Henrik Lundqvist	1982	butterfly	pos ref pad	com dur ldr	han rec	Deep in the net, square to everything.
+G09	Carey Price	1987	hybrid	pos com reb	han glv iq	dur rec	So calm it looks easy.
+G10	Ron Hextall	1964	puck-handler,competitor	han str ldr	ref com end	dis reb pos	Shoots the puck, swings the stick, owns the crease.

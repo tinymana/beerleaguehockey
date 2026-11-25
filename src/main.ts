@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import { ArenaLabScene } from './app/ArenaLabScene';
 import { BootScene } from './app/BootScene';
+import { CreatorScene } from './app/CreatorScene';
 import { TitleScene } from './app/TitleScene';
 import { GAME_HEIGHT, GAME_WIDTH } from './app/config';
 import { fitStage } from './app/stage';
@@ -17,7 +18,7 @@ const game = new Phaser.Game({
   banner: false,
   input: { gamepad: true },
   scale: { mode: Phaser.Scale.NONE, zoom: 1 },
-  scene: [BootScene, TitleScene, SkatingScene, ArenaLabScene],
+  scene: [BootScene, TitleScene, SkatingScene, ArenaLabScene, CreatorScene],
 });
 
 fitStage(game);
