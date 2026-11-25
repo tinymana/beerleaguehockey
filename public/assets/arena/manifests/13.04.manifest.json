@@ -1,0 +1,639 @@
+{
+  "batch": "13.04",
+  "tileSize": [
+    8,
+    8
+  ],
+  "frameSize": [
+    16,
+    16
+  ],
+  "atlas": "spectator_atlas.png",
+  "assets": [
+    {
+      "file": "seated_west_01.png",
+      "side": "west",
+      "faces": "east",
+      "variant": 1,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_west_01_0_0.png",
+          "seated_west_01_0_1.png"
+        ],
+        [
+          "seated_west_01_1_0.png",
+          "seated_west_01_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_west_02.png",
+      "side": "west",
+      "faces": "east",
+      "variant": 2,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        16,
+        0,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_west_02_0_0.png",
+          "seated_west_02_0_1.png"
+        ],
+        [
+          "seated_west_02_1_0.png",
+          "seated_west_02_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_west_03.png",
+      "side": "west",
+      "faces": "east",
+      "variant": 3,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        32,
+        0,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_west_03_0_0.png",
+          "seated_west_03_0_1.png"
+        ],
+        [
+          "seated_west_03_1_0.png",
+          "seated_west_03_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_west_04.png",
+      "side": "west",
+      "faces": "east",
+      "variant": 4,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        48,
+        0,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_west_04_0_0.png",
+          "seated_west_04_0_1.png"
+        ],
+        [
+          "seated_west_04_1_0.png",
+          "seated_west_04_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_west_05.png",
+      "side": "west",
+      "faces": "east",
+      "variant": 5,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        64,
+        0,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_west_05_0_0.png",
+          "seated_west_05_0_1.png"
+        ],
+        [
+          "seated_west_05_1_0.png",
+          "seated_west_05_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_west_06.png",
+      "side": "west",
+      "faces": "east",
+      "variant": 6,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        80,
+        0,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_west_06_0_0.png",
+          "seated_west_06_0_1.png"
+        ],
+        [
+          "seated_west_06_1_0.png",
+          "seated_west_06_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_west_07.png",
+      "side": "west",
+      "faces": "east",
+      "variant": 7,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        96,
+        0,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_west_07_0_0.png",
+          "seated_west_07_0_1.png"
+        ],
+        [
+          "seated_west_07_1_0.png",
+          "seated_west_07_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_west_08.png",
+      "side": "west",
+      "faces": "east",
+      "variant": 8,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        112,
+        0,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_west_08_0_0.png",
+          "seated_west_08_0_1.png"
+        ],
+        [
+          "seated_west_08_1_0.png",
+          "seated_west_08_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_west_09.png",
+      "side": "west",
+      "faces": "east",
+      "variant": 9,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        0,
+        16,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_west_09_0_0.png",
+          "seated_west_09_0_1.png"
+        ],
+        [
+          "seated_west_09_1_0.png",
+          "seated_west_09_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_west_10.png",
+      "side": "west",
+      "faces": "east",
+      "variant": 10,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_west_10_0_0.png",
+          "seated_west_10_0_1.png"
+        ],
+        [
+          "seated_west_10_1_0.png",
+          "seated_west_10_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_west_11.png",
+      "side": "west",
+      "faces": "east",
+      "variant": 11,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        32,
+        16,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_west_11_0_0.png",
+          "seated_west_11_0_1.png"
+        ],
+        [
+          "seated_west_11_1_0.png",
+          "seated_west_11_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_west_12.png",
+      "side": "west",
+      "faces": "east",
+      "variant": 12,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        48,
+        16,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_west_12_0_0.png",
+          "seated_west_12_0_1.png"
+        ],
+        [
+          "seated_west_12_1_0.png",
+          "seated_west_12_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_east_01.png",
+      "side": "east",
+      "faces": "west",
+      "variant": 1,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        64,
+        16,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_east_01_0_0.png",
+          "seated_east_01_0_1.png"
+        ],
+        [
+          "seated_east_01_1_0.png",
+          "seated_east_01_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_east_02.png",
+      "side": "east",
+      "faces": "west",
+      "variant": 2,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        80,
+        16,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_east_02_0_0.png",
+          "seated_east_02_0_1.png"
+        ],
+        [
+          "seated_east_02_1_0.png",
+          "seated_east_02_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_east_03.png",
+      "side": "east",
+      "faces": "west",
+      "variant": 3,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        96,
+        16,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_east_03_0_0.png",
+          "seated_east_03_0_1.png"
+        ],
+        [
+          "seated_east_03_1_0.png",
+          "seated_east_03_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_east_04.png",
+      "side": "east",
+      "faces": "west",
+      "variant": 4,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        112,
+        16,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_east_04_0_0.png",
+          "seated_east_04_0_1.png"
+        ],
+        [
+          "seated_east_04_1_0.png",
+          "seated_east_04_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_east_05.png",
+      "side": "east",
+      "faces": "west",
+      "variant": 5,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        0,
+        32,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_east_05_0_0.png",
+          "seated_east_05_0_1.png"
+        ],
+        [
+          "seated_east_05_1_0.png",
+          "seated_east_05_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_east_06.png",
+      "side": "east",
+      "faces": "west",
+      "variant": 6,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        16,
+        32,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_east_06_0_0.png",
+          "seated_east_06_0_1.png"
+        ],
+        [
+          "seated_east_06_1_0.png",
+          "seated_east_06_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_east_07.png",
+      "side": "east",
+      "faces": "west",
+      "variant": 7,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        32,
+        32,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_east_07_0_0.png",
+          "seated_east_07_0_1.png"
+        ],
+        [
+          "seated_east_07_1_0.png",
+          "seated_east_07_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_east_08.png",
+      "side": "east",
+      "faces": "west",
+      "variant": 8,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        48,
+        32,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_east_08_0_0.png",
+          "seated_east_08_0_1.png"
+        ],
+        [
+          "seated_east_08_1_0.png",
+          "seated_east_08_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_east_09.png",
+      "side": "east",
+      "faces": "west",
+      "variant": 9,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        64,
+        32,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_east_09_0_0.png",
+          "seated_east_09_0_1.png"
+        ],
+        [
+          "seated_east_09_1_0.png",
+          "seated_east_09_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_east_10.png",
+      "side": "east",
+      "faces": "west",
+      "variant": 10,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        80,
+        32,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_east_10_0_0.png",
+          "seated_east_10_0_1.png"
+        ],
+        [
+          "seated_east_10_1_0.png",
+          "seated_east_10_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_east_11.png",
+      "side": "east",
+      "faces": "west",
+      "variant": 11,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        96,
+        32,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_east_11_0_0.png",
+          "seated_east_11_0_1.png"
+        ],
+        [
+          "seated_east_11_1_0.png",
+          "seated_east_11_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "seated_east_12.png",
+      "side": "east",
+      "faces": "west",
+      "variant": 12,
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        112,
+        32,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "seated_east_12_0_0.png",
+          "seated_east_12_0_1.png"
+        ],
+        [
+          "seated_east_12_1_0.png",
+          "seated_east_12_1_1.png"
+        ]
+      ]
+    }
+  ],
+  "previewOnly": "preview.png"
+}

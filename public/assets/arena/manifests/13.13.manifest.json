@@ -1,0 +1,259 @@
+{
+  "batch": "13.13",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    64,
+    32
+  ],
+  "atlas": "tunnel_atlas.png",
+  "assets": [
+    {
+      "file": "tunnel_west_open.png",
+      "side": "west",
+      "state": "open",
+      "atlasRect": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "aisleAnchorLocal": [
+        63,
+        16
+      ],
+      "exitAnchorLocal": [
+        8,
+        16
+      ],
+      "tiles": [
+        [
+          "tunnel_west_open_0_0.png",
+          "tunnel_west_open_0_1.png",
+          "tunnel_west_open_0_2.png",
+          "tunnel_west_open_0_3.png",
+          "tunnel_west_open_0_4.png",
+          "tunnel_west_open_0_5.png",
+          "tunnel_west_open_0_6.png",
+          "tunnel_west_open_0_7.png"
+        ],
+        [
+          "tunnel_west_open_1_0.png",
+          "tunnel_west_open_1_1.png",
+          "tunnel_west_open_1_2.png",
+          "tunnel_west_open_1_3.png",
+          "tunnel_west_open_1_4.png",
+          "tunnel_west_open_1_5.png",
+          "tunnel_west_open_1_6.png",
+          "tunnel_west_open_1_7.png"
+        ],
+        [
+          "tunnel_west_open_2_0.png",
+          "tunnel_west_open_2_1.png",
+          "tunnel_west_open_2_2.png",
+          "tunnel_west_open_2_3.png",
+          "tunnel_west_open_2_4.png",
+          "tunnel_west_open_2_5.png",
+          "tunnel_west_open_2_6.png",
+          "tunnel_west_open_2_7.png"
+        ],
+        [
+          "tunnel_west_open_3_0.png",
+          "tunnel_west_open_3_1.png",
+          "tunnel_west_open_3_2.png",
+          "tunnel_west_open_3_3.png",
+          "tunnel_west_open_3_4.png",
+          "tunnel_west_open_3_5.png",
+          "tunnel_west_open_3_6.png",
+          "tunnel_west_open_3_7.png"
+        ]
+      ]
+    },
+    {
+      "file": "tunnel_east_open.png",
+      "side": "east",
+      "state": "open",
+      "atlasRect": [
+        64,
+        0,
+        64,
+        32
+      ],
+      "aisleAnchorLocal": [
+        0,
+        16
+      ],
+      "exitAnchorLocal": [
+        55,
+        16
+      ],
+      "tiles": [
+        [
+          "tunnel_east_open_0_0.png",
+          "tunnel_east_open_0_1.png",
+          "tunnel_east_open_0_2.png",
+          "tunnel_east_open_0_3.png",
+          "tunnel_east_open_0_4.png",
+          "tunnel_east_open_0_5.png",
+          "tunnel_east_open_0_6.png",
+          "tunnel_east_open_0_7.png"
+        ],
+        [
+          "tunnel_east_open_1_0.png",
+          "tunnel_east_open_1_1.png",
+          "tunnel_east_open_1_2.png",
+          "tunnel_east_open_1_3.png",
+          "tunnel_east_open_1_4.png",
+          "tunnel_east_open_1_5.png",
+          "tunnel_east_open_1_6.png",
+          "tunnel_east_open_1_7.png"
+        ],
+        [
+          "tunnel_east_open_2_0.png",
+          "tunnel_east_open_2_1.png",
+          "tunnel_east_open_2_2.png",
+          "tunnel_east_open_2_3.png",
+          "tunnel_east_open_2_4.png",
+          "tunnel_east_open_2_5.png",
+          "tunnel_east_open_2_6.png",
+          "tunnel_east_open_2_7.png"
+        ],
+        [
+          "tunnel_east_open_3_0.png",
+          "tunnel_east_open_3_1.png",
+          "tunnel_east_open_3_2.png",
+          "tunnel_east_open_3_3.png",
+          "tunnel_east_open_3_4.png",
+          "tunnel_east_open_3_5.png",
+          "tunnel_east_open_3_6.png",
+          "tunnel_east_open_3_7.png"
+        ]
+      ]
+    },
+    {
+      "file": "tunnel_west_closed.png",
+      "side": "west",
+      "state": "closed",
+      "atlasRect": [
+        0,
+        32,
+        64,
+        32
+      ],
+      "aisleAnchorLocal": [
+        63,
+        16
+      ],
+      "exitAnchorLocal": [
+        8,
+        16
+      ],
+      "tiles": [
+        [
+          "tunnel_west_closed_0_0.png",
+          "tunnel_west_closed_0_1.png",
+          "tunnel_west_closed_0_2.png",
+          "tunnel_west_closed_0_3.png",
+          "tunnel_west_closed_0_4.png",
+          "tunnel_west_closed_0_5.png",
+          "tunnel_west_closed_0_6.png",
+          "tunnel_west_closed_0_7.png"
+        ],
+        [
+          "tunnel_west_closed_1_0.png",
+          "tunnel_west_closed_1_1.png",
+          "tunnel_west_closed_1_2.png",
+          "tunnel_west_closed_1_3.png",
+          "tunnel_west_closed_1_4.png",
+          "tunnel_west_closed_1_5.png",
+          "tunnel_west_closed_1_6.png",
+          "tunnel_west_closed_1_7.png"
+        ],
+        [
+          "tunnel_west_closed_2_0.png",
+          "tunnel_west_closed_2_1.png",
+          "tunnel_west_closed_2_2.png",
+          "tunnel_west_closed_2_3.png",
+          "tunnel_west_closed_2_4.png",
+          "tunnel_west_closed_2_5.png",
+          "tunnel_west_closed_2_6.png",
+          "tunnel_west_closed_2_7.png"
+        ],
+        [
+          "tunnel_west_closed_3_0.png",
+          "tunnel_west_closed_3_1.png",
+          "tunnel_west_closed_3_2.png",
+          "tunnel_west_closed_3_3.png",
+          "tunnel_west_closed_3_4.png",
+          "tunnel_west_closed_3_5.png",
+          "tunnel_west_closed_3_6.png",
+          "tunnel_west_closed_3_7.png"
+        ]
+      ]
+    },
+    {
+      "file": "tunnel_east_closed.png",
+      "side": "east",
+      "state": "closed",
+      "atlasRect": [
+        64,
+        32,
+        64,
+        32
+      ],
+      "aisleAnchorLocal": [
+        0,
+        16
+      ],
+      "exitAnchorLocal": [
+        55,
+        16
+      ],
+      "tiles": [
+        [
+          "tunnel_east_closed_0_0.png",
+          "tunnel_east_closed_0_1.png",
+          "tunnel_east_closed_0_2.png",
+          "tunnel_east_closed_0_3.png",
+          "tunnel_east_closed_0_4.png",
+          "tunnel_east_closed_0_5.png",
+          "tunnel_east_closed_0_6.png",
+          "tunnel_east_closed_0_7.png"
+        ],
+        [
+          "tunnel_east_closed_1_0.png",
+          "tunnel_east_closed_1_1.png",
+          "tunnel_east_closed_1_2.png",
+          "tunnel_east_closed_1_3.png",
+          "tunnel_east_closed_1_4.png",
+          "tunnel_east_closed_1_5.png",
+          "tunnel_east_closed_1_6.png",
+          "tunnel_east_closed_1_7.png"
+        ],
+        [
+          "tunnel_east_closed_2_0.png",
+          "tunnel_east_closed_2_1.png",
+          "tunnel_east_closed_2_2.png",
+          "tunnel_east_closed_2_3.png",
+          "tunnel_east_closed_2_4.png",
+          "tunnel_east_closed_2_5.png",
+          "tunnel_east_closed_2_6.png",
+          "tunnel_east_closed_2_7.png"
+        ],
+        [
+          "tunnel_east_closed_3_0.png",
+          "tunnel_east_closed_3_1.png",
+          "tunnel_east_closed_3_2.png",
+          "tunnel_east_closed_3_3.png",
+          "tunnel_east_closed_3_4.png",
+          "tunnel_east_closed_3_5.png",
+          "tunnel_east_closed_3_6.png",
+          "tunnel_east_closed_3_7.png"
+        ]
+      ]
+    }
+  ],
+  "previewOnly": "preview.png"
+}

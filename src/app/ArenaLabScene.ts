@@ -100,6 +100,12 @@ export class ArenaLabScene extends Phaser.Scene {
         },
         setBenchMood: (mood) => this.arena.setBenchMood(mood),
         setDoorsOpen: (open) => this.arena.setDoorsOpen(open),
+        setCrowdPose: (pose) => this.arena.setCrowdPose(pose),
+        crowdReact: (kind) => void this.arena.crowdReact(kind),
+        flashLamps: () => {
+          this.arena.flashLamp('north');
+          this.arena.flashLamp('south');
+        },
         useInGame: (id) => {
           arenaChoice.id = id;
         },
@@ -147,6 +153,7 @@ export class ArenaLabScene extends Phaser.Scene {
     const mirrored = this.arenaRegistry.issues.some((i) => i.message === 'North and south creases are exact vertical mirrors');
     this.panel.setAlignment(goalAlignment(RINK, tuning.cameraTilt, this.arena.layout, lookup), mirrored);
     this.panel.setBenchReport(this.arena.config.benchArea ? benchReport(RINK, this.arena.layout) : null);
+    this.panel.setStadiumReport(this.arena.config.stadium ? this.arena.layout.stadium : null, this.arena.config.crowdDensity);
     this.panel.setGoalFit(goalFit(RINK, tuning.cameraTilt, this.arena.config, lookup));
     this.drawGuides();
   }

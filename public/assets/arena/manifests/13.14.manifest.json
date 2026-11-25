@@ -1,0 +1,335 @@
+{
+  "batch": "13.14",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    32,
+    32
+  ],
+  "atlas": "structure_atlas.png",
+  "assets": [
+    {
+      "file": "steel_column.png",
+      "atlasRect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "steel_column_0_0.png",
+          "steel_column_0_1.png",
+          "steel_column_0_2.png",
+          "steel_column_0_3.png"
+        ],
+        [
+          "steel_column_1_0.png",
+          "steel_column_1_1.png",
+          "steel_column_1_2.png",
+          "steel_column_1_3.png"
+        ],
+        [
+          "steel_column_2_0.png",
+          "steel_column_2_1.png",
+          "steel_column_2_2.png",
+          "steel_column_2_3.png"
+        ],
+        [
+          "steel_column_3_0.png",
+          "steel_column_3_1.png",
+          "steel_column_3_2.png",
+          "steel_column_3_3.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "concrete_column.png",
+      "atlasRect": [
+        32,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "concrete_column_0_0.png",
+          "concrete_column_0_1.png",
+          "concrete_column_0_2.png",
+          "concrete_column_0_3.png"
+        ],
+        [
+          "concrete_column_1_0.png",
+          "concrete_column_1_1.png",
+          "concrete_column_1_2.png",
+          "concrete_column_1_3.png"
+        ],
+        [
+          "concrete_column_2_0.png",
+          "concrete_column_2_1.png",
+          "concrete_column_2_2.png",
+          "concrete_column_2_3.png"
+        ],
+        [
+          "concrete_column_3_0.png",
+          "concrete_column_3_1.png",
+          "concrete_column_3_2.png",
+          "concrete_column_3_3.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "beam_horizontal.png",
+      "atlasRect": [
+        64,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "beam_horizontal_0_0.png",
+          "beam_horizontal_0_1.png",
+          "beam_horizontal_0_2.png",
+          "beam_horizontal_0_3.png"
+        ],
+        [
+          "beam_horizontal_1_0.png",
+          "beam_horizontal_1_1.png",
+          "beam_horizontal_1_2.png",
+          "beam_horizontal_1_3.png"
+        ],
+        [
+          "beam_horizontal_2_0.png",
+          "beam_horizontal_2_1.png",
+          "beam_horizontal_2_2.png",
+          "beam_horizontal_2_3.png"
+        ],
+        [
+          "beam_horizontal_3_0.png",
+          "beam_horizontal_3_1.png",
+          "beam_horizontal_3_2.png",
+          "beam_horizontal_3_3.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "beam_vertical.png",
+      "atlasRect": [
+        96,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "beam_vertical_0_0.png",
+          "beam_vertical_0_1.png",
+          "beam_vertical_0_2.png",
+          "beam_vertical_0_3.png"
+        ],
+        [
+          "beam_vertical_1_0.png",
+          "beam_vertical_1_1.png",
+          "beam_vertical_1_2.png",
+          "beam_vertical_1_3.png"
+        ],
+        [
+          "beam_vertical_2_0.png",
+          "beam_vertical_2_1.png",
+          "beam_vertical_2_2.png",
+          "beam_vertical_2_3.png"
+        ],
+        [
+          "beam_vertical_3_0.png",
+          "beam_vertical_3_1.png",
+          "beam_vertical_3_2.png",
+          "beam_vertical_3_3.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "beam_cross.png",
+      "atlasRect": [
+        0,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "beam_cross_0_0.png",
+          "beam_cross_0_1.png",
+          "beam_cross_0_2.png",
+          "beam_cross_0_3.png"
+        ],
+        [
+          "beam_cross_1_0.png",
+          "beam_cross_1_1.png",
+          "beam_cross_1_2.png",
+          "beam_cross_1_3.png"
+        ],
+        [
+          "beam_cross_2_0.png",
+          "beam_cross_2_1.png",
+          "beam_cross_2_2.png",
+          "beam_cross_2_3.png"
+        ],
+        [
+          "beam_cross_3_0.png",
+          "beam_cross_3_1.png",
+          "beam_cross_3_2.png",
+          "beam_cross_3_3.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "beam_corner.png",
+      "atlasRect": [
+        32,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "beam_corner_0_0.png",
+          "beam_corner_0_1.png",
+          "beam_corner_0_2.png",
+          "beam_corner_0_3.png"
+        ],
+        [
+          "beam_corner_1_0.png",
+          "beam_corner_1_1.png",
+          "beam_corner_1_2.png",
+          "beam_corner_1_3.png"
+        ],
+        [
+          "beam_corner_2_0.png",
+          "beam_corner_2_1.png",
+          "beam_corner_2_2.png",
+          "beam_corner_2_3.png"
+        ],
+        [
+          "beam_corner_3_0.png",
+          "beam_corner_3_1.png",
+          "beam_corner_3_2.png",
+          "beam_corner_3_3.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "column_braced.png",
+      "atlasRect": [
+        64,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "column_braced_0_0.png",
+          "column_braced_0_1.png",
+          "column_braced_0_2.png",
+          "column_braced_0_3.png"
+        ],
+        [
+          "column_braced_1_0.png",
+          "column_braced_1_1.png",
+          "column_braced_1_2.png",
+          "column_braced_1_3.png"
+        ],
+        [
+          "column_braced_2_0.png",
+          "column_braced_2_1.png",
+          "column_braced_2_2.png",
+          "column_braced_2_3.png"
+        ],
+        [
+          "column_braced_3_0.png",
+          "column_braced_3_1.png",
+          "column_braced_3_2.png",
+          "column_braced_3_3.png"
+        ]
+      ],
+      "decorative": true
+    },
+    {
+      "file": "column_padded.png",
+      "atlasRect": [
+        96,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "column_padded_0_0.png",
+          "column_padded_0_1.png",
+          "column_padded_0_2.png",
+          "column_padded_0_3.png"
+        ],
+        [
+          "column_padded_1_0.png",
+          "column_padded_1_1.png",
+          "column_padded_1_2.png",
+          "column_padded_1_3.png"
+        ],
+        [
+          "column_padded_2_0.png",
+          "column_padded_2_1.png",
+          "column_padded_2_2.png",
+          "column_padded_2_3.png"
+        ],
+        [
+          "column_padded_3_0.png",
+          "column_padded_3_1.png",
+          "column_padded_3_2.png",
+          "column_padded_3_3.png"
+        ]
+      ],
+      "decorative": true
+    }
+  ],
+  "previewOnly": "preview.png"
+}

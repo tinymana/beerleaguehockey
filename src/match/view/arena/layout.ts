@@ -6,6 +6,8 @@
 import { goalLineY } from '../../sim/rink';
 import type { RinkGeometry } from '../../sim/rink';
 import { projectY } from '../projection';
+import { Rng, hashString } from '../../../core/rng';
+import { worldScreenHeight } from '../projection';
 import type { ArenaConfig, BenchSide, BenchTeam, BoardSide, GoalArt, GoalEnd, SideStructure } from './config';
 import { TILE, visibleCentre } from './registry';
 import type { ArenaAsset } from './registry';
@@ -215,6 +217,7 @@ export interface ArenaLayout {
   structures: StructurePlacement[];
   /** Structures the config asked for that do not fit on the straight boards at this tilt. */
   structuresSkipped: string[];
+  stadium: StadiumLayout;
 }
 
 type Lookup = (id: string) => ArenaAsset | undefined;
@@ -294,7 +297,8 @@ export function layoutArena(rink: RinkGeometry, tilt: number, config: ArenaConfi
     centred('centerDot', 'markings', config.centerDot.asset, config.centerDot.scale, rink.centerX, rink.centerY);
   }
 
-  return { grid, lines, images, ...layoutBoards(rink, tilt, config, lookup) };
+  const boards = layoutBoards(rink, tilt, config, lookup);
+  return { grid, lines, images, ...boards, stadium: layoutStadium(rink, tilt, config, boards) };
 }
 
 /** Reach of the supplied corner modules, from their manifests: 37 px along the ends, 21 px along the sides. */
@@ -492,6 +496,107 @@ const BOARD_FACE = 15;
 const GLASS_CONTACT: Record<BoardSide, { x: number; y: number }> = { north: { x: 0, y: 14 }, south: { x: 0, y: 2 }, west: { x: 7, y: 0 }, east: { x: 1, y: 0 } };
 /** Local pixel of each post that sits on the board cap at a panel seam (batch 10.10 manifest). */
 const POST_ANCHOR: Record<BoardSide, { x: number; y: number }> = { north: { x: 4, y: 14 }, south: { x: 4, y: 1 }, west: { x: 7, y: 8 }, east: { x: 0, y: 8 } };
+
+/** One 64x32 piece of the stands: seats or a flight of stairs. */
+export interface StandModule {
+  side: BenchSide;
+  kind: 'seating' | 'stairs';
+  asset: string;
+  x: number;
+  y: number;
+}
+
+/** One spectator. `x`,`y` is the seat anchor on screen; frames are centred on it. */
+export interface Fan {
+  side: BenchSide;
+  x: number;
+  y: number;
+  /** 1-based art variant, kept for the fan's whole life so reactions match the still pose. */
+  variant: number;
+  frontRow: boolean;
+}
+
+export interface LampPlacement {
+  end: GoalEnd;
+  /** Top-left of the 16x16 lamp frame. */
+  x: number;
+  y: number;
+}
+
+export interface StadiumLayout {
+  modules: StandModule[];
+  fans: Fan[];
+  /** Seats that are on screen, and seats the art has that fall outside the world. */
+  seatsVisible: number;
+  seatsOffWorld: number;
+  lamps: LampPlacement[];
+}
+
+const STAND = { width: 64, height: 32 };
+
+/**
+ * Seating down both sides, outside the glass, in step with the board modules; a gap wherever a
+ * bench, penalty box or the timekeeper stands. Who sits where comes from a seeded stream, so the
+ * same arena always has the same crowd, and a fuller house only ever adds people.
+ */
+export function layoutStadium(rink: RinkGeometry, tilt: number, config: ArenaConfig, boards: Pick<ArenaLayout, 'strips' | 'glass' | 'extents' | 'structures'>): StadiumLayout {
+  const result: StadiumLayout = { modules: [], fans: [], seatsVisible: 0, seatsOffWorld: 0, lamps: [] };
+  const art = config.stadium;
+  if (!art) return result;
+  const worldH = worldScreenHeight(rink.worldHeight, tilt);
+  const rng = new Rng(hashString(`crowd:${config.id}`));
+  for (const side of ['west', 'east'] as const) {
+    const run = boards.strips.find((s) => s.role === `${side}Boards`);
+    if (!run) continue;
+    const panes = boards.glass.filter((g) => g.side === side);
+    // The stands start at the outside face of the glass, or of the boards where there is no glass.
+    const x =
+      side === 'west'
+        ? Math.min(run.x, ...panes.map((p) => p.x)) - STAND.width
+        : Math.max(run.x + run.width, ...panes.map((p) => p.x + (p.cropW ?? 0)));
+    const taken = boards.structures.filter((p) => p.structure.side === side).map((p) => [p.y, p.y + p.structure.height] as const);
+    const seats = rng.fork(side);
+    let placed = 0;
+    for (let k = Math.ceil(-boards.extents.y0 / MODULE); ; k++) {
+      const y = boards.extents.y0 + k * MODULE;
+      if (y + STAND.height > worldH) break;
+      if (taken.some(([top, bottom]) => y < bottom && y + STAND.height > top)) continue;
+      const stairs = placed % art.stairsEvery === Math.floor(art.stairsEvery / 2);
+      placed++;
+      result.modules.push({ side, kind: stairs ? 'stairs' : 'seating', asset: stairs ? art.stairs[side] : art.seating[side], x, y });
+      if (stairs) continue;
+      for (const [sx, sy] of art.seats[side]) {
+        // Every seat draws from the stream, seen or not, so the crowd does not reshuffle if the world is widened.
+        const roll = seats.next();
+        const variant = seats.int(art.crowd.variants) + 1;
+        const fx = x + sx;
+        if (fx - 8 < 0 || fx + 8 > rink.worldWidth) {
+          result.seatsOffWorld++;
+          continue;
+        }
+        result.seatsVisible++;
+        if (roll < config.crowdDensity) result.fans.push({ side, x: fx, y: y + sy, variant, frontRow: sx === art.frontRow[side] });
+      }
+    }
+  }
+  // Goal lamps: behind each net, against the outside of the end boards, as far out as the world allows.
+  const north = boards.strips.find((s) => s.role === 'northBoards');
+  const south = boards.strips.find((s) => s.role === 'southBoards');
+  const [ax, ay] = art.lamp.anchor;
+  if (north) result.lamps.push({ end: 'north', x: rink.centerX - ax, y: Math.max(north.y + 1, ay - 3) - ay });
+  if (south) result.lamps.push({ end: 'south', x: rink.centerX - ax, y: Math.min(Math.floor(worldH), south.y + south.height + 10) - ay });
+  return result;
+}
+
+/** Frame of a one-shot or repeated sequence at time `t` ms, or null once it has finished (or not begun). */
+export function sequenceFrame(durations: readonly number[], loops: number, t: number): number | null {
+  const total = durations.reduce((a, b) => a + b, 0);
+  if (t < 0 || total <= 0 || t >= total * loops) return null;
+  let rest = t % total;
+  let frame = 0;
+  while (frame < durations.length - 1 && rest >= (durations[frame] ?? 0)) rest -= durations[frame++] ?? 0;
+  return frame;
+}
 
 export interface BenchReport {
   rows: { kind: string; side: BenchSide; top: number; bottom: number; doors: number; gapToNext: number | null }[];

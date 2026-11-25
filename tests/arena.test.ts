@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { RINK, goalLineY } from '../src/match/sim/rink';
 import { ARENA_CONFIGS, arenaConfig } from '../src/match/view/arena/config';
 import { IceWear, trafficPrior } from '../src/match/view/arena/iceWear';
-import { ARENA_LAYERS, benchReport, faceoffSpots, goalAlignment, goalFit, iceGrid, iceOutline, layoutArena, layoutGoals, screenY } from '../src/match/view/arena/layout';
+import { ARENA_LAYERS, benchReport, layoutStadium, sequenceFrame, faceoffSpots, goalAlignment, goalFit, iceGrid, iceOutline, layoutArena, layoutGoals, screenY } from '../src/match/view/arena/layout';
 import { TILE, assetById, loadableAssets, textureSource } from '../src/match/view/arena/registry';
 import type { ArenaRegistry } from '../src/match/view/arena/registry';
 import { projectY } from '../src/match/view/projection';
@@ -28,10 +28,11 @@ describe('arena asset registry', () => {
       ...Array.from({ length: 14 }, (_, i) => `10.${String(i + 1).padStart(2, '0')}`),
       ...Array.from({ length: 10 }, (_, i) => `11.${String(i + 1).padStart(2, '0')}`),
       ...Array.from({ length: 10 }, (_, i) => `12.${String(i + 1).padStart(2, '0')}`),
+      ...Array.from({ length: 15 }, (_, i) => `13.${String(i + 1).padStart(2, '0')}`),
     ];
     expect(Object.keys(registry.batches).sort()).toEqual(expected);
     expect(registry.issues.filter((i) => i.level === 'error')).toEqual([]);
-    expect(registry.assets.length).toBe(4327);
+    expect(registry.assets.length).toBe(9610);
   });
 
   it('points only at files that exist, with the recorded pixel size, on the 8-pixel grid', () => {
@@ -58,7 +59,7 @@ describe('arena asset registry', () => {
 
   it('reports what has arrived and what is still missing', () => {
     const status = Object.fromEntries(registry.slots.map((s) => [s.id, s.status]));
-    for (const id of ['ice.base', 'ice.scratches', 'markings.creaseNorth', 'logo.center', 'boards.west', 'boards.east', 'boards.north', 'boards.south', 'glass', 'glass.posts', 'glass.damage', 'boards.gates', 'boards.ads', 'goals.scored', 'goals.ripple', 'goals.knockoff', 'goals.dislodged', 'benches.reactions', 'benches.doors', 'benches.equipment']) {
+    for (const id of ['ice.base', 'ice.scratches', 'markings.creaseNorth', 'logo.center', 'boards.west', 'boards.east', 'boards.north', 'boards.south', 'glass', 'glass.posts', 'glass.damage', 'boards.gates', 'boards.ads', 'goals.scored', 'goals.ripple', 'goals.knockoff', 'goals.dislodged', 'benches.reactions', 'benches.doors', 'benches.equipment', 'stadium.reactions', 'stadium.railings', 'stadium.tunnels', 'stadium.signs', 'stadium.structure']) {
       expect(status[id], id).toBe('supplied');
     }
     expect(status['boards.corners']).toBe('unfit');
@@ -66,8 +67,8 @@ describe('arena asset registry', () => {
     expect(status['goals.north']).toBe('provisional');
     expect(status['goals.south']).toBe('provisional');
     // Benches and boxes are placed as a proposal: the packages call every placement provisional.
-    for (const id of ['benches', 'penaltyBox', 'benches.timekeeper', 'benches.players']) expect(status[id], id).toBe('provisional');
-    for (const id of ['glass.corners', 'stadium', 'spectators', 'equipment']) {
+    for (const id of ['benches', 'penaltyBox', 'benches.timekeeper', 'benches.players', 'stadium', 'spectators', 'stadium.lamps']) expect(status[id], id).toBe('provisional');
+    for (const id of ['glass.corners', 'equipment']) {
       expect(status[id], id).toBe('missing');
     }
   });
@@ -76,7 +77,7 @@ describe('arena asset registry', () => {
     const load = loadableAssets(registry);
     expect(load.some((a) => a.role === 'tile' || a.role === 'frame')).toBe(false);
     expect(load.some((a) => a.duplicateOf)).toBe(false);
-    expect(load.length).toBeLessThan(140);
+    expect(load.length).toBeLessThan(190);
     // Every duplicate points at a file that is loaded.
     // Everything that is not a single tile resolves to a texture that is loaded, and to a cell inside it.
     const loaded = new Map(load.map((l) => [l.id, l]));
@@ -341,7 +342,7 @@ describe('goal nets', () => {
 
   it('files every single animation frame against a strip that holds the same pixels', () => {
     const frames = registry.assets.filter((a) => a.role === 'frame');
-    expect(frames.length).toBe(282);
+    expect(frames.length).toBe(1050);
     for (const f of frames) {
       const strip = lookup(f.atlas ?? '');
       expect(strip, f.id).toBeDefined();
@@ -448,6 +449,125 @@ describe('benches, penalty boxes and doors', () => {
       expect(new Set(p.spots.map((s) => s.team)).size).toBe(1);
     }
     expect(l.structures.filter((x) => x.structure.kind !== 'bench').every((x) => x.spots.length === 0)).toBe(true);
+  });
+});
+
+describe('stands, crowd and goal lamps', () => {
+  const standard = arenaConfig('standard');
+  const art = standard.stadium;
+  if (!art) throw new Error('standard arena has no stadium');
+  const manifest = (batch: string) => JSON.parse(readFileSync(join(ARENA_DIR, 'manifests', `${batch}.manifest.json`), 'utf8')) as Record<string, unknown>;
+  const l = layoutArena(RINK, TILT, standard, lookup);
+  const two = (n: number) => String(n).padStart(2, '0');
+
+  it('uses the seat anchors and timings written in the batch manifests', () => {
+    const seating = manifest('13.01').assets as { file: string; seatAnchorsLocal: number[][] }[];
+    for (const side of ['west', 'east'] as const) {
+      const entry = seating.find((a) => `13.01/${a.file.replace('.png', '')}` === art.seating[side]);
+      expect(entry?.seatAnchorsLocal, side).toEqual(art.seats[side]);
+    }
+    for (const [kind, key] of [['cheer', 'assets'], ['bang', 'sequences'], ['drink', 'assets'], ['heckle', 'sequences'], ['goal', 'assets']] as const) {
+      const r = art.crowd.reactions[kind];
+      const entries = manifest(r.batch)[key] as { anchorLocal: number[]; frames: { file: string; durationMs: number }[] }[];
+      expect(entries.length).toBe(art.crowd.variants * 2);
+      for (const e of entries) {
+        expect(e.frames.map((f) => f.durationMs), r.batch).toEqual([...r.durations]);
+        expect(e.anchorLocal).toEqual([r.size / 2, r.size / 2]);
+      }
+      expect(entries[0]?.frames[0]?.file).toBe(`${r.name}_west_01_00.png`);
+    }
+    const lamp = (manifest('13.15').sequences as { id: string; anchorLocal: number[]; frames: { durationMs: number }[] }[]).find((x) => x.id === 'goal_lamp');
+    expect(lamp?.anchorLocal).toEqual([...art.lamp.anchor]);
+    expect(lamp?.frames.map((f) => f.durationMs)).toEqual(Array.from({ length: art.lamp.count }, () => art.lamp.frameMs));
+  });
+
+  it('has a still pose and every reaction frame in the registry for every fan it can draw', () => {
+    for (const side of ['west', 'east']) {
+      for (let v = 1; v <= art.crowd.variants; v++) {
+        expect(lookup(`${art.crowd.seated}_${side}_${two(v)}`), `seated ${side} ${v}`).toBeDefined();
+        expect(lookup(`${art.crowd.standing}_${side}_${two(v)}`), `standing ${side} ${v}`).toBeDefined();
+        for (const r of Object.values(art.crowd.reactions)) {
+          r.durations.forEach((_, f) => {
+            const frame = lookup(`${r.batch}/${r.name}_${side}_${two(v)}_${two(f)}`);
+            expect([frame?.width, frame?.height], `${r.name} ${side} ${v} ${f}`).toEqual([r.size, r.size]);
+          });
+        }
+      }
+    }
+    for (let f = 0; f < art.lamp.count; f++) expect(lookup(`${art.lamp.frames}_${two(f)}`)).toBeDefined();
+  });
+
+  it('stands the seating against the outside of the glass, in step with the board modules, clear of benches and boxes', () => {
+    const { modules } = l.stadium;
+    expect(modules.length).toBeGreaterThan(20);
+    for (const m of modules) {
+      const glass = l.glass.filter((g) => g.side === m.side);
+      const edge = m.side === 'west' ? Math.min(...glass.map((g) => g.x)) : Math.max(...glass.map((g) => g.x + (g.cropW ?? 0)));
+      expect(m.side === 'west' ? m.x + 64 : m.x, m.side).toBe(edge);
+      expect((m.y - l.extents.y0) % 32 === 0).toBe(true);
+      expect(m.y).toBeGreaterThanOrEqual(0);
+      for (const p of l.structures.filter((x) => x.structure.side === m.side)) {
+        expect(m.y >= p.y + p.structure.height || m.y + 32 <= p.y, `${m.side} stand at ${m.y} vs ${p.structure.kind}`).toBe(true);
+      }
+    }
+    expect(modules.some((m) => m.kind === 'stairs' && m.side === 'west')).toBe(true);
+    expect(modules.some((m) => m.kind === 'stairs' && m.side === 'east')).toBe(true);
+  });
+
+  it('seats fans only on seats that are on screen, never on stairs, and reports the tier that does not fit', () => {
+    const { fans, modules, seatsVisible, seatsOffWorld } = l.stadium;
+    const seating = modules.filter((m) => m.kind === 'seating');
+    expect(seatsVisible + seatsOffWorld).toBe(seating.length * 8);
+    // The world is 480 wide: three of the four tiers fit on each side.
+    expect(seatsOffWorld).toBe(seating.length * 2);
+    for (const f of fans) {
+      expect(f.x - 8).toBeGreaterThanOrEqual(0);
+      expect(f.x + 8).toBeLessThanOrEqual(RINK.worldWidth);
+      expect(f.variant >= 1 && f.variant <= art.crowd.variants).toBe(true);
+      expect(seating.some((m) => m.side === f.side && f.y > m.y && f.y < m.y + 32 && f.x > m.x && f.x < m.x + 64)).toBe(true);
+    }
+    expect(fans.some((f) => f.frontRow)).toBe(true);
+    expect(Math.abs(fans.length / seatsVisible - standard.crowdDensity)).toBeLessThan(0.12);
+  });
+
+  it('gives the same crowd every time, and a fuller house only adds people', () => {
+    const again = layoutArena(RINK, TILT, standard, lookup).stadium.fans;
+    expect(again).toEqual(l.stadium.fans);
+    const full = layoutArena(RINK, TILT, { ...standard, crowdDensity: 1 }, lookup).stadium;
+    expect(full.fans.length).toBe(full.seatsVisible);
+    for (const f of l.stadium.fans) expect(full.fans).toContainEqual(f);
+    expect(layoutArena(RINK, TILT, { ...standard, crowdDensity: 0 }, lookup).stadium.fans).toEqual([]);
+  });
+
+  it('puts a goal lamp behind each net, on the centre line and inside the world', () => {
+    const worldH = Math.ceil(RINK.worldHeight * TILT);
+    const lamps = l.stadium.lamps;
+    expect(lamps.map((x) => x.end)).toEqual(['north', 'south']);
+    for (const lamp of lamps) {
+      expect(lamp.x + art.lamp.anchor[0]).toBe(RINK.centerX);
+      const ink = lookup(`${art.lamp.frames}_00`)?.bbox ?? [0, 0, 15, 15];
+      expect(lamp.y + ink[1]).toBeGreaterThanOrEqual(0);
+      expect(lamp.y + ink[3]).toBeLessThan(worldH);
+    }
+    const north = lamps[0];
+    const south = lamps[1];
+    expect((north?.y ?? 0) + 16).toBeLessThan(screenY(RINK, TILT, goalLineY(RINK, 'top')));
+    expect(south?.y ?? 0).toBeGreaterThan(screenY(RINK, TILT, goalLineY(RINK, 'bottom')));
+  });
+
+  it('has no stands, crowd or lamps where the arena does not ask for them', () => {
+    const none = layoutStadium(RINK, TILT, arenaConfig('practice-sheet'), layoutArena(RINK, TILT, arenaConfig('practice-sheet'), lookup));
+    expect(none).toEqual({ modules: [], fans: [], seatsVisible: 0, seatsOffWorld: 0, lamps: [] });
+  });
+
+  it('steps through a sequence by its frame times, repeats it, then ends', () => {
+    const d = [100, 120, 160, 120];
+    expect(sequenceFrame(d, 2, -1)).toBeNull();
+    expect([0, 99, 100, 219, 220, 379, 380, 499].map((t) => sequenceFrame(d, 2, t))).toEqual([0, 0, 1, 1, 2, 2, 3, 3]);
+    expect(sequenceFrame(d, 2, 500)).toBe(0);
+    expect(sequenceFrame(d, 2, 999)).toBe(3);
+    expect(sequenceFrame(d, 2, 1000)).toBeNull();
+    expect(sequenceFrame([], 1, 0)).toBeNull();
   });
 });
 

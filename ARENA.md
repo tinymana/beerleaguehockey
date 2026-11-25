@@ -69,16 +69,17 @@ Open it by pressing **L** on the title screen, or by loading the game with `#are
 - Centre-logo replacement: supplied logo, no logo (centre dot), or a magenta test card. The test card is a generated developer fixture, never shipped art.
 - Ice wear control, 0 to 100%.
 - Goal states: rest, scored, net ripple, bottle off, dislodged, played on both nets; a goal fit readout gives the drawn mouth and depth against the physics net.
+- Stands: sit, stand, fans cheer, goal celebration, glass banging (front row), drink, heckle, goal lamps; a readout gives seats on screen, seats taken and seats that fall outside the world.
 - Benches: empty, seated, standing, cheer, groan; open and close every door; a footprint report says whether each structure is off the ice, on screen, clear of its neighbour and has its doors on whole board modules.
 - Art slots list: every slot with supplied, provisional or missing.
 - Asset browser: every registered asset at native size and enlarged, on a real checkerboard, with its facts.
 - Ingestion report: counts and every warning.
 
-## Status (v0.2.3)
+## Status (v0.2.4)
 
-Registered: 4,327 assets from 47 packages (batches 09.01 to 09.13, 10.01 to 10.14, 11.01 to 11.10 and 12.01 to 12.10). Errors: 0. Rejected: 0. Excluded: 47 preview images. The game loads 133 of the files: one per atlas or animation strip and one per distinct whole image. Single tiles, files a manifest places inside an atlas, and byte-identical duplicates are all drawn from those (`textureSource()` in `registry.ts`).
+Registered: 9,610 assets from 62 packages (batches 09.01 to 09.13, 10.01 to 10.14, 11.01 to 11.10, 12.01 to 12.10 and 13.01 to 13.15). Errors: 0. Rejected: 0. Excluded: 62 preview images. The game loads 184 of the files: one per atlas or animation strip and one per distinct whole image. Single tiles, files a manifest places inside an atlas, and byte-identical duplicates are all drawn from those (`textureSource()` in `registry.ts`).
 
-In the standard arena now: ice, scratches, reflections, all markings, centre logo, straight boards on all four sides, glass panes and posts on the straight runs, two sponsor panels, the supplied north and south goals (provisional: see A13), and the bench area: two benches with seated players, two penalty boxes, the timekeeper booth and six closed doors (provisional: see A16). Glass damage states (cracked, shattered, missing) can be set per pane and are shown by the Lab's glass damage test.
+In the standard arena now: ice, scratches, reflections, all markings, centre logo, straight boards on all four sides, glass panes and posts on the straight runs, two sponsor panels, the supplied north and south goals (provisional: see A13), and the bench area: two benches with seated players, two penalty boxes, the timekeeper booth and six closed doors (provisional: see A16), side seating with a seated crowd, and a goal lamp behind each net (provisional: see A20, A21). Glass damage states (cracked, shattered, missing) can be set per pane and are shown by the Lab's glass damage test.
 
 Not usable as drawn (1 slot): the four corner boards. See A8.
 
@@ -86,7 +87,9 @@ Goals (batch 11): each goal is one image placed by its manifest mouth anchor on 
 
 Bench area (batch 12): `benchArea` in the arena config lists each structure with the contact edge, layers and anchors from its manifest. `layoutBoards()` stands each one against the outside edge of the side boards, snaps it along the boards so its doors replace whole 32 px board modules, and pushes it along if it would overlap its neighbour; a structure that does not fit on the straight run is skipped and reported. Structures draw in the stadium layer, behind boards and glass, with players between the seating and enclosure layers. Doors are the 12.09 strip, frame 0 (identical pixels to the 10.12 closed gate). `setBenchMood()` and `setDoorsOpen()` drive the Lab tests.
 
-Missing (4 slots): curved corner glass, stadium and seating, animated spectators, arena equipment.
+Stands and crowd (batch 13): `stadium` in the arena config names the seating and stairs modules, the seat anchors, each crowd reaction (batch, frame name, frame size, timings, repeats) and the goal lamp. `layoutStadium()` places 64x32 modules from the top of the world to the bottom on each side, starting at the outside face of the glass, and seats fans from a seeded stream (`crowd:<arena id>`). `CrowdView` owns one image per fan and steps reactions with `sequenceFrame()`. Reaction frames are found by name (`13.06/cheer_west_03_02`) and drawn from the batch atlas. In play the crowd sips at random intervals and celebrates on the sim's goal event; `flashLamp()` runs the lamp.
+
+Missing (2 slots): curved corner glass, arena equipment (batch 14). Also not drawn: seating for the ends and corners, which no batch has supplied.
 
 Arena configurations: Standard rink; Supplied art only (no stand-ins); Corner art fit test; Practice sheet.
 
@@ -112,4 +115,8 @@ Arena configurations: Standard rink; Supplied art only (no stand-ins); Corner ar
 | A17 | **Bench players' colours.** The seated and standing players are blue-and-white (home) and red-and-white (away). The package says to palette swap for other teams | Shown as supplied. I have not recoloured anything | Team colours are yours to approve. Palette swapping is also recolouring supplied art, which rule 10 forbids today: say if bench players are an exception |
 | A18 | **Bench equipment has no positions.** Stick racks, bottles, towels, bags and crates arrive with a pivot each and "behind players where appropriate" | Registered and viewable in the Lab browser; not placed | Tell me which items go on which bench, or approve me proposing a layout |
 | A19 | **Open doors show the backdrop.** The open door frames are transparent across the board's width, and no floor or threshold art covers that strip | Doors stay closed in play; opening is a Lab test | A threshold tile per side (about 16x24 px) would fix it |
+| A20 | **The stands do not fit the world.** A seating module is 64 px (four tiers); there are 48 px between the glass and the edge of the 480 px world, so the outer tier of each side is off screen. There is no seating for the ends or corners at all. Seat colours (blue west, red east) and the 55% house are my picks | Three tiers a side, sides only, stand-in backdrop at the ends | Choose: (a) accept three tiers; (b) widen the world by 16 to 32 px a side and let the camera scroll sideways as it does in NHL '94, which is a camera change and needs your approval; or (c) redraw seating as three tiers. Also say whether end and corner seating is coming |
+| A21 | **Goal reactions with no teams.** On a goal the lamp behind that net flashes and the whole crowd celebrates. The packages say supporters of the scoring team only. The lamps sit hard against the top and bottom of the world because there is nothing beyond the end glass | As described; one line each in `SkatingScene` | Fine for the prototype? It narrows to the scoring side once teams exist. Benches still do not react, for the same reason |
+| A22 | **Batch 13 pieces with nowhere to go yet.** Railings (the front row sits against the glass, so a railing would cover it); aisles, tunnels and departing fans (need routes and a reason to leave); columns and beams (no positions given); beacon and siren fixtures (no positions given) | Registered and viewable in the Lab browser; not placed | Tell me where they go, or approve me proposing a layout once A20 settles how wide the stands are |
+| A23 | **Sign holders.** Twelve signs: GO!, DEF, WIN, BEER, SHOOT, REF!, BOO, HIT, GOAL, PUCK, USA, NO! | Not placed | "USA" is a real place and rule 9 says everything is fictional: drop it, or swap for a Puck Falls slogan. Say how many sign holders you want in a crowd |
 | A12 | **Supplied boards and stand-in corners do not match** where they meet | Visible seam at each corner | Goes away with A8 |

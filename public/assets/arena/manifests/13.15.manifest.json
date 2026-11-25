@@ -1,0 +1,525 @@
+{
+  "batch": "13.15",
+  "tileSize": [
+    8,
+    8
+  ],
+  "frameSize": [
+    16,
+    16
+  ],
+  "atlas": "lights_atlas.png",
+  "sequences": [
+    {
+      "id": "goal_lamp",
+      "anchorLocal": [
+        8,
+        14
+      ],
+      "idleFrame": 0,
+      "frames": [
+        {
+          "file": "goal_lamp_00.png",
+          "atlasRect": [
+            0,
+            0,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "goal_lamp_00_0_0.png",
+              "goal_lamp_00_0_1.png"
+            ],
+            [
+              "goal_lamp_00_1_0.png",
+              "goal_lamp_00_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "goal_lamp_01.png",
+          "atlasRect": [
+            16,
+            0,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "goal_lamp_01_0_0.png",
+              "goal_lamp_01_0_1.png"
+            ],
+            [
+              "goal_lamp_01_1_0.png",
+              "goal_lamp_01_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "goal_lamp_02.png",
+          "atlasRect": [
+            32,
+            0,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "goal_lamp_02_0_0.png",
+              "goal_lamp_02_0_1.png"
+            ],
+            [
+              "goal_lamp_02_1_0.png",
+              "goal_lamp_02_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "goal_lamp_03.png",
+          "atlasRect": [
+            48,
+            0,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "goal_lamp_03_0_0.png",
+              "goal_lamp_03_0_1.png"
+            ],
+            [
+              "goal_lamp_03_1_0.png",
+              "goal_lamp_03_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "goal_lamp_04.png",
+          "atlasRect": [
+            64,
+            0,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "goal_lamp_04_0_0.png",
+              "goal_lamp_04_0_1.png"
+            ],
+            [
+              "goal_lamp_04_1_0.png",
+              "goal_lamp_04_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "goal_lamp_05.png",
+          "atlasRect": [
+            80,
+            0,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "goal_lamp_05_0_0.png",
+              "goal_lamp_05_0_1.png"
+            ],
+            [
+              "goal_lamp_05_1_0.png",
+              "goal_lamp_05_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "goal_lamp_06.png",
+          "atlasRect": [
+            96,
+            0,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "goal_lamp_06_0_0.png",
+              "goal_lamp_06_0_1.png"
+            ],
+            [
+              "goal_lamp_06_1_0.png",
+              "goal_lamp_06_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "goal_lamp_07.png",
+          "atlasRect": [
+            112,
+            0,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "goal_lamp_07_0_0.png",
+              "goal_lamp_07_0_1.png"
+            ],
+            [
+              "goal_lamp_07_1_0.png",
+              "goal_lamp_07_1_1.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rotating_beacon",
+      "anchorLocal": [
+        8,
+        14
+      ],
+      "idleFrame": 0,
+      "frames": [
+        {
+          "file": "rotating_beacon_00.png",
+          "atlasRect": [
+            0,
+            16,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "rotating_beacon_00_0_0.png",
+              "rotating_beacon_00_0_1.png"
+            ],
+            [
+              "rotating_beacon_00_1_0.png",
+              "rotating_beacon_00_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "rotating_beacon_01.png",
+          "atlasRect": [
+            16,
+            16,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "rotating_beacon_01_0_0.png",
+              "rotating_beacon_01_0_1.png"
+            ],
+            [
+              "rotating_beacon_01_1_0.png",
+              "rotating_beacon_01_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "rotating_beacon_02.png",
+          "atlasRect": [
+            32,
+            16,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "rotating_beacon_02_0_0.png",
+              "rotating_beacon_02_0_1.png"
+            ],
+            [
+              "rotating_beacon_02_1_0.png",
+              "rotating_beacon_02_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "rotating_beacon_03.png",
+          "atlasRect": [
+            48,
+            16,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "rotating_beacon_03_0_0.png",
+              "rotating_beacon_03_0_1.png"
+            ],
+            [
+              "rotating_beacon_03_1_0.png",
+              "rotating_beacon_03_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "rotating_beacon_04.png",
+          "atlasRect": [
+            64,
+            16,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "rotating_beacon_04_0_0.png",
+              "rotating_beacon_04_0_1.png"
+            ],
+            [
+              "rotating_beacon_04_1_0.png",
+              "rotating_beacon_04_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "rotating_beacon_05.png",
+          "atlasRect": [
+            80,
+            16,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "rotating_beacon_05_0_0.png",
+              "rotating_beacon_05_0_1.png"
+            ],
+            [
+              "rotating_beacon_05_1_0.png",
+              "rotating_beacon_05_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "rotating_beacon_06.png",
+          "atlasRect": [
+            96,
+            16,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "rotating_beacon_06_0_0.png",
+              "rotating_beacon_06_0_1.png"
+            ],
+            [
+              "rotating_beacon_06_1_0.png",
+              "rotating_beacon_06_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "rotating_beacon_07.png",
+          "atlasRect": [
+            112,
+            16,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "rotating_beacon_07_0_0.png",
+              "rotating_beacon_07_0_1.png"
+            ],
+            [
+              "rotating_beacon_07_1_0.png",
+              "rotating_beacon_07_1_1.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "id": "siren_fixture",
+      "anchorLocal": [
+        8,
+        14
+      ],
+      "idleFrame": 0,
+      "frames": [
+        {
+          "file": "siren_fixture_00.png",
+          "atlasRect": [
+            0,
+            32,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "siren_fixture_00_0_0.png",
+              "siren_fixture_00_0_1.png"
+            ],
+            [
+              "siren_fixture_00_1_0.png",
+              "siren_fixture_00_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "siren_fixture_01.png",
+          "atlasRect": [
+            16,
+            32,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "siren_fixture_01_0_0.png",
+              "siren_fixture_01_0_1.png"
+            ],
+            [
+              "siren_fixture_01_1_0.png",
+              "siren_fixture_01_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "siren_fixture_02.png",
+          "atlasRect": [
+            32,
+            32,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "siren_fixture_02_0_0.png",
+              "siren_fixture_02_0_1.png"
+            ],
+            [
+              "siren_fixture_02_1_0.png",
+              "siren_fixture_02_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "siren_fixture_03.png",
+          "atlasRect": [
+            48,
+            32,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "siren_fixture_03_0_0.png",
+              "siren_fixture_03_0_1.png"
+            ],
+            [
+              "siren_fixture_03_1_0.png",
+              "siren_fixture_03_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "siren_fixture_04.png",
+          "atlasRect": [
+            64,
+            32,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "siren_fixture_04_0_0.png",
+              "siren_fixture_04_0_1.png"
+            ],
+            [
+              "siren_fixture_04_1_0.png",
+              "siren_fixture_04_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "siren_fixture_05.png",
+          "atlasRect": [
+            80,
+            32,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "siren_fixture_05_0_0.png",
+              "siren_fixture_05_0_1.png"
+            ],
+            [
+              "siren_fixture_05_1_0.png",
+              "siren_fixture_05_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "siren_fixture_06.png",
+          "atlasRect": [
+            96,
+            32,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "siren_fixture_06_0_0.png",
+              "siren_fixture_06_0_1.png"
+            ],
+            [
+              "siren_fixture_06_1_0.png",
+              "siren_fixture_06_1_1.png"
+            ]
+          ]
+        },
+        {
+          "file": "siren_fixture_07.png",
+          "atlasRect": [
+            112,
+            32,
+            16,
+            16
+          ],
+          "durationMs": 125,
+          "tiles": [
+            [
+              "siren_fixture_07_0_0.png",
+              "siren_fixture_07_0_1.png"
+            ],
+            [
+              "siren_fixture_07_1_0.png",
+              "siren_fixture_07_1_1.png"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "previewOnly": "preview.png"
+}

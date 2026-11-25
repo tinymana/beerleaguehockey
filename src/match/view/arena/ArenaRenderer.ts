@@ -11,7 +11,8 @@ import type { RinkGeometry } from '../../sim/rink';
 import { goalLineY, netBox } from '../../sim/rink';
 import { projectY, worldScreenHeight } from '../projection';
 import { TEX, buildTemporaryTextures, netLayout, netScreenAnchor } from '../textures';
-import type { ArenaConfig, BenchMood, BoardSide, GlassState, GoalEnd, GoalState, GoalStrip } from './config';
+import type { ArenaConfig, BenchMood, BoardSide, CrowdPose, CrowdReaction, GlassState, GoalEnd, GoalState, GoalStrip } from './config';
+import { CrowdView } from './CrowdView';
 import { IceWear, trafficPrior } from './iceWear';
 import { ARENA_LAYERS, faceoffSpots, iceOutline, layerDepth, layoutArena, layoutGoals } from './layout';
 import type { ArenaLayerId, ArenaLayout, BenchSpot, GoalPlacement } from './layout';
@@ -58,6 +59,8 @@ export class ArenaRenderer {
   private readonly benchPlayers: { image: Phaser.GameObjects.Image; spot: BenchSpot; index: number }[] = [];
   private benchTimer: Phaser.Time.TimerEvent | null = null;
   private mood: BenchMood = 'empty';
+  private crowd: CrowdView | null = null;
+  private readonly lamps = new Map<GoalEnd, { image: Phaser.GameObjects.Image; timer: Phaser.Time.TimerEvent | null }>();
   /** Objects switched off by a state (an empty bench seat), whatever their layer says. */
   private readonly hidden = new Set<Phaser.GameObjects.GameObject>();
   private readonly glassPanels = new Map<string, { image: Phaser.GameObjects.Image; side: BoardSide; cropW: number; cropH: number }>();
@@ -222,6 +225,7 @@ export class ArenaRenderer {
       if (p.doorId && p.cell) this.doors.set(p.doorId, { image, row: p.cell.y, frame: 0 });
     }
     this.buildBenchArea();
+    this.buildStadium();
     // Glass, one pane at a time so each can crack on its own.
     for (const pane of this.layout.glass) {
       if (!this.has(pane.asset)) continue;
@@ -231,6 +235,31 @@ export class ArenaRenderer {
       image.setCrop(0, 0, cropW, cropH);
       this.add(image, pane.layer, false, layerDepth(pane.layer) + pane.z);
       this.glassPanels.set(pane.id, { image, side: pane.side, cropW, cropH });
+    }
+  }
+
+  /** Stands down both sides with the crowd in them, and a goal lamp behind each net. */
+  private buildStadium(): void {
+    const art = this.config.stadium;
+    if (!art) return;
+    const stadium = this.layout.stadium;
+    const base = layerDepth('stadium') + 0.5;
+    for (const m of stadium.modules) {
+      if (!this.has(m.asset)) continue;
+      this.add(this.scene.add.image(m.x, m.y, ...this.tex(m.asset)).setOrigin(0, 0), 'stadium', false, base);
+    }
+    const sample = stadium.fans[0];
+    const crowdArt = [art.crowd.seated, art.crowd.standing].map((p) => `${p}_west_01`).concat(Object.values(art.crowd.reactions).map((r) => `${r.batch}/${r.name}_west_01_00`));
+    if (sample && crowdArt.map((id) => this.has(id)).every(Boolean)) {
+      this.crowd = new CrowdView(this.scene, art, stadium.fans, (id) => this.tex(id), `crowd:${this.config.id}`);
+      for (const image of this.crowd.images) this.add(image, 'stadium', false, base + 0.1);
+    }
+    for (const lamp of stadium.lamps) {
+      if (!this.has(`${art.lamp.frames}_00`)) continue;
+      const image = this.scene.add.image(lamp.x, lamp.y, ...this.tex(`${art.lamp.frames}_00`)).setOrigin(0, 0);
+      const layer = lamp.end === 'north' ? 'backBoards' : 'frontBoards';
+      this.add(image, layer, false, layerDepth(layer) + 6);
+      this.lamps.set(lamp.end, { image, timer: null });
     }
   }
 
@@ -289,6 +318,50 @@ export class ArenaRenderer {
   }
 
   // ---- runtime controls ---------------------------------------------------
+
+  /** Number of spectators drawn, and how many are mid-reaction. */
+  crowdStatus(): { fans: number; reacting: number; pose: CrowdPose } {
+    return { fans: this.crowd?.size ?? 0, reacting: this.crowd?.reacting ?? 0, pose: this.crowd?.currentPose() ?? 'seated' };
+  }
+
+  setCrowdPose(pose: CrowdPose): void {
+    this.crowd?.setPose(pose);
+  }
+
+  /** Play a supplied crowd reaction. Pictures only. Returns how many fans joined in. */
+  crowdReact(kind: CrowdReaction): number {
+    return this.crowd?.react(kind) ?? 0;
+  }
+
+  lampLit(end: GoalEnd): boolean {
+    return !!this.lamps.get(end)?.timer;
+  }
+
+  /** Flash the goal lamp behind one net for the time its package asks for, then leave it dark. */
+  flashLamp(end: GoalEnd): void {
+    const lamp = this.lamps.get(end);
+    const art = this.config.stadium?.lamp;
+    if (!lamp || !art) return;
+    lamp.timer?.remove();
+    const frame = (i: number): void => void lamp.image.setTexture(...this.tex(`${art.frames}_${String(i).padStart(2, '0')}`));
+    let i = 0;
+    const steps = Math.round(art.flashMs / art.frameMs);
+    lamp.timer = this.scene.time.addEvent({
+      delay: art.frameMs,
+      repeat: steps,
+      callback: () => {
+        i++;
+        if (i > steps) {
+          frame(0);
+          lamp.timer = null;
+        } else {
+          // Frame 0 is the dark lamp: the flash loops frames 1 to count-1.
+          frame(1 + ((i - 1) % (art.count - 1)));
+        }
+      },
+    });
+    frame(1);
+  }
 
   benchMood(): BenchMood {
     return this.mood;
@@ -608,6 +681,10 @@ export class ArenaRenderer {
     for (const goal of this.goals.values()) goal.timer?.remove();
     this.benchTimer?.remove();
     this.doorTimer?.remove();
+    this.crowd?.destroy();
+    this.crowd = null;
+    for (const lamp of this.lamps.values()) lamp.timer?.remove();
+    this.lamps.clear();
     this.doors.clear();
     this.benchPlayers.length = 0;
     this.hidden.clear();

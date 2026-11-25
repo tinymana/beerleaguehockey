@@ -2,6 +2,21 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.2.4",
+      "date": "2026-11-25",
+      "title": "Somebody showed up",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Stands down both sides with an actual crowd in them. They sip their beers. Constantly."
+        },
+        {
+          "tag": "new",
+          "text": "Score and the goal lamp spins while the whole barn loses it."
+        }
+      ]
+    },
+    {
       "version": "0.2.3",
       "date": "2026-11-25",
       "title": "Somewhere to sit",

@@ -411,16 +411,92 @@
     {
       "id": "stadium",
       "layer": "stadium",
-      "label": "Stadium and seating",
-      "expectedBatch": "13",
-      "assets": []
+      "label": "Side seating and stairs",
+      "expectedBatch": "13.01-13.02",
+      "assets": [
+        "13.01/seating_atlas",
+        "13.02/aisle_atlas"
+      ],
+      "provisional": true,
+      "note": "West and east sides only, and only three of the four tiers fit: the world is 480 px wide and the outer tier falls outside it. No seating exists for the ends or corners. See ARENA.md A20."
     },
     {
       "id": "spectators",
-      "layer": "frontSpectators",
-      "label": "Animated spectators",
-      "expectedBatch": "13",
-      "assets": []
+      "layer": "stadium",
+      "label": "Spectators, seated and standing",
+      "expectedBatch": "13.04-13.05",
+      "assets": [
+        "13.04/spectator_atlas",
+        "13.05/spectator_atlas"
+      ],
+      "provisional": true,
+      "note": "Seated at seeded seats, 55% house as a proposal. See ARENA.md A20."
+    },
+    {
+      "id": "stadium.reactions",
+      "layer": "stadium",
+      "label": "Crowd reactions: cheer, goal celebration, glass banging, drinking, heckling",
+      "expectedBatch": "13.06-13.09, 13.11",
+      "assets": [
+        "13.06/cheer_atlas",
+        "13.07/bang_atlas",
+        "13.08/drink_atlas",
+        "13.09/heckle_atlas",
+        "13.11/goal_celebration_atlas"
+      ],
+      "note": "In play: an occasional sip, and the goal celebration when the sim reports a goal. The rest are Lab tests."
+    },
+    {
+      "id": "stadium.lamps",
+      "layer": "backBoards",
+      "label": "Goal lamps",
+      "expectedBatch": "13.15",
+      "assets": [
+        "13.15/lights_atlas"
+      ],
+      "provisional": true,
+      "note": "Goal lamp behind each net, squeezed against the edge of the world: there is no room beyond the end glass. Beacon and siren fixtures are not placed. See ARENA.md A21."
+    },
+    {
+      "id": "stadium.railings",
+      "layer": "stadium",
+      "label": "Protective railings",
+      "expectedBatch": "13.03",
+      "assets": [
+        "13.03/railing_atlas"
+      ],
+      "note": "Registered, not placed: the front row sits directly against the glass, so a railing would cover it. See ARENA.md A22."
+    },
+    {
+      "id": "stadium.tunnels",
+      "layer": "stadium",
+      "label": "Tunnels, aisles and departing spectators",
+      "expectedBatch": "13.02, 13.12, 13.13",
+      "assets": [
+        "13.13/tunnel_atlas",
+        "13.12/exit_atlas"
+      ],
+      "note": "Registered, not placed: leaving the building needs routes and a reason to leave, neither of which is designed. See ARENA.md A22."
+    },
+    {
+      "id": "stadium.signs",
+      "layer": "stadium",
+      "label": "Fans holding signs",
+      "expectedBatch": "13.10",
+      "assets": [
+        "13.10/sign_atlas"
+      ],
+      "note": "Registered, not placed. One sign reads USA, a real place, which the all-fictional rule does not allow. See ARENA.md A23."
+    },
+    {
+      "id": "stadium.structure",
+      "layer": "stadium",
+      "label": "Columns and beams",
+      "expectedBatch": "13.14",
+      "assets": [
+        "13.14/structure_atlas"
+      ],
+      "note": "Registered, not placed: the package gives no positions. See ARENA.md A22."
     },
     {
       "id": "equipment",

@@ -147,7 +147,7 @@ def main():
                     for key, value in node.items():
                         collect(value, inside_tiles or key == 'tiles')
 
-            for key in ('assets', 'entries', 'frames'):
+            for key in ('assets', 'entries', 'frames', 'sequences'):
                 collect(manifest.get(key))
             # Animation frames: whole-frame files that are also cells of one of the batch's strips.
             # 'file' sits in the goal atlas; 'net' and 'bottle' layers sit in their own strips.
@@ -352,6 +352,11 @@ def main():
         if slot['status'] == 'missing':
             issue('warn', f'Missing art: {slot["label"]} (expected in batch {slot.get("expectedBatch", "?")})')
 
+    # Single tiles are found through their atlas; their pixel hashes are only needed while ingesting.
+    for entry in assets:
+        if entry['role'] == 'tile':
+            entry.pop('hash', None)
+
     registry = {
         'generatedBy': 'scripts/art/ingest_arena.py',
         'tileSize': TILE,
@@ -361,7 +366,7 @@ def main():
         'issues': issues,
     }
     with open(os.path.join(OUT, 'manifests', 'registry.json'), 'w') as fh:
-        json.dump(registry, fh, indent=1)
+        json.dump(registry, fh, separators=(',', ':'))  # compact: thousands of entries, read once at start
 
     levels = {level: sum(1 for i in issues if i['level'] == level) for level in ('error', 'warn', 'info')}
     print(f'Packages: {len(batches)}   Assets registered: {len(assets)}   '

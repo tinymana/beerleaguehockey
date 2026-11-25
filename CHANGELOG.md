@@ -2,6 +2,26 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.2.4 - 2026-11-25 - Stands, crowd and goal lamps
+
+Fifteen more packages (batches 13.01 to 13.15) ingested: 9,610 assets from 62 packages, 0 errors. No gameplay physics changed.
+
+### Added
+- Seating down the west and east sides, outside the glass and in step with the board modules, with stairs every fifth module and a gap wherever a bench, penalty box or the timekeeper stands.
+- A seated crowd: 68 fans in 120 visible seats (55% house). Who sits where comes from a seeded stream, so the crowd is the same every time and a fuller house only adds people.
+- In play: a fan somewhere takes a sip every few seconds, and on a goal the lamp behind that net flashes for three seconds while the crowd plays the goal celebration.
+- Arena Asset Lab: sit, stand, fans cheer, goal, bang glass (front row only), drink, heckle, goal lamps, and a readout of seats on screen, seats taken and seats that fall outside the world.
+- Ingest: manifests that list animations under `sequences`; the registry is written compactly and single tiles no longer carry a hash. The game loads 184 files for 9,610 assets.
+
+### Known issues
+- Only three of the four seating tiers fit. The world is 480 px wide, the same as the screen, and the outer tier of each side falls outside it. `ARENA.md` A20.
+- No seating art exists for the ends or corners, so the stand-in backdrop still shows there. `ARENA.md` A20.
+- With no teams yet the whole building celebrates every goal. `ARENA.md` A21.
+- The goal lamps are squeezed against the top and bottom edge of the world: there is no room beyond the end glass. `ARENA.md` A21.
+- Registered but not placed: railings, aisles, tunnels, departing fans, columns and beams, sign holders, the beacon and siren fixtures. `ARENA.md` A22.
+- One supplied sign reads "USA", a real place. `ARENA.md` A23.
+- The registry is 2.5 MB of JSON (about 200 KB compressed), read once at start.
+
 ## 0.2.3 - 2026-11-25 - Benches, penalty boxes and doors
 
 Ten more packages (batches 12.01 to 12.10) ingested: 4,327 assets from 47 packages, 0 errors. No gameplay physics changed.

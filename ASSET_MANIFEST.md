@@ -42,11 +42,11 @@ Three pieces of approved art exist today; everything else is either a code-drawn
 | `site/assets/*` | Web-sized copies and crops of the supplied art, plus real prototype screenshots | Derived; for the website |
 | `site/fonts/*` | Tiny5 and Jersey 15 web fonts (SIL Open Font License), carried over from the Ryan's Road site | Third-party, open license |
 
-## Arena art (batches 09 to 12)
+## Arena art (batches 09 to 13)
 
 Modular rink tiles arrive as `BLH_Batch_*.zip` packages in `art/packages/` and are ingested into `public/assets/arena/`. The full inventory, validation notes and missing slots live in the generated registry (`public/assets/arena/manifests/registry.json`) and are browsable in the Arena Asset Lab. See `ARENA.md`.
 
-As of v0.2.3: 4,327 assets from 47 packages, 0 errors; 30 slots supplied, 6 provisional (the goals: larger than the gameplay net; benches, penalty boxes, timekeeper and bench players: placement and colours are proposals), 1 unfit (corner boards: wrong radius for the rink), 4 missing (curved corner glass, stadium, spectators, arena equipment).
+As of v0.2.4: 9,610 assets from 62 packages, 0 errors; 35 slots supplied, 9 provisional (goals larger than the gameplay net; bench area placement and colours; side seating that only partly fits the world; crowd; goal lamps), 1 unfit (corner boards: wrong radius for the rink), 2 missing (curved corner glass, arena equipment). Still wanted and not in any batch: seating for the ends and corners.
 
 ## Art batch 01 (received Nov 25): review
 

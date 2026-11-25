@@ -1,0 +1,267 @@
+{
+  "batch": "13.02",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    64,
+    32
+  ],
+  "atlas": "aisle_atlas.png",
+  "assets": [
+    {
+      "file": "stairs_west.png",
+      "kind": "stairs",
+      "orientation": "west",
+      "atlasRect": [
+        0,
+        0,
+        64,
+        32
+      ],
+      "tiles": [
+        [
+          "stairs_west_0_0.png",
+          "stairs_west_0_1.png",
+          "stairs_west_0_2.png",
+          "stairs_west_0_3.png",
+          "stairs_west_0_4.png",
+          "stairs_west_0_5.png",
+          "stairs_west_0_6.png",
+          "stairs_west_0_7.png"
+        ],
+        [
+          "stairs_west_1_0.png",
+          "stairs_west_1_1.png",
+          "stairs_west_1_2.png",
+          "stairs_west_1_3.png",
+          "stairs_west_1_4.png",
+          "stairs_west_1_5.png",
+          "stairs_west_1_6.png",
+          "stairs_west_1_7.png"
+        ],
+        [
+          "stairs_west_2_0.png",
+          "stairs_west_2_1.png",
+          "stairs_west_2_2.png",
+          "stairs_west_2_3.png",
+          "stairs_west_2_4.png",
+          "stairs_west_2_5.png",
+          "stairs_west_2_6.png",
+          "stairs_west_2_7.png"
+        ],
+        [
+          "stairs_west_3_0.png",
+          "stairs_west_3_1.png",
+          "stairs_west_3_2.png",
+          "stairs_west_3_3.png",
+          "stairs_west_3_4.png",
+          "stairs_west_3_5.png",
+          "stairs_west_3_6.png",
+          "stairs_west_3_7.png"
+        ]
+      ],
+      "pathAnchorsLocal": [
+        [
+          4,
+          16
+        ],
+        [
+          60,
+          16
+        ]
+      ]
+    },
+    {
+      "file": "stairs_east.png",
+      "kind": "stairs",
+      "orientation": "east",
+      "atlasRect": [
+        64,
+        0,
+        64,
+        32
+      ],
+      "tiles": [
+        [
+          "stairs_east_0_0.png",
+          "stairs_east_0_1.png",
+          "stairs_east_0_2.png",
+          "stairs_east_0_3.png",
+          "stairs_east_0_4.png",
+          "stairs_east_0_5.png",
+          "stairs_east_0_6.png",
+          "stairs_east_0_7.png"
+        ],
+        [
+          "stairs_east_1_0.png",
+          "stairs_east_1_1.png",
+          "stairs_east_1_2.png",
+          "stairs_east_1_3.png",
+          "stairs_east_1_4.png",
+          "stairs_east_1_5.png",
+          "stairs_east_1_6.png",
+          "stairs_east_1_7.png"
+        ],
+        [
+          "stairs_east_2_0.png",
+          "stairs_east_2_1.png",
+          "stairs_east_2_2.png",
+          "stairs_east_2_3.png",
+          "stairs_east_2_4.png",
+          "stairs_east_2_5.png",
+          "stairs_east_2_6.png",
+          "stairs_east_2_7.png"
+        ],
+        [
+          "stairs_east_3_0.png",
+          "stairs_east_3_1.png",
+          "stairs_east_3_2.png",
+          "stairs_east_3_3.png",
+          "stairs_east_3_4.png",
+          "stairs_east_3_5.png",
+          "stairs_east_3_6.png",
+          "stairs_east_3_7.png"
+        ]
+      ],
+      "pathAnchorsLocal": [
+        [
+          60,
+          16
+        ],
+        [
+          4,
+          16
+        ]
+      ]
+    },
+    {
+      "file": "aisle_west.png",
+      "kind": "aisle",
+      "orientation": "west",
+      "atlasRect": [
+        0,
+        32,
+        64,
+        32
+      ],
+      "tiles": [
+        [
+          "aisle_west_0_0.png",
+          "aisle_west_0_1.png",
+          "aisle_west_0_2.png",
+          "aisle_west_0_3.png",
+          "aisle_west_0_4.png",
+          "aisle_west_0_5.png",
+          "aisle_west_0_6.png",
+          "aisle_west_0_7.png"
+        ],
+        [
+          "aisle_west_1_0.png",
+          "aisle_west_1_1.png",
+          "aisle_west_1_2.png",
+          "aisle_west_1_3.png",
+          "aisle_west_1_4.png",
+          "aisle_west_1_5.png",
+          "aisle_west_1_6.png",
+          "aisle_west_1_7.png"
+        ],
+        [
+          "aisle_west_2_0.png",
+          "aisle_west_2_1.png",
+          "aisle_west_2_2.png",
+          "aisle_west_2_3.png",
+          "aisle_west_2_4.png",
+          "aisle_west_2_5.png",
+          "aisle_west_2_6.png",
+          "aisle_west_2_7.png"
+        ],
+        [
+          "aisle_west_3_0.png",
+          "aisle_west_3_1.png",
+          "aisle_west_3_2.png",
+          "aisle_west_3_3.png",
+          "aisle_west_3_4.png",
+          "aisle_west_3_5.png",
+          "aisle_west_3_6.png",
+          "aisle_west_3_7.png"
+        ]
+      ],
+      "pathAnchorsLocal": [
+        [
+          4,
+          16
+        ],
+        [
+          60,
+          16
+        ]
+      ]
+    },
+    {
+      "file": "aisle_east.png",
+      "kind": "aisle",
+      "orientation": "east",
+      "atlasRect": [
+        64,
+        32,
+        64,
+        32
+      ],
+      "tiles": [
+        [
+          "aisle_east_0_0.png",
+          "aisle_east_0_1.png",
+          "aisle_east_0_2.png",
+          "aisle_east_0_3.png",
+          "aisle_east_0_4.png",
+          "aisle_east_0_5.png",
+          "aisle_east_0_6.png",
+          "aisle_east_0_7.png"
+        ],
+        [
+          "aisle_east_1_0.png",
+          "aisle_east_1_1.png",
+          "aisle_east_1_2.png",
+          "aisle_east_1_3.png",
+          "aisle_east_1_4.png",
+          "aisle_east_1_5.png",
+          "aisle_east_1_6.png",
+          "aisle_east_1_7.png"
+        ],
+        [
+          "aisle_east_2_0.png",
+          "aisle_east_2_1.png",
+          "aisle_east_2_2.png",
+          "aisle_east_2_3.png",
+          "aisle_east_2_4.png",
+          "aisle_east_2_5.png",
+          "aisle_east_2_6.png",
+          "aisle_east_2_7.png"
+        ],
+        [
+          "aisle_east_3_0.png",
+          "aisle_east_3_1.png",
+          "aisle_east_3_2.png",
+          "aisle_east_3_3.png",
+          "aisle_east_3_4.png",
+          "aisle_east_3_5.png",
+          "aisle_east_3_6.png",
+          "aisle_east_3_7.png"
+        ]
+      ],
+      "pathAnchorsLocal": [
+        [
+          60,
+          16
+        ],
+        [
+          4,
+          16
+        ]
+      ]
+    }
+  ],
+  "previewOnly": "preview.png"
+}

@@ -24,7 +24,8 @@ export interface ArenaAsset {
   alpha: 'opaque' | 'binary' | 'soft';
   /** Bounds of the visible pixels: [left, top, right, bottom], inclusive. Null when empty. */
   bbox: [number, number, number, number] | null;
-  hash: string;
+  /** Pixel hash. Left out for single tiles. */
+  hash?: string;
   tileIndex?: number;
   /** Registry id of the strip an animation frame is drawn from. */
   atlas?: string;
@@ -75,8 +76,15 @@ export interface ArenaRegistry {
   issues: ArenaIssue[];
 }
 
+const INDEX = new WeakMap<ArenaRegistry, Map<string, ArenaAsset>>();
+
 export function assetById(registry: ArenaRegistry, id: string): ArenaAsset | undefined {
-  return registry.assets.find((a) => a.id === id);
+  let index = INDEX.get(registry);
+  if (!index) {
+    index = new Map(registry.assets.map((a) => [a.id, a]));
+    INDEX.set(registry, index);
+  }
+  return index.get(id);
 }
 
 export function assetUrl(asset: ArenaAsset): string {

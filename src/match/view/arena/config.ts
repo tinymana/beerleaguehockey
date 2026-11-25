@@ -73,6 +73,52 @@ export interface BenchArea {
   mood: BenchMood;
 }
 
+/** What the crowd can be asked to do. All of it is supplied animation; none of it affects play. */
+export type CrowdReaction = 'cheer' | 'goal' | 'bang' | 'drink' | 'heckle';
+export type CrowdPose = 'seated' | 'standing';
+
+/**
+ * One crowd animation. Frames are separate registry assets named
+ * `${batch}/${name}_${side}_${variant}_${frame}` (two digits each), drawn from the batch atlas.
+ */
+export interface CrowdReactionArt {
+  batch: string;
+  name: string;
+  /** Frame size in pixels; the frame's centre sits on the seat anchor. */
+  size: number;
+  durations: readonly number[];
+  /** Times the sequence plays before the fan settles again. */
+  loops: number;
+  /** Largest start delay, so the crowd does not move as one. */
+  stagger: number;
+  /** Only fans in the row against the glass take part. */
+  frontRowOnly?: boolean;
+}
+
+/** Side seating, the crowd in it, and the goal lamps. */
+export interface StadiumArt {
+  /** One 64x32 module per side, repeated down the outside of the glass. */
+  seating: Record<BenchSide, string>;
+  /** Replaces every `stairsEvery`-th seating module. */
+  stairs: Record<BenchSide, string>;
+  stairsEvery: number;
+  /** Seat anchors inside a seating module, from the manifest. */
+  seats: Record<BenchSide, readonly (readonly [number, number])[]>;
+  /** Local x of the seats in the row against the glass. */
+  frontRow: Record<BenchSide, number>;
+  crowd: {
+    /** `${seated}_${side}_${variant}` and `${standing}_${side}_${variant}` are the still poses. */
+    seated: string;
+    standing: string;
+    variants: number;
+    reactions: Record<CrowdReaction, CrowdReactionArt>;
+    /** Seconds between one fan somewhere taking a sip, chosen at random in this range. 0 turns it off. */
+    sipEvery: readonly [number, number];
+  };
+  /** Goal lamp behind each net: `${frames}_${frame}`. Frame 0 is idle; the rest loop for `flashMs` on a goal. */
+  lamp: { frames: string; count: number; frameMs: number; flashMs: number; anchor: readonly [number, number] };
+}
+
 /** One goal: every number here is copied from the batch manifests, and a test checks they still agree. */
 export interface GoalArt {
   rest: string;
@@ -127,12 +173,15 @@ export interface ArenaConfig {
   gates: { side: 'west' | 'east'; at: number; state: 'closed' | 'open' }[];
   /** Benches, penalty boxes and the timekeeper booth outside the side boards. Their doors are added to `gates`. */
   benchArea: BenchArea | null;
+  /** Side seating, crowd and goal lamps. How full the seats are is `crowdDensity`. */
+  stadium: StadiumArt | null;
   /** Supplied goal nets. Null keeps the code-drawn stand-in nets, which are the size of the physics net. */
   goals: Record<GoalEnd, GoalArt> | null;
   /** Sponsor panels on the end boards. `x` is a gameplay x position for the panel's centre. */
   boardAds: { asset: string; side: 'north' | 'south'; x: number }[];
   // Extension points: carried, not yet drawn.
   banners: { kind: 'championship' | 'retired-jersey' | 'tournament'; label: string }[];
+  /** Share of the visible seats that are taken, 0 to 1. Drawn when the arena has a `stadium`. */
   crowdDensity: number;
   palette: string | null;
   divisionTier: number | null;
@@ -192,6 +241,32 @@ const BENCH_AREA: BenchArea = {
   mood: 'seated',
 };
 
+const STADIUM: StadiumArt = {
+  // Proposal (ARENA.md A20): blue seats on the home (west) side, red on the away (east) side, to match the benches.
+  seating: { west: '13.01/seating_west_blue', east: '13.01/seating_east_red' },
+  stairs: { west: '13.02/stairs_west', east: '13.02/stairs_east' },
+  stairsEvery: 5,
+  seats: {
+    west: [[8, 8], [8, 24], [24, 8], [24, 24], [40, 8], [40, 24], [56, 8], [56, 24]],
+    east: [[55, 8], [55, 24], [39, 8], [39, 24], [23, 8], [23, 24], [7, 8], [7, 24]],
+  },
+  frontRow: { west: 56, east: 7 },
+  crowd: {
+    seated: '13.04/seated',
+    standing: '13.05/standing',
+    variants: 12,
+    reactions: {
+      cheer: { batch: '13.06', name: 'cheer', size: 16, durations: [100, 120, 160, 120], loops: 3, stagger: 250 },
+      goal: { batch: '13.11', name: 'goal_celebrate', size: 24, durations: [100, 90, 130, 100, 110, 170], loops: 3, stagger: 250 },
+      bang: { batch: '13.07', name: 'bang', size: 16, durations: [120, 100, 80, 120], loops: 2, stagger: 300, frontRowOnly: true },
+      drink: { batch: '13.08', name: 'drink', size: 16, durations: [400, 180, 650, 180, 400], loops: 1, stagger: 1500 },
+      heckle: { batch: '13.09', name: 'heckle', size: 16, durations: [150, 100, 160, 100], loops: 2, stagger: 300 },
+    },
+    sipEvery: [1.5, 5],
+  },
+  lamp: { frames: '13.15/goal_lamp', count: 8, frameMs: 125, flashMs: 3000, anchor: [8, 14] },
+};
+
 const STANDARD: ArenaConfig = {
   id: 'standard',
   name: 'Standard rink',
@@ -230,6 +305,7 @@ const STANDARD: ArenaConfig = {
   // Doors now come from the benches and penalty boxes; no free-standing gates.
   gates: [],
   benchArea: BENCH_AREA,
+  stadium: STADIUM,
   // Supplied goals at native size. They are larger than the physics net: see goalFit() and ARENA.md A13.
   goals: GOALS,
   // Both names are approved Puck Falls locations.
@@ -238,7 +314,8 @@ const STANDARD: ArenaConfig = {
     { asset: '10.13/ad_top_shelf', side: 'south', x: 240 },
   ],
   banners: [],
-  crowdDensity: 0,
+  // Proposal: a bit over half full, like a decent Tuesday night.
+  crowdDensity: 0.55,
   palette: null,
   divisionTier: null,
   prestigeTier: null,
@@ -260,6 +337,7 @@ export const ARENA_CONFIGS: readonly ArenaConfig[] = [
     description: 'Places the supplied corner boards at their own radius. Turn on Collision geometry to see how far they sit from the corners the puck actually follows. Not a playable arena.',
     corners: { ...STANDARD.corners, mode: 'art' },
     benchArea: null,
+    stadium: null,
     gates: [{ side: 'west', at: 440, state: 'open' }, { side: 'east', at: 440, state: 'open' }],
   },
   {
@@ -276,6 +354,8 @@ export const ARENA_CONFIGS: readonly ArenaConfig[] = [
     glass: null,
     gates: [],
     benchArea: null,
+    stadium: null,
+    crowdDensity: 0,
     boardAds: [{ asset: '10.13/ad_blank', side: 'north', x: 240 }],
   },
 ];

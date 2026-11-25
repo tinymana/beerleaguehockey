@@ -5,8 +5,8 @@
  */
 import { ARENA_CONFIGS } from '../match/view/arena/config';
 import { ARENA_LAYERS } from '../match/view/arena/layout';
-import type { BenchMood, GoalState } from '../match/view/arena/config';
-import type { ArenaLayerId, BenchReport, GoalAlignment, GoalFit } from '../match/view/arena/layout';
+import type { BenchMood, CrowdPose, CrowdReaction, GoalState } from '../match/view/arena/config';
+import type { ArenaLayerId, BenchReport, GoalAlignment, GoalFit, StadiumLayout } from '../match/view/arena/layout';
 import { assetUrl } from '../match/view/arena/registry';
 import type { ArenaAsset, ArenaRegistry } from '../match/view/arena/registry';
 
@@ -24,6 +24,9 @@ export interface LabActions {
   setGlassDamage(on: boolean): void;
   setGoalState(state: GoalState): void;
   setBenchMood(mood: BenchMood): void;
+  setCrowdPose(pose: CrowdPose): void;
+  crowdReact(kind: CrowdReaction): void;
+  flashLamps(): void;
   setDoorsOpen(open: boolean): void;
   useInGame(id: string): void;
   exit(): void;
@@ -78,6 +81,7 @@ export class ArenaLabPanel {
   private readonly alignment: HTMLElement;
   private readonly goalFit: HTMLElement;
   private readonly benchReport: HTMLElement;
+  private readonly stadiumReport: HTMLElement;
   private readonly status: HTMLElement;
   private readonly configNote: HTMLElement;
 
@@ -208,6 +212,33 @@ export class ArenaLabPanel {
       this.benchReport,
     );
     this.root.append(benches);
+
+    // Stands and crowd
+    const stands = section('Stands, crowd and goal lamps');
+    const poseRow = el('div', 'lab-buttons');
+    poseRow.append(
+      button('SIT', () => actions.setCrowdPose('seated')),
+      button('STAND', () => actions.setCrowdPose('standing')),
+      button('GOAL LAMPS', () => actions.flashLamps()),
+    );
+    const reactRow = el('div', 'lab-buttons');
+    for (const [label, kind] of [
+      ['FANS CHEER', 'cheer'],
+      ['GOAL!', 'goal'],
+      ['BANG GLASS', 'bang'],
+      ['DRINK', 'drink'],
+      ['HECKLE', 'heckle'],
+    ] as const) {
+      reactRow.append(button(label, () => actions.crowdReact(kind)));
+    }
+    this.stadiumReport = el('div', 'lab-readout');
+    stands.append(
+      poseRow,
+      reactRow,
+      el('p', 'lab-note', 'Crowd reactions are pictures only. In play the crowd sips now and then, and celebrates with the goal lamp when the sim reports a goal.'),
+      this.stadiumReport,
+    );
+    this.root.append(stands);
 
     // Missing art
     const slots = section('Art slots');
@@ -341,6 +372,24 @@ export class ArenaLabPanel {
       ? `MISSING TEXTURES: ${missingAssets.join(', ')}`
       : 'All assets this arena asks for are loaded.';
     this.status.className = `lab-status ${missingAssets.length ? 'bad' : 'good'}`;
+  }
+
+  /** What the stands hold, and how much of the supplied seating falls outside the world. */
+  setStadiumReport(stadium: StadiumLayout | null, density: number): void {
+    if (!stadium || stadium.modules.length === 0) {
+      this.stadiumReport.textContent = 'This arena has no stands.';
+      this.stadiumReport.className = 'lab-readout';
+      return;
+    }
+    const seating = stadium.modules.filter((m) => m.kind === 'seating').length;
+    const lines = [
+      `${seating} seating modules and ${stadium.modules.length - seating} stairs, west and east sides only`,
+      `${stadium.seatsVisible} seats on screen, ${stadium.fans.length} taken (${Math.round(density * 100)}% house)`,
+      `${stadium.seatsOffWorld} seats fall outside the world: ${stadium.seatsOffWorld === 0 ? 'all four tiers fit' : 'the outer tier of each side does not fit'}`,
+      `Goal lamps: ${stadium.lamps.length}`,
+    ];
+    this.stadiumReport.textContent = lines.join('\n');
+    this.stadiumReport.className = `lab-readout ${stadium.seatsOffWorld === 0 ? 'good' : 'bad'}`;
   }
 
   /** Where each bench-side structure landed, and whether its doors and footprint check out. */

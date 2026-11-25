@@ -188,7 +188,11 @@ export class SkatingScene extends Phaser.Scene {
         this.bannerTimer = 1.2;
         this.cameras.main.shake(180, 0.006);
         // Supplied net ripple: visual only, the goal itself was already decided by the sim.
-        this.arena.setGoalState(e.end === 'top' ? 'north' : 'south', 'ripple');
+        const end = e.end === 'top' ? 'north' : 'south';
+        this.arena.setGoalState(end, 'ripple');
+        // Goal lamp and crowd: also visual only. With no teams yet, the whole building celebrates.
+        this.arena.flashLamp(end);
+        this.arena.crowdReact('goal');
       } else if (e.type === 'shot') {
         this.sinceShot = 0;
         if (e.power > 0.8) this.cameras.main.shake(60, 0.002);

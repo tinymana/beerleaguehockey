@@ -1,0 +1,183 @@
+{
+  "batch": "13.03",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    32,
+    32
+  ],
+  "atlas": "railing_atlas.png",
+  "assets": [
+    {
+      "file": "railing_straight_west.png",
+      "kind": "straight",
+      "orientation": "west",
+      "atlasRect": [
+        0,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        5,
+        4
+      ],
+      "tiles": [
+        [
+          "railing_straight_west_0_0.png",
+          "railing_straight_west_0_1.png",
+          "railing_straight_west_0_2.png",
+          "railing_straight_west_0_3.png"
+        ],
+        [
+          "railing_straight_west_1_0.png",
+          "railing_straight_west_1_1.png",
+          "railing_straight_west_1_2.png",
+          "railing_straight_west_1_3.png"
+        ],
+        [
+          "railing_straight_west_2_0.png",
+          "railing_straight_west_2_1.png",
+          "railing_straight_west_2_2.png",
+          "railing_straight_west_2_3.png"
+        ],
+        [
+          "railing_straight_west_3_0.png",
+          "railing_straight_west_3_1.png",
+          "railing_straight_west_3_2.png",
+          "railing_straight_west_3_3.png"
+        ]
+      ],
+      "layer": "foreground"
+    },
+    {
+      "file": "railing_straight_east.png",
+      "kind": "straight",
+      "orientation": "east",
+      "atlasRect": [
+        32,
+        0,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        26,
+        4
+      ],
+      "tiles": [
+        [
+          "railing_straight_east_0_0.png",
+          "railing_straight_east_0_1.png",
+          "railing_straight_east_0_2.png",
+          "railing_straight_east_0_3.png"
+        ],
+        [
+          "railing_straight_east_1_0.png",
+          "railing_straight_east_1_1.png",
+          "railing_straight_east_1_2.png",
+          "railing_straight_east_1_3.png"
+        ],
+        [
+          "railing_straight_east_2_0.png",
+          "railing_straight_east_2_1.png",
+          "railing_straight_east_2_2.png",
+          "railing_straight_east_2_3.png"
+        ],
+        [
+          "railing_straight_east_3_0.png",
+          "railing_straight_east_3_1.png",
+          "railing_straight_east_3_2.png",
+          "railing_straight_east_3_3.png"
+        ]
+      ],
+      "layer": "foreground"
+    },
+    {
+      "file": "railing_stair_west.png",
+      "kind": "stair",
+      "orientation": "west",
+      "atlasRect": [
+        0,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        5,
+        4
+      ],
+      "tiles": [
+        [
+          "railing_stair_west_0_0.png",
+          "railing_stair_west_0_1.png",
+          "railing_stair_west_0_2.png",
+          "railing_stair_west_0_3.png"
+        ],
+        [
+          "railing_stair_west_1_0.png",
+          "railing_stair_west_1_1.png",
+          "railing_stair_west_1_2.png",
+          "railing_stair_west_1_3.png"
+        ],
+        [
+          "railing_stair_west_2_0.png",
+          "railing_stair_west_2_1.png",
+          "railing_stair_west_2_2.png",
+          "railing_stair_west_2_3.png"
+        ],
+        [
+          "railing_stair_west_3_0.png",
+          "railing_stair_west_3_1.png",
+          "railing_stair_west_3_2.png",
+          "railing_stair_west_3_3.png"
+        ]
+      ],
+      "layer": "foreground"
+    },
+    {
+      "file": "railing_stair_east.png",
+      "kind": "stair",
+      "orientation": "east",
+      "atlasRect": [
+        32,
+        32,
+        32,
+        32
+      ],
+      "anchorLocal": [
+        26,
+        4
+      ],
+      "tiles": [
+        [
+          "railing_stair_east_0_0.png",
+          "railing_stair_east_0_1.png",
+          "railing_stair_east_0_2.png",
+          "railing_stair_east_0_3.png"
+        ],
+        [
+          "railing_stair_east_1_0.png",
+          "railing_stair_east_1_1.png",
+          "railing_stair_east_1_2.png",
+          "railing_stair_east_1_3.png"
+        ],
+        [
+          "railing_stair_east_2_0.png",
+          "railing_stair_east_2_1.png",
+          "railing_stair_east_2_2.png",
+          "railing_stair_east_2_3.png"
+        ],
+        [
+          "railing_stair_east_3_0.png",
+          "railing_stair_east_3_1.png",
+          "railing_stair_east_3_2.png",
+          "railing_stair_east_3_3.png"
+        ]
+      ],
+      "layer": "foreground"
+    }
+  ],
+  "previewOnly": "preview.png"
+}

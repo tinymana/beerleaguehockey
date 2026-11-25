@@ -1,0 +1,1146 @@
+{
+  "batch": "13.10",
+  "sourceBatch": "13.05",
+  "tileSize": [
+    8,
+    8
+  ],
+  "frameSize": [
+    24,
+    32
+  ],
+  "atlas": "sign_atlas.png",
+  "assets": [
+    {
+      "file": "signfan_west_01.png",
+      "holder": "holder_west_01.png",
+      "sign": "sign_01.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "west",
+      "variant": 1,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        0,
+        0,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_west_01_0_0.png",
+          "signfan_west_01_0_1.png",
+          "signfan_west_01_0_2.png"
+        ],
+        [
+          "signfan_west_01_1_0.png",
+          "signfan_west_01_1_1.png",
+          "signfan_west_01_1_2.png"
+        ],
+        [
+          "signfan_west_01_2_0.png",
+          "signfan_west_01_2_1.png",
+          "signfan_west_01_2_2.png"
+        ],
+        [
+          "signfan_west_01_3_0.png",
+          "signfan_west_01_3_1.png",
+          "signfan_west_01_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_west_02.png",
+      "holder": "holder_west_02.png",
+      "sign": "sign_02.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "west",
+      "variant": 2,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        24,
+        0,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_west_02_0_0.png",
+          "signfan_west_02_0_1.png",
+          "signfan_west_02_0_2.png"
+        ],
+        [
+          "signfan_west_02_1_0.png",
+          "signfan_west_02_1_1.png",
+          "signfan_west_02_1_2.png"
+        ],
+        [
+          "signfan_west_02_2_0.png",
+          "signfan_west_02_2_1.png",
+          "signfan_west_02_2_2.png"
+        ],
+        [
+          "signfan_west_02_3_0.png",
+          "signfan_west_02_3_1.png",
+          "signfan_west_02_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_west_03.png",
+      "holder": "holder_west_03.png",
+      "sign": "sign_03.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "west",
+      "variant": 3,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        48,
+        0,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_west_03_0_0.png",
+          "signfan_west_03_0_1.png",
+          "signfan_west_03_0_2.png"
+        ],
+        [
+          "signfan_west_03_1_0.png",
+          "signfan_west_03_1_1.png",
+          "signfan_west_03_1_2.png"
+        ],
+        [
+          "signfan_west_03_2_0.png",
+          "signfan_west_03_2_1.png",
+          "signfan_west_03_2_2.png"
+        ],
+        [
+          "signfan_west_03_3_0.png",
+          "signfan_west_03_3_1.png",
+          "signfan_west_03_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_west_04.png",
+      "holder": "holder_west_04.png",
+      "sign": "sign_04.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "west",
+      "variant": 4,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        72,
+        0,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_west_04_0_0.png",
+          "signfan_west_04_0_1.png",
+          "signfan_west_04_0_2.png"
+        ],
+        [
+          "signfan_west_04_1_0.png",
+          "signfan_west_04_1_1.png",
+          "signfan_west_04_1_2.png"
+        ],
+        [
+          "signfan_west_04_2_0.png",
+          "signfan_west_04_2_1.png",
+          "signfan_west_04_2_2.png"
+        ],
+        [
+          "signfan_west_04_3_0.png",
+          "signfan_west_04_3_1.png",
+          "signfan_west_04_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_west_05.png",
+      "holder": "holder_west_05.png",
+      "sign": "sign_05.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "west",
+      "variant": 5,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        96,
+        0,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_west_05_0_0.png",
+          "signfan_west_05_0_1.png",
+          "signfan_west_05_0_2.png"
+        ],
+        [
+          "signfan_west_05_1_0.png",
+          "signfan_west_05_1_1.png",
+          "signfan_west_05_1_2.png"
+        ],
+        [
+          "signfan_west_05_2_0.png",
+          "signfan_west_05_2_1.png",
+          "signfan_west_05_2_2.png"
+        ],
+        [
+          "signfan_west_05_3_0.png",
+          "signfan_west_05_3_1.png",
+          "signfan_west_05_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_west_06.png",
+      "holder": "holder_west_06.png",
+      "sign": "sign_06.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "west",
+      "variant": 6,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        120,
+        0,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_west_06_0_0.png",
+          "signfan_west_06_0_1.png",
+          "signfan_west_06_0_2.png"
+        ],
+        [
+          "signfan_west_06_1_0.png",
+          "signfan_west_06_1_1.png",
+          "signfan_west_06_1_2.png"
+        ],
+        [
+          "signfan_west_06_2_0.png",
+          "signfan_west_06_2_1.png",
+          "signfan_west_06_2_2.png"
+        ],
+        [
+          "signfan_west_06_3_0.png",
+          "signfan_west_06_3_1.png",
+          "signfan_west_06_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_west_07.png",
+      "holder": "holder_west_07.png",
+      "sign": "sign_07.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "west",
+      "variant": 7,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        144,
+        0,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_west_07_0_0.png",
+          "signfan_west_07_0_1.png",
+          "signfan_west_07_0_2.png"
+        ],
+        [
+          "signfan_west_07_1_0.png",
+          "signfan_west_07_1_1.png",
+          "signfan_west_07_1_2.png"
+        ],
+        [
+          "signfan_west_07_2_0.png",
+          "signfan_west_07_2_1.png",
+          "signfan_west_07_2_2.png"
+        ],
+        [
+          "signfan_west_07_3_0.png",
+          "signfan_west_07_3_1.png",
+          "signfan_west_07_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_west_08.png",
+      "holder": "holder_west_08.png",
+      "sign": "sign_08.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "west",
+      "variant": 8,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        168,
+        0,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_west_08_0_0.png",
+          "signfan_west_08_0_1.png",
+          "signfan_west_08_0_2.png"
+        ],
+        [
+          "signfan_west_08_1_0.png",
+          "signfan_west_08_1_1.png",
+          "signfan_west_08_1_2.png"
+        ],
+        [
+          "signfan_west_08_2_0.png",
+          "signfan_west_08_2_1.png",
+          "signfan_west_08_2_2.png"
+        ],
+        [
+          "signfan_west_08_3_0.png",
+          "signfan_west_08_3_1.png",
+          "signfan_west_08_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_west_09.png",
+      "holder": "holder_west_09.png",
+      "sign": "sign_09.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "west",
+      "variant": 9,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        0,
+        32,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_west_09_0_0.png",
+          "signfan_west_09_0_1.png",
+          "signfan_west_09_0_2.png"
+        ],
+        [
+          "signfan_west_09_1_0.png",
+          "signfan_west_09_1_1.png",
+          "signfan_west_09_1_2.png"
+        ],
+        [
+          "signfan_west_09_2_0.png",
+          "signfan_west_09_2_1.png",
+          "signfan_west_09_2_2.png"
+        ],
+        [
+          "signfan_west_09_3_0.png",
+          "signfan_west_09_3_1.png",
+          "signfan_west_09_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_west_10.png",
+      "holder": "holder_west_10.png",
+      "sign": "sign_10.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "west",
+      "variant": 10,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        24,
+        32,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_west_10_0_0.png",
+          "signfan_west_10_0_1.png",
+          "signfan_west_10_0_2.png"
+        ],
+        [
+          "signfan_west_10_1_0.png",
+          "signfan_west_10_1_1.png",
+          "signfan_west_10_1_2.png"
+        ],
+        [
+          "signfan_west_10_2_0.png",
+          "signfan_west_10_2_1.png",
+          "signfan_west_10_2_2.png"
+        ],
+        [
+          "signfan_west_10_3_0.png",
+          "signfan_west_10_3_1.png",
+          "signfan_west_10_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_west_11.png",
+      "holder": "holder_west_11.png",
+      "sign": "sign_11.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "west",
+      "variant": 11,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        48,
+        32,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_west_11_0_0.png",
+          "signfan_west_11_0_1.png",
+          "signfan_west_11_0_2.png"
+        ],
+        [
+          "signfan_west_11_1_0.png",
+          "signfan_west_11_1_1.png",
+          "signfan_west_11_1_2.png"
+        ],
+        [
+          "signfan_west_11_2_0.png",
+          "signfan_west_11_2_1.png",
+          "signfan_west_11_2_2.png"
+        ],
+        [
+          "signfan_west_11_3_0.png",
+          "signfan_west_11_3_1.png",
+          "signfan_west_11_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_west_12.png",
+      "holder": "holder_west_12.png",
+      "sign": "sign_12.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "west",
+      "variant": 12,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        72,
+        32,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_west_12_0_0.png",
+          "signfan_west_12_0_1.png",
+          "signfan_west_12_0_2.png"
+        ],
+        [
+          "signfan_west_12_1_0.png",
+          "signfan_west_12_1_1.png",
+          "signfan_west_12_1_2.png"
+        ],
+        [
+          "signfan_west_12_2_0.png",
+          "signfan_west_12_2_1.png",
+          "signfan_west_12_2_2.png"
+        ],
+        [
+          "signfan_west_12_3_0.png",
+          "signfan_west_12_3_1.png",
+          "signfan_west_12_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_east_01.png",
+      "holder": "holder_east_01.png",
+      "sign": "sign_01.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "east",
+      "variant": 1,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        96,
+        32,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_east_01_0_0.png",
+          "signfan_east_01_0_1.png",
+          "signfan_east_01_0_2.png"
+        ],
+        [
+          "signfan_east_01_1_0.png",
+          "signfan_east_01_1_1.png",
+          "signfan_east_01_1_2.png"
+        ],
+        [
+          "signfan_east_01_2_0.png",
+          "signfan_east_01_2_1.png",
+          "signfan_east_01_2_2.png"
+        ],
+        [
+          "signfan_east_01_3_0.png",
+          "signfan_east_01_3_1.png",
+          "signfan_east_01_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_east_02.png",
+      "holder": "holder_east_02.png",
+      "sign": "sign_02.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "east",
+      "variant": 2,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        120,
+        32,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_east_02_0_0.png",
+          "signfan_east_02_0_1.png",
+          "signfan_east_02_0_2.png"
+        ],
+        [
+          "signfan_east_02_1_0.png",
+          "signfan_east_02_1_1.png",
+          "signfan_east_02_1_2.png"
+        ],
+        [
+          "signfan_east_02_2_0.png",
+          "signfan_east_02_2_1.png",
+          "signfan_east_02_2_2.png"
+        ],
+        [
+          "signfan_east_02_3_0.png",
+          "signfan_east_02_3_1.png",
+          "signfan_east_02_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_east_03.png",
+      "holder": "holder_east_03.png",
+      "sign": "sign_03.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "east",
+      "variant": 3,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        144,
+        32,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_east_03_0_0.png",
+          "signfan_east_03_0_1.png",
+          "signfan_east_03_0_2.png"
+        ],
+        [
+          "signfan_east_03_1_0.png",
+          "signfan_east_03_1_1.png",
+          "signfan_east_03_1_2.png"
+        ],
+        [
+          "signfan_east_03_2_0.png",
+          "signfan_east_03_2_1.png",
+          "signfan_east_03_2_2.png"
+        ],
+        [
+          "signfan_east_03_3_0.png",
+          "signfan_east_03_3_1.png",
+          "signfan_east_03_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_east_04.png",
+      "holder": "holder_east_04.png",
+      "sign": "sign_04.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "east",
+      "variant": 4,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        168,
+        32,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_east_04_0_0.png",
+          "signfan_east_04_0_1.png",
+          "signfan_east_04_0_2.png"
+        ],
+        [
+          "signfan_east_04_1_0.png",
+          "signfan_east_04_1_1.png",
+          "signfan_east_04_1_2.png"
+        ],
+        [
+          "signfan_east_04_2_0.png",
+          "signfan_east_04_2_1.png",
+          "signfan_east_04_2_2.png"
+        ],
+        [
+          "signfan_east_04_3_0.png",
+          "signfan_east_04_3_1.png",
+          "signfan_east_04_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_east_05.png",
+      "holder": "holder_east_05.png",
+      "sign": "sign_05.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "east",
+      "variant": 5,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        0,
+        64,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_east_05_0_0.png",
+          "signfan_east_05_0_1.png",
+          "signfan_east_05_0_2.png"
+        ],
+        [
+          "signfan_east_05_1_0.png",
+          "signfan_east_05_1_1.png",
+          "signfan_east_05_1_2.png"
+        ],
+        [
+          "signfan_east_05_2_0.png",
+          "signfan_east_05_2_1.png",
+          "signfan_east_05_2_2.png"
+        ],
+        [
+          "signfan_east_05_3_0.png",
+          "signfan_east_05_3_1.png",
+          "signfan_east_05_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_east_06.png",
+      "holder": "holder_east_06.png",
+      "sign": "sign_06.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "east",
+      "variant": 6,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        24,
+        64,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_east_06_0_0.png",
+          "signfan_east_06_0_1.png",
+          "signfan_east_06_0_2.png"
+        ],
+        [
+          "signfan_east_06_1_0.png",
+          "signfan_east_06_1_1.png",
+          "signfan_east_06_1_2.png"
+        ],
+        [
+          "signfan_east_06_2_0.png",
+          "signfan_east_06_2_1.png",
+          "signfan_east_06_2_2.png"
+        ],
+        [
+          "signfan_east_06_3_0.png",
+          "signfan_east_06_3_1.png",
+          "signfan_east_06_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_east_07.png",
+      "holder": "holder_east_07.png",
+      "sign": "sign_07.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "east",
+      "variant": 7,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        48,
+        64,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_east_07_0_0.png",
+          "signfan_east_07_0_1.png",
+          "signfan_east_07_0_2.png"
+        ],
+        [
+          "signfan_east_07_1_0.png",
+          "signfan_east_07_1_1.png",
+          "signfan_east_07_1_2.png"
+        ],
+        [
+          "signfan_east_07_2_0.png",
+          "signfan_east_07_2_1.png",
+          "signfan_east_07_2_2.png"
+        ],
+        [
+          "signfan_east_07_3_0.png",
+          "signfan_east_07_3_1.png",
+          "signfan_east_07_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_east_08.png",
+      "holder": "holder_east_08.png",
+      "sign": "sign_08.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "east",
+      "variant": 8,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        72,
+        64,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_east_08_0_0.png",
+          "signfan_east_08_0_1.png",
+          "signfan_east_08_0_2.png"
+        ],
+        [
+          "signfan_east_08_1_0.png",
+          "signfan_east_08_1_1.png",
+          "signfan_east_08_1_2.png"
+        ],
+        [
+          "signfan_east_08_2_0.png",
+          "signfan_east_08_2_1.png",
+          "signfan_east_08_2_2.png"
+        ],
+        [
+          "signfan_east_08_3_0.png",
+          "signfan_east_08_3_1.png",
+          "signfan_east_08_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_east_09.png",
+      "holder": "holder_east_09.png",
+      "sign": "sign_09.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "east",
+      "variant": 9,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        96,
+        64,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_east_09_0_0.png",
+          "signfan_east_09_0_1.png",
+          "signfan_east_09_0_2.png"
+        ],
+        [
+          "signfan_east_09_1_0.png",
+          "signfan_east_09_1_1.png",
+          "signfan_east_09_1_2.png"
+        ],
+        [
+          "signfan_east_09_2_0.png",
+          "signfan_east_09_2_1.png",
+          "signfan_east_09_2_2.png"
+        ],
+        [
+          "signfan_east_09_3_0.png",
+          "signfan_east_09_3_1.png",
+          "signfan_east_09_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_east_10.png",
+      "holder": "holder_east_10.png",
+      "sign": "sign_10.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "east",
+      "variant": 10,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        120,
+        64,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_east_10_0_0.png",
+          "signfan_east_10_0_1.png",
+          "signfan_east_10_0_2.png"
+        ],
+        [
+          "signfan_east_10_1_0.png",
+          "signfan_east_10_1_1.png",
+          "signfan_east_10_1_2.png"
+        ],
+        [
+          "signfan_east_10_2_0.png",
+          "signfan_east_10_2_1.png",
+          "signfan_east_10_2_2.png"
+        ],
+        [
+          "signfan_east_10_3_0.png",
+          "signfan_east_10_3_1.png",
+          "signfan_east_10_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_east_11.png",
+      "holder": "holder_east_11.png",
+      "sign": "sign_11.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "east",
+      "variant": 11,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        144,
+        64,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_east_11_0_0.png",
+          "signfan_east_11_0_1.png",
+          "signfan_east_11_0_2.png"
+        ],
+        [
+          "signfan_east_11_1_0.png",
+          "signfan_east_11_1_1.png",
+          "signfan_east_11_1_2.png"
+        ],
+        [
+          "signfan_east_11_2_0.png",
+          "signfan_east_11_2_1.png",
+          "signfan_east_11_2_2.png"
+        ],
+        [
+          "signfan_east_11_3_0.png",
+          "signfan_east_11_3_1.png",
+          "signfan_east_11_3_2.png"
+        ]
+      ]
+    },
+    {
+      "file": "signfan_east_12.png",
+      "holder": "holder_east_12.png",
+      "sign": "sign_12.png",
+      "signOffset": [
+        0,
+        0
+      ],
+      "side": "east",
+      "variant": 12,
+      "anchorLocal": [
+        12,
+        20
+      ],
+      "atlasRect": [
+        168,
+        64,
+        24,
+        32
+      ],
+      "tiles": [
+        [
+          "signfan_east_12_0_0.png",
+          "signfan_east_12_0_1.png",
+          "signfan_east_12_0_2.png"
+        ],
+        [
+          "signfan_east_12_1_0.png",
+          "signfan_east_12_1_1.png",
+          "signfan_east_12_1_2.png"
+        ],
+        [
+          "signfan_east_12_2_0.png",
+          "signfan_east_12_2_1.png",
+          "signfan_east_12_2_2.png"
+        ],
+        [
+          "signfan_east_12_3_0.png",
+          "signfan_east_12_3_1.png",
+          "signfan_east_12_3_2.png"
+        ]
+      ]
+    }
+  ],
+  "signs": [
+    {
+      "file": "sign_01.png",
+      "text": "GO!",
+      "anchorLocal": [
+        12,
+        12
+      ]
+    },
+    {
+      "file": "sign_02.png",
+      "text": "DEF",
+      "anchorLocal": [
+        12,
+        12
+      ]
+    },
+    {
+      "file": "sign_03.png",
+      "text": "WIN",
+      "anchorLocal": [
+        12,
+        12
+      ]
+    },
+    {
+      "file": "sign_04.png",
+      "text": "BEER",
+      "anchorLocal": [
+        12,
+        12
+      ]
+    },
+    {
+      "file": "sign_05.png",
+      "text": "SHOOT",
+      "anchorLocal": [
+        12,
+        12
+      ]
+    },
+    {
+      "file": "sign_06.png",
+      "text": "REF!",
+      "anchorLocal": [
+        12,
+        12
+      ]
+    },
+    {
+      "file": "sign_07.png",
+      "text": "BOO",
+      "anchorLocal": [
+        12,
+        12
+      ]
+    },
+    {
+      "file": "sign_08.png",
+      "text": "HIT",
+      "anchorLocal": [
+        12,
+        12
+      ]
+    },
+    {
+      "file": "sign_09.png",
+      "text": "GOAL",
+      "anchorLocal": [
+        12,
+        12
+      ]
+    },
+    {
+      "file": "sign_10.png",
+      "text": "PUCK",
+      "anchorLocal": [
+        12,
+        12
+      ]
+    },
+    {
+      "file": "sign_11.png",
+      "text": "USA",
+      "anchorLocal": [
+        12,
+        12
+      ]
+    },
+    {
+      "file": "sign_12.png",
+      "text": "NO!",
+      "anchorLocal": [
+        12,
+        12
+      ]
+    }
+  ],
+  "previewOnly": "preview.png"
+}
