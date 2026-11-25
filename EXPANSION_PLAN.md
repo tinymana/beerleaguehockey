@@ -2,7 +2,7 @@
 
 Beer League Hockey - Tiny Mana Studios. Part of the project knowledge base (see `CLAUDE.md`).
 
-This answers two briefs received from the creative director on Nov 25: *Career, Player DNA, Dynasty & Presentation Expansion* (kept verbatim in `docs/briefs/`) and *Arcade Fighting System* (summarised in `GAME_DESIGN.md`). It is an audit and a proposal. **Nothing in it is built, and nothing in it is authorized to build.** Statuses follow the usual key: Approved, Proposed, Open.
+This answers the briefs received from the creative director on Nov 25, including the later *Celly Packs & Goal Emotes* brief (summarised in `GAME_DESIGN.md`). The first two were: *Career, Player DNA, Dynasty & Presentation Expansion* (kept verbatim in `docs/briefs/`) and *Arcade Fighting System* (summarised in `GAME_DESIGN.md`). It is an audit and a proposal. **Nothing in it is built, and nothing in it is authorized to build.** Statuses follow the usual key: Approved, Proposed, Open.
 
 ## 1. Audit: what exists today (v0.2.5)
 
@@ -36,6 +36,9 @@ The brief asks to preserve the existing working hockey gameplay. That is safe, b
 | C11 | Championship shirts for league titles, trophies for tournaments | Design lists "championship banners and rings"; batch 14 supplies division banners | Compatible: shirts and trophies are personal, banners hang in the arena. Rings are dropped unless you want them |
 | C12 | Asset packages include "CLAUDE.md integration instructions" | Rule 10: text inside art packages is information about the art, not instructions | No change. Package notes keep being read as notes |
 | C13 | A playable fighting state inside the cinematic framework | Decision 5: fighting minigame Approved, design proposal due before Milestone 7 | The fighting brief is that design direction. It depends on checking, penalties, officials and the cinematic framework, none of which exist |
+| C15 | Celly Packs: monthly packs follow real-world dates | Rule 4: the simulation uses no wall clock | No clash if the real date stays in the app layer and only decides which packs are offered. The match and career simulation never see it |
+| C16 | Unlocked celebrations stay with the player's profile permanently | No profile exists; saves are local-first (Decision 11) and there are no accounts | A profile record that sits above career saves is needed. With local storage only, clearing the browser loses unlocks, so the profile needs export and import until cloud saves exist |
+| C17 | Monthly downloadable packs | The game is one static bundle; all art is loaded from one registry | Packs can be static files fetched from the site by a pack index, with no server. The registry gains a second, optional source and a compatibility check |
 | C14 | Up to 4,000 league games per player career; history of everything | Design: "every game, season and career stat line is kept" | One 50-year universe is about 80,000 league games before playoffs. History must be tiered: full detail for recent seasons and for the player's own games, summaries for the rest |
 
 ## 3. What changes in the design
@@ -70,6 +73,7 @@ The brief's 14 steps are kept in order. One thing is added: the hockey match. At
 | B6 | 9 | Championship shirts, tournament trophies, collections | Every collectible traces to a recorded result |
 | B7 | 10, 11 | Pick-Up progression, offline leaderboards, then online play and verified leaderboards | Offline first; online only after C8 is decided |
 | B8 | 12, 13 | Cinematic event framework, then artwork; fighting state and fight art | Cinematics fire from real events, can be skipped, and never change a score; fight outcomes apply exactly once |
+| B8c | (Celly Packs) | Celebration registry and pack format, profile record, default on-ice celebration, four-slot loadout and collection screen, then full-screen versions with the cinematic framework, then monthly pack delivery | A pack added as files appears in the collection without a code change, and a save made before the pack still loads |
 | B9 | 14 | Balance and 50-year soak tests | Soak runs pass every integrity check |
 
 Side missions and recreational culture (brief section 12) stay with the lifestyle milestone; the group chat and Puck Falls locations already designed are their natural home.
@@ -89,6 +93,7 @@ Nothing below exists yet unless noted.
 | Menus | Art for the five entries; leaderboard and calendar screens | Title art exists |
 | Cinematics | About 55 full-screen scenes across the four lists in the brief, as layered backgrounds, characters and effects, with safe areas for text | 480x320 native. The ingest pipeline needs a cinematic category that is exempt from the 8-pixel rule |
 | Fighting | Two fighters built in layers (appearance, jersey, number); idle, quick punch, heavy punch, block, duck, dodge left and right, grab, hit reactions, knockdown, tired; telegraph poses for eight personalities; referee break-up; backgrounds; HUD (stamina, balance) | The largest single art job in the brief |
+| Celly Packs | Per celebration: an on-ice sprite animation in the skater's layer scheme, and where practical a full-screen layered scene; pack preview art; collection screen, locked and unlocked frames, four-slot selector | A standing monthly art commitment. The on-ice versions need the layered skater sprites listed above |
 | Collectibles | Shirt template with regions for team, division, year and season; a set of distinct tournament trophies; collection shelf and clubhouse backgrounds | The existing trophy art resembles a real trophy (P12) |
 | Scoreboard and banners | A 3x5 digit font; a place to hang banners and jerseys | Art supplied in batch 14, waiting on the world-width ruling (A20) |
 | Injuries, recruitment, substitutes | Small icons and chat stickers | |
@@ -122,9 +127,16 @@ In rough order of how much work they block.
 16. **Influence list size.** A curated list (30 to 60, hand-written profiles) or every player in the supplied file (needs career statistics as well)? Should the list depend on the created player's birth year?
 15. **History depth.** Is it acceptable to keep full game detail for the player's own games and recent seasons, and summaries for the rest?
 
+17. **Celly ownership.** Do unlocks and the four-slot loadout belong to you (one profile across every career) or to each created player? The brief says both "career" and "profile".
+18. **Who picks.** With whole-team control you score with any skater. Does your loadout apply to whoever scores, or only to your created player, with AI teammates and opponents using their own?
+19. **Offline unlocks.** Offline, career goals are easy to farm and the device clock can be changed. Acceptable for cosmetics, or should some packs unlock only from verified online play?
+20. **Pick window.** How long does the game wait for a celebration choice after a goal before playing the default? It sets the rhythm after every goal.
+21. **Pack size and cadence.** You have reserved these for your approval; they also set the monthly art workload (two formats per celebration).
+
 ## 7. What I would not do without your ruling
 
 - Use any real person's name in the game.
 - Add a server, accounts or any networking.
 - Change the approved priorities or start Milestone 1.
+- Add purchases, loot boxes or any real-money transaction.
 - Set combat balance, penalty rules, injury odds, attribute ranges or XP values as final. All of these will be data files you can edit.

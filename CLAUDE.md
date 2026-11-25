@@ -11,8 +11,8 @@ Read this first. It lets a new session resume without losing creative direction 
 
 - **Authorized:** Milestone 0, the initial skating prototype, and the modular arena asset integration. Delivered through v0.2.5.
 - **Waiting on:** the creative director's review of the playable checkpoint. Do not start Milestone 1 until approved.
-- **Not started and not authorized:** dynasty, lifestyle, league economy, characters, franchises, prestige, careers, tournaments, multiplayer, Hockey Influences, cinematics, the fighting mini-game.
-- **Expansion briefs (Nov 25):** career, player DNA, dynasty, presentation and fighting. Audited in `EXPANSION_PLAN.md`; waiting on the creative director's answers to its questions. No implementation.
+- **Not started and not authorized:** dynasty, lifestyle, league economy, characters, franchises, prestige, careers, tournaments, multiplayer, Hockey Influences, cinematics, the fighting mini-game, Celly Packs.
+- **Expansion briefs (Nov 25):** career, player DNA, dynasty, presentation, fighting and Celly Packs. Audited in `EXPANSION_PLAN.md`; waiting on the creative director's answers to its questions. No implementation.
 
 ## Priorities
 

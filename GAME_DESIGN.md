@@ -200,3 +200,15 @@ Two briefs from the creative director extend this document: *Career, Player DNA,
 - **Consequences:** reputation, teammate relationships, captain approval, rivalries, penalty minutes, suspensions, ejections, injury risk, recruitment, chemistry. Fighting is not always good for you: some captains want protection, others see a liability. Fighting stats are tracked apart from hockey stats.
 - **Technical:** an independent game state. The match state is preserved on entry and resumed on exit; penalties and injuries are applied exactly once. Fighters are built from layers (created appearance, skin tone, hair, facial hair, body type, jersey colours and number, opponent identity) over reusable backgrounds, animation atlases, effects and HUD. Difficulty is configurable and fights can be auto-simulated.
 - **Needs approval before it is final:** combat balance, penalty rules, injury probabilities.
+
+### Celly Packs and goal emotes (direction, Nov 25; nothing built)
+
+- **What it is:** collectible goal celebrations you unlock, collect, equip and perform across a career. Purely cosmetic: no effect on attributes, scoring or results.
+- **After a goal:** once the goal is confirmed, the scorer gets a brief window to pick one of four equipped celebrations by direction (keyboard or gamepad). No pick plays the default.
+- **Two formats:** an on-ice overhead sprite animation, and a full-screen 32-bit cinematic that shows the created player's appearance, jersey colours, number and team. Each celebration supports both where practical.
+- **Monthly packs:** released by Tiny Mana Studios on real-world dates, independent of the in-game calendar. Each pack has an ID, name, release date, preview art, celebration IDs, animation assets, unlock requirements, a compatibility version and a manifest. Installing a pack never needs a code change and never invalidates a save.
+- **Unlocks:** configurable, from career goals, assists, games played, hat tricks, overtime winners, league championships, tournament wins, monthly challenges, milestones and special events. Once unlocked, a celebration stays with the profile for good, including after its event ends.
+- **Loadout and collection:** four active slots; a collection screen with locked and unlocked states, previews, unlock progress, equipped slots and pack history.
+- **Multiplayer:** send the celebration ID, never the files; fall back to the default if the other client lacks the pack.
+- **Technical:** fires only after a confirmed goal; never duplicates a goal, changes a result or interrupts scoring. Assets are kept apart from core player animation. Manifests are versioned and backward compatible.
+- **Needs approval:** any paid purchase, loot box or real-money transaction; pack size, unlock difficulty and release cadence.
