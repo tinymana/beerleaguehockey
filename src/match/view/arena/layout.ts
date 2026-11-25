@@ -6,7 +6,7 @@
 import { goalLineY } from '../../sim/rink';
 import type { RinkGeometry } from '../../sim/rink';
 import { projectY } from '../projection';
-import type { ArenaConfig, BoardSide, GoalArt, GoalEnd } from './config';
+import type { ArenaConfig, BenchSide, BenchTeam, BoardSide, GoalArt, GoalEnd, SideStructure } from './config';
 import { TILE, visibleCentre } from './registry';
 import type { ArenaAsset } from './registry';
 
@@ -39,7 +39,7 @@ export const ARENA_LAYERS: readonly ArenaLayerInfo[] = [
   { id: 'markings', label: 'Rink markings and creases', depth: -90 },
   { id: 'centerLogo', label: 'Centre-ice logo', depth: -85 },
   { id: 'reflections', label: 'Overhead light reflections', depth: -80 },
-  { id: 'stadium', label: 'Background stadium and seating', depth: -70 },
+  { id: 'stadium', label: 'Background stadium, seating and benches', depth: -70 },
   { id: 'backBoards', label: 'Background boards and glass', depth: -60 },
   { id: 'nets', label: 'Goal nets', depth: 0, ySorted: true },
   { id: 'actors', label: 'Players, officials and puck', depth: 0, ySorted: true },
@@ -163,6 +163,29 @@ export interface BoardImage {
   /** Show only the top-left part of the image, in pixels. */
   cropW?: number;
   cropH?: number;
+  /** Draw this part of the asset (an atlas) instead of the whole image. */
+  cell?: { x: number; y: number; width: number; height: number };
+  /** Set on animated doors: `${side}:${board module index}`, the same id as the glass pane above it. */
+  doorId?: string;
+}
+
+/** A bench player's spot. `x`,`y` is the top-left of the 16x16 frame. */
+export interface BenchSpot {
+  x: number;
+  y: number;
+  team: BenchTeam;
+  variant: number;
+  pose: 'seated' | 'standing';
+}
+
+/** A bench, penalty box or timekeeper booth, placed outside the side boards. */
+export interface StructurePlacement {
+  structure: SideStructure;
+  x: number;
+  y: number;
+  /** Board module index of each door, counted from the north end of the straight run. */
+  doorModules: number[];
+  spots: BenchSpot[];
 }
 
 /** One pane of glass. Each has an id so its state (intact, cracked...) can be swapped. */
@@ -189,6 +212,9 @@ export interface ArenaLayout {
   boardImages: BoardImage[];
   glass: GlassPanel[];
   extents: StraightExtents;
+  structures: StructurePlacement[];
+  /** Structures the config asked for that do not fit on the straight boards at this tilt. */
+  structuresSkipped: string[];
 }
 
 type Lookup = (id: string) => ArenaAsset | undefined;
@@ -282,7 +308,7 @@ export function layoutBoards(
   tilt: number,
   config: ArenaConfig,
   lookup: Lookup,
-): Pick<ArenaLayout, 'strips' | 'boardImages' | 'glass' | 'extents'> {
+): Pick<ArenaLayout, 'strips' | 'boardImages' | 'glass' | 'extents' | 'structures' | 'structuresSkipped'> {
   const sy = (y: number): number => screenY(rink, tilt, y);
   const topS = sy(rink.top);
   const bottomS = sy(rink.bottom);
@@ -318,9 +344,53 @@ export function layoutBoards(
   // Side boards: strips broken wherever a gate replaces a module.
   const gateRows: Record<'west' | 'east', Map<number, 'closed' | 'open'>> = { west: new Map(), east: new Map() };
   const sideLength = extents.y1 - extents.y0;
+
+  // Benches, penalty boxes and the timekeeper stand against the outside edge of the side boards.
+  // Each snaps along the boards so its doors replace whole board modules, and none may overlap.
+  const structures: StructurePlacement[] = [];
+  const structuresSkipped: string[] = [];
+  const doorIds = new Set<string>();
+  const area = config.benchArea;
+  if (area) {
+    const nextFree: Record<BenchSide, number> = { west: 0, east: 0 };
+    for (const s of area.structures) {
+      const o = origin[s.side];
+      if (!o) continue;
+      const ink = o.asset.bbox ?? [0, 0, o.asset.width - 1, o.asset.height - 1];
+      const outside = s.side === 'west' ? o.x + ink[0] : o.x + ink[2];
+      const door = s.doors[0] ?? 0;
+      let top: number;
+      if (s.follows) {
+        top = nextFree[s.side];
+      } else {
+        top = Math.round((sy(s.at) - extents.y0 - s.height / 2 + door) / MODULE) * MODULE - door;
+        while (top < nextFree[s.side]) top += MODULE;
+      }
+      if (top < 0 || top + s.height > sideLength) {
+        structuresSkipped.push(`${s.kind}:${s.side}`);
+        continue;
+      }
+      nextFree[s.side] = top + s.height;
+      const x = outside - s.contact;
+      const y = extents.y0 + top;
+      const doorModules = s.doors.map((d) => (top + d) / MODULE);
+      for (const k of doorModules) {
+        gateRows[s.side].set(k, 'closed');
+        doorIds.add(`${s.side}:${k}`);
+      }
+      const spots: BenchSpot[] = [];
+      const [ax, ay] = area.players.anchor;
+      for (const pose of ['seated', 'standing'] as const) {
+        (pose === 'seated' ? s.seats : s.standing)?.forEach(([px, py], i) => {
+          spots.push({ x: x + px - ax, y: y + py - ay, team: s.team ?? 'home', variant: i % area.players.variants, pose });
+        });
+      }
+      structures.push({ structure: s, x, y, doorModules, spots });
+    }
+  }
   for (const gate of config.gates) {
     const k = Math.floor((sy(gate.at) - extents.y0) / MODULE);
-    if (k >= 0 && (k + 1) * MODULE <= sideLength) gateRows[gate.side].set(k, gate.state);
+    if (k >= 0 && (k + 1) * MODULE <= sideLength && !doorIds.has(`${gate.side}:${k}`)) gateRows[gate.side].set(k, gate.state);
   }
   for (const side of ['west', 'east'] as const) {
     const o = origin[side];
@@ -334,7 +404,14 @@ export function layoutBoards(
     for (const k of [...gateRows[side].keys()].sort((a, b) => a - b)) {
       flush(k * MODULE);
       const state = gateRows[side].get(k) as 'closed' | 'open';
-      boardImages.push({ role: `gate:${side}:${state}`, layer: 'backBoards', z: Z.board, asset: `10.12/gate_${side}_${state}`, x: o.x, y: extents.y0 + k * MODULE });
+      const doorId = `${side}:${k}`;
+      if (area && doorIds.has(doorId)) {
+        // An animated door (batch 12.09) stands in for the static gate: same anchor, never both.
+        const d = area.doors;
+        boardImages.push({ role: `door:${side}`, layer: 'backBoards', z: Z.board, asset: d.atlas, x: o.x, y: extents.y0 + k * MODULE, doorId, cell: { x: 0, y: d.rows[side] * d.frameHeight, width: d.frameWidth, height: d.frameHeight } });
+      } else {
+        boardImages.push({ role: `gate:${side}:${state}`, layer: 'backBoards', z: Z.board, asset: `10.12/gate_${side}_${state}`, x: o.x, y: extents.y0 + k * MODULE });
+      }
       start = (k + 1) * MODULE;
     }
     flush(sideLength);
@@ -406,7 +483,7 @@ export function layoutBoards(
     }
   }
 
-  return { strips, boardImages, glass, extents };
+  return { strips, boardImages, glass, extents, structures, structuresSkipped };
 }
 
 /** Height of the flat face of an end board, between its cap and its kickplate. */
@@ -415,6 +492,34 @@ const BOARD_FACE = 15;
 const GLASS_CONTACT: Record<BoardSide, { x: number; y: number }> = { north: { x: 0, y: 14 }, south: { x: 0, y: 2 }, west: { x: 7, y: 0 }, east: { x: 1, y: 0 } };
 /** Local pixel of each post that sits on the board cap at a panel seam (batch 10.10 manifest). */
 const POST_ANCHOR: Record<BoardSide, { x: number; y: number }> = { north: { x: 4, y: 14 }, south: { x: 4, y: 1 }, west: { x: 7, y: 8 }, east: { x: 0, y: 8 } };
+
+export interface BenchReport {
+  rows: { kind: string; side: BenchSide; top: number; bottom: number; doors: number; gapToNext: number | null }[];
+  skipped: string[];
+  ok: boolean;
+}
+
+/** Footprint check for the bench-side structures: on screen, off the ice, apart from each other, doors on board modules. */
+export function benchReport(rink: RinkGeometry, layout: ArenaLayout): BenchReport {
+  const rows: BenchReport['rows'] = [];
+  let ok = layout.structuresSkipped.length === 0;
+  for (const side of ['west', 'east'] as const) {
+    const placed = layout.structures.filter((p) => p.structure.side === side).sort((a, b) => a.y - b.y);
+    placed.forEach((p, i) => {
+      const next = placed[i + 1];
+      const bottom = p.y + p.structure.height;
+      const gap = next ? next.y - bottom : null;
+      const width = 48;
+      const offIce = side === 'west' ? p.x + width <= rink.left : p.x >= rink.right;
+      const inWorld = p.x >= 0 && p.x + width <= rink.worldWidth;
+      const onRun = p.y >= layout.extents.y0 && bottom <= layout.extents.y1;
+      const doorsOk = p.doorModules.every((k) => Number.isInteger(k));
+      if (!offIce || !inWorld || !onRun || !doorsOk || (gap !== null && gap < 0)) ok = false;
+      rows.push({ kind: p.structure.kind, side, top: p.y, bottom, doors: p.doorModules.length, gapToNext: gap });
+    });
+  }
+  return { rows, skipped: [...layout.structuresSkipped], ok };
+}
 
 export interface GoalPlacement {
   end: GoalEnd;

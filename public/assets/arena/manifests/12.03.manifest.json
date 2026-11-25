@@ -1,0 +1,315 @@
+{
+  "batch": "12.03",
+  "tileSize": [
+    8,
+    8
+  ],
+  "frameSize": [
+    16,
+    16
+  ],
+  "atlas": "seated_atlas.png",
+  "assets": [
+    {
+      "file": "home_seated_01.png",
+      "side": "home",
+      "faces": "east",
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        0,
+        0,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "home_seated_01_0_0.png",
+          "home_seated_01_0_1.png"
+        ],
+        [
+          "home_seated_01_1_0.png",
+          "home_seated_01_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "home_seated_02.png",
+      "side": "home",
+      "faces": "east",
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        16,
+        0,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "home_seated_02_0_0.png",
+          "home_seated_02_0_1.png"
+        ],
+        [
+          "home_seated_02_1_0.png",
+          "home_seated_02_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "home_seated_03.png",
+      "side": "home",
+      "faces": "east",
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        32,
+        0,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "home_seated_03_0_0.png",
+          "home_seated_03_0_1.png"
+        ],
+        [
+          "home_seated_03_1_0.png",
+          "home_seated_03_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "home_seated_04.png",
+      "side": "home",
+      "faces": "east",
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        48,
+        0,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "home_seated_04_0_0.png",
+          "home_seated_04_0_1.png"
+        ],
+        [
+          "home_seated_04_1_0.png",
+          "home_seated_04_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "home_seated_05.png",
+      "side": "home",
+      "faces": "east",
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        64,
+        0,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "home_seated_05_0_0.png",
+          "home_seated_05_0_1.png"
+        ],
+        [
+          "home_seated_05_1_0.png",
+          "home_seated_05_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "home_seated_06.png",
+      "side": "home",
+      "faces": "east",
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        80,
+        0,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "home_seated_06_0_0.png",
+          "home_seated_06_0_1.png"
+        ],
+        [
+          "home_seated_06_1_0.png",
+          "home_seated_06_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "away_seated_01.png",
+      "side": "away",
+      "faces": "west",
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        0,
+        16,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "away_seated_01_0_0.png",
+          "away_seated_01_0_1.png"
+        ],
+        [
+          "away_seated_01_1_0.png",
+          "away_seated_01_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "away_seated_02.png",
+      "side": "away",
+      "faces": "west",
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        16,
+        16,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "away_seated_02_0_0.png",
+          "away_seated_02_0_1.png"
+        ],
+        [
+          "away_seated_02_1_0.png",
+          "away_seated_02_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "away_seated_03.png",
+      "side": "away",
+      "faces": "west",
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        32,
+        16,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "away_seated_03_0_0.png",
+          "away_seated_03_0_1.png"
+        ],
+        [
+          "away_seated_03_1_0.png",
+          "away_seated_03_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "away_seated_04.png",
+      "side": "away",
+      "faces": "west",
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        48,
+        16,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "away_seated_04_0_0.png",
+          "away_seated_04_0_1.png"
+        ],
+        [
+          "away_seated_04_1_0.png",
+          "away_seated_04_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "away_seated_05.png",
+      "side": "away",
+      "faces": "west",
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        64,
+        16,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "away_seated_05_0_0.png",
+          "away_seated_05_0_1.png"
+        ],
+        [
+          "away_seated_05_1_0.png",
+          "away_seated_05_1_1.png"
+        ]
+      ]
+    },
+    {
+      "file": "away_seated_06.png",
+      "side": "away",
+      "faces": "west",
+      "anchorLocal": [
+        8,
+        8
+      ],
+      "atlasRect": [
+        80,
+        16,
+        16,
+        16
+      ],
+      "tiles": [
+        [
+          "away_seated_06_0_0.png",
+          "away_seated_06_0_1.png"
+        ],
+        [
+          "away_seated_06_1_0.png",
+          "away_seated_06_1_1.png"
+        ]
+      ]
+    }
+  ],
+  "previewOnly": "preview.png"
+}

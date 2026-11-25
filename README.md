@@ -2,7 +2,7 @@
 
 A recreational hockey universe by Tiny Mana Studios: 16-bit arcade hockey feel, a deep persistent rec-league dynasty, and beer league culture.
 
-**Status: Milestone 0, the skating prototype and the modular arena (v0.2.2).** One skater, one puck, one rink, and a live tuning panel, so the feel of skating can be judged before a hockey game is built on it. Dynasty, lifestyle, economy and multiplayer are not started.
+**Status: Milestone 0, the skating prototype and the modular arena (v0.2.3).** One skater, one puck, one rink, and a live tuning panel, so the feel of skating can be judged before a hockey game is built on it. Dynasty, lifestyle, economy and multiplayer are not started.
 
 ## Run it
 

@@ -99,6 +99,27 @@ export function textureKey(registry: ArenaRegistry, id: string): string {
   return assetById(registry, id)?.duplicateOf ?? id;
 }
 
+export interface TextureSource {
+  /** Key of the loaded texture that holds the pixels. */
+  key: string;
+  /** The part of that texture to draw. Absent means the whole image. */
+  cell?: { x: number; y: number; width: number; height: number };
+}
+
+/**
+ * Where an asset's pixels are actually loaded from: its own file, the file it
+ * duplicates, or its cell of an atlas (single frames are never loaded on their own).
+ */
+export function textureSource(registry: ArenaRegistry, id: string): TextureSource {
+  const asset = assetById(registry, id);
+  if (!asset) return { key: id };
+  if (asset.role === 'frame' && asset.atlas && asset.atlasX !== undefined && asset.atlasY !== undefined) {
+    return { key: textureKey(registry, asset.atlas), cell: { x: asset.atlasX, y: asset.atlasY, width: asset.width, height: asset.height } };
+  }
+  if (asset.duplicateOf && asset.duplicateOf !== id) return textureSource(registry, asset.duplicateOf);
+  return { key: id };
+}
+
 /** Centre of an asset's visible pixels, in its own pixel coordinates. */
 export function visibleCentre(asset: ArenaAsset): { x: number; y: number } {
   if (!asset.bbox) return { x: asset.width / 2, y: asset.height / 2 };

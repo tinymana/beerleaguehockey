@@ -1,0 +1,191 @@
+{
+  "batch": "12.07",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    48,
+    48
+  ],
+  "atlas": "penalty_atlas.png",
+  "assets": [
+    {
+      "file": "penalty_west.png",
+      "orientation": "west",
+      "iceSide": "east",
+      "boardContactLocalX": 44,
+      "seatedAnchors": [
+        [
+          16,
+          16
+        ],
+        [
+          16,
+          32
+        ]
+      ],
+      "standingAnchors": [
+        [
+          31,
+          16
+        ],
+        [
+          31,
+          32
+        ]
+      ],
+      "layers": {
+        "floor": "penalty_west_floor.png",
+        "seating": "penalty_west_seating.png",
+        "enclosure": "penalty_west_enclosure.png",
+        "glass": "penalty_west_glass.png"
+      },
+      "atlasRect": [
+        0,
+        0,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "penalty_west_0_0.png",
+          "penalty_west_0_1.png",
+          "penalty_west_0_2.png",
+          "penalty_west_0_3.png",
+          "penalty_west_0_4.png",
+          "penalty_west_0_5.png"
+        ],
+        [
+          "penalty_west_1_0.png",
+          "penalty_west_1_1.png",
+          "penalty_west_1_2.png",
+          "penalty_west_1_3.png",
+          "penalty_west_1_4.png",
+          "penalty_west_1_5.png"
+        ],
+        [
+          "penalty_west_2_0.png",
+          "penalty_west_2_1.png",
+          "penalty_west_2_2.png",
+          "penalty_west_2_3.png",
+          "penalty_west_2_4.png",
+          "penalty_west_2_5.png"
+        ],
+        [
+          "penalty_west_3_0.png",
+          "penalty_west_3_1.png",
+          "penalty_west_3_2.png",
+          "penalty_west_3_3.png",
+          "penalty_west_3_4.png",
+          "penalty_west_3_5.png"
+        ],
+        [
+          "penalty_west_4_0.png",
+          "penalty_west_4_1.png",
+          "penalty_west_4_2.png",
+          "penalty_west_4_3.png",
+          "penalty_west_4_4.png",
+          "penalty_west_4_5.png"
+        ],
+        [
+          "penalty_west_5_0.png",
+          "penalty_west_5_1.png",
+          "penalty_west_5_2.png",
+          "penalty_west_5_3.png",
+          "penalty_west_5_4.png",
+          "penalty_west_5_5.png"
+        ]
+      ]
+    },
+    {
+      "file": "penalty_east.png",
+      "orientation": "east",
+      "iceSide": "west",
+      "boardContactLocalX": 4,
+      "seatedAnchors": [
+        [
+          31,
+          16
+        ],
+        [
+          31,
+          32
+        ]
+      ],
+      "standingAnchors": [
+        [
+          16,
+          16
+        ],
+        [
+          16,
+          32
+        ]
+      ],
+      "layers": {
+        "floor": "penalty_east_floor.png",
+        "seating": "penalty_east_seating.png",
+        "enclosure": "penalty_east_enclosure.png",
+        "glass": "penalty_east_glass.png"
+      },
+      "atlasRect": [
+        48,
+        0,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "penalty_east_0_0.png",
+          "penalty_east_0_1.png",
+          "penalty_east_0_2.png",
+          "penalty_east_0_3.png",
+          "penalty_east_0_4.png",
+          "penalty_east_0_5.png"
+        ],
+        [
+          "penalty_east_1_0.png",
+          "penalty_east_1_1.png",
+          "penalty_east_1_2.png",
+          "penalty_east_1_3.png",
+          "penalty_east_1_4.png",
+          "penalty_east_1_5.png"
+        ],
+        [
+          "penalty_east_2_0.png",
+          "penalty_east_2_1.png",
+          "penalty_east_2_2.png",
+          "penalty_east_2_3.png",
+          "penalty_east_2_4.png",
+          "penalty_east_2_5.png"
+        ],
+        [
+          "penalty_east_3_0.png",
+          "penalty_east_3_1.png",
+          "penalty_east_3_2.png",
+          "penalty_east_3_3.png",
+          "penalty_east_3_4.png",
+          "penalty_east_3_5.png"
+        ],
+        [
+          "penalty_east_4_0.png",
+          "penalty_east_4_1.png",
+          "penalty_east_4_2.png",
+          "penalty_east_4_3.png",
+          "penalty_east_4_4.png",
+          "penalty_east_4_5.png"
+        ],
+        [
+          "penalty_east_5_0.png",
+          "penalty_east_5_1.png",
+          "penalty_east_5_2.png",
+          "penalty_east_5_3.png",
+          "penalty_east_5_4.png",
+          "penalty_east_5_5.png"
+        ]
+      ]
+    }
+  ],
+  "previewOnly": "preview.png"
+}

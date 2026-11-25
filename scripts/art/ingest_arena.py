@@ -169,6 +169,18 @@ def main():
             for value in (manifest.get('layers') or {}).values():
                 if isinstance(value, str) and value.endswith('.png'):
                     composites.add(os.path.basename(value))
+            # Any other file the manifest gives an atlas rectangle for is also a cell of the batch atlas.
+            def collect_cells(node):
+                if isinstance(node, dict):
+                    if manifest.get('atlas') and isinstance(node.get('file'), str) and isinstance(node.get('atlasRect'), list):
+                        frame_entries.setdefault(os.path.basename(node['file']), (os.path.basename(manifest['atlas']), node['atlasRect'][0], node['atlasRect'][1]))
+                    for value in node.values():
+                        collect_cells(value)
+                elif isinstance(node, list):
+                    for item in node:
+                        collect_cells(item)
+
+            collect_cells({k: v for k, v in manifest.items() if k != 'tiles'})
             declared = set(tile_entries) | loose_tiles | composites | set(frame_entries) | ({atlas_name} if atlas_name else set())
             listed_previews = manifest.get('previewOnly') or []
             preview_only = {os.path.basename(p) for p in ([listed_previews] if isinstance(listed_previews, str) else listed_previews)}

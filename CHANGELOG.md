@@ -2,6 +2,24 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.2.3 - 2026-11-25 - Benches, penalty boxes and doors
+
+Ten more packages (batches 12.01 to 12.10) ingested: 4,327 assets from 47 packages, 0 errors. No gameplay physics changed.
+
+### Added
+- Home bench (west) and away bench (east) at centre ice, a penalty box south of each, and the timekeeper booth beside the east penalty box, all standing against the outside edge of the side boards and drawn behind the boards and glass.
+- Six seated players on each bench, drawn between the bench's seating and enclosure layers.
+- Animated doors (12.09) at every bench and penalty-box door, closed in play. They replace the static 10.12 gates at the same anchor; the free-standing gates proposed in v0.2.1 are gone.
+- Arena Asset Lab: bench buttons (empty, seated, standing, cheer, groan), open and close doors, and a footprint report (off the ice, on screen, no overlaps, every door on a whole board module).
+- Ingest: any file a manifest gives an atlas rectangle for is now served from the batch atlas rather than loaded on its own. The game loads 133 files for 4,327 assets.
+
+### Known issues
+- Every placement is my proposal: the packages call positions, anchors and spacing provisional. `ARENA.md` A16.
+- Bench players wear placeholder blue and red. No team colours are approved. `ARENA.md` A17.
+- Cheer and groan play only in the Lab: there are no teams to cheer for yet. Bench equipment (12.10) is registered but not placed, because the package gives no positions. `ARENA.md` A18.
+- An open door shows the dark backdrop through the board opening: no threshold or floor art covers that strip. Doors stay closed in play.
+- The west timekeeper booth is not used.
+
 ## 0.2.2 - 2026-11-25 - Goal nets
 
 Ten more packages (batches 11.01 to 11.10) ingested: 3,157 assets from 37 packages, 0 errors. No gameplay physics changed: the net the puck collides with and the scoring test are exactly as before.

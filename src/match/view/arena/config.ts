@@ -26,6 +26,53 @@ export interface GoalStrip {
   hold: boolean;
 }
 
+export type BenchSide = 'west' | 'east';
+export type BenchTeam = 'home' | 'away';
+/** What the bench players are doing. `cheer` and `groan` are supplied loops; nothing in the game triggers them yet. */
+export type BenchMood = 'empty' | 'seated' | 'standing' | 'cheer' | 'groan';
+
+/** A bench, penalty box or timekeeper booth standing outside the side boards. */
+export interface SideStructure {
+  kind: 'bench' | 'penaltyBox' | 'timekeeper';
+  side: BenchSide;
+  /** Gameplay y the structure is centred near. It then snaps so each door lands on a whole board module. */
+  at: number;
+  /** True to butt against the structure before it on the same side instead of using `at`. */
+  follows?: boolean;
+  /** Layer images, back to front (from the batch manifest). */
+  layers: readonly string[];
+  /** Players are drawn after this many layers: over floor and seating, under the enclosure. */
+  playersAfter: number;
+  /** Local x that sits on the outside edge of the boards (boardContactLocalX in the manifest). */
+  contact: number;
+  height: number;
+  /** Local y of the top of each 32 px door. The doors replace the board modules at those spots. */
+  doors: readonly number[];
+  team?: BenchTeam;
+  seats?: readonly (readonly [number, number])[];
+  standing?: readonly (readonly [number, number])[];
+}
+
+/** Sheets of 16x16 bench players: one column per variant; home in the top half, away in the bottom half. */
+export interface BenchPlayers {
+  seated: string;
+  standing: string;
+  cheer: { atlas: string; durations: readonly number[] };
+  groan: { atlas: string; durations: readonly number[] };
+  frame: number;
+  variants: number;
+  /** Local pixel of a player frame that sits on a seat or standing anchor. */
+  anchor: readonly [number, number];
+}
+
+export interface BenchArea {
+  structures: readonly SideStructure[];
+  /** Animated doors (batch 12.09): one row per side, closed at frame 0 and open at the last frame. */
+  doors: { atlas: string; frameWidth: number; frameHeight: number; durations: readonly number[]; rows: Record<BenchSide, number> };
+  players: BenchPlayers;
+  mood: BenchMood;
+}
+
 /** One goal: every number here is copied from the batch manifests, and a test checks they still agree. */
 export interface GoalArt {
   rest: string;
@@ -78,6 +125,8 @@ export interface ArenaConfig {
   glass: { panels: Record<BoardSide, string>; posts: Record<BoardSide, string>; damageBatch: string } | null;
   /** Gates replace one side-board module each. `at` is a gameplay y position along the boards. */
   gates: { side: 'west' | 'east'; at: number; state: 'closed' | 'open' }[];
+  /** Benches, penalty boxes and the timekeeper booth outside the side boards. Their doors are added to `gates`. */
+  benchArea: BenchArea | null;
   /** Supplied goal nets. Null keeps the code-drawn stand-in nets, which are the size of the physics net. */
   goals: Record<GoalEnd, GoalArt> | null;
   /** Sponsor panels on the end boards. `x` is a gameplay x position for the panel's centre. */
@@ -115,6 +164,34 @@ const GOALS: Record<GoalEnd, GoalArt> = {
   },
 };
 
+const SIX = [14, 26, 38, 50, 62, 74] as const;
+const at = (x: number, ys: readonly number[]): [number, number][] => ys.map((y) => [x, y]);
+
+/**
+ * Proposal (ARENA.md A16): a bench each side at centre ice, a penalty box south of each bench,
+ * and the timekeeper beside the east penalty box. The packages call every placement provisional.
+ */
+const BENCH_AREA: BenchArea = {
+  structures: [
+    { kind: 'bench', side: 'west', team: 'home', at: 440, layers: ['12.01/home_bench_floor', '12.01/home_bench_seating', '12.01/home_bench_enclosure'], playersAfter: 2, contact: 44, height: 96, doors: [0, 64], seats: at(18, SIX), standing: at(32, SIX) },
+    { kind: 'penaltyBox', side: 'west', at: 564, layers: ['12.07/penalty_west'], playersAfter: 1, contact: 44, height: 48, doors: [8] },
+    { kind: 'bench', side: 'east', team: 'away', at: 440, layers: ['12.02/away_bench_floor', '12.02/away_bench_seating', '12.02/away_bench_enclosure'], playersAfter: 2, contact: 3, height: 96, doors: [0, 64], seats: at(29, SIX), standing: at(15, SIX) },
+    { kind: 'penaltyBox', side: 'east', at: 564, layers: ['12.07/penalty_east'], playersAfter: 1, contact: 4, height: 48, doors: [8] },
+    { kind: 'timekeeper', side: 'east', at: 0, follows: true, layers: ['12.08/timekeeper_east'], playersAfter: 1, contact: 3, height: 48, doors: [] },
+  ],
+  doors: { atlas: '12.09/door_atlas', frameWidth: 24, frameHeight: 32, durations: [80, 80, 80, 80, 80], rows: { west: 0, east: 1 } },
+  players: {
+    seated: '12.03/seated_atlas',
+    standing: '12.04/standing_atlas',
+    cheer: { atlas: '12.05/celebration_atlas', durations: [120, 100, 140, 100] },
+    groan: { atlas: '12.06/disappointment_atlas', durations: [100, 140, 240, 140] },
+    frame: 16,
+    variants: 6,
+    anchor: [8, 8],
+  },
+  mood: 'seated',
+};
+
 const STANDARD: ArenaConfig = {
   id: 'standard',
   name: 'Standard rink',
@@ -150,13 +227,9 @@ const STANDARD: ArenaConfig = {
     posts: { north: '10.10/glass_post_north', south: '10.10/glass_post_south', west: '10.10/glass_post_west', east: '10.10/glass_post_east' },
     damageBatch: '10.14',
   },
-  // Proposal: closed gates either side of centre ice, where bench and penalty-box doors would be.
-  gates: [
-    { side: 'west', at: 376, state: 'closed' },
-    { side: 'west', at: 504, state: 'closed' },
-    { side: 'east', at: 376, state: 'closed' },
-    { side: 'east', at: 504, state: 'closed' },
-  ],
+  // Doors now come from the benches and penalty boxes; no free-standing gates.
+  gates: [],
+  benchArea: BENCH_AREA,
   // Supplied goals at native size. They are larger than the physics net: see goalFit() and ARENA.md A13.
   goals: GOALS,
   // Both names are approved Puck Falls locations.
@@ -186,6 +259,7 @@ export const ARENA_CONFIGS: readonly ArenaConfig[] = [
     name: 'Corner art fit test',
     description: 'Places the supplied corner boards at their own radius. Turn on Collision geometry to see how far they sit from the corners the puck actually follows. Not a playable arena.',
     corners: { ...STANDARD.corners, mode: 'art' },
+    benchArea: null,
     gates: [{ side: 'west', at: 440, state: 'open' }, { side: 'east', at: 440, state: 'open' }],
   },
   {
@@ -201,6 +275,7 @@ export const ARENA_CONFIGS: readonly ArenaConfig[] = [
     centerLogo: null,
     glass: null,
     gates: [],
+    benchArea: null,
     boardAds: [{ asset: '10.13/ad_blank', side: 'north', x: 240 }],
   },
 ];

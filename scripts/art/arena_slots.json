@@ -328,16 +328,85 @@
     {
       "id": "benches",
       "layer": "stadium",
-      "label": "Player benches",
-      "expectedBatch": "12",
-      "assets": []
+      "label": "Player benches (home west, away east)",
+      "expectedBatch": "12.01-12.02",
+      "assets": [
+        "12.01/home_bench_floor",
+        "12.01/home_bench_seating",
+        "12.01/home_bench_enclosure",
+        "12.02/away_bench_floor",
+        "12.02/away_bench_seating",
+        "12.02/away_bench_enclosure"
+      ],
+      "provisional": true,
+      "note": "Placed as a proposal: the package calls placement, anchors and spacing provisional. See ARENA.md A16."
     },
     {
       "id": "penaltyBox",
       "layer": "stadium",
       "label": "Penalty boxes",
-      "expectedBatch": "12",
-      "assets": []
+      "expectedBatch": "12.07",
+      "assets": [
+        "12.07/penalty_west",
+        "12.07/penalty_east"
+      ],
+      "provisional": true,
+      "note": "Placed as a proposal: the package calls placement, anchors and spacing provisional. See ARENA.md A16."
+    },
+    {
+      "id": "benches.timekeeper",
+      "layer": "stadium",
+      "label": "Timekeeper booth",
+      "expectedBatch": "12.08",
+      "assets": [
+        "12.08/timekeeper_east",
+        "12.08/timekeeper_west"
+      ],
+      "provisional": true,
+      "note": "East booth placed beside the east penalty box; the west variant is not used. Placed as a proposal: the package calls placement, anchors and spacing provisional. See ARENA.md A16."
+    },
+    {
+      "id": "benches.players",
+      "layer": "stadium",
+      "label": "Bench players, seated and standing",
+      "expectedBatch": "12.03-12.04",
+      "assets": [
+        "12.03/seated_atlas",
+        "12.04/standing_atlas"
+      ],
+      "provisional": true,
+      "note": "Shown seated on both benches in placeholder blue and red. Team colours are not approved: see ARENA.md A17."
+    },
+    {
+      "id": "benches.reactions",
+      "layer": "stadium",
+      "label": "Bench celebrations and disappointment",
+      "expectedBatch": "12.05-12.06",
+      "assets": [
+        "12.05/celebration_atlas",
+        "12.06/disappointment_atlas"
+      ],
+      "note": "Lab test only: there are no teams yet to cheer for."
+    },
+    {
+      "id": "benches.doors",
+      "layer": "backBoards",
+      "label": "Animated bench and penalty-box doors",
+      "expectedBatch": "12.09",
+      "assets": [
+        "12.09/door_atlas"
+      ],
+      "note": "Closed in play, replacing the static 10.12 gates at the same anchor. Opening is a Lab test only."
+    },
+    {
+      "id": "benches.equipment",
+      "layer": "stadium",
+      "label": "Bench equipment (sticks, bottles, towels, bags)",
+      "expectedBatch": "12.10",
+      "assets": [
+        "12.10/equipment_atlas"
+      ],
+      "note": "Registered, not placed: the package gives no positions. See ARENA.md A18."
     },
     {
       "id": "stadium",

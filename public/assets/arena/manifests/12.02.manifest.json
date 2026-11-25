@@ -1,0 +1,172 @@
+{
+  "batch": "12.02",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    48,
+    96
+  ],
+  "orientation": "east",
+  "iceSide": "west",
+  "boardContactLocalX": 3,
+  "atlas": "bench_atlas.png",
+  "composite": "away_bench_empty.png",
+  "layers": {
+    "floor": "away_bench_floor.png",
+    "seating": "away_bench_seating.png",
+    "enclosure": "away_bench_enclosure.png"
+  },
+  "tiles": [
+    [
+      "away_bench_0_0.png",
+      "away_bench_0_1.png",
+      "away_bench_0_2.png",
+      "away_bench_0_3.png",
+      "away_bench_0_4.png",
+      "away_bench_0_5.png"
+    ],
+    [
+      "away_bench_1_0.png",
+      "away_bench_1_1.png",
+      "away_bench_1_2.png",
+      "away_bench_1_3.png",
+      "away_bench_1_4.png",
+      "away_bench_1_5.png"
+    ],
+    [
+      "away_bench_2_0.png",
+      "away_bench_2_1.png",
+      "away_bench_2_2.png",
+      "away_bench_2_3.png",
+      "away_bench_2_4.png",
+      "away_bench_2_5.png"
+    ],
+    [
+      "away_bench_3_0.png",
+      "away_bench_3_1.png",
+      "away_bench_3_2.png",
+      "away_bench_3_3.png",
+      "away_bench_3_4.png",
+      "away_bench_3_5.png"
+    ],
+    [
+      "away_bench_4_0.png",
+      "away_bench_4_1.png",
+      "away_bench_4_2.png",
+      "away_bench_4_3.png",
+      "away_bench_4_4.png",
+      "away_bench_4_5.png"
+    ],
+    [
+      "away_bench_5_0.png",
+      "away_bench_5_1.png",
+      "away_bench_5_2.png",
+      "away_bench_5_3.png",
+      "away_bench_5_4.png",
+      "away_bench_5_5.png"
+    ],
+    [
+      "away_bench_6_0.png",
+      "away_bench_6_1.png",
+      "away_bench_6_2.png",
+      "away_bench_6_3.png",
+      "away_bench_6_4.png",
+      "away_bench_6_5.png"
+    ],
+    [
+      "away_bench_7_0.png",
+      "away_bench_7_1.png",
+      "away_bench_7_2.png",
+      "away_bench_7_3.png",
+      "away_bench_7_4.png",
+      "away_bench_7_5.png"
+    ],
+    [
+      "away_bench_8_0.png",
+      "away_bench_8_1.png",
+      "away_bench_8_2.png",
+      "away_bench_8_3.png",
+      "away_bench_8_4.png",
+      "away_bench_8_5.png"
+    ],
+    [
+      "away_bench_9_0.png",
+      "away_bench_9_1.png",
+      "away_bench_9_2.png",
+      "away_bench_9_3.png",
+      "away_bench_9_4.png",
+      "away_bench_9_5.png"
+    ],
+    [
+      "away_bench_10_0.png",
+      "away_bench_10_1.png",
+      "away_bench_10_2.png",
+      "away_bench_10_3.png",
+      "away_bench_10_4.png",
+      "away_bench_10_5.png"
+    ],
+    [
+      "away_bench_11_0.png",
+      "away_bench_11_1.png",
+      "away_bench_11_2.png",
+      "away_bench_11_3.png",
+      "away_bench_11_4.png",
+      "away_bench_11_5.png"
+    ]
+  ],
+  "seatAnchorsLocal": [
+    [
+      29,
+      14
+    ],
+    [
+      29,
+      26
+    ],
+    [
+      29,
+      38
+    ],
+    [
+      29,
+      50
+    ],
+    [
+      29,
+      62
+    ],
+    [
+      29,
+      74
+    ]
+  ],
+  "standingAnchorsLocal": [
+    [
+      15,
+      14
+    ],
+    [
+      15,
+      26
+    ],
+    [
+      15,
+      38
+    ],
+    [
+      15,
+      50
+    ],
+    [
+      15,
+      62
+    ],
+    [
+      15,
+      74
+    ]
+  ],
+  "previewOnly": "preview.png"
+}

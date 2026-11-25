@@ -1,0 +1,372 @@
+{
+  "batch": "12.09",
+  "sourceBatch": "10.12",
+  "tileSize": [
+    8,
+    8
+  ],
+  "frameSize": [
+    24,
+    32
+  ],
+  "atlas": "door_atlas.png",
+  "assets": [
+    {
+      "orientation": "west",
+      "iceBoundaryLocalX": 19,
+      "openingLocalY": [
+        4,
+        28
+      ],
+      "frames": [
+        {
+          "file": "door_west_00.png",
+          "atlasRect": [
+            0,
+            0,
+            24,
+            32
+          ],
+          "durationMs": 80,
+          "tiles": [
+            [
+              "door_west_00_0_0.png",
+              "door_west_00_0_1.png",
+              "door_west_00_0_2.png"
+            ],
+            [
+              "door_west_00_1_0.png",
+              "door_west_00_1_1.png",
+              "door_west_00_1_2.png"
+            ],
+            [
+              "door_west_00_2_0.png",
+              "door_west_00_2_1.png",
+              "door_west_00_2_2.png"
+            ],
+            [
+              "door_west_00_3_0.png",
+              "door_west_00_3_1.png",
+              "door_west_00_3_2.png"
+            ]
+          ]
+        },
+        {
+          "file": "door_west_01.png",
+          "atlasRect": [
+            24,
+            0,
+            24,
+            32
+          ],
+          "durationMs": 80,
+          "tiles": [
+            [
+              "door_west_01_0_0.png",
+              "door_west_01_0_1.png",
+              "door_west_01_0_2.png"
+            ],
+            [
+              "door_west_01_1_0.png",
+              "door_west_01_1_1.png",
+              "door_west_01_1_2.png"
+            ],
+            [
+              "door_west_01_2_0.png",
+              "door_west_01_2_1.png",
+              "door_west_01_2_2.png"
+            ],
+            [
+              "door_west_01_3_0.png",
+              "door_west_01_3_1.png",
+              "door_west_01_3_2.png"
+            ]
+          ]
+        },
+        {
+          "file": "door_west_02.png",
+          "atlasRect": [
+            48,
+            0,
+            24,
+            32
+          ],
+          "durationMs": 80,
+          "tiles": [
+            [
+              "door_west_02_0_0.png",
+              "door_west_02_0_1.png",
+              "door_west_02_0_2.png"
+            ],
+            [
+              "door_west_02_1_0.png",
+              "door_west_02_1_1.png",
+              "door_west_02_1_2.png"
+            ],
+            [
+              "door_west_02_2_0.png",
+              "door_west_02_2_1.png",
+              "door_west_02_2_2.png"
+            ],
+            [
+              "door_west_02_3_0.png",
+              "door_west_02_3_1.png",
+              "door_west_02_3_2.png"
+            ]
+          ]
+        },
+        {
+          "file": "door_west_03.png",
+          "atlasRect": [
+            72,
+            0,
+            24,
+            32
+          ],
+          "durationMs": 80,
+          "tiles": [
+            [
+              "door_west_03_0_0.png",
+              "door_west_03_0_1.png",
+              "door_west_03_0_2.png"
+            ],
+            [
+              "door_west_03_1_0.png",
+              "door_west_03_1_1.png",
+              "door_west_03_1_2.png"
+            ],
+            [
+              "door_west_03_2_0.png",
+              "door_west_03_2_1.png",
+              "door_west_03_2_2.png"
+            ],
+            [
+              "door_west_03_3_0.png",
+              "door_west_03_3_1.png",
+              "door_west_03_3_2.png"
+            ]
+          ]
+        },
+        {
+          "file": "door_west_04.png",
+          "atlasRect": [
+            96,
+            0,
+            24,
+            32
+          ],
+          "durationMs": 80,
+          "tiles": [
+            [
+              "door_west_04_0_0.png",
+              "door_west_04_0_1.png",
+              "door_west_04_0_2.png"
+            ],
+            [
+              "door_west_04_1_0.png",
+              "door_west_04_1_1.png",
+              "door_west_04_1_2.png"
+            ],
+            [
+              "door_west_04_2_0.png",
+              "door_west_04_2_1.png",
+              "door_west_04_2_2.png"
+            ],
+            [
+              "door_west_04_3_0.png",
+              "door_west_04_3_1.png",
+              "door_west_04_3_2.png"
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "orientation": "east",
+      "iceBoundaryLocalX": 5,
+      "openingLocalY": [
+        4,
+        28
+      ],
+      "frames": [
+        {
+          "file": "door_east_00.png",
+          "atlasRect": [
+            0,
+            32,
+            24,
+            32
+          ],
+          "durationMs": 80,
+          "tiles": [
+            [
+              "door_east_00_0_0.png",
+              "door_east_00_0_1.png",
+              "door_east_00_0_2.png"
+            ],
+            [
+              "door_east_00_1_0.png",
+              "door_east_00_1_1.png",
+              "door_east_00_1_2.png"
+            ],
+            [
+              "door_east_00_2_0.png",
+              "door_east_00_2_1.png",
+              "door_east_00_2_2.png"
+            ],
+            [
+              "door_east_00_3_0.png",
+              "door_east_00_3_1.png",
+              "door_east_00_3_2.png"
+            ]
+          ]
+        },
+        {
+          "file": "door_east_01.png",
+          "atlasRect": [
+            24,
+            32,
+            24,
+            32
+          ],
+          "durationMs": 80,
+          "tiles": [
+            [
+              "door_east_01_0_0.png",
+              "door_east_01_0_1.png",
+              "door_east_01_0_2.png"
+            ],
+            [
+              "door_east_01_1_0.png",
+              "door_east_01_1_1.png",
+              "door_east_01_1_2.png"
+            ],
+            [
+              "door_east_01_2_0.png",
+              "door_east_01_2_1.png",
+              "door_east_01_2_2.png"
+            ],
+            [
+              "door_east_01_3_0.png",
+              "door_east_01_3_1.png",
+              "door_east_01_3_2.png"
+            ]
+          ]
+        },
+        {
+          "file": "door_east_02.png",
+          "atlasRect": [
+            48,
+            32,
+            24,
+            32
+          ],
+          "durationMs": 80,
+          "tiles": [
+            [
+              "door_east_02_0_0.png",
+              "door_east_02_0_1.png",
+              "door_east_02_0_2.png"
+            ],
+            [
+              "door_east_02_1_0.png",
+              "door_east_02_1_1.png",
+              "door_east_02_1_2.png"
+            ],
+            [
+              "door_east_02_2_0.png",
+              "door_east_02_2_1.png",
+              "door_east_02_2_2.png"
+            ],
+            [
+              "door_east_02_3_0.png",
+              "door_east_02_3_1.png",
+              "door_east_02_3_2.png"
+            ]
+          ]
+        },
+        {
+          "file": "door_east_03.png",
+          "atlasRect": [
+            72,
+            32,
+            24,
+            32
+          ],
+          "durationMs": 80,
+          "tiles": [
+            [
+              "door_east_03_0_0.png",
+              "door_east_03_0_1.png",
+              "door_east_03_0_2.png"
+            ],
+            [
+              "door_east_03_1_0.png",
+              "door_east_03_1_1.png",
+              "door_east_03_1_2.png"
+            ],
+            [
+              "door_east_03_2_0.png",
+              "door_east_03_2_1.png",
+              "door_east_03_2_2.png"
+            ],
+            [
+              "door_east_03_3_0.png",
+              "door_east_03_3_1.png",
+              "door_east_03_3_2.png"
+            ]
+          ]
+        },
+        {
+          "file": "door_east_04.png",
+          "atlasRect": [
+            96,
+            32,
+            24,
+            32
+          ],
+          "durationMs": 80,
+          "tiles": [
+            [
+              "door_east_04_0_0.png",
+              "door_east_04_0_1.png",
+              "door_east_04_0_2.png"
+            ],
+            [
+              "door_east_04_1_0.png",
+              "door_east_04_1_1.png",
+              "door_east_04_1_2.png"
+            ],
+            [
+              "door_east_04_2_0.png",
+              "door_east_04_2_1.png",
+              "door_east_04_2_2.png"
+            ],
+            [
+              "door_east_04_3_0.png",
+              "door_east_04_3_1.png",
+              "door_east_04_3_2.png"
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "openSequence": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "closeSequence": [
+    4,
+    3,
+    2,
+    1,
+    0
+  ],
+  "loop": false,
+  "holdLastFrame": true,
+  "previewOnly": "preview.png"
+}

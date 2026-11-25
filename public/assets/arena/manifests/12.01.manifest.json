@@ -1,0 +1,172 @@
+{
+  "batch": "12.01",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    48,
+    96
+  ],
+  "orientation": "west",
+  "iceSide": "east",
+  "boardContactLocalX": 44,
+  "atlas": "bench_atlas.png",
+  "composite": "home_bench_empty.png",
+  "layers": {
+    "floor": "home_bench_floor.png",
+    "seating": "home_bench_seating.png",
+    "enclosure": "home_bench_enclosure.png"
+  },
+  "tiles": [
+    [
+      "home_bench_0_0.png",
+      "home_bench_0_1.png",
+      "home_bench_0_2.png",
+      "home_bench_0_3.png",
+      "home_bench_0_4.png",
+      "home_bench_0_5.png"
+    ],
+    [
+      "home_bench_1_0.png",
+      "home_bench_1_1.png",
+      "home_bench_1_2.png",
+      "home_bench_1_3.png",
+      "home_bench_1_4.png",
+      "home_bench_1_5.png"
+    ],
+    [
+      "home_bench_2_0.png",
+      "home_bench_2_1.png",
+      "home_bench_2_2.png",
+      "home_bench_2_3.png",
+      "home_bench_2_4.png",
+      "home_bench_2_5.png"
+    ],
+    [
+      "home_bench_3_0.png",
+      "home_bench_3_1.png",
+      "home_bench_3_2.png",
+      "home_bench_3_3.png",
+      "home_bench_3_4.png",
+      "home_bench_3_5.png"
+    ],
+    [
+      "home_bench_4_0.png",
+      "home_bench_4_1.png",
+      "home_bench_4_2.png",
+      "home_bench_4_3.png",
+      "home_bench_4_4.png",
+      "home_bench_4_5.png"
+    ],
+    [
+      "home_bench_5_0.png",
+      "home_bench_5_1.png",
+      "home_bench_5_2.png",
+      "home_bench_5_3.png",
+      "home_bench_5_4.png",
+      "home_bench_5_5.png"
+    ],
+    [
+      "home_bench_6_0.png",
+      "home_bench_6_1.png",
+      "home_bench_6_2.png",
+      "home_bench_6_3.png",
+      "home_bench_6_4.png",
+      "home_bench_6_5.png"
+    ],
+    [
+      "home_bench_7_0.png",
+      "home_bench_7_1.png",
+      "home_bench_7_2.png",
+      "home_bench_7_3.png",
+      "home_bench_7_4.png",
+      "home_bench_7_5.png"
+    ],
+    [
+      "home_bench_8_0.png",
+      "home_bench_8_1.png",
+      "home_bench_8_2.png",
+      "home_bench_8_3.png",
+      "home_bench_8_4.png",
+      "home_bench_8_5.png"
+    ],
+    [
+      "home_bench_9_0.png",
+      "home_bench_9_1.png",
+      "home_bench_9_2.png",
+      "home_bench_9_3.png",
+      "home_bench_9_4.png",
+      "home_bench_9_5.png"
+    ],
+    [
+      "home_bench_10_0.png",
+      "home_bench_10_1.png",
+      "home_bench_10_2.png",
+      "home_bench_10_3.png",
+      "home_bench_10_4.png",
+      "home_bench_10_5.png"
+    ],
+    [
+      "home_bench_11_0.png",
+      "home_bench_11_1.png",
+      "home_bench_11_2.png",
+      "home_bench_11_3.png",
+      "home_bench_11_4.png",
+      "home_bench_11_5.png"
+    ]
+  ],
+  "seatAnchorsLocal": [
+    [
+      18,
+      14
+    ],
+    [
+      18,
+      26
+    ],
+    [
+      18,
+      38
+    ],
+    [
+      18,
+      50
+    ],
+    [
+      18,
+      62
+    ],
+    [
+      18,
+      74
+    ]
+  ],
+  "standingAnchorsLocal": [
+    [
+      32,
+      14
+    ],
+    [
+      32,
+      26
+    ],
+    [
+      32,
+      38
+    ],
+    [
+      32,
+      50
+    ],
+    [
+      32,
+      62
+    ],
+    [
+      32,
+      74
+    ]
+  ],
+  "previewOnly": "preview.png"
+}

@@ -2,6 +2,21 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.2.3",
+      "date": "2026-11-25",
+      "title": "Somewhere to sit",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Benches on both sides of centre ice, with the boys watching you skate."
+        },
+        {
+          "tag": "new",
+          "text": "Penalty boxes and a timekeeper's booth. Nobody is in the box. Yet."
+        }
+      ]
+    },
+    {
       "version": "0.2.2",
       "date": "2026-11-25",
       "title": "Real nets",

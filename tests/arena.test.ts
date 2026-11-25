@@ -4,8 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { RINK, goalLineY } from '../src/match/sim/rink';
 import { ARENA_CONFIGS, arenaConfig } from '../src/match/view/arena/config';
 import { IceWear, trafficPrior } from '../src/match/view/arena/iceWear';
-import { ARENA_LAYERS, faceoffSpots, goalAlignment, goalFit, iceGrid, iceOutline, layoutArena, layoutGoals, screenY } from '../src/match/view/arena/layout';
-import { TILE, assetById, loadableAssets } from '../src/match/view/arena/registry';
+import { ARENA_LAYERS, benchReport, faceoffSpots, goalAlignment, goalFit, iceGrid, iceOutline, layoutArena, layoutGoals, screenY } from '../src/match/view/arena/layout';
+import { TILE, assetById, loadableAssets, textureSource } from '../src/match/view/arena/registry';
 import type { ArenaRegistry } from '../src/match/view/arena/registry';
 import { projectY } from '../src/match/view/projection';
 
@@ -27,10 +27,11 @@ describe('arena asset registry', () => {
       ...Array.from({ length: 13 }, (_, i) => `09.${String(i + 1).padStart(2, '0')}`),
       ...Array.from({ length: 14 }, (_, i) => `10.${String(i + 1).padStart(2, '0')}`),
       ...Array.from({ length: 10 }, (_, i) => `11.${String(i + 1).padStart(2, '0')}`),
+      ...Array.from({ length: 10 }, (_, i) => `12.${String(i + 1).padStart(2, '0')}`),
     ];
     expect(Object.keys(registry.batches).sort()).toEqual(expected);
     expect(registry.issues.filter((i) => i.level === 'error')).toEqual([]);
-    expect(registry.assets.length).toBe(3157);
+    expect(registry.assets.length).toBe(4327);
   });
 
   it('points only at files that exist, with the recorded pixel size, on the 8-pixel grid', () => {
@@ -57,14 +58,16 @@ describe('arena asset registry', () => {
 
   it('reports what has arrived and what is still missing', () => {
     const status = Object.fromEntries(registry.slots.map((s) => [s.id, s.status]));
-    for (const id of ['ice.base', 'ice.scratches', 'markings.creaseNorth', 'logo.center', 'boards.west', 'boards.east', 'boards.north', 'boards.south', 'glass', 'glass.posts', 'glass.damage', 'boards.gates', 'boards.ads', 'goals.scored', 'goals.ripple', 'goals.knockoff', 'goals.dislodged']) {
+    for (const id of ['ice.base', 'ice.scratches', 'markings.creaseNorth', 'logo.center', 'boards.west', 'boards.east', 'boards.north', 'boards.south', 'glass', 'glass.posts', 'glass.damage', 'boards.gates', 'boards.ads', 'goals.scored', 'goals.ripple', 'goals.knockoff', 'goals.dislodged', 'benches.reactions', 'benches.doors', 'benches.equipment']) {
       expect(status[id], id).toBe('supplied');
     }
     expect(status['boards.corners']).toBe('unfit');
     // Goal art has arrived but is larger than the physics net, so it stays provisional until that is ruled on.
     expect(status['goals.north']).toBe('provisional');
     expect(status['goals.south']).toBe('provisional');
-    for (const id of ['glass.corners', 'benches', 'penaltyBox', 'stadium', 'spectators', 'equipment']) {
+    // Benches and boxes are placed as a proposal: the packages call every placement provisional.
+    for (const id of ['benches', 'penaltyBox', 'benches.timekeeper', 'benches.players']) expect(status[id], id).toBe('provisional');
+    for (const id of ['glass.corners', 'stadium', 'spectators', 'equipment']) {
       expect(status[id], id).toBe('missing');
     }
   });
@@ -73,10 +76,18 @@ describe('arena asset registry', () => {
     const load = loadableAssets(registry);
     expect(load.some((a) => a.role === 'tile' || a.role === 'frame')).toBe(false);
     expect(load.some((a) => a.duplicateOf)).toBe(false);
-    expect(load.length).toBeLessThan(125);
+    expect(load.length).toBeLessThan(140);
     // Every duplicate points at a file that is loaded.
-    for (const a of registry.assets.filter((x) => x.duplicateOf && x.role !== 'tile' && x.role !== 'frame')) {
-      expect(load.some((l) => l.id === a.duplicateOf), a.id).toBe(true);
+    // Everything that is not a single tile resolves to a texture that is loaded, and to a cell inside it.
+    const loaded = new Map(load.map((l) => [l.id, l]));
+    for (const a of registry.assets.filter((x) => x.role !== 'tile')) {
+      const source = textureSource(registry, a.id);
+      const texture = loaded.get(source.key);
+      expect(texture, a.id).toBeDefined();
+      if (source.cell && texture) {
+        expect(source.cell.x + source.cell.width, a.id).toBeLessThanOrEqual(texture.width);
+        expect(source.cell.y + source.cell.height, a.id).toBeLessThanOrEqual(texture.height);
+      }
     }
   });
 
@@ -195,8 +206,8 @@ describe('arena layout', () => {
   it('replaces whole board modules with gates, leaving no overlap and no gap', () => {
     for (const side of ['west', 'east'] as const) {
       const strips = layout.strips.filter((s) => s.role === `${side}Boards`).map((s) => [s.y, s.y + s.height] as const);
-      const gates = layout.boardImages.filter((i) => i.role.startsWith(`gate:${side}`)).map((g) => [g.y, g.y + 32] as const);
-      expect(gates).toHaveLength(2);
+      const gates = layout.boardImages.filter((i) => i.role.startsWith(`gate:${side}`) || i.role === `door:${side}`).map((g) => [g.y, g.y + 32] as const);
+      expect(gates).toHaveLength(3);
       const spans = [...strips, ...gates].sort((a, b) => a[0] - b[0]);
       expect(spans[0]?.[0]).toBe(layout.extents.y0);
       expect(spans[spans.length - 1]?.[1]).toBe(layout.extents.y1);
@@ -233,7 +244,8 @@ describe('arena layout', () => {
     const gate = test.boardImages.find((i) => i.role === 'gate:west:open');
     expect(gate).toBeDefined();
     expect(test.glass.some((g) => g.side === 'west' && g.y === gate?.y)).toBe(false);
-    const closed = layout.boardImages.find((i) => i.role === 'gate:west:closed');
+    const closed = layout.boardImages.find((i) => i.role === 'door:west');
+    expect(closed).toBeDefined();
     expect(layout.glass.some((g) => g.side === 'west' && g.y === closed?.y)).toBe(true);
   });
 
@@ -329,12 +341,113 @@ describe('goal nets', () => {
 
   it('files every single animation frame against a strip that holds the same pixels', () => {
     const frames = registry.assets.filter((a) => a.role === 'frame');
-    expect(frames.length).toBe(112);
+    expect(frames.length).toBe(282);
     for (const f of frames) {
       const strip = lookup(f.atlas ?? '');
       expect(strip, f.id).toBeDefined();
       expect(f.atlasX, f.id).toBeDefined();
     }
+  });
+});
+
+describe('benches, penalty boxes and doors', () => {
+  const standard = arenaConfig('standard');
+  const area = standard.benchArea;
+  if (!area) throw new Error('standard arena has no bench area');
+  const manifest = (batch: string) => JSON.parse(readFileSync(join(ARENA_DIR, 'manifests', `${batch}.manifest.json`), 'utf8')) as Record<string, unknown>;
+  type Rect = { atlasRect: number[]; durationMs?: number };
+
+  it('uses the contact edges, anchors and layer order written in the batch manifests', () => {
+    for (const [batch, side] of [['12.01', 'west'], ['12.02', 'east']] as const) {
+      const m = manifest(batch);
+      const bench = area.structures.find((s) => s.kind === 'bench' && s.side === side);
+      expect(bench?.contact).toBe(m.boardContactLocalX);
+      expect(bench?.seats).toEqual(m.seatAnchorsLocal);
+      expect(bench?.standing).toEqual(m.standingAnchorsLocal);
+      const layers = m.layers as Record<string, string>;
+      expect(bench?.layers).toEqual([layers.floor, layers.seating, layers.enclosure].map((f) => `${batch}/${String(f).replace('.png', '')}`));
+      expect(bench?.height).toBe((m.moduleSize as number[])[1]);
+    }
+    for (const [batch, kind] of [['12.07', 'penaltyBox'], ['12.08', 'timekeeper']] as const) {
+      const assets = manifest(batch).assets as { file: string; boardContactLocalX: number }[];
+      for (const s of area.structures.filter((x) => x.kind === kind)) {
+        const entry = assets.find((a) => `${batch}/${a.file.replace('.png', '')}` === s.layers[0]);
+        expect(entry?.boardContactLocalX, s.layers[0]).toBe(s.contact);
+      }
+    }
+  });
+
+  it('cuts bench players, reactions and doors from the atlas cells the manifests name', () => {
+    const p = area.players;
+    for (const [batch, atlas, prefix] of [['12.03', p.seated, 'seated'], ['12.04', p.standing, 'standing']] as const) {
+      const assets = manifest(batch).assets as (Rect & { file: string; side: string; anchorLocal: number[] })[];
+      expect(atlas).toBe(`${batch}/${prefix}_atlas`);
+      for (const a of assets) {
+        const variant = Number(a.file.match(/_(\d+)\.png$/)?.[1]) - 1;
+        expect(a.atlasRect, a.file).toEqual([variant * p.frame, (a.side === 'home' ? 0 : 1) * p.frame, p.frame, p.frame]);
+        expect(a.anchorLocal).toEqual([...p.anchor]);
+      }
+      expect(assets.length).toBe(p.variants * 2);
+    }
+    for (const [batch, strip] of [['12.05', p.cheer], ['12.06', p.groan]] as const) {
+      const assets = manifest(batch).assets as { side: string; variant: number; frames: Rect[] }[];
+      for (const a of assets) {
+        expect(a.frames.map((f) => f.durationMs), batch).toEqual([...strip.durations]);
+        a.frames.forEach((f, i) => expect(f.atlasRect).toEqual([(a.variant - 1) * p.frame, ((a.side === 'home' ? 0 : 1) * strip.durations.length + i) * p.frame, p.frame, p.frame]));
+      }
+    }
+    const doors = manifest('12.09').assets as { orientation: 'west' | 'east'; frames: Rect[] }[];
+    for (const d of doors) {
+      expect(d.frames.map((f) => f.durationMs)).toEqual([...area.doors.durations]);
+      d.frames.forEach((f, i) => expect(f.atlasRect).toEqual([i * area.doors.frameWidth, area.doors.rows[d.orientation] * area.doors.frameHeight, area.doors.frameWidth, area.doors.frameHeight]));
+    }
+  });
+
+  it('keeps every structure off the ice, on screen, apart, and with each door on a whole board module, at every tilt', () => {
+    for (const tilt of [0.6, 0.66, 0.7, 0.74, 0.8, 0.9, 1]) {
+      const l = layoutArena(RINK, tilt, standard, lookup);
+      const report = benchReport(RINK, l);
+      expect(report.ok, `tilt ${tilt}: ${JSON.stringify(report)}`).toBe(true);
+      expect(l.structures.length, `tilt ${tilt}`).toBe(area.structures.length);
+    }
+  });
+
+  it('butts each structure against the outside edge of the boards', () => {
+    const l = layoutArena(RINK, TILT, standard, lookup);
+    const west = lookup('10.01/west_board_module');
+    const east = lookup('10.02/east_board_module');
+    const westEdge = RINK.left - 19 + (west?.bbox?.[0] ?? 0);
+    const eastEdge = RINK.right - 1 - 4 + (east?.bbox?.[2] ?? 0);
+    for (const p of l.structures) {
+      expect(p.x + p.structure.contact, p.structure.kind).toBe(p.structure.side === 'west' ? westEdge : eastEdge);
+    }
+  });
+
+  it('puts a closed animated door, not a static gate, at every bench and penalty-box door, with glass above it', () => {
+    const l = layoutArena(RINK, TILT, standard, lookup);
+    const doors = l.boardImages.filter((i) => i.role.startsWith('door:'));
+    expect(doors.length).toBe(6);
+    expect(l.boardImages.some((i) => i.role.startsWith('gate:'))).toBe(false);
+    for (const d of doors) {
+      expect(d.cell?.x).toBe(0);
+      expect(l.glass.some((g) => g.id === d.doorId)).toBe(true);
+    }
+    // Frame 0 and the last frame are the very pixels of the static closed and open gates.
+    expect(lookup('12.09/door_west_00')?.duplicateOf).toBe('10.12/gate_west_closed');
+    expect(lookup('12.09/door_east_04')?.duplicateOf).toBe('10.12/gate_east_open');
+  });
+
+  it('seats six players a side on the manifest anchors, and stands six more', () => {
+    const l = layoutArena(RINK, TILT, standard, lookup);
+    for (const p of l.structures.filter((x) => x.structure.kind === 'bench')) {
+      expect(p.spots.filter((s) => s.pose === 'seated').length).toBe(6);
+      expect(p.spots.filter((s) => s.pose === 'standing').length).toBe(6);
+      const first = p.spots[0];
+      const seat = p.structure.seats?.[0];
+      expect([first?.x, first?.y]).toEqual([p.x + (seat?.[0] ?? 0) - 8, p.y + (seat?.[1] ?? 0) - 8]);
+      expect(new Set(p.spots.map((s) => s.team)).size).toBe(1);
+    }
+    expect(l.structures.filter((x) => x.structure.kind !== 'bench').every((x) => x.spots.length === 0)).toBe(true);
   });
 });
 

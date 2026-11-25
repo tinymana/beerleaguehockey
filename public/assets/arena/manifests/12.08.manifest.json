@@ -1,0 +1,173 @@
+{
+  "batch": "12.08",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    48,
+    48
+  ],
+  "atlas": "timekeeper_atlas.png",
+  "assets": [
+    {
+      "file": "timekeeper_west.png",
+      "orientation": "west",
+      "iceSide": "east",
+      "boardContactLocalX": 44,
+      "officialAnchors": [
+        [
+          15,
+          16
+        ],
+        [
+          15,
+          32
+        ]
+      ],
+      "layers": {
+        "floor": "timekeeper_west_floor.png",
+        "seating": "timekeeper_west_seating.png",
+        "desk": "timekeeper_west_desk.png",
+        "enclosure": "timekeeper_west_enclosure.png",
+        "glass": "timekeeper_west_glass.png"
+      },
+      "atlasRect": [
+        0,
+        0,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "timekeeper_west_0_0.png",
+          "timekeeper_west_0_1.png",
+          "timekeeper_west_0_2.png",
+          "timekeeper_west_0_3.png",
+          "timekeeper_west_0_4.png",
+          "timekeeper_west_0_5.png"
+        ],
+        [
+          "timekeeper_west_1_0.png",
+          "timekeeper_west_1_1.png",
+          "timekeeper_west_1_2.png",
+          "timekeeper_west_1_3.png",
+          "timekeeper_west_1_4.png",
+          "timekeeper_west_1_5.png"
+        ],
+        [
+          "timekeeper_west_2_0.png",
+          "timekeeper_west_2_1.png",
+          "timekeeper_west_2_2.png",
+          "timekeeper_west_2_3.png",
+          "timekeeper_west_2_4.png",
+          "timekeeper_west_2_5.png"
+        ],
+        [
+          "timekeeper_west_3_0.png",
+          "timekeeper_west_3_1.png",
+          "timekeeper_west_3_2.png",
+          "timekeeper_west_3_3.png",
+          "timekeeper_west_3_4.png",
+          "timekeeper_west_3_5.png"
+        ],
+        [
+          "timekeeper_west_4_0.png",
+          "timekeeper_west_4_1.png",
+          "timekeeper_west_4_2.png",
+          "timekeeper_west_4_3.png",
+          "timekeeper_west_4_4.png",
+          "timekeeper_west_4_5.png"
+        ],
+        [
+          "timekeeper_west_5_0.png",
+          "timekeeper_west_5_1.png",
+          "timekeeper_west_5_2.png",
+          "timekeeper_west_5_3.png",
+          "timekeeper_west_5_4.png",
+          "timekeeper_west_5_5.png"
+        ]
+      ]
+    },
+    {
+      "file": "timekeeper_east.png",
+      "orientation": "east",
+      "iceSide": "west",
+      "boardContactLocalX": 3,
+      "officialAnchors": [
+        [
+          32,
+          16
+        ],
+        [
+          32,
+          32
+        ]
+      ],
+      "layers": {
+        "floor": "timekeeper_east_floor.png",
+        "seating": "timekeeper_east_seating.png",
+        "desk": "timekeeper_east_desk.png",
+        "enclosure": "timekeeper_east_enclosure.png",
+        "glass": "timekeeper_east_glass.png"
+      },
+      "atlasRect": [
+        48,
+        0,
+        48,
+        48
+      ],
+      "tiles": [
+        [
+          "timekeeper_east_0_0.png",
+          "timekeeper_east_0_1.png",
+          "timekeeper_east_0_2.png",
+          "timekeeper_east_0_3.png",
+          "timekeeper_east_0_4.png",
+          "timekeeper_east_0_5.png"
+        ],
+        [
+          "timekeeper_east_1_0.png",
+          "timekeeper_east_1_1.png",
+          "timekeeper_east_1_2.png",
+          "timekeeper_east_1_3.png",
+          "timekeeper_east_1_4.png",
+          "timekeeper_east_1_5.png"
+        ],
+        [
+          "timekeeper_east_2_0.png",
+          "timekeeper_east_2_1.png",
+          "timekeeper_east_2_2.png",
+          "timekeeper_east_2_3.png",
+          "timekeeper_east_2_4.png",
+          "timekeeper_east_2_5.png"
+        ],
+        [
+          "timekeeper_east_3_0.png",
+          "timekeeper_east_3_1.png",
+          "timekeeper_east_3_2.png",
+          "timekeeper_east_3_3.png",
+          "timekeeper_east_3_4.png",
+          "timekeeper_east_3_5.png"
+        ],
+        [
+          "timekeeper_east_4_0.png",
+          "timekeeper_east_4_1.png",
+          "timekeeper_east_4_2.png",
+          "timekeeper_east_4_3.png",
+          "timekeeper_east_4_4.png",
+          "timekeeper_east_4_5.png"
+        ],
+        [
+          "timekeeper_east_5_0.png",
+          "timekeeper_east_5_1.png",
+          "timekeeper_east_5_2.png",
+          "timekeeper_east_5_3.png",
+          "timekeeper_east_5_4.png",
+          "timekeeper_east_5_5.png"
+        ]
+      ]
+    }
+  ],
+  "previewOnly": "preview.png"
+}

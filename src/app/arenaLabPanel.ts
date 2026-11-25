@@ -5,8 +5,8 @@
  */
 import { ARENA_CONFIGS } from '../match/view/arena/config';
 import { ARENA_LAYERS } from '../match/view/arena/layout';
-import type { GoalState } from '../match/view/arena/config';
-import type { ArenaLayerId, GoalAlignment, GoalFit } from '../match/view/arena/layout';
+import type { BenchMood, GoalState } from '../match/view/arena/config';
+import type { ArenaLayerId, BenchReport, GoalAlignment, GoalFit } from '../match/view/arena/layout';
 import { assetUrl } from '../match/view/arena/registry';
 import type { ArenaAsset, ArenaRegistry } from '../match/view/arena/registry';
 
@@ -23,6 +23,8 @@ export interface LabActions {
   setWear(level: number): void;
   setGlassDamage(on: boolean): void;
   setGoalState(state: GoalState): void;
+  setBenchMood(mood: BenchMood): void;
+  setDoorsOpen(open: boolean): void;
   useInGame(id: string): void;
   exit(): void;
 }
@@ -75,6 +77,7 @@ export class ArenaLabPanel {
   private readonly layerBox: HTMLElement;
   private readonly alignment: HTMLElement;
   private readonly goalFit: HTMLElement;
+  private readonly benchReport: HTMLElement;
   private readonly status: HTMLElement;
   private readonly configNote: HTMLElement;
 
@@ -179,6 +182,32 @@ export class ArenaLabPanel {
       this.goalFit,
     );
     this.root.append(tests);
+
+    // Benches
+    const benches = section('Benches, penalty boxes and doors');
+    const moodRow = el('div', 'lab-buttons');
+    for (const [label, mood] of [
+      ['EMPTY', 'empty'],
+      ['SEATED', 'seated'],
+      ['STANDING', 'standing'],
+      ['CHEER', 'cheer'],
+      ['GROAN', 'groan'],
+    ] as const) {
+      moodRow.append(button(label, () => actions.setBenchMood(mood)));
+    }
+    const doorRow = el('div', 'lab-buttons');
+    doorRow.append(
+      button('OPEN DOORS', () => actions.setDoorsOpen(true)),
+      button('CLOSE DOORS', () => actions.setDoorsOpen(false)),
+    );
+    this.benchReport = el('div', 'lab-readout');
+    benches.append(
+      moodRow,
+      doorRow,
+      el('p', 'lab-note', 'Bench players and doors are pictures only. Nothing in the game cheers, serves a penalty or opens a door yet, and the boards the puck hits do not change.'),
+      this.benchReport,
+    );
+    this.root.append(benches);
 
     // Missing art
     const slots = section('Art slots');
@@ -312,6 +341,20 @@ export class ArenaLabPanel {
       ? `MISSING TEXTURES: ${missingAssets.join(', ')}`
       : 'All assets this arena asks for are loaded.';
     this.status.className = `lab-status ${missingAssets.length ? 'bad' : 'good'}`;
+  }
+
+  /** Where each bench-side structure landed, and whether its doors and footprint check out. */
+  setBenchReport(report: BenchReport | null): void {
+    if (!report) {
+      this.benchReport.textContent = 'This arena has no benches or boxes.';
+      this.benchReport.className = 'lab-readout';
+      return;
+    }
+    const lines = report.rows.map((r) => `${r.side.toUpperCase()} ${r.kind}: y ${r.top}-${r.bottom}, ${r.doors} door${r.doors === 1 ? '' : 's'}, ${r.gapToNext === null ? 'last on its side' : `${r.gapToNext}px to the next`}`);
+    if (report.skipped.length) lines.push(`Did not fit on the straight boards: ${report.skipped.join(', ')}`);
+    lines.push(`Inside the world, off the ice, no overlaps, every door on a whole board module: ${report.ok ? 'YES' : 'NO'}`);
+    this.benchReport.textContent = lines.join('\n');
+    this.benchReport.className = `lab-readout ${report.ok ? 'good' : 'bad'}`;
   }
 
   /** Supplied goal art against the physics net. An empty list means the stand-in nets are showing. */

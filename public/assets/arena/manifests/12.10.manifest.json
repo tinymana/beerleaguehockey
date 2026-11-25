@@ -1,0 +1,431 @@
+{
+  "batch": "12.10",
+  "tileSize": [
+    8,
+    8
+  ],
+  "frameSize": [
+    24,
+    16
+  ],
+  "atlas": "equipment_atlas.png",
+  "assets": [
+    {
+      "file": "stick_rack_west.png",
+      "orientation": "west",
+      "atlasRect": [
+        0,
+        0,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "stick_rack_west_0_0.png",
+          "stick_rack_west_0_1.png",
+          "stick_rack_west_0_2.png"
+        ],
+        [
+          "stick_rack_west_1_0.png",
+          "stick_rack_west_1_1.png",
+          "stick_rack_west_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    },
+    {
+      "file": "stick_rack_east.png",
+      "orientation": "east",
+      "atlasRect": [
+        24,
+        0,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "stick_rack_east_0_0.png",
+          "stick_rack_east_0_1.png",
+          "stick_rack_east_0_2.png"
+        ],
+        [
+          "stick_rack_east_1_0.png",
+          "stick_rack_east_1_1.png",
+          "stick_rack_east_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    },
+    {
+      "file": "spare_sticks_west.png",
+      "orientation": "west",
+      "atlasRect": [
+        48,
+        0,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "spare_sticks_west_0_0.png",
+          "spare_sticks_west_0_1.png",
+          "spare_sticks_west_0_2.png"
+        ],
+        [
+          "spare_sticks_west_1_0.png",
+          "spare_sticks_west_1_1.png",
+          "spare_sticks_west_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    },
+    {
+      "file": "spare_sticks_east.png",
+      "orientation": "east",
+      "atlasRect": [
+        72,
+        0,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "spare_sticks_east_0_0.png",
+          "spare_sticks_east_0_1.png",
+          "spare_sticks_east_0_2.png"
+        ],
+        [
+          "spare_sticks_east_1_0.png",
+          "spare_sticks_east_1_1.png",
+          "spare_sticks_east_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    },
+    {
+      "file": "bottle_carrier_west.png",
+      "orientation": "west",
+      "atlasRect": [
+        0,
+        16,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "bottle_carrier_west_0_0.png",
+          "bottle_carrier_west_0_1.png",
+          "bottle_carrier_west_0_2.png"
+        ],
+        [
+          "bottle_carrier_west_1_0.png",
+          "bottle_carrier_west_1_1.png",
+          "bottle_carrier_west_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    },
+    {
+      "file": "bottle_carrier_east.png",
+      "orientation": "east",
+      "atlasRect": [
+        24,
+        16,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "bottle_carrier_east_0_0.png",
+          "bottle_carrier_east_0_1.png",
+          "bottle_carrier_east_0_2.png"
+        ],
+        [
+          "bottle_carrier_east_1_0.png",
+          "bottle_carrier_east_1_1.png",
+          "bottle_carrier_east_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    },
+    {
+      "file": "loose_bottles_west.png",
+      "orientation": "west",
+      "atlasRect": [
+        48,
+        16,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "loose_bottles_west_0_0.png",
+          "loose_bottles_west_0_1.png",
+          "loose_bottles_west_0_2.png"
+        ],
+        [
+          "loose_bottles_west_1_0.png",
+          "loose_bottles_west_1_1.png",
+          "loose_bottles_west_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    },
+    {
+      "file": "loose_bottles_east.png",
+      "orientation": "east",
+      "atlasRect": [
+        72,
+        16,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "loose_bottles_east_0_0.png",
+          "loose_bottles_east_0_1.png",
+          "loose_bottles_east_0_2.png"
+        ],
+        [
+          "loose_bottles_east_1_0.png",
+          "loose_bottles_east_1_1.png",
+          "loose_bottles_east_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    },
+    {
+      "file": "folded_towels_west.png",
+      "orientation": "west",
+      "atlasRect": [
+        0,
+        32,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "folded_towels_west_0_0.png",
+          "folded_towels_west_0_1.png",
+          "folded_towels_west_0_2.png"
+        ],
+        [
+          "folded_towels_west_1_0.png",
+          "folded_towels_west_1_1.png",
+          "folded_towels_west_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    },
+    {
+      "file": "folded_towels_east.png",
+      "orientation": "east",
+      "atlasRect": [
+        24,
+        32,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "folded_towels_east_0_0.png",
+          "folded_towels_east_0_1.png",
+          "folded_towels_east_0_2.png"
+        ],
+        [
+          "folded_towels_east_1_0.png",
+          "folded_towels_east_1_1.png",
+          "folded_towels_east_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    },
+    {
+      "file": "hanging_towels_west.png",
+      "orientation": "west",
+      "atlasRect": [
+        48,
+        32,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "hanging_towels_west_0_0.png",
+          "hanging_towels_west_0_1.png",
+          "hanging_towels_west_0_2.png"
+        ],
+        [
+          "hanging_towels_west_1_0.png",
+          "hanging_towels_west_1_1.png",
+          "hanging_towels_west_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    },
+    {
+      "file": "hanging_towels_east.png",
+      "orientation": "east",
+      "atlasRect": [
+        72,
+        32,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "hanging_towels_east_0_0.png",
+          "hanging_towels_east_0_1.png",
+          "hanging_towels_east_0_2.png"
+        ],
+        [
+          "hanging_towels_east_1_0.png",
+          "hanging_towels_east_1_1.png",
+          "hanging_towels_east_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    },
+    {
+      "file": "gear_bag_west.png",
+      "orientation": "west",
+      "atlasRect": [
+        0,
+        48,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "gear_bag_west_0_0.png",
+          "gear_bag_west_0_1.png",
+          "gear_bag_west_0_2.png"
+        ],
+        [
+          "gear_bag_west_1_0.png",
+          "gear_bag_west_1_1.png",
+          "gear_bag_west_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    },
+    {
+      "file": "gear_bag_east.png",
+      "orientation": "east",
+      "atlasRect": [
+        24,
+        48,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "gear_bag_east_0_0.png",
+          "gear_bag_east_0_1.png",
+          "gear_bag_east_0_2.png"
+        ],
+        [
+          "gear_bag_east_1_0.png",
+          "gear_bag_east_1_1.png",
+          "gear_bag_east_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    },
+    {
+      "file": "equipment_crate_west.png",
+      "orientation": "west",
+      "atlasRect": [
+        48,
+        48,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "equipment_crate_west_0_0.png",
+          "equipment_crate_west_0_1.png",
+          "equipment_crate_west_0_2.png"
+        ],
+        [
+          "equipment_crate_west_1_0.png",
+          "equipment_crate_west_1_1.png",
+          "equipment_crate_west_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    },
+    {
+      "file": "equipment_crate_east.png",
+      "orientation": "east",
+      "atlasRect": [
+        72,
+        48,
+        24,
+        16
+      ],
+      "tiles": [
+        [
+          "equipment_crate_east_0_0.png",
+          "equipment_crate_east_0_1.png",
+          "equipment_crate_east_0_2.png"
+        ],
+        [
+          "equipment_crate_east_1_0.png",
+          "equipment_crate_east_1_1.png",
+          "equipment_crate_east_1_2.png"
+        ]
+      ],
+      "pivot": [
+        12,
+        8
+      ]
+    }
+  ],
+  "previewOnly": "preview.png"
+}

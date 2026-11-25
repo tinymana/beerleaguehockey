@@ -11,11 +11,11 @@ import type { RinkGeometry } from '../../sim/rink';
 import { goalLineY, netBox } from '../../sim/rink';
 import { projectY, worldScreenHeight } from '../projection';
 import { TEX, buildTemporaryTextures, netLayout, netScreenAnchor } from '../textures';
-import type { ArenaConfig, BoardSide, GlassState, GoalEnd, GoalState, GoalStrip } from './config';
+import type { ArenaConfig, BenchMood, BoardSide, GlassState, GoalEnd, GoalState, GoalStrip } from './config';
 import { IceWear, trafficPrior } from './iceWear';
 import { ARENA_LAYERS, faceoffSpots, iceOutline, layerDepth, layoutArena, layoutGoals } from './layout';
-import type { ArenaLayerId, ArenaLayout, GoalPlacement } from './layout';
-import { TILE, assetById, assetUrl, loadableAssets, textureKey } from './registry';
+import type { ArenaLayerId, ArenaLayout, BenchSpot, GoalPlacement } from './layout';
+import { TILE, assetById, assetUrl, loadableAssets, textureKey, textureSource } from './registry';
 import type { ArenaRegistry } from './registry';
 
 type Drawable = Phaser.GameObjects.GameObject & Phaser.GameObjects.Components.Visible & Phaser.GameObjects.Components.Depth;
@@ -53,6 +53,13 @@ export class ArenaRenderer {
   private readonly maskShape: Phaser.GameObjects.Graphics;
   private readonly maps: Phaser.Tilemaps.Tilemap[] = [];
   private readonly goals = new Map<GoalEnd, { image: Phaser.GameObjects.Image; place: GoalPlacement; state: GoalState; timer: Phaser.Time.TimerEvent | null }>();
+  private readonly doors = new Map<string, { image: Phaser.GameObjects.Image; row: number; frame: number }>();
+  private doorTimer: Phaser.Time.TimerEvent | null = null;
+  private readonly benchPlayers: { image: Phaser.GameObjects.Image; spot: BenchSpot; index: number }[] = [];
+  private benchTimer: Phaser.Time.TimerEvent | null = null;
+  private mood: BenchMood = 'empty';
+  /** Objects switched off by a state (an empty bench seat), whatever their layer says. */
+  private readonly hidden = new Set<Phaser.GameObjects.GameObject>();
   private readonly glassPanels = new Map<string, { image: Phaser.GameObjects.Image; side: BoardSide; cropW: number; cropH: number }>();
 
   /** Queue every registry texture on a scene's loader. Call from preload. */
@@ -105,8 +112,23 @@ export class ArenaRenderer {
     return textureKey(this.registry, id);
   }
 
+  /** A named frame for one rectangle of a texture, cut on first use. */
+  private cell(key: string, x: number, y: number, width: number, height: number): string {
+    const texture = this.scene.textures.get(key);
+    const name = `cell-${x}-${y}-${width}x${height}`;
+    if (!texture.has(name)) texture.add(name, 0, x, y, width, height);
+    return name;
+  }
+
+  /** Texture and frame that hold an asset's pixels: its own file, its duplicate, or its cell of an atlas. */
+  private tex(id: string): [string, string] {
+    const source = textureSource(this.registry, id);
+    const c = source.cell;
+    return [source.key, c ? this.cell(source.key, c.x, c.y, c.width, c.height) : WHOLE];
+  }
+
   private has(id: string): boolean {
-    const ok = this.scene.textures.exists(this.key(id));
+    const ok = this.scene.textures.exists(textureSource(this.registry, id).key);
     if (!ok && !this.missing.includes(id)) this.missing.push(id);
     return ok;
   }
@@ -193,10 +215,13 @@ export class ArenaRenderer {
     // Corners, gates, sponsor panels and posts.
     for (const p of this.layout.boardImages) {
       if (!this.has(p.asset)) continue;
-      const image = this.scene.add.image(p.x, p.y, this.key(p.asset), WHOLE).setOrigin(0, 0);
+      const [key, frame] = p.cell ? [this.key(p.asset), this.cell(this.key(p.asset), p.cell.x, p.cell.y, p.cell.width, p.cell.height)] : this.tex(p.asset);
+      const image = this.scene.add.image(p.x, p.y, key, frame).setOrigin(0, 0);
       if (p.cropW !== undefined && p.cropH !== undefined) image.setCrop(0, 0, p.cropW, p.cropH);
       this.add(image, p.layer, false, layerDepth(p.layer) + p.z);
+      if (p.doorId && p.cell) this.doors.set(p.doorId, { image, row: p.cell.y, frame: 0 });
     }
+    this.buildBenchArea();
     // Glass, one pane at a time so each can crack on its own.
     for (const pane of this.layout.glass) {
       if (!this.has(pane.asset)) continue;
@@ -207,6 +232,29 @@ export class ArenaRenderer {
       this.add(image, pane.layer, false, layerDepth(pane.layer) + pane.z);
       this.glassPanels.set(pane.id, { image, side: pane.side, cropW, cropH });
     }
+  }
+
+  /** Benches, penalty boxes and the timekeeper booth: behind the boards, players between the layers. */
+  private buildBenchArea(): void {
+    const area = this.config.benchArea;
+    if (!area) return;
+    const base = layerDepth('stadium') + 1;
+    const playersOk = [area.players.seated, area.players.standing, area.players.cheer.atlas, area.players.groan.atlas].map((id) => this.has(id)).every(Boolean);
+    for (const placed of this.layout.structures) {
+      const { structure } = placed;
+      if (!structure.layers.map((id) => this.has(id)).every(Boolean)) continue;
+      structure.layers.forEach((id, i) => {
+        const image = this.scene.add.image(placed.x, placed.y, ...this.tex(id)).setOrigin(0, 0);
+        this.add(image, 'stadium', false, base + (i < structure.playersAfter ? 0 : 2) + i * 0.01);
+      });
+      if (!playersOk) continue;
+      for (const spot of placed.spots) {
+        const image = this.scene.add.image(spot.x, spot.y, this.key(area.players[spot.pose])).setOrigin(0, 0);
+        this.add(image, 'stadium', false, base + 1);
+        this.benchPlayers.push({ image, spot, index: this.benchPlayers.length });
+      }
+    }
+    this.setBenchMood(area.mood);
   }
 
   private buildNets(): void {
@@ -241,6 +289,95 @@ export class ArenaRenderer {
   }
 
   // ---- runtime controls ---------------------------------------------------
+
+  benchMood(): BenchMood {
+    return this.mood;
+  }
+
+  /**
+   * What the bench players are doing. `cheer` loops and `groan` plays once then stands, each player
+   * starting a beat after the last. Pictures only: nothing in the game triggers either yet.
+   */
+  setBenchMood(mood: BenchMood): void {
+    const area = this.config.benchArea;
+    if (!area) return;
+    this.benchTimer?.remove();
+    this.benchTimer = null;
+    this.mood = mood;
+    const p = area.players;
+    const size = p.frame;
+    const half = (team: string): number => (team === 'home' ? 0 : 1);
+    const pose = mood === 'seated' ? 'seated' : 'standing';
+    const stand = (image: Phaser.GameObjects.Image, spot: BenchSpot): void => {
+      const key = this.key(p[spot.pose]);
+      image.setTexture(key, this.cell(key, spot.variant * size, half(spot.team) * size, size, size));
+    };
+    for (const player of this.benchPlayers) {
+      if (mood !== 'empty' && player.spot.pose === pose) this.hidden.delete(player.image);
+      else this.hidden.add(player.image);
+      stand(player.image, player.spot);
+    }
+    this.apply();
+    if (mood !== 'cheer' && mood !== 'groan') return;
+    const strip = p[mood];
+    const key = this.key(strip.atlas);
+    const total = strip.durations.reduce((a, b) => a + b, 0);
+    const started = this.scene.time.now;
+    const STAGGER = 70;
+    this.benchTimer = this.scene.time.addEvent({
+      delay: 20,
+      loop: true,
+      callback: () => {
+        let running = false;
+        for (const player of this.benchPlayers) {
+          if (player.spot.pose !== 'standing') continue;
+          let t = this.scene.time.now - started - (player.index % p.variants) * STAGGER;
+          if (t < 0 || (mood === 'groan' && t >= total)) {
+            stand(player.image, player.spot);
+            running ||= t < 0;
+            continue;
+          }
+          running = true;
+          t %= total;
+          let frame = 0;
+          while (frame < strip.durations.length - 1 && t >= (strip.durations[frame] ?? 0)) t -= strip.durations[frame++] ?? 0;
+          const rows = strip.durations.length;
+          player.image.setTexture(key, this.cell(key, player.spot.variant * size, (half(player.spot.team) * rows + frame) * size, size, size));
+        }
+        if (!running) this.setBenchMood('standing');
+      },
+    });
+  }
+
+  doorIds(): string[] {
+    return [...this.doors.keys()];
+  }
+
+  /**
+   * Swing every bench and penalty-box door open or shut with the supplied frames. The pane of glass
+   * over a door is lifted while it is open. Pictures only: the boards the puck hits do not change.
+   */
+  setDoorsOpen(open: boolean): void {
+    const area = this.config.benchArea;
+    if (!area || this.doors.size === 0) return;
+    this.doorTimer?.remove();
+    const d = area.doors;
+    const last = d.durations.length - 1;
+    const key = this.key(d.atlas);
+    const step = (): void => {
+      let moving = false;
+      for (const [id, door] of this.doors) {
+        const next = door.frame + (open ? 1 : -1);
+        if (next < 0 || next > last) continue;
+        door.frame = next;
+        door.image.setTexture(key, this.cell(key, next * d.frameWidth, door.row, d.frameWidth, d.frameHeight));
+        this.setGlassState(id, next === 0 ? 'intact' : 'missing');
+        moving = true;
+      }
+      this.doorTimer = moving ? this.scene.time.delayedCall(d.durations[0] ?? 80, step) : null;
+    };
+    step();
+  }
 
   /** True when the supplied goal art (not a stand-in) is drawn at this end. */
   hasGoalArt(end: GoalEnd): boolean {
@@ -281,7 +418,7 @@ export class ArenaRenderer {
 
   private apply(): void {
     for (const item of this.items) {
-      const visible = (this.layerVisible.get(item.layer) ?? true) && (!item.standIn || this.standIns);
+      const visible = (this.layerVisible.get(item.layer) ?? true) && (!item.standIn || this.standIns) && !this.hidden.has(item.object);
       item.object.setVisible(visible);
     }
   }
@@ -469,6 +606,11 @@ export class ArenaRenderer {
     this.centerDot = null;
     this.scratchLayer = null;
     for (const goal of this.goals.values()) goal.timer?.remove();
+    this.benchTimer?.remove();
+    this.doorTimer?.remove();
+    this.doors.clear();
+    this.benchPlayers.length = 0;
+    this.hidden.clear();
     this.goals.clear();
     this.glassPanels.clear();
   }
