@@ -5,7 +5,8 @@
  */
 import { ARENA_CONFIGS } from '../match/view/arena/config';
 import { ARENA_LAYERS } from '../match/view/arena/layout';
-import type { ArenaLayerId, GoalAlignment } from '../match/view/arena/layout';
+import type { GoalState } from '../match/view/arena/config';
+import type { ArenaLayerId, GoalAlignment, GoalFit } from '../match/view/arena/layout';
 import { assetUrl } from '../match/view/arena/registry';
 import type { ArenaAsset, ArenaRegistry } from '../match/view/arena/registry';
 
@@ -21,6 +22,7 @@ export interface LabActions {
   setLogo(choice: 'supplied' | 'none' | 'test'): void;
   setWear(level: number): void;
   setGlassDamage(on: boolean): void;
+  setGoalState(state: GoalState): void;
   useInGame(id: string): void;
   exit(): void;
 }
@@ -72,6 +74,7 @@ export class ArenaLabPanel {
   private readonly root: HTMLDivElement;
   private readonly layerBox: HTMLElement;
   private readonly alignment: HTMLElement;
+  private readonly goalFit: HTMLElement;
   private readonly status: HTMLElement;
   private readonly configNote: HTMLElement;
 
@@ -132,7 +135,7 @@ export class ArenaLabPanel {
     this.root.append(view);
 
     // Tests
-    const tests = section('Centre logo, ice wear and glass');
+    const tests = section('Centre logo, ice wear, glass and goals');
     const logo = el('div', 'lab-buttons');
     logo.append(
       button('SUPPLIED LOGO', () => actions.setLogo('supplied')),
@@ -158,6 +161,22 @@ export class ArenaLabPanel {
       wearRow,
       el('p', 'lab-note', '0% is a fresh sheet; 100% is the end of a hard period. Wear is cosmetic only.'),
       check('Glass damage test (cracked, shattered, missing panes)', false, (on) => actions.setGlassDamage(on)),
+    );
+    const goalRow = el('div', 'lab-buttons');
+    for (const [label, state] of [
+      ['GOAL: REST', 'rest'],
+      ['SCORED', 'scored'],
+      ['NET RIPPLE', 'ripple'],
+      ['BOTTLE OFF', 'knockoff'],
+      ['DISLODGED', 'dislodged'],
+    ] as const) {
+      goalRow.append(button(label, () => actions.setGoalState(state)));
+    }
+    this.goalFit = el('div', 'lab-readout');
+    tests.append(
+      goalRow,
+      el('p', 'lab-note', 'Goal states play on both nets. They are pictures only: none of them changes scoring or collision, and bottle knock-off and dislodged goals are not game mechanics yet.'),
+      this.goalFit,
     );
     this.root.append(tests);
 
@@ -223,7 +242,12 @@ export class ArenaLabPanel {
     const big = Math.max(1, Math.min(8, Math.floor(256 / Math.max(asset.width, asset.height))));
     const frames = el('div', 'lab-frames');
     // Single tiles are shown straight from their batch atlas: the same pixels, one file to load.
-    const atlas = asset.role === 'tile' ? this.registry.assets.find((a) => a.batch === asset.batch && a.role === 'atlas') : undefined;
+    const atlas =
+      asset.role === 'tile'
+        ? this.registry.assets.find((a) => a.batch === asset.batch && a.role === 'atlas')
+        : asset.role === 'frame'
+          ? this.registry.assets.find((a) => a.id === asset.atlas)
+          : undefined;
     for (const [label, scale] of [
       ['native', 1],
       [`${big}x`, big],
@@ -288,6 +312,23 @@ export class ArenaLabPanel {
       ? `MISSING TEXTURES: ${missingAssets.join(', ')}`
       : 'All assets this arena asks for are loaded.';
     this.status.className = `lab-status ${missingAssets.length ? 'bad' : 'good'}`;
+  }
+
+  /** Supplied goal art against the physics net. An empty list means the stand-in nets are showing. */
+  setGoalFit(results: GoalFit[]): void {
+    if (results.length === 0) {
+      this.goalFit.textContent = 'Stand-in nets showing: drawn at the size of the physics net.';
+      this.goalFit.className = 'lab-readout';
+      return;
+    }
+    const lines = results.map(
+      (r) =>
+        `${r.end.toUpperCase()}: drawn mouth ${r.artMouth}px vs physics ${r.physicsMouth}px, drawn depth ${r.artDepth}px vs physics ${r.physicsDepth}px, ${r.clearBehind}px clear behind`,
+    );
+    const fits = results.every((r) => r.artMouth === r.physicsMouth && r.artDepth === r.physicsDepth);
+    lines.push(`Goal art matches the physics net: ${fits ? 'YES' : 'NO - turn on Collision geometry to compare'}`);
+    this.goalFit.textContent = lines.join('\n');
+    this.goalFit.className = `lab-readout ${fits ? 'good' : 'bad'}`;
   }
 
   setAlignment(results: GoalAlignment[], mirrored: boolean): void {

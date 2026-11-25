@@ -249,15 +249,81 @@
       "id": "goals.north",
       "layer": "nets",
       "label": "North goal net",
-      "expectedBatch": "11",
-      "assets": []
+      "expectedBatch": "11.01",
+      "assets": [
+        "11.01/goal_north_empty_bottle",
+        "11.01/goal_north_net",
+        "11.01/goal_north_bottle_layer"
+      ],
+      "provisional": true,
+      "note": "Drawn at native size and larger than the gameplay net: the opening between the posts is 37 px against a 24 px physics mouth, and it reaches about 26 px behind the goal line against 10 px. Needs a ruling: see ARENA.md A13."
     },
     {
       "id": "goals.south",
       "layer": "nets",
       "label": "South goal net",
-      "expectedBatch": "11",
-      "assets": []
+      "expectedBatch": "11.02",
+      "assets": [
+        "11.02/goal_south_empty_bottle",
+        "11.02/goal_south_net",
+        "11.02/goal_south_bottle_layer"
+      ],
+      "provisional": true,
+      "note": "Drawn at native size and larger than the gameplay net: the opening between the posts is 37 px against a 24 px physics mouth, and it reaches about 26 px behind the goal line against 10 px. Needs a ruling: see ARENA.md A13."
+    },
+    {
+      "id": "goals.scored",
+      "layer": "nets",
+      "label": "Goal with puck in the net (north, south)",
+      "expectedBatch": "11.03-11.04",
+      "assets": [
+        "11.03/goal_north_scored_bottle",
+        "11.03/goal_north_puck_layer",
+        "11.04/goal_south_scored_bottle",
+        "11.04/goal_south_puck_layer"
+      ],
+      "note": "Lab test only. In play the live puck is drawn instead, so it is never shown twice."
+    },
+    {
+      "id": "goals.ripple",
+      "layer": "nets",
+      "label": "Net ripple on a goal (north, south)",
+      "expectedBatch": "11.07-11.08",
+      "assets": [
+        "11.07/goal_atlas",
+        "11.07/net_atlas",
+        "11.08/goal_atlas",
+        "11.08/net_atlas"
+      ],
+      "note": "Plays once when the sim reports a goal."
+    },
+    {
+      "id": "goals.knockoff",
+      "layer": "nets",
+      "label": "Bottle knocked off the net (north, south)",
+      "expectedBatch": "11.05-11.06",
+      "assets": [
+        "11.05/goal_atlas",
+        "11.05/bottle_atlas",
+        "11.06/goal_atlas",
+        "11.06/bottle_atlas"
+      ],
+      "note": "Lab test only: no bottle mechanic exists or is authorized."
+    },
+    {
+      "id": "goals.dislodged",
+      "layer": "nets",
+      "label": "Goal knocked off its moorings (north, south)",
+      "expectedBatch": "11.09-11.10",
+      "assets": [
+        "11.09/goal_atlas",
+        "11.09/net_atlas",
+        "11.09/bottle_atlas",
+        "11.10/goal_atlas",
+        "11.10/net_atlas",
+        "11.10/bottle_atlas"
+      ],
+      "note": "Lab test only: the gameplay net does not move."
     },
     {
       "id": "benches",

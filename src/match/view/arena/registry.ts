@@ -9,7 +9,8 @@ export const REGISTRY_URL = `${ARENA_BASE_URL}manifests/registry.json`;
 export const REGISTRY_KEY = 'arena-registry';
 export const TILE = 8;
 
-export type AssetRole = 'atlas' | 'tile' | 'composite' | 'module';
+/** `frame`: one animation frame supplied as its own file; the same pixels sit in a strip named by `atlas`. */
+export type AssetRole = 'atlas' | 'tile' | 'frame' | 'composite' | 'module';
 
 export interface ArenaAsset {
   id: string;
@@ -25,7 +26,9 @@ export interface ArenaAsset {
   bbox: [number, number, number, number] | null;
   hash: string;
   tileIndex?: number;
-  /** Pixel position of a single tile inside its batch atlas, when it was found there. */
+  /** Registry id of the strip an animation frame is drawn from. */
+  atlas?: string;
+  /** Pixel position of a single tile or frame inside its atlas, when it was found there. */
   atlasX?: number;
   atlasY?: number;
   columns?: number;
@@ -81,11 +84,11 @@ export function assetUrl(asset: ArenaAsset): string {
 }
 
 /**
- * Assets the renderer loads as textures. Single 8x8 tile files are skipped:
- * the same pixels are already inside their batch's atlas.
+ * Assets the renderer loads as textures. Single 8x8 tile files and single
+ * animation frames are skipped: the same pixels are already inside an atlas.
  */
 export function loadableAssets(registry: ArenaRegistry): ArenaAsset[] {
-  return registry.assets.filter((a) => a.role !== 'tile' && !a.duplicateOf);
+  return registry.assets.filter((a) => a.role !== 'tile' && a.role !== 'frame' && !a.duplicateOf);
 }
 
 /**

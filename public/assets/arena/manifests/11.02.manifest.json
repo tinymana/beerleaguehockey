@@ -1,0 +1,70 @@
+{
+  "batch": "11.02",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    48,
+    32
+  ],
+  "orientation": "south",
+  "mouthFaces": "north",
+  "mouthAnchorLocal": [
+    24,
+    3
+  ],
+  "postAnchorsLocal": [
+    [
+      5,
+      3
+    ],
+    [
+      42,
+      3
+    ]
+  ],
+  "atlas": "goal_atlas.png",
+  "tiles": [
+    [
+      "goal_south_0_0.png",
+      "goal_south_0_1.png",
+      "goal_south_0_2.png",
+      "goal_south_0_3.png",
+      "goal_south_0_4.png",
+      "goal_south_0_5.png"
+    ],
+    [
+      "goal_south_1_0.png",
+      "goal_south_1_1.png",
+      "goal_south_1_2.png",
+      "goal_south_1_3.png",
+      "goal_south_1_4.png",
+      "goal_south_1_5.png"
+    ],
+    [
+      "goal_south_2_0.png",
+      "goal_south_2_1.png",
+      "goal_south_2_2.png",
+      "goal_south_2_3.png",
+      "goal_south_2_4.png",
+      "goal_south_2_5.png"
+    ],
+    [
+      "goal_south_3_0.png",
+      "goal_south_3_1.png",
+      "goal_south_3_2.png",
+      "goal_south_3_3.png",
+      "goal_south_3_4.png",
+      "goal_south_3_5.png"
+    ]
+  ],
+  "net": "goal_south_net.png",
+  "bottleLayer": "goal_south_bottle_layer.png",
+  "composite": "goal_south_empty_bottle.png",
+  "previewOnly": "preview.png",
+  "bottleAnchorLocal": [
+    24,
+    18
+  ]
+}

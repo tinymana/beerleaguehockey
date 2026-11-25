@@ -1,0 +1,666 @@
+{
+  "batch": "11.10",
+  "sourceBatch": "11.02",
+  "orientation": "south",
+  "mouthFaces": "north",
+  "tileSize": [
+    8,
+    8
+  ],
+  "frameSize": [
+    64,
+    48
+  ],
+  "restMouthAnchorLocal": [
+    32,
+    11
+  ],
+  "sourceOffset": [
+    8,
+    8
+  ],
+  "atlas": "goal_atlas.png",
+  "netAtlas": "net_atlas.png",
+  "bottleAtlas": "bottle_atlas.png",
+  "frames": [
+    {
+      "file": "goal_south_dislodged_00.png",
+      "net": "goal_south_dislodged_00_net.png",
+      "bottle": "goal_south_dislodged_00_bottle.png",
+      "atlasRect": [
+        0,
+        0,
+        64,
+        48
+      ],
+      "durationMs": 60,
+      "translation": [
+        0,
+        0
+      ],
+      "rotationDegreesCCW": 0,
+      "tiles": [
+        [
+          "goal_south_dislodged_00_0_0.png",
+          "goal_south_dislodged_00_0_1.png",
+          "goal_south_dislodged_00_0_2.png",
+          "goal_south_dislodged_00_0_3.png",
+          "goal_south_dislodged_00_0_4.png",
+          "goal_south_dislodged_00_0_5.png",
+          "goal_south_dislodged_00_0_6.png",
+          "goal_south_dislodged_00_0_7.png"
+        ],
+        [
+          "goal_south_dislodged_00_1_0.png",
+          "goal_south_dislodged_00_1_1.png",
+          "goal_south_dislodged_00_1_2.png",
+          "goal_south_dislodged_00_1_3.png",
+          "goal_south_dislodged_00_1_4.png",
+          "goal_south_dislodged_00_1_5.png",
+          "goal_south_dislodged_00_1_6.png",
+          "goal_south_dislodged_00_1_7.png"
+        ],
+        [
+          "goal_south_dislodged_00_2_0.png",
+          "goal_south_dislodged_00_2_1.png",
+          "goal_south_dislodged_00_2_2.png",
+          "goal_south_dislodged_00_2_3.png",
+          "goal_south_dislodged_00_2_4.png",
+          "goal_south_dislodged_00_2_5.png",
+          "goal_south_dislodged_00_2_6.png",
+          "goal_south_dislodged_00_2_7.png"
+        ],
+        [
+          "goal_south_dislodged_00_3_0.png",
+          "goal_south_dislodged_00_3_1.png",
+          "goal_south_dislodged_00_3_2.png",
+          "goal_south_dislodged_00_3_3.png",
+          "goal_south_dislodged_00_3_4.png",
+          "goal_south_dislodged_00_3_5.png",
+          "goal_south_dislodged_00_3_6.png",
+          "goal_south_dislodged_00_3_7.png"
+        ],
+        [
+          "goal_south_dislodged_00_4_0.png",
+          "goal_south_dislodged_00_4_1.png",
+          "goal_south_dislodged_00_4_2.png",
+          "goal_south_dislodged_00_4_3.png",
+          "goal_south_dislodged_00_4_4.png",
+          "goal_south_dislodged_00_4_5.png",
+          "goal_south_dislodged_00_4_6.png",
+          "goal_south_dislodged_00_4_7.png"
+        ],
+        [
+          "goal_south_dislodged_00_5_0.png",
+          "goal_south_dislodged_00_5_1.png",
+          "goal_south_dislodged_00_5_2.png",
+          "goal_south_dislodged_00_5_3.png",
+          "goal_south_dislodged_00_5_4.png",
+          "goal_south_dislodged_00_5_5.png",
+          "goal_south_dislodged_00_5_6.png",
+          "goal_south_dislodged_00_5_7.png"
+        ]
+      ]
+    },
+    {
+      "file": "goal_south_dislodged_01.png",
+      "net": "goal_south_dislodged_01_net.png",
+      "bottle": "goal_south_dislodged_01_bottle.png",
+      "atlasRect": [
+        64,
+        0,
+        64,
+        48
+      ],
+      "durationMs": 60,
+      "translation": [
+        1,
+        1
+      ],
+      "rotationDegreesCCW": -2,
+      "tiles": [
+        [
+          "goal_south_dislodged_01_0_0.png",
+          "goal_south_dislodged_01_0_1.png",
+          "goal_south_dislodged_01_0_2.png",
+          "goal_south_dislodged_01_0_3.png",
+          "goal_south_dislodged_01_0_4.png",
+          "goal_south_dislodged_01_0_5.png",
+          "goal_south_dislodged_01_0_6.png",
+          "goal_south_dislodged_01_0_7.png"
+        ],
+        [
+          "goal_south_dislodged_01_1_0.png",
+          "goal_south_dislodged_01_1_1.png",
+          "goal_south_dislodged_01_1_2.png",
+          "goal_south_dislodged_01_1_3.png",
+          "goal_south_dislodged_01_1_4.png",
+          "goal_south_dislodged_01_1_5.png",
+          "goal_south_dislodged_01_1_6.png",
+          "goal_south_dislodged_01_1_7.png"
+        ],
+        [
+          "goal_south_dislodged_01_2_0.png",
+          "goal_south_dislodged_01_2_1.png",
+          "goal_south_dislodged_01_2_2.png",
+          "goal_south_dislodged_01_2_3.png",
+          "goal_south_dislodged_01_2_4.png",
+          "goal_south_dislodged_01_2_5.png",
+          "goal_south_dislodged_01_2_6.png",
+          "goal_south_dislodged_01_2_7.png"
+        ],
+        [
+          "goal_south_dislodged_01_3_0.png",
+          "goal_south_dislodged_01_3_1.png",
+          "goal_south_dislodged_01_3_2.png",
+          "goal_south_dislodged_01_3_3.png",
+          "goal_south_dislodged_01_3_4.png",
+          "goal_south_dislodged_01_3_5.png",
+          "goal_south_dislodged_01_3_6.png",
+          "goal_south_dislodged_01_3_7.png"
+        ],
+        [
+          "goal_south_dislodged_01_4_0.png",
+          "goal_south_dislodged_01_4_1.png",
+          "goal_south_dislodged_01_4_2.png",
+          "goal_south_dislodged_01_4_3.png",
+          "goal_south_dislodged_01_4_4.png",
+          "goal_south_dislodged_01_4_5.png",
+          "goal_south_dislodged_01_4_6.png",
+          "goal_south_dislodged_01_4_7.png"
+        ],
+        [
+          "goal_south_dislodged_01_5_0.png",
+          "goal_south_dislodged_01_5_1.png",
+          "goal_south_dislodged_01_5_2.png",
+          "goal_south_dislodged_01_5_3.png",
+          "goal_south_dislodged_01_5_4.png",
+          "goal_south_dislodged_01_5_5.png",
+          "goal_south_dislodged_01_5_6.png",
+          "goal_south_dislodged_01_5_7.png"
+        ]
+      ]
+    },
+    {
+      "file": "goal_south_dislodged_02.png",
+      "net": "goal_south_dislodged_02_net.png",
+      "bottle": "goal_south_dislodged_02_bottle.png",
+      "atlasRect": [
+        128,
+        0,
+        64,
+        48
+      ],
+      "durationMs": 60,
+      "translation": [
+        3,
+        2
+      ],
+      "rotationDegreesCCW": -5,
+      "tiles": [
+        [
+          "goal_south_dislodged_02_0_0.png",
+          "goal_south_dislodged_02_0_1.png",
+          "goal_south_dislodged_02_0_2.png",
+          "goal_south_dislodged_02_0_3.png",
+          "goal_south_dislodged_02_0_4.png",
+          "goal_south_dislodged_02_0_5.png",
+          "goal_south_dislodged_02_0_6.png",
+          "goal_south_dislodged_02_0_7.png"
+        ],
+        [
+          "goal_south_dislodged_02_1_0.png",
+          "goal_south_dislodged_02_1_1.png",
+          "goal_south_dislodged_02_1_2.png",
+          "goal_south_dislodged_02_1_3.png",
+          "goal_south_dislodged_02_1_4.png",
+          "goal_south_dislodged_02_1_5.png",
+          "goal_south_dislodged_02_1_6.png",
+          "goal_south_dislodged_02_1_7.png"
+        ],
+        [
+          "goal_south_dislodged_02_2_0.png",
+          "goal_south_dislodged_02_2_1.png",
+          "goal_south_dislodged_02_2_2.png",
+          "goal_south_dislodged_02_2_3.png",
+          "goal_south_dislodged_02_2_4.png",
+          "goal_south_dislodged_02_2_5.png",
+          "goal_south_dislodged_02_2_6.png",
+          "goal_south_dislodged_02_2_7.png"
+        ],
+        [
+          "goal_south_dislodged_02_3_0.png",
+          "goal_south_dislodged_02_3_1.png",
+          "goal_south_dislodged_02_3_2.png",
+          "goal_south_dislodged_02_3_3.png",
+          "goal_south_dislodged_02_3_4.png",
+          "goal_south_dislodged_02_3_5.png",
+          "goal_south_dislodged_02_3_6.png",
+          "goal_south_dislodged_02_3_7.png"
+        ],
+        [
+          "goal_south_dislodged_02_4_0.png",
+          "goal_south_dislodged_02_4_1.png",
+          "goal_south_dislodged_02_4_2.png",
+          "goal_south_dislodged_02_4_3.png",
+          "goal_south_dislodged_02_4_4.png",
+          "goal_south_dislodged_02_4_5.png",
+          "goal_south_dislodged_02_4_6.png",
+          "goal_south_dislodged_02_4_7.png"
+        ],
+        [
+          "goal_south_dislodged_02_5_0.png",
+          "goal_south_dislodged_02_5_1.png",
+          "goal_south_dislodged_02_5_2.png",
+          "goal_south_dislodged_02_5_3.png",
+          "goal_south_dislodged_02_5_4.png",
+          "goal_south_dislodged_02_5_5.png",
+          "goal_south_dislodged_02_5_6.png",
+          "goal_south_dislodged_02_5_7.png"
+        ]
+      ]
+    },
+    {
+      "file": "goal_south_dislodged_03.png",
+      "net": "goal_south_dislodged_03_net.png",
+      "bottle": "goal_south_dislodged_03_bottle.png",
+      "atlasRect": [
+        192,
+        0,
+        64,
+        48
+      ],
+      "durationMs": 70,
+      "translation": [
+        5,
+        3
+      ],
+      "rotationDegreesCCW": -9,
+      "tiles": [
+        [
+          "goal_south_dislodged_03_0_0.png",
+          "goal_south_dislodged_03_0_1.png",
+          "goal_south_dislodged_03_0_2.png",
+          "goal_south_dislodged_03_0_3.png",
+          "goal_south_dislodged_03_0_4.png",
+          "goal_south_dislodged_03_0_5.png",
+          "goal_south_dislodged_03_0_6.png",
+          "goal_south_dislodged_03_0_7.png"
+        ],
+        [
+          "goal_south_dislodged_03_1_0.png",
+          "goal_south_dislodged_03_1_1.png",
+          "goal_south_dislodged_03_1_2.png",
+          "goal_south_dislodged_03_1_3.png",
+          "goal_south_dislodged_03_1_4.png",
+          "goal_south_dislodged_03_1_5.png",
+          "goal_south_dislodged_03_1_6.png",
+          "goal_south_dislodged_03_1_7.png"
+        ],
+        [
+          "goal_south_dislodged_03_2_0.png",
+          "goal_south_dislodged_03_2_1.png",
+          "goal_south_dislodged_03_2_2.png",
+          "goal_south_dislodged_03_2_3.png",
+          "goal_south_dislodged_03_2_4.png",
+          "goal_south_dislodged_03_2_5.png",
+          "goal_south_dislodged_03_2_6.png",
+          "goal_south_dislodged_03_2_7.png"
+        ],
+        [
+          "goal_south_dislodged_03_3_0.png",
+          "goal_south_dislodged_03_3_1.png",
+          "goal_south_dislodged_03_3_2.png",
+          "goal_south_dislodged_03_3_3.png",
+          "goal_south_dislodged_03_3_4.png",
+          "goal_south_dislodged_03_3_5.png",
+          "goal_south_dislodged_03_3_6.png",
+          "goal_south_dislodged_03_3_7.png"
+        ],
+        [
+          "goal_south_dislodged_03_4_0.png",
+          "goal_south_dislodged_03_4_1.png",
+          "goal_south_dislodged_03_4_2.png",
+          "goal_south_dislodged_03_4_3.png",
+          "goal_south_dislodged_03_4_4.png",
+          "goal_south_dislodged_03_4_5.png",
+          "goal_south_dislodged_03_4_6.png",
+          "goal_south_dislodged_03_4_7.png"
+        ],
+        [
+          "goal_south_dislodged_03_5_0.png",
+          "goal_south_dislodged_03_5_1.png",
+          "goal_south_dislodged_03_5_2.png",
+          "goal_south_dislodged_03_5_3.png",
+          "goal_south_dislodged_03_5_4.png",
+          "goal_south_dislodged_03_5_5.png",
+          "goal_south_dislodged_03_5_6.png",
+          "goal_south_dislodged_03_5_7.png"
+        ]
+      ]
+    },
+    {
+      "file": "goal_south_dislodged_04.png",
+      "net": "goal_south_dislodged_04_net.png",
+      "bottle": "goal_south_dislodged_04_bottle.png",
+      "atlasRect": [
+        256,
+        0,
+        64,
+        48
+      ],
+      "durationMs": 80,
+      "translation": [
+        7,
+        4
+      ],
+      "rotationDegreesCCW": -13,
+      "tiles": [
+        [
+          "goal_south_dislodged_04_0_0.png",
+          "goal_south_dislodged_04_0_1.png",
+          "goal_south_dislodged_04_0_2.png",
+          "goal_south_dislodged_04_0_3.png",
+          "goal_south_dislodged_04_0_4.png",
+          "goal_south_dislodged_04_0_5.png",
+          "goal_south_dislodged_04_0_6.png",
+          "goal_south_dislodged_04_0_7.png"
+        ],
+        [
+          "goal_south_dislodged_04_1_0.png",
+          "goal_south_dislodged_04_1_1.png",
+          "goal_south_dislodged_04_1_2.png",
+          "goal_south_dislodged_04_1_3.png",
+          "goal_south_dislodged_04_1_4.png",
+          "goal_south_dislodged_04_1_5.png",
+          "goal_south_dislodged_04_1_6.png",
+          "goal_south_dislodged_04_1_7.png"
+        ],
+        [
+          "goal_south_dislodged_04_2_0.png",
+          "goal_south_dislodged_04_2_1.png",
+          "goal_south_dislodged_04_2_2.png",
+          "goal_south_dislodged_04_2_3.png",
+          "goal_south_dislodged_04_2_4.png",
+          "goal_south_dislodged_04_2_5.png",
+          "goal_south_dislodged_04_2_6.png",
+          "goal_south_dislodged_04_2_7.png"
+        ],
+        [
+          "goal_south_dislodged_04_3_0.png",
+          "goal_south_dislodged_04_3_1.png",
+          "goal_south_dislodged_04_3_2.png",
+          "goal_south_dislodged_04_3_3.png",
+          "goal_south_dislodged_04_3_4.png",
+          "goal_south_dislodged_04_3_5.png",
+          "goal_south_dislodged_04_3_6.png",
+          "goal_south_dislodged_04_3_7.png"
+        ],
+        [
+          "goal_south_dislodged_04_4_0.png",
+          "goal_south_dislodged_04_4_1.png",
+          "goal_south_dislodged_04_4_2.png",
+          "goal_south_dislodged_04_4_3.png",
+          "goal_south_dislodged_04_4_4.png",
+          "goal_south_dislodged_04_4_5.png",
+          "goal_south_dislodged_04_4_6.png",
+          "goal_south_dislodged_04_4_7.png"
+        ],
+        [
+          "goal_south_dislodged_04_5_0.png",
+          "goal_south_dislodged_04_5_1.png",
+          "goal_south_dislodged_04_5_2.png",
+          "goal_south_dislodged_04_5_3.png",
+          "goal_south_dislodged_04_5_4.png",
+          "goal_south_dislodged_04_5_5.png",
+          "goal_south_dislodged_04_5_6.png",
+          "goal_south_dislodged_04_5_7.png"
+        ]
+      ]
+    },
+    {
+      "file": "goal_south_dislodged_05.png",
+      "net": "goal_south_dislodged_05_net.png",
+      "bottle": "goal_south_dislodged_05_bottle.png",
+      "atlasRect": [
+        320,
+        0,
+        64,
+        48
+      ],
+      "durationMs": 90,
+      "translation": [
+        8,
+        4
+      ],
+      "rotationDegreesCCW": -15,
+      "tiles": [
+        [
+          "goal_south_dislodged_05_0_0.png",
+          "goal_south_dislodged_05_0_1.png",
+          "goal_south_dislodged_05_0_2.png",
+          "goal_south_dislodged_05_0_3.png",
+          "goal_south_dislodged_05_0_4.png",
+          "goal_south_dislodged_05_0_5.png",
+          "goal_south_dislodged_05_0_6.png",
+          "goal_south_dislodged_05_0_7.png"
+        ],
+        [
+          "goal_south_dislodged_05_1_0.png",
+          "goal_south_dislodged_05_1_1.png",
+          "goal_south_dislodged_05_1_2.png",
+          "goal_south_dislodged_05_1_3.png",
+          "goal_south_dislodged_05_1_4.png",
+          "goal_south_dislodged_05_1_5.png",
+          "goal_south_dislodged_05_1_6.png",
+          "goal_south_dislodged_05_1_7.png"
+        ],
+        [
+          "goal_south_dislodged_05_2_0.png",
+          "goal_south_dislodged_05_2_1.png",
+          "goal_south_dislodged_05_2_2.png",
+          "goal_south_dislodged_05_2_3.png",
+          "goal_south_dislodged_05_2_4.png",
+          "goal_south_dislodged_05_2_5.png",
+          "goal_south_dislodged_05_2_6.png",
+          "goal_south_dislodged_05_2_7.png"
+        ],
+        [
+          "goal_south_dislodged_05_3_0.png",
+          "goal_south_dislodged_05_3_1.png",
+          "goal_south_dislodged_05_3_2.png",
+          "goal_south_dislodged_05_3_3.png",
+          "goal_south_dislodged_05_3_4.png",
+          "goal_south_dislodged_05_3_5.png",
+          "goal_south_dislodged_05_3_6.png",
+          "goal_south_dislodged_05_3_7.png"
+        ],
+        [
+          "goal_south_dislodged_05_4_0.png",
+          "goal_south_dislodged_05_4_1.png",
+          "goal_south_dislodged_05_4_2.png",
+          "goal_south_dislodged_05_4_3.png",
+          "goal_south_dislodged_05_4_4.png",
+          "goal_south_dislodged_05_4_5.png",
+          "goal_south_dislodged_05_4_6.png",
+          "goal_south_dislodged_05_4_7.png"
+        ],
+        [
+          "goal_south_dislodged_05_5_0.png",
+          "goal_south_dislodged_05_5_1.png",
+          "goal_south_dislodged_05_5_2.png",
+          "goal_south_dislodged_05_5_3.png",
+          "goal_south_dislodged_05_5_4.png",
+          "goal_south_dislodged_05_5_5.png",
+          "goal_south_dislodged_05_5_6.png",
+          "goal_south_dislodged_05_5_7.png"
+        ]
+      ]
+    },
+    {
+      "file": "goal_south_dislodged_06.png",
+      "net": "goal_south_dislodged_06_net.png",
+      "bottle": "goal_south_dislodged_06_bottle.png",
+      "atlasRect": [
+        384,
+        0,
+        64,
+        48
+      ],
+      "durationMs": 100,
+      "translation": [
+        7,
+        3
+      ],
+      "rotationDegreesCCW": -12,
+      "tiles": [
+        [
+          "goal_south_dislodged_06_0_0.png",
+          "goal_south_dislodged_06_0_1.png",
+          "goal_south_dislodged_06_0_2.png",
+          "goal_south_dislodged_06_0_3.png",
+          "goal_south_dislodged_06_0_4.png",
+          "goal_south_dislodged_06_0_5.png",
+          "goal_south_dislodged_06_0_6.png",
+          "goal_south_dislodged_06_0_7.png"
+        ],
+        [
+          "goal_south_dislodged_06_1_0.png",
+          "goal_south_dislodged_06_1_1.png",
+          "goal_south_dislodged_06_1_2.png",
+          "goal_south_dislodged_06_1_3.png",
+          "goal_south_dislodged_06_1_4.png",
+          "goal_south_dislodged_06_1_5.png",
+          "goal_south_dislodged_06_1_6.png",
+          "goal_south_dislodged_06_1_7.png"
+        ],
+        [
+          "goal_south_dislodged_06_2_0.png",
+          "goal_south_dislodged_06_2_1.png",
+          "goal_south_dislodged_06_2_2.png",
+          "goal_south_dislodged_06_2_3.png",
+          "goal_south_dislodged_06_2_4.png",
+          "goal_south_dislodged_06_2_5.png",
+          "goal_south_dislodged_06_2_6.png",
+          "goal_south_dislodged_06_2_7.png"
+        ],
+        [
+          "goal_south_dislodged_06_3_0.png",
+          "goal_south_dislodged_06_3_1.png",
+          "goal_south_dislodged_06_3_2.png",
+          "goal_south_dislodged_06_3_3.png",
+          "goal_south_dislodged_06_3_4.png",
+          "goal_south_dislodged_06_3_5.png",
+          "goal_south_dislodged_06_3_6.png",
+          "goal_south_dislodged_06_3_7.png"
+        ],
+        [
+          "goal_south_dislodged_06_4_0.png",
+          "goal_south_dislodged_06_4_1.png",
+          "goal_south_dislodged_06_4_2.png",
+          "goal_south_dislodged_06_4_3.png",
+          "goal_south_dislodged_06_4_4.png",
+          "goal_south_dislodged_06_4_5.png",
+          "goal_south_dislodged_06_4_6.png",
+          "goal_south_dislodged_06_4_7.png"
+        ],
+        [
+          "goal_south_dislodged_06_5_0.png",
+          "goal_south_dislodged_06_5_1.png",
+          "goal_south_dislodged_06_5_2.png",
+          "goal_south_dislodged_06_5_3.png",
+          "goal_south_dislodged_06_5_4.png",
+          "goal_south_dislodged_06_5_5.png",
+          "goal_south_dislodged_06_5_6.png",
+          "goal_south_dislodged_06_5_7.png"
+        ]
+      ]
+    },
+    {
+      "file": "goal_south_dislodged_07.png",
+      "net": "goal_south_dislodged_07_net.png",
+      "bottle": "goal_south_dislodged_07_bottle.png",
+      "atlasRect": [
+        448,
+        0,
+        64,
+        48
+      ],
+      "durationMs": 100,
+      "translation": [
+        7,
+        3
+      ],
+      "rotationDegreesCCW": -12,
+      "tiles": [
+        [
+          "goal_south_dislodged_07_0_0.png",
+          "goal_south_dislodged_07_0_1.png",
+          "goal_south_dislodged_07_0_2.png",
+          "goal_south_dislodged_07_0_3.png",
+          "goal_south_dislodged_07_0_4.png",
+          "goal_south_dislodged_07_0_5.png",
+          "goal_south_dislodged_07_0_6.png",
+          "goal_south_dislodged_07_0_7.png"
+        ],
+        [
+          "goal_south_dislodged_07_1_0.png",
+          "goal_south_dislodged_07_1_1.png",
+          "goal_south_dislodged_07_1_2.png",
+          "goal_south_dislodged_07_1_3.png",
+          "goal_south_dislodged_07_1_4.png",
+          "goal_south_dislodged_07_1_5.png",
+          "goal_south_dislodged_07_1_6.png",
+          "goal_south_dislodged_07_1_7.png"
+        ],
+        [
+          "goal_south_dislodged_07_2_0.png",
+          "goal_south_dislodged_07_2_1.png",
+          "goal_south_dislodged_07_2_2.png",
+          "goal_south_dislodged_07_2_3.png",
+          "goal_south_dislodged_07_2_4.png",
+          "goal_south_dislodged_07_2_5.png",
+          "goal_south_dislodged_07_2_6.png",
+          "goal_south_dislodged_07_2_7.png"
+        ],
+        [
+          "goal_south_dislodged_07_3_0.png",
+          "goal_south_dislodged_07_3_1.png",
+          "goal_south_dislodged_07_3_2.png",
+          "goal_south_dislodged_07_3_3.png",
+          "goal_south_dislodged_07_3_4.png",
+          "goal_south_dislodged_07_3_5.png",
+          "goal_south_dislodged_07_3_6.png",
+          "goal_south_dislodged_07_3_7.png"
+        ],
+        [
+          "goal_south_dislodged_07_4_0.png",
+          "goal_south_dislodged_07_4_1.png",
+          "goal_south_dislodged_07_4_2.png",
+          "goal_south_dislodged_07_4_3.png",
+          "goal_south_dislodged_07_4_4.png",
+          "goal_south_dislodged_07_4_5.png",
+          "goal_south_dislodged_07_4_6.png",
+          "goal_south_dislodged_07_4_7.png"
+        ],
+        [
+          "goal_south_dislodged_07_5_0.png",
+          "goal_south_dislodged_07_5_1.png",
+          "goal_south_dislodged_07_5_2.png",
+          "goal_south_dislodged_07_5_3.png",
+          "goal_south_dislodged_07_5_4.png",
+          "goal_south_dislodged_07_5_5.png",
+          "goal_south_dislodged_07_5_6.png",
+          "goal_south_dislodged_07_5_7.png"
+        ]
+      ]
+    }
+  ],
+  "loop": false,
+  "holdFinalFrame": true,
+  "resetFrame": 0,
+  "previewOnly": [
+    "preview.png",
+    "animation.gif"
+  ]
+}

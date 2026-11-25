@@ -1,0 +1,71 @@
+{
+  "batch": "11.03",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    48,
+    32
+  ],
+  "orientation": "north",
+  "mouthFaces": "south",
+  "mouthAnchorLocal": [
+    24,
+    28
+  ],
+  "postAnchorsLocal": [
+    [
+      5,
+      28
+    ],
+    [
+      42,
+      28
+    ]
+  ],
+  "atlas": "goal_atlas.png",
+  "tiles": [
+    [
+      "goal_north_scored_0_0.png",
+      "goal_north_scored_0_1.png",
+      "goal_north_scored_0_2.png",
+      "goal_north_scored_0_3.png",
+      "goal_north_scored_0_4.png",
+      "goal_north_scored_0_5.png"
+    ],
+    [
+      "goal_north_scored_1_0.png",
+      "goal_north_scored_1_1.png",
+      "goal_north_scored_1_2.png",
+      "goal_north_scored_1_3.png",
+      "goal_north_scored_1_4.png",
+      "goal_north_scored_1_5.png"
+    ],
+    [
+      "goal_north_scored_2_0.png",
+      "goal_north_scored_2_1.png",
+      "goal_north_scored_2_2.png",
+      "goal_north_scored_2_3.png",
+      "goal_north_scored_2_4.png",
+      "goal_north_scored_2_5.png"
+    ],
+    [
+      "goal_north_scored_3_0.png",
+      "goal_north_scored_3_1.png",
+      "goal_north_scored_3_2.png",
+      "goal_north_scored_3_3.png",
+      "goal_north_scored_3_4.png",
+      "goal_north_scored_3_5.png"
+    ]
+  ],
+  "net": "goal_north_net.png",
+  "bottleLayer": "goal_north_bottle_layer.png",
+  "composite": "goal_north_scored_bottle.png",
+  "previewOnly": "preview.png",
+  "puckLayer": "goal_north_puck_layer.png",
+  "puckAnchorLocal": [
+    24,
+    22
+  ]
+}

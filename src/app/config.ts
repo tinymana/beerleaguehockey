@@ -1,7 +1,7 @@
 /** Gameplay grid. Resolution is an open creative decision (DECISIONS.md #9). */
 export const GAME_WIDTH = 480;
 export const GAME_HEIGHT = 320;
-export const VERSION = '0.2.1';
+export const VERSION = '0.2.2';
 
 export const SCENES = {
   boot: 'Boot',

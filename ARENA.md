@@ -72,15 +72,17 @@ Open it by pressing **L** on the title screen, or by loading the game with `#are
 - Asset browser: every registered asset at native size and enlarged, on a real checkerboard, with its facts.
 - Ingestion report: counts and every warning.
 
-## Status (v0.2.1)
+## Status (v0.2.2)
 
-Registered: 991 assets from 27 packages (batches 09.01 to 09.13 and 10.01 to 10.14). Errors: 0. Rejected: 0. Excluded: 27 preview images. The game loads 76 of the files: one per atlas and one per distinct whole image (single tiles and byte-identical duplicates are served from those).
+Registered: 3,157 assets from 37 packages (batches 09.01 to 09.13, 10.01 to 10.14 and 11.01 to 11.10). Errors: 0. Rejected: 0. Excluded: 37 preview images. The game loads 119 of the files: one per atlas or animation strip and one per distinct whole image (single tiles, single animation frames and byte-identical duplicates are served from those).
 
-In the standard arena now: ice, scratches, reflections, all markings, centre logo, straight boards on all four sides, glass panes and posts on the straight runs, four closed gates, and two sponsor panels. Glass damage states (cracked, shattered, missing) can be set per pane and are shown by the Lab's glass damage test.
+In the standard arena now: ice, scratches, reflections, all markings, centre logo, straight boards on all four sides, glass panes and posts on the straight runs, four closed gates, two sponsor panels, and the supplied north and south goals (provisional: see A13). Glass damage states (cracked, shattered, missing) can be set per pane and are shown by the Lab's glass damage test.
 
 Not usable as drawn (1 slot): the four corner boards. See A8.
 
-Missing (8 slots): curved corner glass, north and south goal nets, player benches, penalty boxes, stadium and seating, animated spectators, arena equipment.
+Goals (batch 11): each goal is one image placed by its manifest mouth anchor on the centre of the goal line. The far goal sorts at its goal line and the near goal at its back edge, so skaters pass in front of and behind them correctly. `setGoalState(end, state)` switches between rest, scored, ripple, knockoff and dislodged; animations are cut from the supplied strips with the manifest's frame sizes, offsets and timings (held in `config.ts`, checked against the manifests by a test). In play only the ripple is used, on the sim's goal event. Everything else is a Lab test.
+
+Missing (6 slots): curved corner glass, player benches, penalty boxes, stadium and seating, animated spectators, arena equipment.
 
 Arena configurations: Standard rink; Supplied art only (no stand-ins); Corner art fit test; Practice sheet.
 
@@ -99,4 +101,7 @@ Arena configurations: Standard rink; Supplied art only (no stand-ins); Corner ar
 | A9 | **Glass anchors.** The south glass and posts hang below the board cap as their manifest anchors say, and the side glass is a thin strip outside the boards | Placed exactly by the manifest | Review in the Lab; anchors are one number each to adjust |
 | A10 | **Gate positions are my proposal.** No benches or penalty boxes exist yet to say where doors go | Two closed gates per side, either side of centre ice | Confirm or move when batch 12 arrives |
 | A11 | **Sponsor panels.** Shown: Penalty Box Sports Bar (north) and Top Shelf Hockey (south), both approved town names, clipped by one pixel row to the 15 px board face. Not shown pending your say: Five Hole Nightclub, Ice Barn Arena, Puck Falls Auto Repair, Cold One Brewing (a new name), Sofa Kings Furniture (uses an unapproved team name). The "Penalty Box" lettering has a malformed L | Two panels placed | Approve names; fix the lettering in the art |
+| A13 | **Goals are larger than the gameplay net.** The supplied goal is 37 px between the posts and about 25 px deep on screen. The net the puck collides with is 24 px wide (6 ft at 4 px per foot) and 10 px deep on screen. The supplied crease matches the supplied goal, not the physics net | Art shown at native size on the goal line; physics untouched. A puck can pass through the outer 6 px of each side of the drawn goal, and through its back. Turn on Collision geometry in the Lab to see both | Recommended: approve widening the gameplay net to the art (about 36 px mouth, 9 ft), which also matches the oversized skaters and the supplied crease. This changes scoring feel, so it needs your approval. Alternative: redraw the goals with a 24 px mouth |
+| A14 | **The bottle on the net.** Every goal carries a green bottle on its crossbar, with knock-off animations | Shown as supplied. Nothing can knock it off in play | If knocking the bottle off should be a mechanic (a bonus, a taunt, a crowd reaction), tell me what it does; it is not designed anywhere yet |
+| A15 | **Dislodged goal and scored-puck art** | Lab tests only | A net that comes off its moorings would be a new rule (whistle? play on?). Needs design before it is built |
 | A12 | **Supplied boards and stand-in corners do not match** where they meet | Visible seam at each corner | Goes away with A8 |

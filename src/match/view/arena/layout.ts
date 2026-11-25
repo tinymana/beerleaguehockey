@@ -6,7 +6,7 @@
 import { goalLineY } from '../../sim/rink';
 import type { RinkGeometry } from '../../sim/rink';
 import { projectY } from '../projection';
-import type { ArenaConfig, BoardSide } from './config';
+import type { ArenaConfig, BoardSide, GoalArt, GoalEnd } from './config';
 import { TILE, visibleCentre } from './registry';
 import type { ArenaAsset } from './registry';
 
@@ -415,6 +415,67 @@ const BOARD_FACE = 15;
 const GLASS_CONTACT: Record<BoardSide, { x: number; y: number }> = { north: { x: 0, y: 14 }, south: { x: 0, y: 2 }, west: { x: 7, y: 0 }, east: { x: 1, y: 0 } };
 /** Local pixel of each post that sits on the board cap at a panel seam (batch 10.10 manifest). */
 const POST_ANCHOR: Record<BoardSide, { x: number; y: number }> = { north: { x: 4, y: 14 }, south: { x: 4, y: 1 }, west: { x: 7, y: 8 }, east: { x: 0, y: 8 } };
+
+export interface GoalPlacement {
+  end: GoalEnd;
+  art: GoalArt;
+  /** Top-left of the 48x32 goal module on screen. */
+  x: number;
+  y: number;
+  /** Depth for y-sorting against skaters and the puck. */
+  depth: number;
+}
+
+/**
+ * Where the supplied goals go: the manifest's mouth anchor on the centre of the goal line.
+ * The far (north) goal sorts at its goal line, so anyone in front of the line draws over it;
+ * the near (south) goal sorts at its back edge, so it covers players behind it.
+ */
+export function layoutGoals(rink: RinkGeometry, tilt: number, config: ArenaConfig, lookup: Lookup): GoalPlacement[] {
+  if (!config.goals) return [];
+  const result: GoalPlacement[] = [];
+  for (const end of ['north', 'south'] as const) {
+    const art = config.goals[end];
+    const asset = lookup(art.rest);
+    if (!asset) continue;
+    const lineY = screenY(rink, tilt, goalLineY(rink, end === 'north' ? 'top' : 'bottom'));
+    const y = lineY - art.mouth[1];
+    const back = asset.bbox ? y + asset.bbox[3] + 1 : y + asset.height;
+    result.push({ end, art, x: rink.centerX - art.mouth[0], y, depth: end === 'north' ? lineY : back });
+  }
+  return result;
+}
+
+export interface GoalFit {
+  end: GoalEnd;
+  /** Opening between the drawn posts, and the net the puck actually collides with, in pixels. */
+  artMouth: number;
+  physicsMouth: number;
+  /** How far the drawn goal and the physics net reach behind the goal line, on screen. */
+  artDepth: number;
+  physicsDepth: number;
+  /** Clear ice left between the back of the drawn goal and the end of the playing surface, on screen. */
+  clearBehind: number;
+}
+
+/** Size of the supplied goal art against the gameplay net. Reported, never corrected: physics is the source of truth. */
+export function goalFit(rink: RinkGeometry, tilt: number, config: ArenaConfig, lookup: Lookup): GoalFit[] {
+  return layoutGoals(rink, tilt, config, lookup).map((goal) => {
+    const asset = need(lookup, goal.art.rest);
+    const [, top, , bottom] = asset.bbox ?? [0, 0, asset.width - 1, asset.height - 1];
+    const artDepth = goal.end === 'north' ? goal.art.mouth[1] - top : bottom - goal.art.mouth[1];
+    const physicsDepth = Math.round(rink.netDepth * tilt);
+    const toBoards = Math.round(rink.goalLineInset * tilt);
+    return {
+      end: goal.end,
+      artMouth: goal.art.posts[1] - goal.art.posts[0],
+      physicsMouth: rink.netHalfWidth * 2,
+      artDepth,
+      physicsDepth,
+      clearBehind: toBoards - artDepth,
+    };
+  });
+}
 
 export interface GoalAlignment {
   end: 'north' | 'south';

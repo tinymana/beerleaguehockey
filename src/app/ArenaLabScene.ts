@@ -3,7 +3,7 @@ import { clamp } from '../core/math';
 import { RINK, goalLineY } from '../match/sim/rink';
 import { ArenaRenderer } from '../match/view/arena/ArenaRenderer';
 import { arenaConfig } from '../match/view/arena/config';
-import { ARENA_LAYERS, goalAlignment } from '../match/view/arena/layout';
+import { ARENA_LAYERS, goalAlignment, goalFit } from '../match/view/arena/layout';
 import type { ArenaLayerId } from '../match/view/arena/layout';
 import { REGISTRY_KEY, assetById } from '../match/view/arena/registry';
 import type { ArenaRegistry } from '../match/view/arena/registry';
@@ -94,6 +94,10 @@ export class ArenaLabScene extends Phaser.Scene {
           this.glassDamage = on;
           this.applyGlassDamage();
         },
+        setGoalState: (state) => {
+          this.arena.setGoalState('north', state);
+          this.arena.setGoalState('south', state);
+        },
         useInGame: (id) => {
           arenaChoice.id = id;
         },
@@ -140,6 +144,7 @@ export class ArenaLabScene extends Phaser.Scene {
     const lookup = (id: string) => assetById(this.arenaRegistry, id);
     const mirrored = this.arenaRegistry.issues.some((i) => i.message === 'North and south creases are exact vertical mirrors');
     this.panel.setAlignment(goalAlignment(RINK, tuning.cameraTilt, this.arena.layout, lookup), mirrored);
+    this.panel.setGoalFit(goalFit(RINK, tuning.cameraTilt, this.arena.config, lookup));
     this.drawGuides();
   }
 

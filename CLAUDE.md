@@ -9,7 +9,7 @@ Read this first. It lets a new session resume without losing creative direction 
 
 ## Current state
 
-- **Authorized:** Milestone 0, the initial skating prototype, and the modular arena asset integration. Delivered through v0.2.1.
+- **Authorized:** Milestone 0, the initial skating prototype, and the modular arena asset integration. Delivered through v0.2.2.
 - **Waiting on:** the creative director's review of the playable checkpoint. Do not start Milestone 1 until approved.
 - **Not started and not authorized:** dynasty, lifestyle, league economy, characters, franchises, prestige, careers, tournaments, multiplayer.
 

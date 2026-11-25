@@ -11,10 +11,10 @@ import type { RinkGeometry } from '../../sim/rink';
 import { goalLineY, netBox } from '../../sim/rink';
 import { projectY, worldScreenHeight } from '../projection';
 import { TEX, buildTemporaryTextures, netLayout, netScreenAnchor } from '../textures';
-import type { ArenaConfig, BoardSide, GlassState } from './config';
+import type { ArenaConfig, BoardSide, GlassState, GoalEnd, GoalState, GoalStrip } from './config';
 import { IceWear, trafficPrior } from './iceWear';
-import { ARENA_LAYERS, faceoffSpots, iceOutline, layerDepth, layoutArena } from './layout';
-import type { ArenaLayerId, ArenaLayout } from './layout';
+import { ARENA_LAYERS, faceoffSpots, iceOutline, layerDepth, layoutArena, layoutGoals } from './layout';
+import type { ArenaLayerId, ArenaLayout, GoalPlacement } from './layout';
 import { TILE, assetById, assetUrl, loadableAssets, textureKey } from './registry';
 import type { ArenaRegistry } from './registry';
 
@@ -52,6 +52,7 @@ export class ArenaRenderer {
   private readonly iceMask: Phaser.Display.Masks.GeometryMask;
   private readonly maskShape: Phaser.GameObjects.Graphics;
   private readonly maps: Phaser.Tilemaps.Tilemap[] = [];
+  private readonly goals = new Map<GoalEnd, { image: Phaser.GameObjects.Image; place: GoalPlacement; state: GoalState; timer: Phaser.Time.TimerEvent | null }>();
   private readonly glassPanels = new Map<string, { image: Phaser.GameObjects.Image; side: BoardSide; cropW: number; cropH: number }>();
 
   /** Queue every registry texture on a scene's loader. Call from preload. */
@@ -209,7 +210,19 @@ export class ArenaRenderer {
   }
 
   private buildNets(): void {
+    const placed = layoutGoals(this.rink, this.tilt, this.config, (id) => assetById(this.registry, id));
+    for (const place of placed) {
+      const { art } = place;
+      // A goal is drawn only when every one of its states is present, so a state change can never blank it.
+      const ids = [art.rest, art.scored, art.ripple.atlas, art.knockoff.atlas, art.dislodged.atlas];
+      if (!ids.map((id) => this.has(id)).every(Boolean)) continue;
+      const image = this.scene.add.image(place.x, place.y, this.key(art.rest), WHOLE).setOrigin(0, 0);
+      this.add(image, 'nets', false, place.depth);
+      this.goals.set(place.end, { image, place, state: 'rest', timer: null });
+    }
+    // Stand-in nets, sized to the physics net, wherever a supplied goal is not drawn.
     for (const end of ['top', 'bottom'] as const) {
+      if (this.goals.has(end === 'top' ? 'north' : 'south')) continue;
       const anchor = netScreenAnchor(this.rink, end, this.tilt);
       const layout = netLayout(this.rink, end, this.tilt);
       const top = anchor.y - layout.goalLineRow;
@@ -219,7 +232,52 @@ export class ArenaRenderer {
     }
   }
 
+  /** Frame name for one cell of an animation strip, cut on first use. */
+  private stripFrame(strip: GoalStrip, index: number): string {
+    const texture = this.scene.textures.get(this.key(strip.atlas));
+    const name = `strip-${strip.frameWidth}x${strip.frameHeight}-${index}`;
+    if (!texture.has(name)) texture.add(name, 0, index * strip.frameWidth, 0, strip.frameWidth, strip.frameHeight);
+    return name;
+  }
+
   // ---- runtime controls ---------------------------------------------------
+
+  /** True when the supplied goal art (not a stand-in) is drawn at this end. */
+  hasGoalArt(end: GoalEnd): boolean {
+    return this.goals.has(end);
+  }
+
+  goalState(end: GoalEnd): GoalState | null {
+    return this.goals.get(end)?.state ?? null;
+  }
+
+  /**
+   * Show one of the supplied goal states. Purely visual: scoring and collision do not change.
+   * `ripple` plays once and returns to rest; `knockoff` and `dislodged` play once and hold their last frame.
+   */
+  setGoalState(end: GoalEnd, state: GoalState): void {
+    const goal = this.goals.get(end);
+    if (!goal) return;
+    goal.timer?.remove();
+    goal.timer = null;
+    goal.state = state;
+    const { art, x, y } = goal.place;
+    if (state === 'rest' || state === 'scored') {
+      goal.image.setTexture(this.key(state === 'rest' ? art.rest : art.scored), WHOLE).setPosition(x, y);
+      return;
+    }
+    const strip = art[state];
+    const show = (index: number): void => {
+      goal.image.setTexture(this.key(strip.atlas), this.stripFrame(strip, index)).setPosition(x - strip.offset[0], y - strip.offset[1]);
+      const last = index === strip.durations.length - 1;
+      if (last && strip.hold) return;
+      goal.timer = this.scene.time.delayedCall(strip.durations[index] ?? 0, () => {
+        if (last) this.setGoalState(end, 'rest');
+        else show(index + 1);
+      });
+    };
+    show(0);
+  }
 
   private apply(): void {
     for (const item of this.items) {
@@ -410,6 +468,8 @@ export class ArenaRenderer {
     this.logo = null;
     this.centerDot = null;
     this.scratchLayer = null;
+    for (const goal of this.goals.values()) goal.timer?.remove();
+    this.goals.clear();
     this.glassPanels.clear();
   }
 }

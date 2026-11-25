@@ -2,6 +2,25 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.2.2 - 2026-11-25 - Goal nets
+
+Ten more packages (batches 11.01 to 11.10) ingested: 3,157 assets from 37 packages, 0 errors. No gameplay physics changed: the net the puck collides with and the scoring test are exactly as before.
+
+### Added
+- Supplied north and south goals replace the stand-in nets, placed by their manifest mouth anchors on the goal lines and depth-sorted against the skater.
+- Net ripple plays once on the scored net when the sim reports a goal. Visual only.
+- Arena Asset Lab: goal state buttons (rest, scored, net ripple, bottle off, dislodged) and a goal fit readout comparing the drawn goal with the physics net.
+- Ingest: animation batches. Single frame files are checked against their strip and filed as `frame` (not loaded separately); per-tile notes are summarised per batch; a `previewOnly` entry may be a single name.
+
+### Changed
+- The practice sheet arena keeps the stand-in nets, which are drawn at the size of the physics net, for comparison.
+
+### Known issues
+- The supplied goals are larger than the gameplay net: 37 px between the posts against a 24 px physics mouth, and about 25 px deep against 10 px. A puck can pass through the drawn posts' outer edges and net. Needs a ruling: `ARENA.md` A13.
+- Scored, bottle knock-off and dislodged goal art is shown only in the Lab. No bottle or dislodged-net mechanic exists or is authorized.
+- The registry is now 1.2 MB of JSON (3,157 entries), loaded once at start.
+- Curved corner glass, benches, penalty boxes, stands, spectators and equipment are still missing.
+
 ## 0.2.1 - 2026-11-25 - Boards, glass, gates and sponsor panels
 
 Thirteen more packages (batches 10.02 to 10.14) dropped into `art/packages/` and ingested with the same pipeline: 991 assets from 27 packages, 0 errors.

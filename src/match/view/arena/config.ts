@@ -9,6 +9,35 @@
  */
 export type BoardSide = 'north' | 'south' | 'west' | 'east';
 export type GlassState = 'intact' | 'cracked' | 'shattered' | 'missing';
+export type GoalEnd = 'north' | 'south';
+/** `rest` is the normal goal. The others are supplied visual states; none of them changes scoring or collision. */
+export type GoalState = 'rest' | 'scored' | 'ripple' | 'knockoff' | 'dislodged';
+
+/** A one-shot animation supplied as a horizontal strip of equal frames. */
+export interface GoalStrip {
+  atlas: string;
+  frameWidth: number;
+  frameHeight: number;
+  /** Where the 48x32 goal module sits inside each frame (from the batch manifest). */
+  offset: readonly [number, number];
+  /** Milliseconds per frame. The strip has as many frames as this has entries. */
+  durations: readonly number[];
+  /** True when the animation stays on its last frame instead of returning to rest. */
+  hold: boolean;
+}
+
+/** One goal: every number here is copied from the batch manifests, and a test checks they still agree. */
+export interface GoalArt {
+  rest: string;
+  /** The module's local pixel that sits on the centre of the goal line. */
+  mouth: readonly [number, number];
+  /** Local x of the two post anchors. */
+  posts: readonly [number, number];
+  scored: string;
+  ripple: GoalStrip;
+  knockoff: GoalStrip;
+  dislodged: GoalStrip;
+}
 
 export interface ScaledAsset {
   asset: string;
@@ -49,6 +78,8 @@ export interface ArenaConfig {
   glass: { panels: Record<BoardSide, string>; posts: Record<BoardSide, string>; damageBatch: string } | null;
   /** Gates replace one side-board module each. `at` is a gameplay y position along the boards. */
   gates: { side: 'west' | 'east'; at: number; state: 'closed' | 'open' }[];
+  /** Supplied goal nets. Null keeps the code-drawn stand-in nets, which are the size of the physics net. */
+  goals: Record<GoalEnd, GoalArt> | null;
   /** Sponsor panels on the end boards. `x` is a gameplay x position for the panel's centre. */
   boardAds: { asset: string; side: 'north' | 'south'; x: number }[];
   // Extension points: carried, not yet drawn.
@@ -58,6 +89,31 @@ export interface ArenaConfig {
   divisionTier: number | null;
   prestigeTier: number | null;
 }
+
+const RIPPLE_MS = [65, 65, 65, 65, 65, 65, 65, 65];
+const KNOCKOFF_MS = [80, 80, 80, 80, 80, 80, 80, 160];
+const DISLODGED_MS = [60, 60, 60, 70, 80, 90, 100, 100];
+
+const GOALS: Record<GoalEnd, GoalArt> = {
+  north: {
+    rest: '11.01/goal_north_empty_bottle',
+    mouth: [24, 28],
+    posts: [5, 42],
+    scored: '11.03/goal_north_scored_bottle',
+    ripple: { atlas: '11.07/goal_atlas', frameWidth: 48, frameHeight: 32, offset: [0, 0], durations: RIPPLE_MS, hold: false },
+    knockoff: { atlas: '11.05/goal_atlas', frameWidth: 64, frameHeight: 48, offset: [8, 16], durations: KNOCKOFF_MS, hold: true },
+    dislodged: { atlas: '11.09/goal_atlas', frameWidth: 64, frameHeight: 48, offset: [8, 8], durations: DISLODGED_MS, hold: true },
+  },
+  south: {
+    rest: '11.02/goal_south_empty_bottle',
+    mouth: [24, 3],
+    posts: [5, 42],
+    scored: '11.04/goal_south_scored_bottle',
+    ripple: { atlas: '11.08/goal_atlas', frameWidth: 48, frameHeight: 32, offset: [0, 0], durations: RIPPLE_MS, hold: false },
+    knockoff: { atlas: '11.06/goal_atlas', frameWidth: 64, frameHeight: 48, offset: [8, 0], durations: KNOCKOFF_MS, hold: true },
+    dislodged: { atlas: '11.10/goal_atlas', frameWidth: 64, frameHeight: 48, offset: [8, 8], durations: DISLODGED_MS, hold: true },
+  },
+};
 
 const STANDARD: ArenaConfig = {
   id: 'standard',
@@ -101,6 +157,8 @@ const STANDARD: ArenaConfig = {
     { side: 'east', at: 376, state: 'closed' },
     { side: 'east', at: 504, state: 'closed' },
   ],
+  // Supplied goals at native size. They are larger than the physics net: see goalFit() and ARENA.md A13.
+  goals: GOALS,
   // Both names are approved Puck Falls locations.
   boardAds: [
     { asset: '10.13/ad_penalty_box', side: 'north', x: 240 },
@@ -119,7 +177,7 @@ export const ARENA_CONFIGS: readonly ArenaConfig[] = [
     ...STANDARD,
     id: 'supplied-only',
     name: 'Supplied art only',
-    description: 'Exactly what has been delivered and fits. No stand-ins, so the corners, nets and stands show as gaps.',
+    description: 'Exactly what has been delivered and fits. No stand-ins, so the corners and stands show as gaps.',
     standIns: false,
   },
   {
@@ -134,7 +192,8 @@ export const ARENA_CONFIGS: readonly ArenaConfig[] = [
     ...STANDARD,
     id: 'practice-sheet',
     name: 'Practice sheet',
-    description: 'A plainer rink from the same parts: no logo, no light pools, faded blue lines, worn goal lines.',
+    description: 'A plainer rink from the same parts: no logo, no light pools, faded blue lines, worn goal lines, and the stand-in nets (the size of the physics net) for comparison.',
+    goals: null,
     reflections: { ...STANDARD.reflections, enabled: false },
     blueLine: { ...STANDARD.blueLine, tile: 3 },
     goalLine: { ...STANDARD.goalLine, tile: 2 },

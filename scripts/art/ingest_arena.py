@@ -147,8 +147,19 @@ def main():
                     for key, value in node.items():
                         collect(value, inside_tiles or key == 'tiles')
 
-            for key in ('assets', 'entries'):
+            for key in ('assets', 'entries', 'frames'):
                 collect(manifest.get(key))
+            # Animation frames: whole-frame files that are also cells of one of the batch's strips.
+            # 'file' sits in the goal atlas; 'net' and 'bottle' layers sit in their own strips.
+            frame_entries = {}
+            strip_for = {'file': manifest.get('atlas'), 'net': manifest.get('netAtlas'),
+                         'bottle': manifest.get('bottleAtlas'), 'bottleLayer': manifest.get('bottleAtlas')}
+            for frame in manifest.get('frames') or []:
+                if not isinstance(frame, dict) or not isinstance(frame.get('atlasRect'), list):
+                    continue
+                for key, strip in strip_for.items():
+                    if strip and isinstance(frame.get(key), str):
+                        frame_entries[os.path.basename(frame[key])] = (os.path.basename(strip), frame['atlasRect'][0], frame['atlasRect'][1])
             loose_tiles -= set(tile_entries)
             atlas_name = os.path.basename(manifest['atlas']) if manifest.get('atlas') else None
             composites = set()
@@ -158,10 +169,12 @@ def main():
             for value in (manifest.get('layers') or {}).values():
                 if isinstance(value, str) and value.endswith('.png'):
                     composites.add(os.path.basename(value))
-            declared = set(tile_entries) | loose_tiles | composites | ({atlas_name} if atlas_name else set())
-            preview_only = {os.path.basename(p) for p in manifest.get('previewOnly', [])}
+            declared = set(tile_entries) | loose_tiles | composites | set(frame_entries) | ({atlas_name} if atlas_name else set())
+            listed_previews = manifest.get('previewOnly') or []
+            preview_only = {os.path.basename(p) for p in ([listed_previews] if isinstance(listed_previews, str) else listed_previews)}
 
             batch_assets = []
+            empty_pieces = repeated_pieces = 0
             pngs = [n for n in names if n.lower().endswith('.png')]
             present = {os.path.basename(n) for n in pngs}
             for missing in sorted(declared - present):
@@ -183,7 +196,7 @@ def main():
                 height, width = arr.shape[:2]
                 asset_id = f'{batch}/{base[:-4]}'
                 role = ('atlas' if base == atlas_name else 'tile' if base in tile_entries or base in loose_tiles
-                        else 'composite' if base in composites else 'module')
+                        else 'frame' if base in frame_entries else 'composite' if base in composites else 'module')
                 ok = True
                 if width % TILE or height % TILE:
                     issue('error', f'{base}: {width}x{height} is not a multiple of {TILE}; rejected', batch, asset_id)
@@ -202,8 +215,12 @@ def main():
                 alpha = arr[..., 3]
                 ys, xs = np.nonzero(alpha > 0)
                 bbox = [int(xs.min()), int(ys.min()), int(xs.max()), int(ys.max())] if len(xs) else None
+                piece = role in ('tile', 'frame')  # pieces of a larger image: summarised per batch, not one note each
                 if bbox is None:
-                    issue('info', f'{base}: fully transparent (an intentionally empty tile)', batch, asset_id)
+                    if piece:
+                        empty_pieces += 1
+                    else:
+                        issue('info', f'{base}: fully transparent (an intentionally empty tile)', batch, asset_id)
                 digest = pixel_hash(arr)
                 rel = f'{category}/{batch}/{base}'
                 os.makedirs(os.path.dirname(os.path.join(OUT, rel)), exist_ok=True)
@@ -229,7 +246,10 @@ def main():
                     entry['rows'] = height // TILE
                 if digest in seen_hash and bbox is not None:
                     entry['duplicateOf'] = seen_hash[digest]
-                    issue('info', f'{base}: identical pixels to {seen_hash[digest]}', batch, asset_id)
+                    if piece:
+                        repeated_pieces += 1
+                    else:
+                        issue('info', f'{base}: identical pixels to {seen_hash[digest]}', batch, asset_id)
                 else:
                     seen_hash.setdefault(digest, asset_id)
                 if base in seen_name and seen_name[base][1] != digest:
@@ -260,6 +280,24 @@ def main():
                             break
             elif tile_entries:
                 issue('warn', 'Tiles supplied without an atlas', batch)
+
+            # Each animation frame must match its cell in the strip it is drawn from.
+            by_name = {e['name']: (e, a) for e, a in batch_assets}
+            for frame, frame_arr in ((e, a) for e, a in batch_assets if e['role'] == 'frame'):
+                strip_name, fx, fy = frame_entries[frame['name']]
+                strip = by_name.get(strip_name)
+                h, w = frame_arr.shape[:2]
+                if not strip:
+                    issue('error', f'{frame["name"]}: its strip {strip_name} is missing', batch, frame['id'])
+                elif fy + h > strip[1].shape[0] or fx + w > strip[1].shape[1] or not (strip[1][fy:fy + h, fx:fx + w] == frame_arr).all():
+                    issue('warn', f'{frame["name"]}: differs from {strip_name} at {fx},{fy}', batch, frame['id'])
+                else:
+                    frame['atlas'] = strip[0]['id']
+                    frame['atlasX'], frame['atlasY'] = fx, fy
+
+            if empty_pieces or repeated_pieces:
+                issue('info', f'{repeated_pieces} tile or frame files repeat pixels found elsewhere and {empty_pieces} are intentionally empty; '
+                              'each is marked in its registry entry', batch)
 
             batches[batch] = {
                 'package': package,

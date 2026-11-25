@@ -4,7 +4,7 @@ import { describe, expect, it } from 'vitest';
 import { RINK, goalLineY } from '../src/match/sim/rink';
 import { ARENA_CONFIGS, arenaConfig } from '../src/match/view/arena/config';
 import { IceWear, trafficPrior } from '../src/match/view/arena/iceWear';
-import { ARENA_LAYERS, faceoffSpots, goalAlignment, iceGrid, iceOutline, layoutArena, screenY } from '../src/match/view/arena/layout';
+import { ARENA_LAYERS, faceoffSpots, goalAlignment, goalFit, iceGrid, iceOutline, layoutArena, layoutGoals, screenY } from '../src/match/view/arena/layout';
 import { TILE, assetById, loadableAssets } from '../src/match/view/arena/registry';
 import type { ArenaRegistry } from '../src/match/view/arena/registry';
 import { projectY } from '../src/match/view/projection';
@@ -26,10 +26,11 @@ describe('arena asset registry', () => {
     const expected = [
       ...Array.from({ length: 13 }, (_, i) => `09.${String(i + 1).padStart(2, '0')}`),
       ...Array.from({ length: 14 }, (_, i) => `10.${String(i + 1).padStart(2, '0')}`),
+      ...Array.from({ length: 10 }, (_, i) => `11.${String(i + 1).padStart(2, '0')}`),
     ];
     expect(Object.keys(registry.batches).sort()).toEqual(expected);
     expect(registry.issues.filter((i) => i.level === 'error')).toEqual([]);
-    expect(registry.assets.length).toBe(991);
+    expect(registry.assets.length).toBe(3157);
   });
 
   it('points only at files that exist, with the recorded pixel size, on the 8-pixel grid', () => {
@@ -56,22 +57,25 @@ describe('arena asset registry', () => {
 
   it('reports what has arrived and what is still missing', () => {
     const status = Object.fromEntries(registry.slots.map((s) => [s.id, s.status]));
-    for (const id of ['ice.base', 'ice.scratches', 'markings.creaseNorth', 'logo.center', 'boards.west', 'boards.east', 'boards.north', 'boards.south', 'glass', 'glass.posts', 'glass.damage', 'boards.gates', 'boards.ads']) {
+    for (const id of ['ice.base', 'ice.scratches', 'markings.creaseNorth', 'logo.center', 'boards.west', 'boards.east', 'boards.north', 'boards.south', 'glass', 'glass.posts', 'glass.damage', 'boards.gates', 'boards.ads', 'goals.scored', 'goals.ripple', 'goals.knockoff', 'goals.dislodged']) {
       expect(status[id], id).toBe('supplied');
     }
     expect(status['boards.corners']).toBe('unfit');
-    for (const id of ['glass.corners', 'goals.north', 'goals.south', 'benches', 'penaltyBox', 'stadium', 'spectators', 'equipment']) {
+    // Goal art has arrived but is larger than the physics net, so it stays provisional until that is ruled on.
+    expect(status['goals.north']).toBe('provisional');
+    expect(status['goals.south']).toBe('provisional');
+    for (const id of ['glass.corners', 'benches', 'penaltyBox', 'stadium', 'spectators', 'equipment']) {
       expect(status[id], id).toBe('missing');
     }
   });
 
-  it('loads atlases and whole images once each, not the 876 single tiles or duplicate files', () => {
+  it('loads atlases and whole images once each, not single tiles, single animation frames or duplicate files', () => {
     const load = loadableAssets(registry);
-    expect(load.some((a) => a.role === 'tile')).toBe(false);
+    expect(load.some((a) => a.role === 'tile' || a.role === 'frame')).toBe(false);
     expect(load.some((a) => a.duplicateOf)).toBe(false);
-    expect(load.length).toBeLessThan(100);
+    expect(load.length).toBeLessThan(125);
     // Every duplicate points at a file that is loaded.
-    for (const a of registry.assets.filter((x) => x.duplicateOf && x.role !== 'tile')) {
+    for (const a of registry.assets.filter((x) => x.duplicateOf && x.role !== 'tile' && x.role !== 'frame')) {
       expect(load.some((l) => l.id === a.duplicateOf), a.id).toBe(true);
     }
   });
@@ -79,6 +83,9 @@ describe('arena asset registry', () => {
   it('every arena configuration asks only for assets that exist', () => {
     for (const config of ARENA_CONFIGS) {
       expect(() => layoutArena(RINK, TILT, config, lookup), config.id).not.toThrow();
+      for (const art of Object.values(config.goals ?? {})) {
+        for (const id of [art.rest, art.scored, art.ripple.atlas, art.knockoff.atlas, art.dislodged.atlas]) expect(lookup(id), id).toBeDefined();
+      }
     }
   });
 });
@@ -248,6 +255,86 @@ describe('arena layout', () => {
     // The supplied corner turns in 37 px; the rink's real corner needs 112.
     expect(test.extents.x0 - RINK.left).toBe(37);
     expect(RINK.cornerRadius).toBe(112);
+  });
+});
+
+describe('goal nets', () => {
+  const standard = arenaConfig('standard');
+  const manifest = (batch: string) => JSON.parse(readFileSync(join(ARENA_DIR, 'manifests', `${batch}.manifest.json`), 'utf8')) as Record<string, unknown> & { frames?: { durationMs: number; atlasRect: number[] }[] };
+
+  it('uses the anchors, frame sizes and timings written in the batch manifests', () => {
+    const goals = standard.goals;
+    if (!goals) throw new Error('standard arena has no goals');
+    for (const [end, rest, ripple, knockoff, dislodged] of [
+      ['north', '11.01', '11.07', '11.05', '11.09'],
+      ['south', '11.02', '11.08', '11.06', '11.10'],
+    ] as const) {
+      const art = goals[end];
+      const base = manifest(rest);
+      expect(base.mouthAnchorLocal, end).toEqual([...art.mouth]);
+      expect((base.postAnchorsLocal as number[][]).map((p) => p[0]), end).toEqual([...art.posts]);
+      expect(art.rest.endsWith(String(base.composite).replace('.png', ''))).toBe(true);
+      for (const [strip, batch, offsetKey] of [
+        [art.ripple, ripple, null],
+        [art.knockoff, knockoff, 'goalOffset'],
+        [art.dislodged, dislodged, 'sourceOffset'],
+      ] as const) {
+        const m = manifest(batch);
+        const frames = m.frames ?? [];
+        expect(strip.atlas).toBe(`${batch}/goal_atlas`);
+        expect(frames.map((f) => f.durationMs), batch).toEqual([...strip.durations]);
+        frames.forEach((f, i) => expect(f.atlasRect, `${batch} frame ${i}`).toEqual([i * strip.frameWidth, 0, strip.frameWidth, strip.frameHeight]));
+        expect(offsetKey ? m[offsetKey] : [0, 0], batch).toEqual([...strip.offset]);
+        const atlas = lookup(strip.atlas);
+        expect([atlas?.width, atlas?.height], batch).toEqual([strip.frameWidth * strip.durations.length, strip.frameHeight]);
+      }
+    }
+  });
+
+  it('puts each mouth anchor on the centre of its goal line, mirrored north to south', () => {
+    for (const tilt of [0.6, 0.74, 0.9, 1]) {
+      const [north, south] = layoutGoals(RINK, tilt, standard, lookup);
+      if (!north || !south) throw new Error('goals not placed');
+      const centre = screenY(RINK, tilt, RINK.centerY);
+      expect(north.x + north.art.mouth[0]).toBe(RINK.centerX);
+      expect(south.x + south.art.mouth[0]).toBe(RINK.centerX);
+      expect(north.y + north.art.mouth[1]).toBe(screenY(RINK, tilt, goalLineY(RINK, 'top')));
+      expect(south.y + south.art.mouth[1]).toBe(screenY(RINK, tilt, goalLineY(RINK, 'bottom')));
+      expect(centre - (north.y + north.art.mouth[1])).toBe(south.y + south.art.mouth[1] - centre);
+    }
+  });
+
+  it('sorts the far goal at its goal line and the near goal at its back edge', () => {
+    const [north, south] = layoutGoals(RINK, TILT, standard, lookup);
+    expect(north?.depth).toBe(screenY(RINK, TILT, goalLineY(RINK, 'top')));
+    expect(south?.depth).toBeGreaterThan(screenY(RINK, TILT, goalLineY(RINK, 'bottom')) + 20);
+  });
+
+  it('reports that the supplied goals are larger than the physics net, and still sit on the ice', () => {
+    const fit = goalFit(RINK, TILT, standard, lookup);
+    expect(fit.length).toBe(2);
+    for (const f of fit) {
+      expect(f.physicsMouth).toBe(24);
+      expect(f.artMouth).toBe(37);
+      expect(f.artDepth).toBeGreaterThan(f.physicsDepth);
+      expect(f.clearBehind).toBeGreaterThan(0);
+    }
+    // The gameplay net is untouched by the art.
+    expect([RINK.netHalfWidth, RINK.netDepth, RINK.goalLineInset]).toEqual([12, 14, 44]);
+  });
+
+  it('keeps stand-in nets on the practice sheet, where no goal art is asked for', () => {
+    expect(layoutGoals(RINK, TILT, arenaConfig('practice-sheet'), lookup)).toEqual([]);
+  });
+
+  it('files every single animation frame against a strip that holds the same pixels', () => {
+    const frames = registry.assets.filter((a) => a.role === 'frame');
+    expect(frames.length).toBe(112);
+    for (const f of frames) {
+      const strip = lookup(f.atlas ?? '');
+      expect(strip, f.id).toBeDefined();
+      expect(f.atlasX, f.id).toBeDefined();
+    }
   });
 });
 

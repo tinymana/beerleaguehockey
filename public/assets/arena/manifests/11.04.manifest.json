@@ -1,0 +1,75 @@
+{
+  "batch": "11.04",
+  "tileSize": [
+    8,
+    8
+  ],
+  "moduleSize": [
+    48,
+    32
+  ],
+  "orientation": "south",
+  "mouthFaces": "north",
+  "mouthAnchorLocal": [
+    24,
+    3
+  ],
+  "postAnchorsLocal": [
+    [
+      5,
+      3
+    ],
+    [
+      42,
+      3
+    ]
+  ],
+  "atlas": "goal_atlas.png",
+  "tiles": [
+    [
+      "goal_south_scored_0_0.png",
+      "goal_south_scored_0_1.png",
+      "goal_south_scored_0_2.png",
+      "goal_south_scored_0_3.png",
+      "goal_south_scored_0_4.png",
+      "goal_south_scored_0_5.png"
+    ],
+    [
+      "goal_south_scored_1_0.png",
+      "goal_south_scored_1_1.png",
+      "goal_south_scored_1_2.png",
+      "goal_south_scored_1_3.png",
+      "goal_south_scored_1_4.png",
+      "goal_south_scored_1_5.png"
+    ],
+    [
+      "goal_south_scored_2_0.png",
+      "goal_south_scored_2_1.png",
+      "goal_south_scored_2_2.png",
+      "goal_south_scored_2_3.png",
+      "goal_south_scored_2_4.png",
+      "goal_south_scored_2_5.png"
+    ],
+    [
+      "goal_south_scored_3_0.png",
+      "goal_south_scored_3_1.png",
+      "goal_south_scored_3_2.png",
+      "goal_south_scored_3_3.png",
+      "goal_south_scored_3_4.png",
+      "goal_south_scored_3_5.png"
+    ]
+  ],
+  "net": "goal_south_net.png",
+  "bottleLayer": "goal_south_bottle_layer.png",
+  "composite": "goal_south_scored_bottle.png",
+  "previewOnly": "preview.png",
+  "bottleAnchorLocal": [
+    24,
+    18
+  ],
+  "puckLayer": "goal_south_puck_layer.png",
+  "puckAnchorLocal": [
+    24,
+    9
+  ]
+}

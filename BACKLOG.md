@@ -71,3 +71,7 @@ The first build you will see after approval is Milestone 0 plus a skating protot
 - No sound
 - Analog stick is quantized to eight directions by design; revisit if it feels stiff on a pad
 - Promote more `FEEL` constants (wind-up time, pickup cooldown, stick reach) into the tuning panel if needed
+
+## Goal bottle and dislodged nets (raised by art batch 11)
+
+Batch 11 supplies a bottle on each crossbar with a knock-off animation, and a dislodged-goal animation. Possible homes: the bottle as a skill shot or taunt in the arcade layer (Milestone 2 or later); a dislodged net as a stoppage once referees and whistles exist. Proposed home only. Not designed, not authorized.
