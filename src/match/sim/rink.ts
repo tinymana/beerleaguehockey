@@ -47,15 +47,16 @@ export interface RinkGeometry {
 }
 
 /**
- * Goal dimensions (Decision 76). The production baseline is a 48 px goal mouth, chosen by the creative director
- * against the current skater sprites; 40 is kept as a test value. Everything else follows from the mouth width,
- * so the picture, the collision box and the scoring test can never disagree. All of it is data.
+ * Goal dimensions. The creative director first approved a 48 px mouth against 48 px skaters (Decision 76), then,
+ * after seeing both side by side, chose the smaller scale (Decision 80): a **32 px player and a 32 px goal mouth**,
+ * the same proportion with more ice around the play. Everything else follows from the mouth width, so the picture,
+ * the collision box and the scoring test can never disagree. All of it is data. Not locked until play-tested.
  */
 export const GOAL_CONFIG = {
   /** Clear opening between the posts, in world pixels. */
-  mouthWidth: 48,
-  /** Values offered for testing. */
-  testWidths: [40, 48] as const,
+  mouthWidth: 32,
+  /** Values kept for testing. */
+  testWidths: [32, 40, 48] as const,
   postWidth: 2,
   /** Depth behind the goal line as a share of the mouth (a real net is 44 in deep and 72 in wide). */
   depthRatio: 7 / 12,
@@ -65,6 +66,12 @@ export const GOAL_CONFIG = {
   /** Ice kept between the back of the net and the end boards, so play behind the net survives a bigger net. */
   clearanceBehind: 30,
 };
+
+/**
+ * Everything on the ice that was sized for the 48 px player (the skater, his stick, the goalie, how high a shot
+ * climbs) is scaled by this, so the proportions that were play-tested at 48 carry over to the smaller scale.
+ */
+export const PLAY_SCALE = GOAL_CONFIG.mouthWidth / 48;
 
 export interface GoalDimensions {
   mouthWidth: number;

@@ -3,6 +3,7 @@ import { GAME_HEIGHT, GAME_WIDTH, SCENES, UI } from './config';
 import { Edge, readPad } from './padInput';
 import { addText, fontText } from './pixelFont';
 import { GOALIE } from '../match/sim/goalie';
+import { PLAY_SCALE } from '../match/sim/rink';
 import { arenaChoice, tuning, tuningPanel } from './session';
 import { setTitleArtVisible } from './stage';
 import { directionIndex8, lerp } from '../core/math';
@@ -85,7 +86,10 @@ export class SkatingScene extends Phaser.Scene {
     this.puck = this.add.image(0, 0, TEX.puck);
     this.skater = this.add
       .image(0, 0, SKATER_SHEET.key, 0)
-      .setOrigin(SKATER_SHEET.feet.x / SKATER_SHEET.cell, SKATER_SHEET.feet.y / SKATER_SHEET.cell);
+      .setOrigin(SKATER_SHEET.feet.x / SKATER_SHEET.cell, SKATER_SHEET.feet.y / SKATER_SHEET.cell)
+      // Decision 80: the player is 32 px. Until the skater is redrawn at that size, the 48 px art is shown shrunk by
+      // the display (temporary and rough: this is the one place art is not shown at a whole-number scale).
+      .setScale(PLAY_SCALE);
 
     this.cameras.main.setBounds(0, 0, rink.worldWidth, this.worldHeight);
     this.camY = projectY(this.sim.skater.y, this.tilt);
@@ -97,7 +101,7 @@ export class SkatingScene extends Phaser.Scene {
     hud.fillRect(0, 0, GAME_WIDTH, 12);
     hud.fillRect(0, GAME_HEIGHT - 12, GAME_WIDTH, 12);
     this.fixed(addText(this, 4, 3, 'Skating prototype', UI.gold));
-    this.fixed(addText(this, GAME_WIDTH / 2, 3, 'Temp art - style test', UI.dim).setOrigin(0.5, 0));
+    this.fixed(addText(this, GAME_WIDTH / 2, 3, 'Temp art - 32 px scale test', UI.dim).setOrigin(0.5, 0));
     this.hudGoals = this.fixed(addText(this, GAME_WIDTH - 4, 3, 'Goals 0', UI.white).setOrigin(1, 0));
     this.hudSpeed = this.fixed(addText(this, 4, GAME_HEIGHT - 9, '', UI.ice));
     this.hudLast = this.fixed(addText(this, GAME_WIDTH / 2, 14, '', UI.gold).setOrigin(0.5, 0));

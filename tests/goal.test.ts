@@ -1,17 +1,19 @@
 import { describe, expect, it } from 'vitest';
-import { GOAL_CONFIG, RINK, goalDimensions, goalLineY, makeRink, netBox } from '../src/match/sim/rink';
+import { GOAL_CONFIG, PLAY_SCALE, RINK, goalDimensions, goalLineY, makeRink, netBox } from '../src/match/sim/rink';
 import { SkatingSim } from '../src/match/sim/skatingSim';
 import { cloneTuning } from '../src/match/sim/tuning';
 import { netLayout, netScreenAnchor } from '../src/match/view/textures';
 
-describe('the goal (Decision 76)', () => {
-  it('has a 48 px mouth as the baseline, with 40 kept as a test value, all derived from one number', () => {
-    expect(GOAL_CONFIG.mouthWidth).toBe(48);
-    expect([...GOAL_CONFIG.testWidths]).toEqual([40, 48]);
+describe('the goal (Decisions 76, 80)', () => {
+  it('has a 32 px mouth as the baseline (Decision 80), with 40 and 48 kept as test values, all derived from one number', () => {
+    expect(GOAL_CONFIG.mouthWidth).toBe(32);
+    expect(PLAY_SCALE).toBeCloseTo(2 / 3, 12);
+    expect([...GOAL_CONFIG.testWidths]).toEqual([32, 40, 48]);
+    expect(goalDimensions(32)).toEqual({ mouthWidth: 32, outsideWidth: 36, postWidth: 2, depth: 19, frontHeight: 21, backHeight: 13, goalLineInset: 49 });
     expect(goalDimensions(48)).toEqual({ mouthWidth: 48, outsideWidth: 52, postWidth: 2, depth: 28, frontHeight: 32, backHeight: 20, goalLineInset: 58 });
     expect(goalDimensions(40)).toEqual({ mouthWidth: 40, outsideWidth: 44, postWidth: 2, depth: 23, frontHeight: 27, backHeight: 17, goalLineInset: 53 });
-    expect(RINK.mouthHalfWidth * 2).toBe(48);
-    expect(RINK.netHalfWidth * 2).toBe(52);
+    expect(RINK.mouthHalfWidth * 2).toBe(32);
+    expect(RINK.netHalfWidth * 2).toBe(36);
   });
 
   it('keeps the same ice behind the net as before, and mirrors north and south exactly', () => {

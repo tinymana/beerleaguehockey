@@ -6,46 +6,47 @@
  */
 import type { Rng } from '../../core/rng';
 import type { RinkEnd, RinkGeometry } from './rink';
-import { goalLineY } from './rink';
+import { PLAY_SCALE, goalLineY } from './rink';
 
 /**
- * Sizes are in the same scale as the net and the skaters: the 48 px goal mouth is a 6 ft net, so 8 px is a foot.
+ * Sizes are written for the 48 px net (a 6 ft net, so 8 px a foot) and scaled with the net and the player by PLAY_SCALE,
+ * so he keeps the same proportions at any scale (Decision 80).
  * (The first version of these numbers was left at the old 24 px net's scale, which made him half size: he could not
  * cover the sides of a net twice as wide. That was a scale error, corrected here, not a difficulty setting.)
  */
 export const GOALIE = {
   /** How far out from the goal line he stands: a little over two feet, inside the crease. */
-  depthOut: 18,
+  depthOut: 18 * PLAY_SCALE,
   /** Half the width of his body and pads together: he is three feet wide. */
-  halfBody: 12,
+  halfBody: 12 * PLAY_SCALE,
   /** Extra reach to each side, above the pads. */
-  gloveReach: 7,
-  blockerReach: 6,
+  gloveReach: 7 * PLAY_SCALE,
+  blockerReach: 6 * PLAY_SCALE,
   /** Extra reach along the ice with a pad or skate. */
-  padReach: 5,
+  padReach: 5 * PLAY_SCALE,
   /** Top of the pads, and the highest he can reach. */
-  padHeight: 10,
-  reachHeight: 30,
+  padHeight: 10 * PLAY_SCALE,
+  reachHeight: 30 * PLAY_SCALE,
   /** Seconds, after he reacts, to get a glove, blocker or pad to full stretch. A shot that arrives sooner finds only part of his reach. */
   reachTime: 0.3,
   /** From a sharp angle he backs toward his line: his depth shrinks once the puck is closer to the goal line than this. */
-  retreatWithin: 50,
+  retreatWithin: 50 * PLAY_SCALE,
   minDepthShare: 0.3,
   /** Sideways speed, px/s. */
-  speed: 95,
+  speed: 95 * PLAY_SCALE,
   /** Seconds between the puck moving and the goalie seeing it. */
   reaction: 0.12,
   /** Sliding faster than this opens the five-hole: a low puck through the middle gets by. */
-  fiveHoleSpeed: 40,
-  fiveHoleHalf: 2.5,
-  fiveHoleHeight: 4,
+  fiveHoleSpeed: 40 * PLAY_SCALE,
+  fiveHoleHalf: 2.5 * PLAY_SCALE,
+  fiveHoleHeight: 4 * PLAY_SCALE,
   /** Seconds he holds a caught puck before dropping it for play. */
   holdTime: 0.9,
   padRestitution: 0.4,
   blockerRestitution: 0.6,
   /** He stops tracking when the puck is this far up the ice, and squares up to the middle. */
-  trackingRange: 420,
-} as const;
+  trackingRange: 420 * PLAY_SCALE,
+};
 
 export type SaveKind = 'glove' | 'blocker' | 'pad' | 'body';
 

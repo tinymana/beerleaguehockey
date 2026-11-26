@@ -2,6 +2,25 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.9.0 - 2026-11-26 - The 32-pixel scale
+
+185 tests. The creative director chose the smaller scale after a side-by-side comparison (Decision 80).
+
+### Changed
+- **Player 32 px, goal mouth 32 px.** The same proportion as before, with more ice around the play.
+- The goal (posts, depth, height, goal line), the goalie, the skater's body and stick reach, puck pickup and how high shots climb are all scaled by the same two-thirds, so what was tested at the larger size carries over.
+- Skating and shot speeds are unchanged, so everything is quicker relative to the player.
+
+### Measured (goalie set, same shots as before, scaled)
+Slot 22%, circles 4%, sharp angle 7%, point 2%: the same as at the larger scale, as intended.
+
+### Known issues
+- **The skater and stand-in goalie are the old art shown at two-thirds size.** It looks rough. It is temporary until the skater is redrawn at 32 px.
+- The crease is the supplied art at twice its size: bigger than the new goal calls for.
+- Feel is untested at this scale: the stick, the turning circle and the speeds may want retuning.
+- Faceoff circle lines are still thick and the ice still blue (supplied art).
+- The batch 11 goal art (37 px) now nearly fits the 36 px net, but it is the old drawing and is still fit-test only.
+
 ## 0.8.1 - 2026-11-26 - Goalie fix: the sides
 
 185 tests. From the creative director's first playtest: "goalies seem to let in sides a lot".

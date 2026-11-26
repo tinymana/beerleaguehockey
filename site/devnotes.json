@@ -2,6 +2,17 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.9.0",
+      "date": "2026-11-26",
+      "title": "Smaller players, bigger ice",
+      "items": [
+        {
+          "tag": "improved",
+          "text": "Everyone on the ice got smaller, the way the classics did it. More room to skate, more room to make a play, and the game moves faster for it."
+        }
+      ]
+    },
+    {
       "version": "0.8.1",
       "date": "2026-11-26",
       "title": "The goalie grew up",

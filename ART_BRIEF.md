@@ -235,100 +235,103 @@ The batch 11 goals are larger than the net the puck hits. The ruling is to redra
 
 Package format as before: named PNGs, the strip as the atlas, `manifest.json` carrying these anchors, a preview image, one ZIP per batch. If the camera tilt changes (decision P13), the 11 px depth changes with it and I will reissue this table.
 
-## 11. Goal, crease and ice: production specification (Decision 76, Nov 25)
+## 11. Player, goal, crease and ice at the 32 px scale: production specification (Decision 80, Nov 26)
 
-**This supersedes section 10 (24 px) and the 40 px proposal.** The creative director approved a **48 px goal mouth** as the production baseline after playing the prototype. Player scale and the vertical scrolling camera are unchanged. Final dimensions are not locked until shooting and goaltending have been tested, so every number below comes from one setting in the game (`GOAL_CONFIG` in `src/match/sim/rink.ts`) and the art is checked against it on delivery.
+**This supersedes every earlier goal size (24, 40 and 48 px) and the earlier 48 px player.** After seeing the sizes side by side, the creative director chose a **32 px player and a 32 px goal mouth**: the same proportion that was approved at 48, with more ice around the play. Not locked until play-tested. Every number comes from one setting in the game (`GOAL_CONFIG.mouthWidth` in `src/match/sim/rink.ts`), and art is checked against it on delivery.
 
-### 11.1 The goal in the game (what the art must match)
-
-All in screen pixels at the 0.74 camera tilt, 1 art pixel = 1 screen pixel.
+### 11.1 The player
 
 | | Value |
 | --- | --- |
-| Goal mouth: clear opening between the posts | **48 px** |
+| Frame | **32 x 32 px** per cell (was 48 x 48) |
+| Standing height | about 27 px |
+| Feet anchor (where the skates touch the ice) | **`[16, 27]`** in every cell |
+| Sheet | The same layout as the current skater sheet (10 columns, same rows and poses), every cell 32 x 32 |
+| Until it is redrawn | The game shows the 48 px art shrunk to two-thirds. That is temporary and rough |
+
+### 11.2 The goal in the game (what the art must match)
+
+Screen pixels at the 0.74 camera tilt; 1 art pixel is 1 screen pixel.
+
+| | Value |
+| --- | --- |
+| Goal mouth: clear opening between the posts | **32 px** |
 | Posts | **2 px wide** each |
-| Outside width, post to post | **52 px** |
-| Depth behind the goal line, on screen | **21 px** (28 world px at the tilt) |
-| Crossbar height above the goal line, on screen | **22 px** |
-| Back bar height above the ice at the back of the net, on screen | **13 px** |
-| Ice between the back of the net and the end boards | 22 px on screen (unchanged from before) |
+| Outside width, post to post | **36 px** |
+| Depth behind the goal line, on screen | **14 px** |
+| Crossbar height above the goal line, on screen | **14 px** |
+| Back bar height above the ice at the back of the net, on screen | **9 px** |
 
-**Collision boundaries (for information; the game enforces them).** Skaters and the puck collide with a box 52 px wide and 21 px deep on screen, starting at the goal line and running back. A goal counts when the whole puck crosses the goal line between the posts: the 48 px opening, less the puck's own width at each side. The picture's posts must therefore sit exactly on columns given below, or shots will appear to score through a post.
+**Collision boundaries (for information).** Skaters and the puck collide with a box 36 px wide and 14 px deep on screen, from the goal line back. A goal counts when the whole puck crosses the goal line between the posts and under the bar. The posts in the picture must sit exactly on the columns below.
 
-**Pixel templates.** `art/templates/goal_north_template_64x48.png` and `goal_south_template_64x48.png` are the two goals drawn to these exact rows and columns at true size, with enlarged guides beside them (`*_guide.png`). Give the art tool the template and ask it to paint over it without moving a post, bar or edge. Approved as the production baseline (Decision 78).
-
-### 11.2 North goal (top of the rink, mouth faces down the screen)
+### 11.3 North goal (top of the rink, mouth faces down the screen)
 
 | | Value |
 | --- | --- |
-| Canvas | **64 x 48 px**, transparent |
-| Rendering anchor (centre of the goal mouth, on the goal line) | **`[32, 45]`** |
-| Left post | columns 6-7, from the crossbar (row 23) down to row 45 |
-| Right post | columns 56-57, same rows |
-| Goal mouth | columns 8 to 55 (48 px), rows 24 to 45: **open**, netting seen through it |
-| Crossbar | row 23, columns 6 to 57, red |
-| Top netting (seen from above and in front) | rows 12 to 22, narrowing slightly toward the back |
-| Back bar | row 11, columns 8 to 55 (the back of the net, 34 px above the goal line on screen) |
-| Free rows | 0 to 10 (water bottle and ripple overshoot), 46 to 47 (empty) |
-| Nothing but the bottle and ripple may leave | columns 6 to 57, rows 11 to 45 |
+| Canvas | **40 x 32 px**, transparent |
+| Rendering anchor (centre of the mouth, on the goal line) | **`[20, 30]`** |
+| Posts | columns 2-3 and 36-37, from the crossbar (row 16) down to row 30 |
+| Goal mouth | columns 4 to 35 (32 px), rows 17 to 30: open, see-through mesh behind it |
+| Crossbar | row 16, columns 2 to 37, red |
+| Top netting | rows 8 to 15 |
+| Back bar | row 7, columns 4 to 35 |
+| Free rows | 0 to 6 (water bottle, ripple overshoot), 31 |
 
-### 11.3 South goal (bottom of the rink, mouth faces up the screen, seen from behind)
+### 11.4 South goal (bottom of the rink, mouth faces up the screen toward open ice, seen from behind)
 
 | | Value |
 | --- | --- |
-| Canvas | **64 x 48 px**, transparent |
-| Rendering anchor (centre of the goal mouth, on the goal line) | **`[32, 24]`** |
-| Crossbar | row 2, columns 6 to 57 (22 px above the goal line) |
-| Posts | columns 6-7 and 56-57, rows 2 to 24 (seen through the netting) |
-| Top netting | rows 3 to 31 |
-| Back bar | row 32 (13 px above the back base) |
-| Back netting | rows 33 to 44 |
-| Back base on the ice | row 45, columns 6 to 57 (21 px below the goal line) |
-| Free rows | 0 to 1 and 46 to 47 |
+| Canvas | **40 x 32 px**, transparent |
+| Rendering anchor | **`[20, 16]`** |
+| Crossbar | row 2, columns 2 to 37 |
+| Posts | columns 2-3 and 36-37, rows 2 to 16 (seen through the mesh) |
+| Top netting | rows 3 to 20 |
+| Back bar | row 21 |
+| Back netting | rows 22 to 29 |
+| Back base on the ice | row 30, columns 2 to 37 |
+| Free rows | 0 to 1, 31 |
 
-The netting must stay see-through (a checker or mesh with clear pixels) so a puck in the net shows. Every pixel fully opaque or fully clear.
+Both goals need a visible crossbar, posts on these columns and see-through mesh (clear pixels in it), so a puck in the net shows. **Pixel templates** at true size, with enlarged guides, are in `art/templates/`: `goal_north_template_40x32.png`, `goal_south_template_40x32.png`. Give the art tool the template and ask it to paint over it without moving a post, bar or edge.
 
-### 11.4 Files
+### 11.5 Files
 
 | File | Canvas | Anchor | Notes |
 | --- | --- | --- | --- |
-| `goal_north.png`, `goal_south.png` | 64x48 | as above | Resting goal: frame and netting, no bottle |
-| `goal_north_ripple_01` to `_04`, `goal_south_ripple_01` to `_04` | 64x48 | same | **Net ripple:** the netting bulges away from the mouth by up to 4 px at frame 2 and settles by frame 4. Frame and posts do not move. North ripple may use rows 7 to 10 |
-| `bottle.png` | 16x16 | `[8, 14]` (centre of the bottle's base) | **Water bottle**, standing. The game places the anchor on top of the net at `[32, 16]` on the north canvas and `[32, 14]` on the south canvas |
-| `bottle_knock_01` to `_06` | 32x32 | `[16, 22]` (where the base stood) | **Knock-off:** the bottle jumps up and back off the net, tumbling, and lands behind it. Travels away from the mouth: up the screen for the north goal. Supply `bottle_knock_south_01` to `_06` travelling down the screen. Frame 6 is the bottle lying on the ice |
-| `goal_north_dislodged_left`, `_right`, `goal_south_dislodged_left`, `_right` | **80x64** | north `[40, 53]`, south `[40, 32]` (where the mouth centre was before it moved) | **Dislodged net:** one post lifted off its peg and the whole goal swung about 15 degrees around the other post |
-| `goal_north_dislodged_off`, `goal_south_dislodged_off` | 80x64 | same | Knocked fully off: pushed back 6 px and skewed |
-| `peg_marks.png` | 64x8 | `[32, 4]` | The two post holes left on the goal line when the net is off: at columns 6-7 and 56-57 |
+| `goal_north.png`, `goal_south.png` | 40x32 | as above | Resting goal, no bottle |
+| `goal_north_ripple_01` to `_04`, `goal_south_ripple_01` to `_04` | 40x32 | same | Only the mesh bulges away from the mouth (up to 3 px) and settles. Posts and bars do not move |
+| `bottle.png` | 8x8 | `[4, 7]` (centre of the base) | Standing water bottle. Placed on top of the net at `[20, 11]` on the north canvas and `[20, 10]` on the south canvas |
+| `bottle_knock_01` to `_06`, `bottle_knock_south_01` to `_06` | 24x24 | `[12, 16]` | Knocked off, tumbling away from the mouth (up the screen for north, down for south), ending on its side |
+| `goal_north_dislodged_left`, `_right`, `_off` and the same for `goal_south` | **56x40** | north `[28, 34]`, south `[28, 20]` | Swung about 15 degrees around one post (left, right), or pushed fully off and skewed |
+| `peg_marks.png` | 40x8 | `[20, 4]` | The two post holes, at columns 2-3 and 36-37 |
 
-Dislodged-goal play and the bottle are art for mechanics that are not designed yet (`BACKLOG.md`): the states are specified so the art exists, not as a commitment to the rules.
+Dislodged nets and the bottle are art for mechanics not designed yet (`BACKLOG.md`).
 
-### 11.5 Goal crease
+### 11.6 Goal crease
 
 | | Value |
 | --- | --- |
-| Shape | Half-oval in front of the goal mouth, flat side on the goal line |
-| Width on the goal line | **64 px** (6 px beyond the outside of each post) |
-| Depth in front of the goal line, on screen | **36 px** (48 world px at the tilt: as deep as the mouth is wide) |
-| Canvas | **64 x 40 px**, transparent |
-| Anchor | north crease `[32, 0]` (flat edge on row 0, opens down the screen); south crease `[32, 39]` (flat edge on row 39, opens up) |
-| Look | Light blue fill, 2 px red outline on the curved side only; no outline on the goal-line side |
+| Shape | Half-oval in front of the mouth, flat side on the goal line |
+| Width on the goal line | **44 px** (4 px beyond the outside of each post) |
+| Depth in front of the goal line, on screen | **24 px** |
+| Canvas | **48 x 32 px**, transparent |
+| Anchor | north `[24, 0]` (flat edge on row 0, opens down); south `[24, 31]` (flat edge on row 31, opens up) |
+| Look | Light blue fill, 2 px red outline on the curved side only |
 | Files | `crease_north.png`, `crease_south.png` |
 
-Until redrawn, the game shows the supplied batch 09 creases at twice their size.
+Until redrawn, the game shows the supplied batch 09 creases at twice their size, which is larger than this.
 
-### 11.6 Ice and markings (creative director's visual feedback, same date)
+### 11.7 Ice, markings and crowd
 
-- **Ice colour:** frosty off-white, not saturated blue. Base ice target about `#EEF3F6`, variation no darker than `#DDE6EC`, the coolest shadow `#C9D6E0`. The current supplied ice reads as blue; it is never recoloured by the game, so new tiles are needed.
-- **Faceoff circles:** thinner lines. The supplied circles are 32 px wide and shown four times larger, which makes every line 4 px thick. Redraw at the size they appear: **120 x 89 px with a 2 px line**. Same for the centre circle.
-- **Crowd:** the temporary spectators stay until the detailed crowd art is integrated at its own milestone.
-- **Player scale:** unchanged.
+- **Ice colour:** frosty off-white, not saturated blue. Base about `#EEF3F6`, variation no darker than `#DDE6EC`, coolest shadow `#C9D6E0`.
+- **Faceoff and centre circles:** redrawn at the size they appear, **120 x 89 px with a thin 2 px line** (the supplied 32 px circles are shown four times larger, which makes every line 4 px thick). At the 32 px player these circles are close to true scale.
+- **Crowd:** in proportion to the 32 px player: seated fans about 16 x 24. The temporary spectators stay until the crowd integration milestone.
 
-## 12. Correction request for the art tool: goals, ice and crowd (updated for the 48 px goal)
+## 12. Correction request for the art tool: player, goals, ice and crowd at the 32 px scale
 
-Paste the block below as one message.
+Paste the block below as one message, and attach the two goal template PNGs from `art/templates/`.
 
 ```text
-You are producing corrected game sprites for "Beer League Hockey", a retro hockey game: Tape to Tape style combined with NHL '94 arcade play, in modernized 32-bit pixel art. Fix scale and technical problems only. Keep the existing characters and palette. Do not redesign anything.
+You are producing corrected game sprites for "Beer League Hockey", a retro hockey game: Tape to Tape style combined with NHL '94 arcade play, in modernized 32-bit era pixel art. Fix scale and technical problems only. Keep the existing characters and palette. Do not redesign anything.
 
 STYLE (all assets)
 - Detailed 32-bit era pixel art, bold dark outlines, warm arena lighting, saturated colours for objects. Same look as the game's Batch 18 art.
@@ -343,31 +346,34 @@ TECHNICAL RULES (all assets)
 - One sprite per file, named exactly as listed. Animation frames are separate files numbered _01, _02...
 
 SCALE REFERENCE
-- A skater is drawn inside a 48 x 48 frame and stands about 40 px tall.
-- The goal mouth is exactly 48 px wide between the posts: a little wider than a skater is tall.
+- A skater is drawn inside a 32 x 32 frame and stands about 27 px tall, skates touching the ice at column 16, row 27.
+- The goal mouth is exactly 32 px wide between the posts.
 
-A. GOALS
-- goal_north.png, 64 x 48. Goal at the top of the rink, mouth facing down the screen. Red posts 2 px wide at columns 6-7 and 56-57, standing on row 45 (the goal line). Red crossbar on row 23 from column 6 to 57. The mouth (columns 8-55, rows 24-45) is open, with white see-through mesh behind it. Top netting on rows 12-22. Back bar on row 11. Rows 0-10 and 46-47 empty.
-- goal_south.png, 64 x 48. Goal at the bottom of the rink, mouth facing up the screen, seen from behind through white see-through mesh. Crossbar on row 2. Posts at columns 6-7 and 56-57, rows 2-24. Top netting rows 3-31, back bar row 32, back netting rows 33-44, back base on row 45. Rows 0-1 and 46-47 empty.
-- goal_north_ripple_01 to _04.png and goal_south_ripple_01 to _04.png, 64 x 48, same position: only the mesh bulges away from the mouth (up to 4 px), then settles. Posts and bars do not move.
-- bottle.png, 16 x 16: a plastic water bottle standing upright, base centred at column 8, row 14.
-- bottle_knock_01 to _06.png, 32 x 32: the bottle knocked off the net, tumbling up the screen and landing on its side. bottle_knock_south_01 to _06.png: the same, tumbling down the screen.
-- goal_north_dislodged_left.png, goal_north_dislodged_right.png, goal_north_dislodged_off.png and the same three for goal_south, each 80 x 64: the goal knocked off its pegs, swung about 15 degrees around one post (left, right), or pushed fully off and skewed (off).
-- peg_marks.png, 64 x 8: two small dark post holes at columns 6-7 and 56-57.
+A. SKATER
+- Redraw the existing skater sprite sheet at 32 x 32 per cell: the same poses, the same order, the same character, each one redrawn cleanly at the smaller size (not a shrunken copy). Skates touch the ice at column 16, row 27 of every cell.
 
-B. ICE (frosty off-white, NOT blue)
+B. GOALS (two template images are attached: paint over them without moving any post, bar or edge)
+- goal_north.png, 40 x 32. Goal at the top of the rink, mouth facing down the screen. Red posts 2 px wide at columns 2-3 and 36-37, standing on row 30 (the goal line). Red crossbar on row 16 from column 2 to 37. The mouth (columns 4-35, rows 17-30) is open, with white see-through mesh behind it. Top netting on rows 8-15. Back bar on row 7. Rows 0-6 and 31 empty.
+- goal_south.png, 40 x 32. Goal at the bottom of the rink, mouth facing up the screen, seen from behind through white see-through mesh. Crossbar on row 2. Posts at columns 2-3 and 36-37, rows 2-16. Top netting rows 3-20, back bar row 21, back netting rows 22-29, back base on row 30. Rows 0-1 and 31 empty.
+- goal_north_ripple_01 to _04.png and goal_south_ripple_01 to _04.png, 40 x 32, same position: only the mesh bulges away from the mouth (up to 3 px), then settles.
+- bottle.png, 8 x 8: a plastic water bottle standing upright, base centred at column 4, row 7.
+- bottle_knock_01 to _06.png, 24 x 24: the bottle knocked off the net, tumbling up the screen and landing on its side. bottle_knock_south_01 to _06.png: the same, tumbling down the screen.
+- goal_north_dislodged_left.png, goal_north_dislodged_right.png, goal_north_dislodged_off.png and the same three for goal_south, each 56 x 40: the goal knocked off its pegs, swung about 15 degrees around one post (left, right), or pushed fully off and skewed (off).
+- peg_marks.png, 40 x 8: two small dark post holes at columns 2-3 and 36-37.
+
+C. ICE (frosty off-white, NOT blue)
 - ice_base_01 to _04.png, 32 x 32, fully opaque, seamless on all four edges: frosty off-white ice, base colour #EEF3F6, subtle variation no darker than #DDE6EC.
 - ice_scratch_01 to _08.png, 32 x 32, transparent: thin skate cuts in #C9D6E0 only.
 - circle_centre.png, 120 x 89: blue centre circle drawn with a thin 2 px line, with a small blue centre dot.
 - circle_faceoff.png, 120 x 89: red faceoff circle drawn with a thin 2 px line, hash marks and a small red dot.
-- crease_north.png and crease_south.png, 64 x 40: light blue half-oval goal crease, 64 px wide on its flat side and 36 px deep, 2 px red outline on the curved side only. North: flat side on row 0. South: flat side on row 39.
+- crease_north.png and crease_south.png, 48 x 32: light blue half-oval goal crease, 44 px wide on its flat side and 24 px deep, 2 px red outline on the curved side only. North: flat side on row 0. South: flat side on row 31.
 - line_red.png 32 x 6 and line_blue.png 32 x 8, fully opaque, tile seamlessly left to right.
 
-C. CROWD (fans in proportion to the 48 px skaters)
-- seats_row.png, 48 x 32, tiles seamlessly left to right: one row of two empty arena seats, seen from the same camera.
-- fan_a to fan_f, six different everyday adult fans, each 24 x 32, seated, cut off at the seat:
+D. CROWD (fans in proportion to the 32 px skaters)
+- seats_row.png, 32 x 24, tiles seamlessly left to right: one row of two empty arena seats, seen from the same camera.
+- fan_a to fan_f, six different everyday adult fans, each 16 x 24, seated, cut off at the seat:
   fan_a_sit_01 to _02, fan_a_cheer_01 to _04, fan_a_stand_01 to _02 (and the same nine frames for fan_b to fan_f).
   Mixed ages, builds and plain clothing in varied colours. No jerseys with markings.
 
-Deliver a zip with one folder per section (goals, ice, crowd) and a manifest.json listing each file name and its pixel size.
+Deliver a zip with one folder per section (skater, goals, ice, crowd) and a manifest.json listing each file name and its pixel size.
 ```

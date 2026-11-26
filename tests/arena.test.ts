@@ -336,12 +336,12 @@ describe('goal nets', () => {
     const fit = goalFit(RINK, TILT, standard, lookup);
     expect(fit.length).toBe(2);
     for (const f of fit) {
-      // Since Decision 76 the gameplay net is 52 px outside (48 px mouth): the batch 11 art is now too small, not too big.
-      expect(f.physicsMouth).toBe(52);
+      // At the 32 px mouth (Decision 80) the gameplay net is 36 px outside: the batch 11 art, 37 px, is within a pixel of it.
+      expect(f.physicsMouth).toBe(36);
       expect(f.artMouth).toBe(37);
       expect(f.clearBehind).toBeGreaterThan(0);
     }
-    expect([RINK.netHalfWidth, RINK.netDepth, RINK.goalLineInset]).toEqual([26, 28, 58]);
+    expect([RINK.netHalfWidth, RINK.netDepth, RINK.goalLineInset]).toEqual([18, 19, 49]);
   });
 
   it('keeps stand-in nets, at the size the puck hits, in the standard arena until redrawn goals arrive', () => {

@@ -1,3 +1,4 @@
+import { PLAY_SCALE } from './rink';
 /**
  * Gameplay tuning values for the skating prototype.
  *
@@ -29,7 +30,7 @@ export const DEFAULT_TUNING: Readonly<Tuning> = Object.freeze({
   turnResponse: 6,
   iceFriction: 0.55,
   puckFriction: 0.45,
-  pickupRadius: 9,
+  pickupRadius: 9 * PLAY_SCALE,
   shotVelocity: 560,
   boardRestitution: 0.65,
   cameraFollow: 6,
@@ -67,10 +68,10 @@ export const TUNING_SPECS: readonly TuningSpec[] = [
  * prove worth tuning live.
  */
 export const FEEL = Object.freeze({
-  skaterRadius: 7,
+  skaterRadius: 7 * PLAY_SCALE,
   puckRadius: 2,
   /** Distance from skater centre to stick blade. */
-  stickReach: 13,
+  stickReach: 13 * PLAY_SCALE,
   /** Seconds of wind-up for a full-power shot. */
   maxChargeTime: 0.6,
   /** Share of shot velocity for an instant tap (wrist shot). */
@@ -100,13 +101,14 @@ export const SHOOT = {
   slapThreshold: 0.5,
   releaseHeight: 1,
   /** How fast each shot climbs off the blade. A wrist shot rises; a slap shot stays low. */
-  wristLift: 90,
-  slapLift: 50,
-  gravity: 120,
+  // Lift and gravity shrink with the net, so a shot climbs the same share of the crossbar's height at any scale.
+  wristLift: 90 * PLAY_SCALE,
+  slapLift: 50 * PLAY_SCALE,
+  gravity: 120 * PLAY_SCALE,
   /** Slowing while airborne (the ice slows it far more once it lands). */
   airDrag: 0.15,
   /** Half the thickness of the crossbar, in height. */
-  barThickness: 1.5,
+  barThickness: 1.5 * PLAY_SCALE,
   ironRestitution: 0.55,
   /** A loose puck faster than this counts as a shot for a goalie's reaction clock. */
   launchSpeed: 150,

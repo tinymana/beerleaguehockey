@@ -312,7 +312,8 @@ const STANDARD: ArenaConfig = {
   centerCircle: { asset: '09.09/center_circle', scale: 4 },
   faceoffMark: { asset: '09.08/faceoff_mark', scale: 1 },
   neutralDot: { atlas: '09.08/faceoff_hash_atlas', frame: 0 },
-  // Decision 76: the net doubled from 24 to 48 px, so the supplied creases are shown at twice their size (a whole-number scale) until redrawn.
+  // The supplied creases were drawn for a 24 px net. At the 32 px net (Decision 80) neither whole-number size fits: twice
+  // their size is the nearer one, and is used until the crease is redrawn.
   creaseNorth: { asset: '09.10/crease_north', scale: 2 },
   creaseSouth: { asset: '09.11/crease_south', scale: 2 },
   refereeCrease: { asset: '09.12/referee_crease_east', scale: 2 },
