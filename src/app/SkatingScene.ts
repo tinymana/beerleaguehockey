@@ -202,15 +202,18 @@ export class SkatingScene extends Phaser.Scene {
   private makeGoalieTexture(): void {
     if (this.textures.exists('tmp-goalie')) return;
     const g = this.make.graphics({ x: 0, y: 0 }, false);
-    const w = (GOALIE.halfBody + GOALIE.gloveReach) * 2;
+    const b = GOALIE.halfBody;
+    const w = (b + GOALIE.gloveReach) * 2;
     const mid = w / 2;
-    g.fillStyle(0x1b2a5a).fillRect(mid - 8, 0, 16, 20); // outline
-    g.fillStyle(0xe8e8ee).fillRect(mid - 7, 9, 14, 10); // pads
-    g.fillStyle(0xc8343c).fillRect(mid - 6, 3, 12, 7); // jersey
-    g.fillStyle(0xf2f2f6).fillRect(mid - 3, 0, 6, 4); // mask
-    g.fillStyle(0xb98a4a).fillRect(mid + 7, 5, 6, 6); // glove, on his left (the viewer's right for the north goalie)
-    g.fillStyle(0x2b3a7a).fillRect(mid - 13, 4, 6, 8); // blocker
-    g.generateTexture('tmp-goalie', w, 20);
+    // Drawn to the sizes the rules use, so what you see is what stops the puck.
+    g.fillStyle(0x1b2a5a).fillRect(mid - b, 0, b * 2, 24); // outline
+    g.fillStyle(0xe8e8ee).fillRect(mid - b + 1, 11, b * 2 - 2, 12); // pads
+    g.fillStyle(0x1b2a5a).fillRect(mid - 1, 12, 2, 11); // the gap between the pads
+    g.fillStyle(0xc8343c).fillRect(mid - b + 2, 4, b * 2 - 4, 8); // jersey
+    g.fillStyle(0xf2f2f6).fillRect(mid - 4, 0, 8, 5); // mask
+    g.fillStyle(0xb98a4a).fillRect(mid + b, 5, GOALIE.gloveReach, 7); // glove, on his left (the viewer's right for the north goalie)
+    g.fillStyle(0x2b3a7a).fillRect(mid - b - GOALIE.blockerReach, 4, GOALIE.blockerReach, 9); // blocker
+    g.generateTexture('tmp-goalie', w, 24);
     g.destroy();
   }
 

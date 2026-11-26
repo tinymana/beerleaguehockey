@@ -8,11 +8,16 @@ import type { Rng } from '../../core/rng';
 import type { RinkEnd, RinkGeometry } from './rink';
 import { goalLineY } from './rink';
 
+/**
+ * Sizes are in the same scale as the net and the skaters: the 48 px goal mouth is a 6 ft net, so 8 px is a foot.
+ * (The first version of these numbers was left at the old 24 px net's scale, which made him half size: he could not
+ * cover the sides of a net twice as wide. That was a scale error, corrected here, not a difficulty setting.)
+ */
 export const GOALIE = {
-  /** How far out from the goal line he stands. */
-  depthOut: 10,
-  /** Half the width of his body and pads together. */
-  halfBody: 7,
+  /** How far out from the goal line he stands: a little over two feet, inside the crease. */
+  depthOut: 18,
+  /** Half the width of his body and pads together: he is three feet wide. */
+  halfBody: 12,
   /** Extra reach to each side, above the pads. */
   gloveReach: 7,
   blockerReach: 6,
@@ -21,6 +26,11 @@ export const GOALIE = {
   /** Top of the pads, and the highest he can reach. */
   padHeight: 10,
   reachHeight: 30,
+  /** Seconds, after he reacts, to get a glove, blocker or pad to full stretch. A shot that arrives sooner finds only part of his reach. */
+  reachTime: 0.3,
+  /** From a sharp angle he backs toward his line: his depth shrinks once the puck is closer to the goal line than this. */
+  retreatWithin: 50,
+  minDepthShare: 0.3,
   /** Sideways speed, px/s. */
   speed: 95,
   /** Seconds between the puck moving and the goalie seeing it. */
@@ -60,13 +70,31 @@ export function makeGoalie(rink: RinkGeometry, end: RinkEnd): Goalie {
 export function goalieTarget(rink: RinkGeometry, goalie: Goalie, seenX: number, seenY: number): number {
   const line = goalLineY(rink, goalie.end);
   const out = goalie.end === 'top' ? seenY - line : line - seenY;
-  const limit = rink.mouthHalfWidth - 2;
+  // He goes as far as hugging a post: half his body outside it, never more.
+  const limit = Math.max(0, rink.mouthHalfWidth - GOALIE.halfBody / 2);
   if (out <= 0 || out > GOALIE.trackingRange) return rink.centerX;
-  const share = out <= GOALIE.depthOut ? 1 : GOALIE.depthOut / out;
+  const depth = goalieDepth(out);
+  const share = out <= depth ? 1 : depth / out;
   return rink.centerX + Math.max(-limit, Math.min(limit, (seenX - rink.centerX) * share));
 }
 
+/** How far out he stands for a puck at this distance from the goal line: full depth from out front, backing onto his line for sharp angles. */
+export function goalieDepth(out: number): number {
+  if (out <= 0) return GOALIE.depthOut * GOALIE.minDepthShare;
+  return GOALIE.depthOut * Math.max(GOALIE.minDepthShare, Math.min(1, out / GOALIE.retreatWithin));
+}
+
+/** The share of his full stretch he can reach in the time a shot gives him. */
+export function reachShare(flightTime: number): number {
+  return Math.max(0, Math.min(1, (flightTime - GOALIE.reaction) / GOALIE.reachTime));
+}
+
 export function stepGoalie(rink: RinkGeometry, goalie: Goalie, seenX: number, seenY: number, dt: number): void {
+  const line = goalLineY(rink, goalie.end);
+  const out = goalie.end === 'top' ? seenY - line : line - seenY;
+  const depth = goalieDepth(out);
+  const wantY = goalie.end === 'top' ? line + depth : line - depth;
+  goalie.y += Math.max(-GOALIE.speed * dt, Math.min(GOALIE.speed * dt, wantY - goalie.y));
   const target = goalieTarget(rink, goalie, seenX, seenY);
   const want = target - goalie.x;
   const step = Math.max(-GOALIE.speed * dt, Math.min(GOALIE.speed * dt, want));
@@ -79,16 +107,18 @@ export type ShotOutcome = { saved: SaveKind } | { saved: null; fiveHole: boolean
 
 /**
  * What happens when the puck reaches the goalie. `offset` is how far the puck is to the right of his middle,
- * `height` how high it is off the ice.
+ * `height` how high it is off the ice, `flightTime` how long the shot has been on its way: his body is always there,
+ * but a glove, blocker or kick save takes time to get to.
  */
-export function resolveShot(goalie: Goalie, offset: number, height: number): ShotOutcome {
+export function resolveShot(goalie: Goalie, offset: number, height: number, flightTime: number = Infinity): ShotOutcome {
+  const stretch = reachShare(flightTime);
   const reach = Math.abs(offset);
   const side: 'glove' | 'blocker' = Math.sign(offset || 1) === goalie.gloveSide ? 'glove' : 'blocker';
   if (reach <= GOALIE.fiveHoleHalf && height <= GOALIE.fiveHoleHeight && Math.abs(goalie.vx) >= GOALIE.fiveHoleSpeed) return { saved: null, fiveHole: true };
   if (height > GOALIE.reachHeight) return { saved: null, fiveHole: false };
   if (reach <= GOALIE.halfBody) return { saved: height <= GOALIE.padHeight ? 'pad' : 'body' };
-  if (height <= GOALIE.padHeight) return reach <= GOALIE.halfBody + GOALIE.padReach ? { saved: 'pad' } : { saved: null, fiveHole: false };
-  const arm = side === 'glove' ? GOALIE.gloveReach : GOALIE.blockerReach;
+  if (height <= GOALIE.padHeight) return reach <= GOALIE.halfBody + GOALIE.padReach * stretch ? { saved: 'pad' } : { saved: null, fiveHole: false };
+  const arm = (side === 'glove' ? GOALIE.gloveReach : GOALIE.blockerReach) * stretch;
   return reach <= GOALIE.halfBody + arm ? { saved: side } : { saved: null, fiveHole: false };
 }
 

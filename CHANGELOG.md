@@ -2,6 +2,28 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.8.1 - 2026-11-26 - Goalie fix: the sides
+
+185 tests. From the creative director's first playtest: "goalies seem to let in sides a lot".
+
+### Fixed
+- **The goalie was half size.** His width was left at the old 24 px net's scale. He is now three feet wide at the 48 px net's scale (24 px), and the stand-in drawing matches.
+- **He plays the angle properly:** he stands 18 px out (was 10), follows the puck's angle out to hugging a post, and backs onto his line for sharp angles.
+- **The near post is sealed:** a shot along the goal line can no longer slip between him and the post he is standing against.
+
+### Changed
+- **Glove, blocker and kick saves take time.** His body is always there; his reach grows over about a third of a second after he reacts. A quick shot to a corner beats him; a slow one from distance does not.
+
+### Measured (goalie set, 45 shots on net from each spot)
+| From | Before | Now |
+| --- | --- | --- |
+| Slot | 36% score | 22% |
+| Circles | 20 to 22% | 4% |
+| Sharp angle | 51% | 7% |
+| Point | 22% | 4% |
+
+These are with him standing ready. Catching him moving, or on the wrong side, scores far more often, as it should.
+
 ## 0.8.0 - 2026-11-25 - Milestone 1: shooting and a basic goalie
 
 182 tests. In Pick-Up.

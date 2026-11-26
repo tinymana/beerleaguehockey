@@ -77,6 +77,9 @@ export class SkatingSim {
   private seen: { x: number; y: number }[] = [];
   private beatGoalie = false;
   private overNet = false;
+  private throughFiveHole = false;
+  /** The tick a shot, pass or rebound set the puck going, for how long a goalie has had to react. -1 when it is not moving fast. */
+  private launchTick = -1;
 
   constructor(tuning: Tuning, rink: RinkGeometry = RINK) {
     this.tuning = tuning;
@@ -248,9 +251,11 @@ export class SkatingSim {
     const kind: ShotKind = power >= SHOOT.slapThreshold ? 'slap' : 'wrist';
     p.z = SHOOT.releaseHeight;
     p.vz = kind === 'slap' ? SHOOT.slapLift : SHOOT.wristLift;
+    this.launchTick = this.tick;
     this.stats.shots++;
     this.stats.last = kind === 'slap' ? 'Slap shot' : 'Wrist shot';
     this.beatGoalie = false;
+    this.throughFiveHole = false;
     s.hasPuck = false;
     s.charge = 0;
     s.pickupCooldown = FEEL.pickupCooldown;
@@ -324,6 +329,10 @@ export class SkatingSim {
       p.vx = 0;
       p.vy = 0;
     }
+    // A loose puck that is suddenly moving fast was launched by something: start the clock. A slow one stops it.
+    const moving = Math.hypot(p.vx, p.vy);
+    if (moving > SHOOT.launchSpeed && this.launchTick < 0) this.launchTick = this.tick;
+    else if (moving < SHOOT.launchSpeed * 0.6) this.launchTick = -1;
     const prevX = p.x;
     const prevY = p.y;
     p.x += p.vx * dt;
@@ -346,7 +355,8 @@ export class SkatingSim {
           // Judge the shot where it actually crossed his line, not where the step ended.
           const at = prevX + ((p.x - prevX) * (prevY - goalie.y)) / (prevY - p.y || 1);
           p.x = at;
-          const outcome = resolveShot(goalie, at - goalie.x, p.z);
+          const flight = this.launchTick < 0 ? Infinity : (this.tick - this.launchTick) * SIM_DT;
+          const outcome = resolveShot(goalie, at - goalie.x, p.z, flight);
           if (outcome.saved) {
             this.stats.saves++;
             this.stats.last = `${outcome.saved[0]?.toUpperCase()}${outcome.saved.slice(1)} save`;
@@ -364,10 +374,12 @@ export class SkatingSim {
             const v = reboundVelocity(goalie, outcome.saved, p.x - goalie.x, p.vx, p.vy, this.rng);
             p.vx = v.vx;
             p.vy = v.vy;
+            this.launchTick = this.tick;
             p.y = goalie.y - toward;
             continue;
           }
           this.beatGoalie = true;
+          this.throughFiveHole = outcome.fiveHole;
           if (outcome.fiveHole) this.stats.last = 'Five-hole';
         }
       }
@@ -379,6 +391,23 @@ export class SkatingSim {
       const offAtLine = Math.abs(xAtLine - this.rink.centerX);
       if (cameFromFront && crossed && offAtLine <= this.rink.netHalfWidth + FEEL.puckRadius) {
         const bar = this.rink.netFrontHeight;
+        // He fills the part of the goal line his body stands in front of. Without this a shot along the goal line from a
+        // sharp angle could slip between him and the post he is standing against.
+        if (goalie && goalie.holding === 0 && !this.throughFiveHole && p.z <= GOALIE.reachHeight && Math.abs(xAtLine - goalie.x) <= GOALIE.halfBody) {
+          const kind = p.z <= GOALIE.padHeight ? 'pad' : 'body';
+          this.stats.saves++;
+          this.stats.last = `${kind === 'pad' ? 'Pad' : 'Body'} save`;
+          events.push({ type: 'save', kind, end });
+          p.x = xAtLine;
+          p.y = line - toward * (FEEL.puckRadius + 0.5);
+          const v = reboundVelocity(goalie, 'pad', xAtLine - goalie.x, p.vx, p.vy, this.rng);
+          p.vx = v.vx;
+          p.vy = v.vy;
+          p.z = 0;
+          p.vz = 0;
+          this.launchTick = this.tick;
+          continue;
+        }
         // A goal needs the whole puck between the posts and under the bar: the same opening the goal art shows.
         const betweenPosts = offAtLine <= this.rink.mouthHalfWidth - FEEL.puckRadius;
         if (p.z > bar + SHOOT.barThickness) {

@@ -2,6 +2,17 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.8.1",
+      "date": "2026-11-26",
+      "title": "The goalie grew up",
+      "items": [
+        {
+          "tag": "fixed",
+          "text": "Our goalie was half the size he should have been, which is why the sides of the net were wide open. He now fills the net properly, hugs his post, and has to actually reach for the corners."
+        }
+      ]
+    },
+    {
       "version": "0.8.0",
       "date": "2026-11-25",
       "title": "Somebody is in the net",

@@ -108,4 +108,6 @@ export const SHOOT = {
   /** Half the thickness of the crossbar, in height. */
   barThickness: 1.5,
   ironRestitution: 0.55,
+  /** A loose puck faster than this counts as a shot for a goalie's reaction clock. */
+  launchSpeed: 150,
 } as const;

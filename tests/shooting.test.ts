@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { GOALIE, goalieTarget, makeGoalie, resolveShot, stepGoalie } from '../src/match/sim/goalie';
+import { GOALIE, goalieDepth, goalieTarget, makeGoalie, reachShare, resolveShot, stepGoalie } from '../src/match/sim/goalie';
 import { RINK, goalLineY } from '../src/match/sim/rink';
 import { SIM_DT, SkatingSim } from '../src/match/sim/skatingSim';
 import type { SimEvent } from '../src/match/sim/skatingSim';
@@ -102,13 +102,25 @@ describe('the goal frame (Decision 78)', () => {
 });
 
 describe('the basic goalie (Decision 78)', () => {
+  it('is sized to the 48 px net: three feet wide, standing inside the crease, and cannot cover the whole net standing still', () => {
+    const foot = (RINK.mouthHalfWidth * 2) / 6;
+    expect(GOALIE.halfBody * 2).toBe(3 * foot);
+    expect(GOALIE.depthOut).toBeGreaterThan(2 * foot);
+    expect(GOALIE.depthOut).toBeLessThan(RINK.mouthHalfWidth * 2); // inside a crease as deep as the mouth is wide
+    // Centred, even at full stretch he leaves the corners: positioning has to do the rest.
+    expect(GOALIE.halfBody + GOALIE.gloveReach).toBeLessThan(RINK.mouthHalfWidth - 2);
+    expect(GOALIE.halfBody + GOALIE.padReach).toBeLessThan(RINK.mouthHalfWidth - 2);
+  });
+
   it('plays the angle: on the line between the puck and the middle of the net, never outside the posts', () => {
     const g = makeGoalie(RINK, 'top');
     expect(g.y).toBe(line + GOALIE.depthOut);
     expect(goalieTarget(RINK, g, RINK.centerX, line + 100)).toBe(RINK.centerX);
-    const right = goalieTarget(RINK, g, RINK.centerX + 80, line + 100);
-    expect(right).toBeCloseTo(RINK.centerX + 8, 6);
-    expect(goalieTarget(RINK, g, RINK.centerX + 500, line + 12)).toBe(RINK.centerX + RINK.mouthHalfWidth - 2);
+    const limit = RINK.mouthHalfWidth - GOALIE.halfBody / 2;
+    expect(goalieTarget(RINK, g, RINK.centerX + 40, line + 100)).toBeCloseTo(RINK.centerX + (40 * GOALIE.depthOut) / 100, 6);
+    // From wide he goes to the near post and hugs it.
+    expect(goalieTarget(RINK, g, RINK.centerX + 500, line + 12)).toBe(RINK.centerX + limit);
+    expect(goalieTarget(RINK, g, RINK.centerX - 500, line + 12)).toBe(RINK.centerX - limit);
     // Puck behind the net or far up the ice: square to the middle.
     expect(goalieTarget(RINK, g, RINK.centerX + 60, line - 5)).toBe(RINK.centerX);
     expect(goalieTarget(RINK, g, RINK.centerX + 60, line + GOALIE.trackingRange + 1)).toBe(RINK.centerX);
@@ -161,14 +173,51 @@ describe('the basic goalie (Decision 78)', () => {
     expect(held.sim.goals).toBe(0);
   });
 
-  it('is beaten by a shot to the far post from the side, and the same shot always ends the same way', () => {
-    // From wide on one side to just inside the far post: he is still covering the near side.
-    const far = fire({ from: -70, aim: RINK.mouthHalfWidth - 4 });
-    expect(kinds(far.events)).toEqual(['goal']);
-    const again = fire({ from: -70, aim: RINK.mouthHalfWidth - 4 });
-    expect(again.sim.snapshot()).toBe(far.sim.snapshot());
+  it('is beaten when he is caught on the wrong side, and the same shot always ends the same way', () => {
+    // He was covering a puck on the right; the shot comes from the left before he can get across.
+    const caught = (sim: SkatingSim): void => {
+      sim.goalies[0]!.x = RINK.centerX + 16;
+    };
+    const quick = fire({ from: -50, aim: -14, speed: 480, setup: caught });
+    expect(kinds(quick.events)).toEqual(['goal']);
+    expect(fire({ from: -50, aim: -14, speed: 480, setup: caught }).sim.snapshot()).toBe(quick.sim.snapshot());
     // Two rebounds from identical shots are identical too: rebound variation is seeded.
     expect(fire({ z: 0 }).sim.snapshot()).toBe(fire({ z: 0 }).sim.snapshot());
+  });
+
+  it('covers the sides when he is set: the same shots that beat him out of position are stopped', () => {
+    const settle = (sim: SkatingSim): void => {
+      // Let him read the puck where it is before it is shot.
+      const p = sim.puck;
+      const hold = { x: p.x, y: p.y, vx: p.vx, vy: p.vy };
+      for (let i = 0; i < 90; i++) {
+        Object.assign(p, { x: hold.x, y: hold.y, vx: 0, vy: 0 });
+        sim.step(IDLE);
+      }
+      Object.assign(p, hold);
+    };
+    // From the left circle, set: near post and far post are both covered.
+    expect(kinds(fire({ from: -50, aim: -14, speed: 480, setup: settle }).events)[0]).toMatch(/^save/);
+    expect(kinds(fire({ from: -50, aim: -20, speed: 480, setup: settle }).events)[0]).toMatch(/^save/);
+    // From a sharp angle he hugs the post: nothing slips between him and it.
+    const sharp = fire({ from: -90, aim: -21, speed: 420, setup: settle });
+    expect(sharp.sim.goals).toBe(0);
+    // From the slot a quick shot into a corner still beats him: he cannot stretch that far in time.
+    const corner = fire({ from: 0, aim: 21, speed: 520, setup: settle });
+    expect(kinds(corner.events)).toEqual(['goal']);
+  });
+
+  it('needs time to stretch: his body is always there, his glove and pads are not', () => {
+    const g = makeGoalie(RINK, 'top');
+    const wide = GOALIE.halfBody + GOALIE.gloveReach - 1;
+    expect(resolveShot(g, wide, 18, 1)).toEqual({ saved: 'glove' });
+    expect(resolveShot(g, wide, 18, GOALIE.reaction)).toEqual({ saved: null, fiveHole: false });
+    expect(resolveShot(g, GOALIE.halfBody - 1, 18, 0)).toEqual({ saved: 'body' });
+    expect(reachShare(GOALIE.reaction)).toBe(0);
+    expect(reachShare(GOALIE.reaction + GOALIE.reachTime)).toBe(1);
+    // From a sharp angle he backs onto his line.
+    expect(goalieDepth(200)).toBe(GOALIE.depthOut);
+    expect(goalieDepth(10)).toBeLessThan(GOALIE.depthOut / 2);
   });
 
   it('leaves the skating prototype exactly as it was when goalies are off', () => {
