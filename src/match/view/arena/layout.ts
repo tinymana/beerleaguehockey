@@ -583,8 +583,11 @@ export function layoutStadium(rink: RinkGeometry, tilt: number, config: ArenaCon
   const north = boards.strips.find((s) => s.role === 'northBoards');
   const south = boards.strips.find((s) => s.role === 'southBoards');
   const [ax, ay] = art.lamp.anchor;
-  if (north) result.lamps.push({ end: 'north', x: rink.centerX - ax, y: Math.max(north.y + 1, ay - 3) - ay });
-  if (south) result.lamps.push({ end: 'south', x: rink.centerX - ax, y: Math.min(Math.floor(worldH), south.y + south.height + 10) - ay });
+  // Without supplied end boards (the ends drawn as one piece) the lamps stand just outside the edge of the ice.
+  const iceTop = screenY(rink, tilt, rink.top);
+  const iceBottom = screenY(rink, tilt, rink.bottom);
+  result.lamps.push({ end: 'north', x: rink.centerX - ax, y: Math.max(north ? north.y + 1 : iceTop - 8, ay - 3) - ay });
+  result.lamps.push({ end: 'south', x: rink.centerX - ax, y: Math.min(Math.floor(worldH), south ? south.y + south.height + 10 : iceBottom + 18) - ay });
   return result;
 }
 

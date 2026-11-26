@@ -27,6 +27,7 @@ Read this first. It lets a new session resume without losing creative direction 
 - **Cards (Decision 56):** `CARD_ART_SPEC.md` approved. Card pictures in the game are labelled placeholders until art arrives.
 - **Batch 26 career cinematics (Decision 59):** on the roadmap as an art collection; cinematics are not authorized to build. Branded equipment thumbnails stay out of Creator V1 (Decision 49). The official crest is used for all game branding (Decision 50).
 - **On-ice reference (Decision 46):** Tape to Tape with NHL '94. Audit and open tradeoffs in `ONICE_DIRECTION.md`.
+- **End boards (Decision 84, v0.10.1):** the standard arena draws the north and south ends as one code-drawn piece with the corners; the supplied batch 10 end boards, end glass and sponsor panels are in the "End board art" Lab arena only. Side boards are supplied art.
 - **Art integration:** delivered through batch 15 (v0.3.1). Batch 15 is locker room art, shown only in a developer fit test; the locker room is not a game location yet. Goal art is being redrawn to the gameplay size (`ART_BRIEF.md` section 10). All supplied art so far is base art that will be re-supplied at higher fidelity (Decision 35).
 - **Settled decisions are not reopened** unless a new technical conflict is found. The register is `DECISIONS.md`; open items are listed at its end.
 

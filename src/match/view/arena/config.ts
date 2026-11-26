@@ -379,8 +379,11 @@ const STANDARD: ArenaConfig = {
   boards: {
     west: { asset: '10.01/west_board_module', boundary: 19 },
     east: { asset: '10.02/east_board_module', boundary: 4 },
-    north: { asset: '10.03/north_board_module', boundary: 19 },
-    south: { asset: '10.04/south_board_module', boundary: 5 },
+    // The ends are drawn as one piece with the corners (creative director, Nov 26): the supplied end boards only cover
+    // the short straight between the corners, and the corner art does not fit the rink, so the mix read as broken.
+    // The supplied end boards, their glass and the sponsor panels are shown in the 'End board art' arena.
+    north: null,
+    south: null,
   },
   corners: { mode: 'stand-in', nw: '10.05/nw_corner_module', ne: '10.06/ne_corner_module', sw: '10.07/sw_corner_module', se: '10.08/se_corner_module' },
   glass: {
@@ -418,6 +421,13 @@ export const ARENA_CONFIGS: readonly ArenaConfig[] = [
     name: 'Supplied art only',
     description: 'Exactly what has been delivered and fits. No stand-ins, so the corners, nets and end stands show as gaps.',
     standIns: false,
+  },
+  {
+    ...STANDARD,
+    id: 'end-board-art',
+    name: 'End board art',
+    description: 'The supplied north and south boards, glass and sponsor panels on the straight between the corners, with stand-in corners either side. Kept for comparison; the standard arena draws each end as one piece.',
+    boards: { ...STANDARD.boards, north: { asset: '10.03/north_board_module', boundary: 19 }, south: { asset: '10.04/south_board_module', boundary: 5 } },
   },
   {
     ...STANDARD,

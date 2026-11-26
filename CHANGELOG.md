@@ -2,6 +2,17 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.10.1 - 2026-11-26 - End boards drawn as one piece
+
+205 tests.
+
+### Changed
+- **North and south ends (creative director, Nov 26; Decision 84):** each end of the standard arena is drawn as one continuous code-drawn board, corner to corner, as it was before the batch 10 end boards went in. The supplied end boards only cover the short straight between the corners and the supplied corners do not fit the rink, so the mix read as broken. The goal lamps stay, just outside the ice.
+- The supplied end boards, their glass and the two sponsor panels are kept in a new Arena Lab arena, "End board art", for comparison. The side boards are unchanged.
+
+### Known issues
+- The ends are temporary code-drawn art again, and the sponsor panels (Penalty Box Sports Bar, Top Shelf Hockey) are off the standard rink until end boards arrive that include the corners at the rink's radius (`ARENA.md` A8).
+
 ## 0.10.0 - 2026-11-26 - 5-on-5 test game, shot aim help, goalie art
 
 204 tests. Three things the creative director asked for after playing v0.9.2 (Decision 83).

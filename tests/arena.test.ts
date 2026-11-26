@@ -111,7 +111,7 @@ describe('arena asset registry', () => {
 });
 
 describe('arena layout', () => {
-  const layout = layoutArena(RINK, TILT, arenaConfig('standard'), lookup);
+  const layout = layoutArena(RINK, TILT, arenaConfig('end-board-art'), lookup);
 
   it('defines the twelve layers in back-to-front order', () => {
     expect(ARENA_LAYERS).toHaveLength(12);
@@ -342,6 +342,22 @@ describe('goal nets', () => {
       expect(f.clearBehind).toBeGreaterThan(0);
     }
     expect([RINK.netHalfWidth, RINK.netDepth, RINK.goalLineInset]).toEqual([18, 19, 49]);
+  });
+
+  it('draws each end of the standard arena as one piece: no supplied end boards, end glass or sponsor panels, lamps still placed', () => {
+    const config = arenaConfig('standard');
+    expect([config.boards.north, config.boards.south]).toEqual([null, null]);
+    const made = layoutArena(RINK, TILT, config, lookup);
+    expect(made.strips.some((s) => s.role === 'northBoards' || s.role === 'southBoards')).toBe(false);
+    expect(made.strips.some((s) => s.role === 'westBoards')).toBe(true);
+    expect(made.glass.some((g) => g.side === 'north' || g.side === 'south')).toBe(false);
+    const lamps = layoutStadium(RINK, TILT, config, made).lamps;
+    expect(lamps.map((l) => l.end)).toEqual(['north', 'south']);
+    // Behind each goal line, outside the ice.
+    expect((lamps[0]?.y ?? 0) + 16).toBeLessThanOrEqual(screenY(RINK, TILT, RINK.top) + 8);
+    expect(lamps[1]?.y ?? 0).toBeGreaterThanOrEqual(screenY(RINK, TILT, RINK.bottom));
+    // The supplied end boards are kept in their own arena for comparison.
+    expect(layoutArena(RINK, TILT, arenaConfig('end-board-art'), lookup).strips.some((s) => s.role === 'northBoards')).toBe(true);
   });
 
   it('leaves the batch 11 goals out of the standard arena', () => {
