@@ -2,7 +2,7 @@
 
 Beer League Hockey - Tiny Mana Studios. Requested in the creative director's proposed rulings of Nov 25. Written against the 960x540 off-ice design space (Decision 38) and the three card frames supplied in batch 16.11 (`card_gold`, `card_blue`, `card_green`, 64x64 nine-slice).
 
-**Hold:** the gold template, the blank templates and the 17 Play Style cards can be drawn now. **The 18 archetype cards wait for the registry review** (`REGISTRIES.md` section 3), as ruled.
+**Approved (Decision 56).** Everything here is cleared for production, including the 18 archetype cards (registry approved, Decisions 54 and 55). Follow the approved batch 18 visual style; true transparency; no real manufacturer or team branding; the official crest on card backs.
 
 **The one rule that shapes everything: art carries no words and no numbers.** Names, descriptions, eligibility, progress, statistics, flags, position and era are drawn by the game from data. A card whose name changes, or whose threshold is rebalanced, needs no new art. This also lets every real name be swapped for a fictional one before release (Decision 34).
 
@@ -16,7 +16,7 @@ All cards are portrait, 5:7. Three sizes, each an exact half of the one above, s
 | Medium | 80 x 112 | Lists and grids: choosing an influence, a play style, the archetype collection |
 | Small | 40 x 56 | The three influence slots on the profile, save-slot summaries |
 
-Deliver each illustration at Large. Deliver Medium and Small as separately drawn files if the half-size reduction loses the read; otherwise the game shows the Large at half size (a whole-number reduction is not available, so hand-drawn Medium and Small are preferred for the 17 + 18 character cards).
+**Ruling:** create master illustrations at Large, and optimize the Medium and Small versions by hand wherever visual clarity requires it.
 
 Format: PNG, transparent outside the card, no anti-aliasing against the background, no baked drop shadow, palette consistent with batch 16.11. Higher-fidelity re-issues (Decision 35) keep these exact pixel sizes and zones.
 
@@ -57,7 +57,7 @@ That is 3 blank fronts, 1 back, 1 locked overlay, 3 silhouettes, 1 focus ring, 1
 | --- | --- | --- |
 | Unlocked | Full colour | Template + illustration + dynamic text |
 | Locked, visible | Illustration shown desaturated under T5; name shown; footer shows the requirement and a progress bar | The same illustration, desaturated by the game; T5 |
-| Locked, hidden | Card back or a "?" silhouette; name hidden; footer may show a hint | T4 or T6. Used for archetypes whose requirement is a secret (Hall of Famer, Ringer, No-Show, Hockey Parent) |
+| Locked, hidden | Card back or a "?" silhouette; name hidden; footer shows a **cryptic hint that does not reveal the exact requirement** (ruled) | T4 or T6. Used for archetypes whose requirement is a secret (Hall of Famer, Ringer, No-Show, Hockey Parent) |
 | Selected / focused | T7 around the card | T7 |
 | Active archetype | A small marker in the corner badge | Dynamic |
 | Limited data (influences) | Silhouette instead of an illustration; a plain "limited data" line in the footer | T6 + dynamic text |
@@ -71,7 +71,7 @@ Each is a 144 x 96 illustration-window image (plus 72 x 48 and 34 x 50), with **
 ### 5a. Gold: Hockey Influences
 
 - The gold blank template (T1) and the three silhouettes (T6) cover every influence, including all 64 curated and any added later.
-- Individual illustrations for featured influences are optional and subject to rights review before public release (Decision 40). If drawn: illustrated, not photographic; file name by neutral id (`influence_F01`), never by the person's name.
+- **Ruling: 12 featured Hockey Influence illustrations initially**, subject to rights review. Everyone else uses the reusable generic forward, defenseman and goalie illustrations (T6). Featured illustrations are not a Creator V1 dependency. Suggested twelve: the twelve example influences named in the original brief. For each: illustrated, not photographic; file name by neutral id (`influence_F01`), never by the person's name.
 - Dynamic fields on a gold card: name (or fictional alias), position, country flag, era, career span, tendencies, the curated blurb, and the slot it fills (primary 60%, secondary 25%, secondary 15%).
 
 ### 5b. Ice blue: the 17 Play Styles (ready to draw)
@@ -100,7 +100,7 @@ A character vignette showing the style in action. Skater cards show a generic sk
 
 Dynamic fields on a blue card: name, eligible positions, description, "leans toward" and "leans away" attribute icons (the batch 16.09 icons), and "develops faster".
 
-### 5c. Green: 7 starting and 11 evolved Archetypes (on hold until the registry is approved)
+### 5c. Green: 7 starting and 11 evolved Archetypes (approved)
 
 | File | Archetype | Picture brief |
 | --- | --- | --- |
@@ -133,15 +133,17 @@ Any lettering inside an illustration (a jersey letter such as the captain's C is
 | --- | --- |
 | Blank templates and shared pieces (T1 to T8) | 10 pieces, most in three sizes |
 | Play Style illustrations | 17 |
-| Archetype illustrations (on hold) | 18 |
-| Featured influence illustrations | Optional, your choice of how many |
+| Archetype illustrations | 18 |
+| Featured influence illustrations | 12 initially, subject to rights review |
 
 ## 7. Manifest
 
 One `manifest.json` with, for each file: id, file, size, and for templates the zone rectangles from section 2 as they were actually drawn. If a zone had to move, say so in the manifest and the game will follow it; the zones come from the manifest, not from this document, once art exists.
 
-## 8. Questions
+## 8. Answered (Decision 56)
 
-1. Hand-drawn Medium and Small versions of the 35 character illustrations, or Large only shown at half size?
-2. Should hidden archetypes show a hint line ("Something to do with attendance...") or nothing at all?
-3. How many featured influences get their own illustration in the first pass, if any?
+1. Sizes: masters at Large, smaller versions optimized where clarity requires it.
+2. Hidden archetypes: cryptic hints.
+3. Featured influences: 12 initially.
+
+If PS18 Hybrid Goalie is approved (`REGISTRIES.md` section 2a), add `style_PS18` to section 5b: 18 Play Style illustrations.

@@ -2,14 +2,25 @@
 
 Beer League Hockey - Tiny Mana Studios. Dataset review requested by the creative director (Decisions 41 and 47). Rewritten Nov 25 after the statistics files arrived.
 
-**Status: audited, nothing activated.** The game still reads only the 64 curated profiles. Everything in sections 5 to 8 is a proposal for review. Reproduce every number here with `npm run data:audit`.
+**Status: reviewed and ruled (Decision 53). The limited approach is built in v0.4.0.** Sections 1 to 9 are the audit as submitted; section 0 is what was ruled and built.
+
+## 0. Ruling and what is in the game
+
+- **Curated (64):** unchanged, the featured set, listed first.
+- **Derived (830 skaters):** exactly one mild leaning (weight 1). Finisher: offensive awareness. Playmaker: passing. No wrist shot accuracy. The Scorer class is not used.
+- **Limited data (7,768):** selectable, shape nothing, labelled "limited data" on the card. Every goalie outside the curated ten is here.
+- Total selectable: 8,662, everyone in the biographical file. Ids outside the curated set are "N" plus the NHL id, so saves hold no names.
+- The only fact taken from the statistics is one letter per skater (`data/influences/derived_tendencies.tsv`: 861 ids, of which 31 belong to curated players and are ignored). No statistics are shipped in the game.
+- **Raw dataset: internal only.** It lives in `data/private/`, which is git-ignored, with the match and review lists that restate it. The licence is still unverified.
+- **Reconciliation worklist:** `data/private/derived/reconciliation.tsv`, 479 records, largest careers first, each with suggested people. 419 have a suggestion; for 286 of the 349 unmatched there is exactly one candidate (same surname, position and plausible years, and no statistics of their own). Rulings go in `data/influences/reconciliation_decisions.tsv` (file, name, first, last, NHL id or "none"); the audit applies them and never guesses.
+- Reproduce with `npm run data:audit` (needs the private files) then `npm run data:influences`.
 
 ## 1. What was delivered
 
 | File | Records | One row is | Columns |
 | --- | --- | --- | --- |
-| `data/reference/nhl_stats/SKATERS.csv` | 7,785 | A skater's whole career | name, first, last, position, games, goals, assists, time, active, hof |
-| `data/reference/nhl_stats/GOALIES.csv` | 869 | A goalie's whole career | name, first, last, games, started, wins, losses, conceded, saves, minutes, goals, assists, active, hof |
+| `data/private/nhl_stats/SKATERS.csv` | 7,785 | A skater's whole career | name, first, last, position, games, goals, assists, time, active, hof |
+| `data/private/nhl_stats/GOALIES.csv` | 869 | A goalie's whole career | name, first, last, games, started, wins, losses, conceded, saves, minutes, goals, assists, active, hof |
 | `data/reference/nhl_players.csv` (already held) | 8,662 | A person | NHL id, name, position (F, D, G), shoots or catches, birthday, nationality, height, weight, draft |
 
 Both statistics files are kept byte for byte as delivered. Coverage is 1918 to 2025.
@@ -56,7 +67,7 @@ On the other side, 8,175 of the 8,662 biographical people now have statistics an
 - **Conflict (101):** 64 on career years, 41 on position (four on both). The year conflicts are mostly a father and son, or two unrelated players, with one name where the biographical file holds only one of them: the Syl Apps who played 1971 to 1980 against a birthday of 1915; Ace Bailey 1969 to 1978 against 1903. The position conflicts are mostly forwards who also played defence.
 - **Ambiguous (29):** shared names where both people plausibly fit: Greg Adams, Ron Anderson, Peter Andersson, Mike Brown, Mikko Lehtonen (three records).
 
-**Files for review:** `data/derived/stat_matches.tsv` lists every statistics record with its outcome, matched id and reason. `data/derived/stat_review.tsv` lists the 130 conflicts and ambiguities with every candidate beside them. Nothing on the review list is merged until a person decides; decisions will be kept in their own file so re-running the audit never loses them.
+**Files for review:** `data/private/derived/stat_matches.tsv` lists every statistics record with its outcome, matched id and reason. `data/private/derived/stat_review.tsv` lists the 130 conflicts and ambiguities with every candidate beside them. Nothing on the review list is merged until a person decides; decisions will be kept in their own file so re-running the audit never loses them.
 
 **The 64 curated influences:** all 64 were found and matched cleanly. None is on a review list.
 
@@ -110,7 +121,7 @@ Counts include the curated 64, who would keep their curated profile whatever cla
 
 ## 7. Ten sample profiles, and the curated set beside the generated one
 
-Full figures are in `data/derived/sample_profiles.json`.
+Full figures are in `data/private/derived/sample_profiles.json` (private).
 
 | Player | Era, position | Games, G, A | Production / goal-share percentile | Generated | Curated (signature; weak) | Verdict |
 | --- | --- | --- | --- | --- | --- | --- |
@@ -155,7 +166,7 @@ I am not a lawyer; this is what the evidence shows.
 - **No licence travelled with the files.** The archive holds two CSVs and nothing else.
 - **The Kaggle page could not be read for its licence.** The page returns only its title and the description "NHL Player Database 1918-Present" to an automated reader; the licence field is not in what came back. I did not find the terms stated anywhere else.
 - **The underlying source is not stated.** Career totals of this kind originate with the league's own records or a statistics site, each with its own terms of use.
-- **Assessment:** treat redistribution rights as **unknown**. Keep the raw files for internal development only. They are in the repository under `data/reference/`, which the website build does not publish; I checked that nothing under `data/` is copied into the game or the site. If the repository is ever made public, or the licence turns out to forbid redistribution, the raw files should come out of it.
+- **Assessment:** treat redistribution rights as **unknown**. Keep the raw files for internal development only. **Correction, Nov 25:** the repository is public, and the previous checkpoint's commit put the raw files in it. They were removed in the next commit, but they remain in the branch history (commit 5affd00) until the history is rewritten, which needs the creative director's go-ahead. They now live only in the git-ignored `data/private/`.
 - **Derived profiles** (our own leanings and labels) are a separate work from the raw table, and individual career totals are facts. Even so, the names are real people, and Decision 34 already requires real names to be replaceable before public release. The dataset does not change that.
 - **What I need from you:** the licence line from the dataset's Kaggle page (it is shown under the description when signed in), and the source the uploader names, if any.
 

@@ -79,16 +79,16 @@ Ids are stable and never shown to players. Display names can change without touc
 | G09 | Carey Price | G | 1987 | hybrid | **positioning, composure, rebounds**; puck handling, glove, hockey IQ | durability, recovery | So calm it looks easy. |
 | G10 | Ron Hextall | G | 1964 | puck-handler, competitor | **puck handling, strength, leadership**; reflexes, composure, endurance | discipline, rebounds, positioning | Shoots the puck, swings the stick, owns the crease. |
 
-## 2. Play Styles (ice blue cards): chosen by the player (Decision 43); strength approved and built (Decision 48)
+## 2. Play Styles (ice blue cards): approved (Decisions 43, 48, 57)
 
 **Ruling:** Play Style is a player-selected gameplay identity. It influences attribute allocation tendencies, development priorities and AI behaviour, works inside the existing attribute budget, is position-appropriate, and can evolve over a career.
 
-**What exists today (v0.3.2):** the 17 styles below are in the DNA engine as provisional data (`src/dynasty/playStyles.ts`), with the approved strength: **25% of the starting attribute spread**, taken proportionally from the influences, inside the same budget, never raising a natural ceiling; and a **20% faster development** setting stored for when progression is built. Both are configuration values. The creator screen does not offer the choice yet: that is the Play Style tab in Creator V1. The list of styles and their leanings is approved subject to balancing in the director's proposed rulings of Nov 25, awaiting confirmation.
+**What exists today (v0.3.2):** the 17 styles below are in the DNA engine as provisional data (`src/dynasty/playStyles.ts`), with the approved strength: **25% of the starting attribute spread**, taken proportionally from the influences, inside the same budget, never raising a natural ceiling; and a **20% faster development** setting stored for when progression is built. Both are configuration values. Chosen on the Play Style step of Create a Player since v0.4.0. **All 17 styles and their toward/away lists are approved as initial balancing values (Decision 57).** Also ruled: no extra starting points, no higher ceilings, no retroactive redistribution of ratings already earned, style changes between seasons, chosen and observed styles kept separate, and **development in unrelated attributes is not slowed**.
 
 **Proposed gameplay implications, for approval before balancing:**
 
 - **Allocation (approved, built):** a style has its own small set of leanings (the "leans toward" and "leans away" columns; the first attribute listed counts double). They are blended into the same zero-sum spread the influences use, so a style reshapes a player and never adds rating points. Strength: a quarter of the total, taken proportionally from the influences. A style that matches the influence adds little on top, by design.
-- **Development (approved, stored, not active):** when progression exists, the style's attributes develop 20% faster. Whether the others slow down to pay for it is a question for the progression design; ceilings do not move either way.
+- **Development (approved, stored, not active):** when progression exists, the style's attributes develop 20% faster. The others are not slowed (Decision 57). Ceilings do not move.
 - **AI behaviour:** on the ice, AI-controlled players act their style. Track A work, not designed yet.
 - **Evolving:** the chosen style can be changed between seasons; the change affects development from then on and never rewrites ratings already earned.
 - **Chosen against observed:** the game can also work out an *observed style* from what the player actually does (shots, passes, hits). Show both: "Chosen: Playmaker. Plays like: Sniper." Observed style is a label only.
@@ -113,11 +113,29 @@ Ids are stable and never shown to players. Display names can change without touc
 | PS16 | Acrobat | G | No technique. Somehow stops it. | reflexes, recovery, agility | positioning, rebounds | Proposed | Blue card |
 | PS17 | Puck-Handling Goalie | G | Thinks he is a defenseman. Is occasionally right. | puck handling, composure | pad saves, discipline | Proposed | Blue card |
 
-Dropped since the first draft: Faceoff Specialist (too narrow to be an identity; faceoffs now sit under Two-Way Forward). Left out on purpose: a Hybrid goalie, which is the absence of a style.
+Dropped since the first draft: Faceoff Specialist (too narrow to be an identity; faceoffs now sit under Two-Way Forward).
 
-## 3. Beer League Archetypes (green cards): registry for review, evolving (Decision 44)
+### 2a. Proposed: PS18 Hybrid Goalie (for review; not implemented)
 
-**Status: submitted for the creative director's review (ruling of Nov 25: batch 16.10 archetype cards are not finalized until this review is complete).** This section includes the edits from the director's proposed rulings of the same day; they are marked *(proposed ruling)* and take effect when confirmed. Nothing here is implemented.
+Requested in Decision 57: an explicitly selectable balanced goalie style, not the absence of one.
+
+| Field | Proposal |
+| --- | --- |
+| Id, name, eligibility | PS18, Hybrid Goalie, goalies only |
+| Description | "Butterfly when it suits, stand-up when it does not. No habits to exploit, no party trick either." |
+| **Starting allocation** | **No toward or away attributes.** The style's 25% share of the starting spread is flat. The effect is real and fits the name: the influences' leanings are worn down by a quarter, so a Hybrid goalie starts a little more even than his heroes made him. Same budget, no added points, ceilings untouched |
+| **Development** | Every other style speeds up two or three attributes by 20%. Hybrid instead speeds up the six technique attributes (reflexes, positioning, glove hand, blocker, pad saves, recovery) by **7% each**: roughly the same total benefit as 20% on two, spread evenly. Nothing is slowed |
+| Why not "a little of everything, +20%" | Six attributes at 20% would make Hybrid strictly the best choice for development |
+| Card | Blue card `style_PS18`: a goalie caught halfway between standing and dropping, reading the shooter |
+| Engine changes needed | A style may have an empty toward list; a per-style development rate (7% here) beside the default 20%; the "develops faster" list becomes its own field. Small, with tests |
+
+Alternative if you would rather it lean somewhere: toward positioning and recovery (the two attributes every technique shares), away from nothing, standard 20% development on those two. Simpler, but then it is a fifth specialist rather than a balanced style. I recommend the table above.
+
+**Question:** flat allocation with 7% on six attributes (recommended), or the alternative?
+
+## 3. Beer League Archetypes (green cards): approved for artwork (Decisions 44, 54, 55)
+
+**Status: approved (Decisions 54 and 55), subject to future balancing.** All seven starting and eleven evolved archetypes are approved and cleared for artwork. The starting archetypes are in the game (`src/dynasty/archetypes.ts`) and chosen in Create a Player. The evolved archetypes' rules are not built: they need the career systems, and Hall of Famer and Hockey Parent also need systems that are not designed yet.
 
 **Ruling in force:** an archetype is a player's identity within beer league culture. The player picks an eligible starting archetype in the creator; it then evolves with age, experience, memberships, leadership, attendance, loyalty, decisions, discipline, achievements and events. Age-dependent archetypes respect the player's actual age.
 
@@ -125,18 +143,18 @@ Dropped since the first draft: Faceoff Specialist (too narrow to be an identity;
 
 | Topic | Rule |
 | --- | --- |
-| **Active archetype** | A person has exactly one active archetype at a time |
-| **Card collection** *(proposed ruling)* | Every archetype a person has ever earned stays in a **permanent career collection**, with the date and reason it was earned. Losing the active status never removes the card |
+| **Automatic archetype** | A person has exactly one automatic archetype at a time |
+| **Card collection** | Every archetype a person has ever earned stays in a **permanent career collection**, with the date and reason it was earned. Losing the active status never removes the card |
 | **Attribute implications** | **None.** An archetype never modifies an attribute, a ceiling, a development rate or a simulation roll (Decision 45; restated in the proposed rulings). Only background, influences and play style move numbers |
 | **What it does do** | Changes how people talk to and about the player; which invitations, events and dialogue options appear; the newspaper's epithet; the card shown on the profile. Each hook is specified when its system is built |
-| **When transitions are checked** | Between seasons (four times a year), and immediately on a named event: captaincy given or removed, induction, joining a fifth team, a streak ending, **a temporary condition expiring** *(proposed ruling)* |
+| **When transitions are checked** | Between seasons (four times a year), and immediately on a named event: captaincy given or removed, induction, joining a fifth team, a streak ending, **a temporary condition expiring** |
 | **Which one becomes active** | Of all archetypes the person currently qualifies for, the **highest priority** (the order of table 3.3, top first). Starting archetypes rank below every evolved one |
-| **Losing an archetype** | Only those with a "lost when" condition can lapse (Captain, Iron Man, Ringer, No-Show). When one lapses, eligibility is **re-evaluated from scratch** and the highest-priority archetype the person still qualifies for becomes active *(proposed ruling; replaces "returns to previous")*. The lapsed card stays in the collection |
-| **Player choice** | Open question 3 below: may the player pin any earned card as active, or is the active one always automatic? |
+| **Losing an archetype** | Only those with a "lost when" condition can lapse (Captain, Iron Man, Ringer, No-Show). When one lapses, eligibility is **re-evaluated from scratch** and the highest-priority archetype the person still qualifies for becomes active. The lapsed card stays in the collection |
+| **Automatic against displayed (Decision 55)** | Two separate things. The **automatic career archetype** is worked out by the rules below and determines contextual dialogue, event eligibility and career recognition. The **displayed profile archetype** is whichever previously earned card the player has **pinned** to their public profile (the automatic one until they pin another). Pinning changes nothing but the card shown: not eligibility, not NPC behaviour, not gameplay |
 | **Telling the player** | A card reveal, a line in the career history, and a newspaper item for the rare ones |
 | **Generated league players** | Same rules, applied to their generated history |
-| **Thresholds** *(proposed ruling)* | Every number below is configuration data, not code, and is a starting value subject to balancing |
-| **Reserved ids** *(proposed ruling)* | AR08 to AR19 are reserved for further starting archetypes and AR31 to AR49 for further evolved ones. Ids are never reused |
+| **Thresholds** | Every number below is configuration data, not code, and is a starting value subject to balancing |
+| **Reserved ids** | AR08 to AR19 are reserved for further starting archetypes and AR31 to AR49 for further evolved ones. Ids are never reused |
 
 **What "a season" means here.** The calendar has four seasons a year of 21 regular-season games each (Decision 34). "Seasons played" counts seasons in which the person appeared in at least half of one team's games. "Attendance" is games attended over games scheduled across all teams the person belongs to.
 
@@ -151,7 +169,7 @@ A starting archetype is the active one until an evolved archetype is earned. It 
 | AR03 | Washed-Up Junior | Background: Junior | Played junior, will tell you, peaked at 17. | Storyteller: the stories get longer. Competitive: takes beer league far too seriously | Green card |
 | AR04 | Rink Rat | Background: Youth hockey or High school | Has been at this rink since he was six. Knows which shower works. | Loyal: knows every staff member by name | Green card |
 | AR05 | Roller Kid | Background: Roller hockey convert | Dangles for days. Cannot stop. | Puck Hog: nobody is surprised | Green card |
-| AR06 | Equipment Guy | Anyone | Four sticks, three hundred dollars each. Cannot raise the puck. | Gear Snob: the pro shop greets him by name. Gets extra dialogue and warnings about gear; no mechanical bonus *(proposed ruling)* | Green card |
+| AR06 | Equipment Guy | Anyone | Four sticks, three hundred dollars each. Cannot raise the puck. | Gear Snob: the pro shop greets him by name. Gets extra dialogue and warnings about gear; no mechanical bonus | Green card |
 | AR07 | Emergency Goalie | Position: goalie | Not really a goalie. Owns the gear. Gets the call anyway. | Flaky: the whole league's group chat panics. Reliable: beloved | Green card |
 
 Backgrounds available at 18 are beginner, pond, roller, youth, high school and junior, so every created player has at least Rookie and Equipment Guy to choose from, plus one tied to the background (two for a goalie).
@@ -166,9 +184,9 @@ Highest priority first. All thresholds are starting values.
 | 2 | AR21 | Locker Room Legend | Age 30+, 40 seasons played (ten years), leadership in the top tenth of the league, career attendance 85%+ | Four bars: age, seasons 0 to 40, leadership rank, attendance | Never | Average on the ice. Undefeated in the room. | Chirper and Storyteller: holds court. Pays Up: buys the first round |
 | 3 | AR22 | Captain | Named captain of any team | "Be named captain" | He captains no team (then re-evaluated) | Wears the C. Collects the fees. Regrets both. | Deadbeat captain: comedy. Hothead captain: referees know his name |
 | 4 | AR23 | Old Timer | Age 45+ | Age bar to 45 | Never | Slower every year, somehow always open. | Storyteller: "back when we had real boards" |
-| 5 | AR24 | Iron Man | 100 consecutive scheduled league games attended for one team (a little over a year: a year is four seasons of 21, so 84 games) *(flavour text corrected for the four-season calendar, proposed ruling)* | Streak counter 0 to 100 | The streak ends (then re-evaluated; the card stays in the collection) | Has not missed a game in over a year. Nobody asked him to. | Reliable: of course. Flaky: cannot hold this by definition |
+| 5 | AR24 | Iron Man | 100 consecutive scheduled league games attended for one team (a little over a year: a year is four seasons of 21, so 84 games) | Streak counter 0 to 100 | The streak ends (then re-evaluated; the card stays in the collection) | Has not missed a game in over a year. Nobody asked him to. | Reliable: of course. Flaky: cannot hold this by definition |
 | 6 | AR25 | Journeyman | Joins a fifth different team over a career | Teams 0 to 5 | Never | Eleven teams in nine years. Knows everyone, owes most of them. | Mercenary: on purpose. Loyal: bad luck, and says so |
-| 7 | AR26 | Hockey Parent *(rename from Hockey Dad, proposed ruling)* | Age 28+ and the "kids" life event (the event is not designed yet) | Hidden until the event | Never | Leaves early for the kid's practice. Brings orange slices by mistake. | Reliable: arrives exactly at puck drop. Flaky: "it's my week" |
+| 7 | AR26 | Hockey Parent (renamed from Hockey Dad, Decision 55) | Age 28+ and the "kids" life event (the event is not designed yet) | Hidden until the event | Never | Leaves early for the kid's practice. Brings orange slices by mistake. | Reliable: arrives exactly at puck drop. Flaky: "it's my week" |
 | 8 | AR27 | Ringer | Plays a full season in a division two or more tiers below his rating | Hidden (nobody plans to be this) | A full season back at his level (then re-evaluated) | Says he is "just getting back into it". Scores six. | Competitive: does it on purpose. Just Here for Fun: honestly did not notice |
 | 9 | AR28 | No-Show | Attendance under 50% across two consecutive seasons | Hidden | Attendance above 75% for two consecutive seasons (then re-evaluated) | "On my way." He is not on his way. | Flaky: the natural home. Reliable: cannot earn this |
 | 10 | AR29 | Weekend Warrior | Age 25+, 12 seasons played (three years) | Age and seasons 0 to 12 | Never | Desk job all week, Game 7 every Sunday night. | Competitive: Game 7 in warm-ups too |
@@ -183,24 +201,17 @@ Highest priority first. All thresholds are starting values.
 - A Locker Room Legend who stops turning up for two seasons qualifies for No-Show, but Locker Room Legend ranks higher and is never lost, so it stays active. The No-Show card is still added to the collection, and people still mention it.
 - A temporary Ringer season ends: at the next check Ringer lapses and the highest remaining archetype returns.
 
-**Considerations I would raise before these are approved.**
-
-1. **Captain outranks most things.** A captain who is also an Old Timer shows as Captain. If the long-earned identities should show instead, move Captain below Old Timer.
-2. **No-Show and Ringer are mildly unflattering and automatic.** That is the joke, but a player may dislike having one forced as the active card. See question 3.
-3. **Hall of Famer, Hockey Parent and Captain depend on systems not designed yet** (hall of fame, life events, captaincy). Their cards can be drawn now; their rules cannot be built until those exist.
-4. **Hockey Parent.** The rename costs nothing and fits created players of any gender. I recommend it.
+**Settled by Decision 55:** Captain stays above Old Timer; Iron Man stays at 100 games; Hockey Parent is the name; unflattering automatic archetypes (No-Show, Ringer) need not be shown, because the player can pin any earned card.
 
 ### 3.4 Required card artwork
 
-Eighteen green illustrations (7 starting, 11 evolved), each a character vignette with no text, name or numbers baked in, plus the shared green frame, locked state and blank template. Sizes, layout and the full list are in `CARD_ART_SPEC.md`. **Not to be finalized until this registry is approved.**
+Eighteen green illustrations (7 starting, 11 evolved), each a character vignette with no text, name or numbers baked in, plus the shared green frame, locked state and blank template. Sizes, layout and the full list are in `CARD_ART_SPEC.md`. **Approved for production (Decisions 54 and 56).** Hidden archetypes carry a cryptic hint that does not reveal the exact requirement, for example No-Show: "Some people are always on their way."
 
-### 3.5 Questions
+### 3.5 Still pending
 
-1. Are the eleven evolved archetypes, their thresholds and their priority order approved as starting values?
-2. Hockey Dad becomes Hockey Parent?
-3. May the player choose which earned card is active (a "pin"), or is the active archetype always the automatic highest-priority one? The proposed rulings say "one active archetype" and "reevaluate eligible active archetypes", which reads as automatic; I have written it that way.
-4. Iron Man stays at 100 consecutive games with corrected text ("over a year" instead of "a decade"). Would 84, exactly one full year, be the cleaner number?
-5. Captain above or below Old Timer?
+- Hall of Fame induction rules and family life events: each needs its own design approval (Decision 54).
+- Captaincy: how a captain is named and removed belongs to the team-management design.
+- Cryptic hint lines for the four hidden archetypes: to be written with the card text.
 
 ## 4. Player Backgrounds: implemented
 

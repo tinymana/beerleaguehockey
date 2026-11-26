@@ -10,14 +10,17 @@ Read this first. It lets a new session resume without losing creative direction 
 ## Current state
 
 - **Two tracks (approved Nov 25, Decision 34).** Track A is arcade hockey on the ice. Track B is career, dynasty, player creation and statistical simulation.
-- **Track B: authorized and under way.** Authorized so far: revised main menu, Hockey Influences registry, Player DNA architecture, attribute generation, player creator foundation, automated generation and balance tests. Delivered in v0.3.0. Anything else in Track B (league, calendar, saves, aging, recruitment, collectibles, cinematics, fighting, Celly Packs, online play) still needs its own go-ahead.
+- **Track B: authorized and under way.** Authorized so far: revised main menu, Hockey Influences registry, Player DNA architecture, attribute generation, Creator V1, automated generation and balance tests. Anything else in Track B (league, calendar, saves, aging, recruitment, collectibles, cinematics, fighting, Celly Packs, online play) still needs its own go-ahead.
 - **Track A: gated.** Do not begin on-ice match development (Milestone 1) until the creative director explicitly approves the hands-on skating checkpoint.
 - **All supplied art so far is base graphics (Decision 35).** Higher-fidelity art starts with batch 16, and batches 09 to 15 will be re-issued. Treat no current art as final; keep sizes and anchors coming from manifests.
-- **Creator V1 is authorized (Decision 39):** Create a Player V1 now, Create a Team V1 when batch 17 arrives. Off-ice screens use a 960x540 design space (Decision 38); the ice stays 480x320. Plan and step order: `CREATOR_PLAN.md` section 9a. Batch 16 art is audited and kept in `art/character_packages/`; most of it is reference or preset art.
+- **Creator V1 (Decisions 39, 58): first build delivered in v0.4.0.** Create a Player runs in the 960x540 off-ice profile (Decision 38; the ice stays 480x320) with the batch 16.11 interface kit: profile, background, influences, play style, starting archetype, review, confirm, saved players. The player is rolled once at confirmation and stored in the browser; a draft holds choices only, so there is no re-roll. Still to build: appearance, equipment, nationality, attribute icons, randomize. Create a Team V1 waits for batch 17. Plan: `CREATOR_PLAN.md` section 9a.
 - **Identity systems (Decision 45):** influence, play style, background, archetype and personality are five separate systems; only background, influences and play style may move attribute numbers.
-- **Play style (Decision 48):** 25% of the starting attribute spread, 20% faster development (stored, progression not built), inside the budget, ceilings untouched. In the DNA engine since v0.3.2; not yet a choice on the creator screen.
-- **NHL statistics (Decision 47):** audited in `INFLUENCE_ENGINE.md`; raw files in `data/reference/nhl_stats/` (licence unknown, internal use only). **Generated influence profiles are not activated** and the 64 curated profiles are never overwritten. Statistical proxies are never presented as measured physical abilities.
-- **Awaiting the creative director:** the dataset review answers, the archetype registry review (`REGISTRIES.md` section 3; batch 16.10 archetype cards are on hold until then), and final confirmation of the proposed rulings recorded as P28. Branded equipment thumbnails stay out of Creator V1 (Decision 49). The official crest is used for all game branding (Decision 50).
+- **Play style (Decisions 48, 57):** 17 styles approved as initial balancing values; 25% of the starting spread; 20% faster development stored for progression, with nothing else slowed; ceilings untouched. PS18 Hybrid Goalie is proposed in `REGISTRIES.md` 2a and **not implemented until reviewed**.
+- **Influences (Decisions 47, 53):** 64 curated profiles, never modified; 830 skaters with one mild derived leaning (finisher: offensive awareness; playmaker: passing); everyone else selectable and neutral with a limited-data label. Statistical proxies are never presented as measured physical abilities.
+- **Raw NHL statistics are private.** Licence unverified. They live only in the git-ignored `data/private/` and must never be committed, published or copied into a build. **The repository is public.** A fresh checkout does not have them; `npm run data:audit` needs them, the game does not.
+- **Archetypes (Decisions 54, 55):** registry approved for artwork. Starting archetypes are in the game. The automatic career archetype is separate from the displayed (pinned) one. Evolved archetype rules are not built; Hall of Fame and family life events are not designed.
+- **Cards (Decision 56):** `CARD_ART_SPEC.md` approved. Card pictures in the game are labelled placeholders until art arrives.
+- **Batch 26 career cinematics (Decision 59):** on the roadmap as an art collection; cinematics are not authorized to build. Branded equipment thumbnails stay out of Creator V1 (Decision 49). The official crest is used for all game branding (Decision 50).
 - **On-ice reference (Decision 46):** Tape to Tape with NHL '94. Audit and open tradeoffs in `ONICE_DIRECTION.md`.
 - **Art integration:** delivered through batch 15 (v0.3.1). Batch 15 is locker room art, shown only in a developer fit test; the locker room is not a game location yet. Goal art is being redrawn to the gameplay size (`ART_BRIEF.md` section 10). All supplied art so far is base art that will be re-supplied at higher fidelity (Decision 35).
 - **Settled decisions are not reopened** unless a new technical conflict is found. The register is `DECISIONS.md`; open items are listed at its end.
@@ -36,9 +39,9 @@ Gameplay first. Dynasty second. Lifestyle third. The first objective is addictiv
 | `DECISIONS.md` | Every decision with status: Approved, Proposed or Open |
 | `EXPANSION_PLAN.md` | Audit, conflicts, proposed roadmap, asset inventory and open questions for the Nov 25 expansion briefs; the briefs themselves are in `docs/briefs/` |
 | `CREATOR_PLAN.md` | Batch 16 audit, art deficiency report, modular character architecture, batch 17 (Create a Team) art specifications, creator sequence and open questions |
-| `REGISTRIES.md` | Hockey Influences (implemented), play styles (in the engine, provisional), archetypes (under review), backgrounds (implemented), personality traits (designed), and their overlaps |
+| `REGISTRIES.md` | Hockey Influences, play styles (approved; PS18 proposed), archetypes (approved for artwork), backgrounds, personality traits (designed), and their overlaps |
 | `LIFESTYLE_PLAN.md` | Equipment lifecycle proposal, point-and-click location framework, batch 18 art specifications |
-| `INFLUENCE_ENGINE.md` | NHL statistics dataset audit, matching results, proposed (inactive) profile method, sample profiles, confidence classes, licence assessment |
+| `INFLUENCE_ENGINE.md` | NHL statistics audit, matching results, the approved limited method and what is built, sample profiles, licence assessment |
 | `CARD_ART_SPEC.md` | Batch 16.10 card artwork specification: sizes, zones, templates, states, illustration list |
 | `ONICE_DIRECTION.md` | Reference hierarchy, audit of on-ice art against the Tape to Tape direction, tradeoffs needing rulings |
 | `BACKLOG.md` | Ideas with a proposed home. Never a work order |
@@ -77,7 +80,8 @@ npm run typecheck   # strict TypeScript
 npm run build:site  # game + website into dist-site/
 npm run assets:ingest  # rebuild arena assets and registry from art/packages/
 npm run data:influences  # rebuild the Hockey Influences registry from data/influences/curated.tsv
-npm run data:audit  # audit the NHL statistics files; writes review files to data/derived/ (not read by the game)
+npm run data:audit  # needs the private raw files in data/private/; rewrites derived_tendencies.tsv and the private review lists
+python3 -I scripts/art/ingest_ui.py  # copy the batch 16.11 interface atlas into public/assets/ui/
 ```
 
 ## Git

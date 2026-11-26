@@ -9,6 +9,7 @@
 import type { AttributeKey, Position } from './attributes';
 import { attributesFor } from './attributes';
 import { INFLUENCE_DATA } from './data/influences';
+import { EXTENDED_INFLUENCE_LINES } from './data/influencesExtended';
 
 export interface InfluenceRecord {
   id: string;
@@ -29,7 +30,15 @@ export interface InfluenceRecord {
   /** 2 signature, 1 strong, -1 weak. Unlisted attributes are 0. */
   weights: Partial<Record<AttributeKey, number>>;
   blurb: string;
+  /** Where the style profile came from. Absent means curated. */
+  source?: InfluenceSource;
 }
+
+/**
+ * curated: hand-written, the featured set. derived: one mild leaning from the career record (Decision 53).
+ * limited: selectable, shapes nothing, shown with a limited-data label.
+ */
+export type InfluenceSource = 'curated' | 'derived' | 'limited';
 
 export type InfluenceNameSet = 'real' | 'fictional';
 
@@ -40,8 +49,97 @@ export const INFLUENCES: readonly InfluenceRecord[] = INFLUENCE_DATA;
 
 const BY_ID = new Map(INFLUENCES.map((i) => [i.id, i]));
 
+const EXTENDED_POSITION: Record<string, Position> = { F: 'forward', D: 'defense', G: 'goalie' };
+
+/**
+ * The wider registry: everyone else in the reference file. Ids are "N" plus the NHL id.
+ * Skaters whose career record leans clearly one way get a single mild leaning: a finisher toward
+ * offensive awareness, a playmaker toward passing. Nothing else is inferred, and goalies are always neutral.
+ */
+function parseExtended(lines: string): InfluenceRecord[] {
+  const out: InfluenceRecord[] = [];
+  for (const line of lines.split('\n')) {
+    const [referenceId, name, pos, born, country, letter] = line.split('|');
+    const position = EXTENDED_POSITION[pos ?? ''];
+    if (!referenceId || !name || !position) continue;
+    const tendency = position === 'goalie' ? '' : letter;
+    const weights: Partial<Record<AttributeKey, number>> = tendency === 'f' ? { offensiveAwareness: 1 } : tendency === 'p' ? { passing: 1 } : {};
+    out.push({
+      id: `N${referenceId}`,
+      name,
+      alias: null,
+      referenceId,
+      position,
+      born: Number(born) || 0,
+      country: country ?? '',
+      shoots: null,
+      heightIn: null,
+      weightLb: null,
+      tags: tendency === 'f' ? ['finisher'] : tendency === 'p' ? ['playmaker'] : [],
+      weights,
+      blurb: tendency === 'f' ? 'Career record leans toward finishing.' : tendency === 'p' ? 'Career record leans toward setting others up.' : 'Limited data: no playing style on file.',
+      source: tendency === 'f' || tendency === 'p' ? 'derived' : 'limited',
+    });
+  }
+  return out;
+}
+
+let extended: InfluenceRecord[] | null = null;
+let extendedById: Map<string, InfluenceRecord> | null = null;
+
+/** Everyone outside the curated set, in surname order. Parsed on first use. */
+export function extendedInfluences(): readonly InfluenceRecord[] {
+  if (!extended) {
+    extended = parseExtended(EXTENDED_INFLUENCE_LINES);
+    extendedById = new Map(extended.map((i) => [i.id, i]));
+  }
+  return extended;
+}
+
 export function influenceById(id: string): InfluenceRecord | undefined {
-  return BY_ID.get(id);
+  const curated = BY_ID.get(id);
+  if (curated || !id.startsWith('N')) return curated;
+  extendedInfluences();
+  return extendedById?.get(id);
+}
+
+export function influenceSource(influence: InfluenceRecord): InfluenceSource {
+  return influence.source ?? 'curated';
+}
+
+/** Lower-case, accents removed: so "lidstrom" finds "Lidström". */
+export function searchKey(text: string): string {
+  return text.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+/**
+ * Influences a player at this position may choose, curated first, then the wider registry in surname order.
+ * `query` matches any part of the name. Returns at most `limit`.
+ */
+export function searchInfluences(position: Position, query: string, limit = 50): InfluenceRecord[] {
+  const goalie = position === 'goalie';
+  const q = searchKey(query.trim());
+  // Curated before the wider registry; within each, names where a word starts with the query before names that merely contain it.
+  const out: InfluenceRecord[] = [];
+  for (const list of [INFLUENCES, extendedInfluences()]) {
+    const inside: InfluenceRecord[] = [];
+    for (const i of list) {
+      if ((i.position === 'goalie') !== goalie) continue;
+      if (!q) {
+        out.push(i);
+      } else {
+        const name = searchKey(influenceName(i));
+        const at = name.indexOf(q);
+        if (at < 0) continue;
+        if (at === 0 || name[at - 1] === ' ' || name.includes(` ${q}`)) out.push(i);
+        else inside.push(i);
+      }
+      if (out.length >= limit) return out;
+    }
+    out.push(...inside);
+    if (out.length >= limit) return out.slice(0, limit);
+  }
+  return out;
 }
 
 /** The name to show. With fictional names on, an influence without an alias shows its id rather than a real name. */

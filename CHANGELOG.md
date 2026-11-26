@@ -2,6 +2,33 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.4.0 - 2026-11-25 - Create a Player V1 (first build); the wider influence registry
+
+145 tests. On the ice nothing changed.
+
+### Added
+- **Off-ice rendering profile (Decision 38):** off-ice screens draw at 960x540 and the ice stays 480x320, in one game. Whole-number scaling where the window allows; smaller windows shrink to fit with letterboxing.
+- **Create a Player V1 (Decision 58)**, drawn with the batch 16.11 interface kit: Profile (name, position), Background, Influences (search across 8,662 people; one primary and two secondaries at 60 / 25 / 15), Play Style, Archetype, Review, Saved Players. Keyboard, mouse and gamepad. Open it from the menu or with `#creator`.
+- **No re-roll.** Before confirmation the screen shows the range each attribute can start in and the range of its potential, updating as you browse choices. The player is rolled once, at confirmation, and kept. A draft stores choices only: no seed, no ratings.
+- **Stored players:** up to 8 confirmed players kept in the browser, versioned, with tests. A save that cannot be read is set aside, not overwritten.
+- **Starting archetypes** AR01 to AR07 in the game, offered by background and position (Decisions 54, 55).
+- **Wider influence registry (Decision 53):** everyone in the biographical file is selectable. 830 skaters carry one mild leaning (finisher: offensive awareness; playmaker: passing); the rest are neutral and labelled limited data; goalies outside the curated ten are neutral. The 64 curated profiles are unchanged and listed first.
+- **Reconciliation worklist** for the 479 unmerged statistics records, with suggested matches, and a decisions file the audit applies.
+
+### Changed
+- The earlier creator foundation screen is replaced by V1. Its re-roll button is gone on purpose.
+- **Raw NHL statistics removed from the repository** and kept in a git-ignored folder (licence pending, Decision 53).
+
+### Known issues
+- Card pictures are labelled placeholders; the font is the temporary 5x7.
+- Appearance, equipment, nationality, attribute icons and randomize are not built yet.
+- Names accept letters, spaces, apostrophes and hyphens, 12 characters; there is no offensive-name filter. Gamepad cannot type a name.
+- Stored players cannot be deleted in V1, and the limit of 8 is a proposed value.
+- A determined player can still confirm several players and keep the best. Only a rule on which created player may enter a career can close that; it belongs to the career design.
+- The bundle grew by about 300 kB for the wider registry.
+- The title screen and menu are still in the 480x320 profile.
+- PS18 Hybrid Goalie is proposed, not implemented.
+
 ## 0.3.2 - 2026-11-25 - Play style in the DNA engine; NHL statistics audit
 
 Nothing visible in the game changed. 132 tests.

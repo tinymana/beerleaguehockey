@@ -268,3 +268,10 @@ The biggest risk is arcade feel, which no document can settle, so it is tackled 
 - **Tests:** unit tests for rules and simulation logic, determinism tests (same seed, same result), contract tests for `MatchResult`, and multi-season soak tests.
 - **Saves:** schema version bumped with every shape change, with a migration and a test fixture from the previous version.
 - **Approval:** I bring you a short proposal before locking any major mechanic; design changes are recorded in this document.
+
+## Rendering profiles and the created-player store (v0.4.0)
+
+- **Profiles** (`src/app/stage.ts`): `ice` 480x320 and `offIce` 960x540. A scene calls `setProfile` when it starts and restores `ice` when it shuts down; the game is resized, never recreated, and `src/match` knows nothing about it. `profileFit` is a pure function with tests.
+- **Interface kit:** the batch 16.11 atlas is copied unchanged by `scripts/art/ingest_ui.py`; frames and nine-slice insets come from its manifest.
+- **Created players** (`src/dynasty/createdPlayer.ts`, pure): a draft (choices only) and confirmed players (DNA rolled once). Versioned; a damaged confirmed player makes the read fail rather than vanish. `src/app/createdPlayerStore.ts` keeps it in local storage and sets a damaged save aside.
+- **Wider influence registry:** `src/dynasty/data/influencesExtended.ts` is one packed string, parsed on first use.

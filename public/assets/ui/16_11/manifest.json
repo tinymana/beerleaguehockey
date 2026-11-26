@@ -1,0 +1,84 @@
+{
+ "batch": "16.11",
+ "atlas": "ui_atlas.png",
+ "nineSliceInsets": [
+  8,
+  8,
+  8,
+  8
+ ],
+ "frames": {
+  "panel": [
+   0,
+   0,
+   64,
+   64
+  ],
+  "button_idle": [
+   64,
+   0,
+   64,
+   32
+  ],
+  "button_selected": [
+   128,
+   0,
+   64,
+   32
+  ],
+  "button_confirm": [
+   192,
+   0,
+   64,
+   32
+  ],
+  "button_disabled": [
+   0,
+   64,
+   64,
+   32
+  ],
+  "card_gold": [
+   64,
+   64,
+   64,
+   64
+  ],
+  "card_blue": [
+   128,
+   64,
+   64,
+   64
+  ],
+  "card_green": [
+   192,
+   64,
+   64,
+   64
+  ],
+  "bar_filled": [
+   0,
+   128,
+   8,
+   8
+  ],
+  "bar_empty": [
+   8,
+   128,
+   8,
+   8
+  ],
+  "arrow_left": [
+   16,
+   128,
+   16,
+   16
+  ],
+  "arrow_right": [
+   32,
+   128,
+   16,
+   16
+  ]
+ }
+}

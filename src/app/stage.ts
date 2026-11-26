@@ -16,15 +16,57 @@ export function integerZoom(windowWidth: number, windowHeight: number): number {
   return Math.max(1, Math.floor(Math.min(windowWidth / GAME_WIDTH, windowHeight / GAME_HEIGHT)));
 }
 
+/**
+ * Rendering profiles (Decision 38). One game, two design spaces: the ice at 480x320 and every
+ * off-ice screen at 960x540. A scene picks its profile when it starts; the on-ice engine is untouched.
+ */
+export const PROFILES = {
+  ice: { width: GAME_WIDTH, height: GAME_HEIGHT },
+  offIce: { width: 960, height: 540 },
+} as const;
+export type ProfileName = keyof typeof PROFILES;
+
+/**
+ * How a profile fits a window: the largest whole-number zoom, never below 1, so pixels stay square.
+ * A window smaller than the design space cannot be served by whole numbers: `shrink` scales the
+ * whole stage down to fit instead (1 when it is not needed). The rest of the window is letterbox.
+ */
+export function profileFit(profile: ProfileName, windowWidth: number, windowHeight: number): { zoom: number; shrink: number } {
+  const { width, height } = PROFILES[profile];
+  const ratio = Math.min(windowWidth / width, windowHeight / height);
+  return { zoom: Math.max(1, Math.floor(ratio)), shrink: Math.min(1, ratio) };
+}
+
+let current: ProfileName = 'ice';
+let refit: (() => void) | null = null;
+
+export function currentProfile(): ProfileName {
+  return current;
+}
+
+/** Switch design space. Safe to call when already there. */
+export function setProfile(game: Phaser.Game, profile: ProfileName): void {
+  if (current === profile) return;
+  current = profile;
+  const { width, height } = PROFILES[profile];
+  game.scale.resize(width, height);
+  refit?.();
+}
+
 export function fitStage(game: Phaser.Game): void {
   const stage = document.getElementById('stage');
   if (!stage) return;
   const apply = (): void => {
-    const zoom = integerZoom(window.innerWidth, window.innerHeight);
-    stage.style.width = `${GAME_WIDTH * zoom}px`;
-    stage.style.height = `${GAME_HEIGHT * zoom}px`;
+    const { width, height } = PROFILES[current];
+    const { zoom, shrink } = profileFit(current, window.innerWidth, window.innerHeight);
+    stage.style.width = `${width * zoom}px`;
+    stage.style.height = `${height * zoom}px`;
+    stage.style.flexShrink = '0';
+    stage.style.transform = shrink < 1 ? `scale(${shrink})` : '';
     game.scale.setZoom(zoom);
+    game.scale.refresh();
   };
+  refit = apply;
   apply();
   window.addEventListener('resize', apply);
 }

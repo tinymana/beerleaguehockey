@@ -203,3 +203,12 @@ Steps 1 and 2 come first because everything else is drawn with them.
 - **Cards (batch 16.10):** specification in `CARD_ART_SPEC.md`. Archetype cards on hold until the registry review.
 - **Branding (Decision 50):** the official Beer League Hockey crest on every creator screen that carries game branding.
 
+## 11. Creator V1, first build (v0.4.0, Decision 58)
+
+Built: plan steps 1 (rendering profile), 2 (interface kit: panels, buttons, card frames; focus for keyboard, mouse and gamepad; text fields; scrolling searchable list), 9 (influences, now across 8,662 people), 10 (play style and archetype), 12 (review and confirm) and 13 (stored players). Step 5 is partly built: first and last name and position; nickname, number, hometown, height, weight and handedness are not.
+
+How re-roll exploitation is prevented: nothing is rolled before confirmation. The attribute panel shows the published range for the current choices (and for whichever choice is highlighted), so choices can be compared honestly without revealing a roll. Confirmation rolls once and stores the result. The draft that survives a reload contains choices only.
+
+Not built: steps 3, 4, 6, 7, 8, 11 (icons), 14, 15. Bars are drawn in code; the kit's bar tiles are not used yet. The export and import of stored players in step 13 is not built.
+
+Questions: 1. Is 8 stored players the right limit, and should deleting one be allowed? 2. Which created player may enter a career, and how many careers, is what finally closes "make several and keep the best". 3. Gamepad name entry: an on-screen keyboard, or a random-name button?

@@ -28,6 +28,6 @@ export class BootScene extends Phaser.Scene {
     registerPixelFont(this);
     // A dedicated development route: open the page with #arena-lab to land in the Arena Asset Lab.
     const hash = window.location.hash;
-    this.scene.start(hash === '#arena-lab' ? SCENES.arenaLab : hash === '#locker-room' ? SCENES.lockerRoom : SCENES.title);
+    this.scene.start(hash === '#arena-lab' ? SCENES.arenaLab : hash === '#creator' ? SCENES.creator : hash === '#locker-room' ? SCENES.lockerRoom : SCENES.title);
   }
 }

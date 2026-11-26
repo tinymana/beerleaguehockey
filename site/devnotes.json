@@ -2,6 +2,29 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.4.0",
+      "date": "2026-11-25",
+      "title": "Create a Player, for real this time",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Create a Player has a proper screen: name your skater, pick where they learned the game, who they grew up watching, how they play and who they are in the room."
+        },
+        {
+          "tag": "new",
+          "text": "Search thousands of professionals for your hockey heroes. The famous ones shape your player the most."
+        },
+        {
+          "tag": "improved",
+          "text": "No more re-rolling. You see the range your choices lead to, you commit, and your player is rolled once. Just like real life, you get what you get."
+        },
+        {
+          "tag": "new",
+          "text": "Your confirmed players are kept in your browser."
+        }
+      ]
+    },
+    {
       "version": "0.3.2",
       "date": "2026-11-25",
       "title": "How do you play?",

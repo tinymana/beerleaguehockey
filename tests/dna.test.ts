@@ -7,7 +7,7 @@ import { BACKGROUNDS, CREATED_PLAYER_AGE, backgroundsForAge } from '../src/dynas
 import { DNA_CONFIG, DNA_VERSION, attributeBounds, dnaInputProblems, generateDNA, influenceBias, parseDNA, serializeDNA, startingAttributes, startingBias } from '../src/dynasty/dna';
 import { PLAY_STYLES, developsFaster, playStyleById, playStylesFor } from '../src/dynasty/playStyles';
 import type { DnaInput } from '../src/dynasty/dna';
-import { INFLUENCES, influenceById, influenceName, influencesFor, missingAliases, registryProblems } from '../src/dynasty/influences';
+import { INFLUENCES, extendedInfluences, influenceById, influenceName, influenceSource, influencesFor, missingAliases, registryProblems, searchInfluences } from '../src/dynasty/influences';
 
 const ROOT = join(__dirname, '..');
 const skater = (over: Partial<DnaInput> = {}): DnaInput => ({ seed: 1, position: 'forward', background: 'youth', primary: 'F01', secondaries: [], ...over });
@@ -313,5 +313,72 @@ describe('play styles (Decision 48)', () => {
     const migrated = parseDNA(JSON.stringify({ ...v1, version: 1 }));
     expect(migrated).toEqual(old);
     expect(migrated.playStyle).toBeNull();
+  });
+});
+
+describe('the wider influence registry (Decision 53)', () => {
+  it('leaves the 64 curated profiles as the featured set and adds everyone else behind neutral ids', () => {
+    expect(INFLUENCES.length).toBe(64);
+    const wider = extendedInfluences();
+    expect(wider.length).toBeGreaterThan(8000);
+    const curatedRefs = new Set(INFLUENCES.map((i) => i.referenceId));
+    const ids = new Set<string>();
+    for (const i of wider) {
+      expect(i.id).toBe(`N${i.referenceId}`);
+      expect(curatedRefs.has(i.referenceId)).toBe(false);
+      ids.add(i.id);
+    }
+    expect(ids.size).toBe(wider.length);
+    expect(influenceById('F01')?.name).toBe('Wayne Gretzky');
+    expect(influenceSource(influenceById('F01')!)).toBe('curated');
+  });
+
+  it('gives a derived skater exactly one mild leaning, and nothing else to anyone', () => {
+    const counts = { derived: 0, limited: 0 };
+    for (const i of extendedInfluences()) {
+      const entries = Object.entries(i.weights);
+      const source = influenceSource(i);
+      if (source === 'derived') {
+        counts.derived++;
+        expect(i.position).not.toBe('goalie');
+        expect(entries.length).toBe(1);
+        expect(entries[0]![1]).toBe(1);
+        expect(['offensiveAwareness', 'passing']).toContain(entries[0]![0]);
+        expect(i.tags).toEqual([entries[0]![0] === 'passing' ? 'playmaker' : 'finisher']);
+      } else {
+        counts.limited++;
+        expect(source).toBe('limited');
+        expect(entries).toEqual([]);
+        expect(i.tags).toEqual([]);
+      }
+    }
+    expect(counts.derived).toBeGreaterThan(700);
+    expect(counts.derived).toBeLessThan(900);
+  });
+
+  it('a limited-data influence shapes nothing; a derived one leans mildly; both stay inside the budget', () => {
+    const wider = extendedInfluences();
+    const neutral = wider.find((i) => influenceSource(i) === 'limited' && i.position === 'forward')!;
+    const finisher = wider.find((i) => influenceSource(i) === 'derived' && i.weights.offensiveAwareness === 1)!;
+    const flat = influenceBias(skater({ primary: neutral.id }));
+    for (const key of SKATER_ATTRIBUTES) expect(flat[key]).toBeCloseTo(0, 9);
+    const lean = influenceBias(skater({ primary: finisher.id }));
+    expect(lean.offensiveAwareness!).toBeGreaterThan(0.9);
+    expect(SKATER_ATTRIBUTES.reduce((a, k) => a + (lean[k] ?? 0), 0)).toBeCloseTo(0, 9);
+    // As a 15% secondary beside a curated primary it barely moves anything, and the curated profile still dominates.
+    const mixed = influenceBias(skater({ primary: 'F33', secondaries: ['F08', finisher.id] }));
+    expect(mixed.strength!).toBeGreaterThan(mixed.offensiveAwareness!);
+    expect(generateDNA(skater({ primary: neutral.id, playStyle: 'PS01' })).playStyle).toBe('PS01');
+    expect(dnaInputProblems(skater({ position: 'goalie', primary: neutral.id })).length).toBeGreaterThan(0);
+  });
+
+  it('searches by any part of a name, ignoring accents, curated first, goalies only for goalies', () => {
+    const hits = searchInfluences('forward', 'lidstrom');
+    expect(hits[0]?.id).toBe('D02');
+    expect(searchInfluences('forward', 'gretz').map((i) => i.id)).toContain('F01');
+    expect(searchInfluences('goalie', '').slice(0, 10).every((i) => i.position === 'goalie')).toBe(true);
+    expect(searchInfluences('forward', '', 70).slice(0, 54).every((i) => influenceSource(i) === 'curated')).toBe(true);
+    expect(searchInfluences('forward', 'zzzzqq')).toEqual([]);
+    expect(searchInfluences('forward', '', 25).length).toBe(25);
   });
 });

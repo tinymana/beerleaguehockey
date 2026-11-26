@@ -1,11 +1,16 @@
 #!/usr/bin/env python3
 """Development-time audit of the NHL career statistics files against the biographical file.
 
-Reads   data/reference/nhl_stats/SKATERS.csv, GOALIES.csv, data/reference/nhl_players.csv, data/influences/curated.tsv
-Writes  data/derived/stat_matches.tsv      one row per statistics record with its match status
-        data/derived/stat_review.tsv       records that need a person to decide (never merged automatically)
-        data/derived/sample_profiles.json  proposed data-derived leanings (NOT used by the game)
-Prints  a summary. Nothing here is imported by the game. Run: python3 -I scripts/data/audit_stats.py
+The raw statistics are kept out of the repository (licence pending): data/private/ is git-ignored.
+Reads   data/private/nhl_stats/SKATERS.csv, GOALIES.csv   (raw, private)
+        data/reference/nhl_players.csv, data/influences/curated.tsv
+        data/influences/reconciliation_decisions.tsv      (a person's rulings on doubtful matches, optional)
+Writes  data/private/derived/stat_matches.tsv      every statistics record with its match status (private: restates the raw data)
+        data/private/derived/stat_review.tsv       conflicts and ambiguities with their candidates (private)
+        data/private/derived/reconciliation.tsv    the worklist: every unmerged record with suggested people (private)
+        data/influences/derived_tendencies.tsv     NHL id and tendency only: the one derived fact the game uses
+        data/derived/sample_profiles.json, curated_comparison.tsv   small review samples
+Run: python3 -I scripts/data/audit_stats.py
 """
 import csv, json, os, sys, unicodedata, collections, bisect
 
@@ -42,8 +47,8 @@ by_name = collections.defaultdict(list)
 for b in bio:
     by_name[norm(b['Player'])].append(b)
 
-skaters = read(P('data/reference/nhl_stats/SKATERS.csv'))
-goalies = read(P('data/reference/nhl_stats/GOALIES.csv'))
+skaters = read(P('data/private/nhl_stats/SKATERS.csv'))
+goalies = read(P('data/private/nhl_stats/GOALIES.csv'))
 records = []
 for kind, rows in (('skater', skaters), ('goalie', goalies)):
     for i, r in enumerate(rows):
@@ -84,6 +89,21 @@ for rec in records:
         rec['status'], rec['why'] = 'conflict', '; '.join(bits)
     else:
         rec['status'], rec['why'] = 'ambiguous', f'{len(cands)} biographical candidates, {len(strong)} fit; {same_name_stats} statistics records share the name'
+# a person's rulings: file, name, first, last, player_id (or 'none' to say this record has no biographical row)
+by_id = {b['PlayerID']: b for b in bio}
+dpath = P('data/influences/reconciliation_decisions.tsv')
+decided = 0
+if os.path.exists(dpath):
+    with open(dpath, encoding='utf-8') as f:
+        for line in f:
+            if line.startswith('#') or not line.strip(): continue
+            kind, name, first, last, pid = [c.strip() for c in line.rstrip('\n').split('\t')[:5]]
+            for rec in records:
+                if rec['kind'] == kind and rec['name'] == name and str(rec['first']) == first and str(rec['last']) == last:
+                    rec.pop('bio', None)
+                    if pid in by_id: rec['status'], rec['why'], rec['bio'] = 'matched-by-decision', 'ruled by a person', by_id[pid]
+                    else: rec['status'], rec['why'] = 'unmatched', 'ruled by a person: no biographical record'
+                    decided += 1
 # two statistics records must never claim the same person
 claims = collections.defaultdict(list)
 for rec in records:
@@ -91,16 +111,17 @@ for rec in records:
 for pid, rs in claims.items():
     if len(rs) > 1:
         for rec in rs:
+            if rec['status'] == 'matched-by-decision': continue
             rec['status'], rec['why'] = 'ambiguous', f'{len(rs)} statistics records fit the same person (id {pid})'
             del rec['bio']
 
-os.makedirs(P('data/derived'), exist_ok=True)
-with open(P('data/derived/stat_matches.tsv'), 'w', encoding='utf-8', newline='') as f:
+os.makedirs(P('data/derived'), exist_ok=True); os.makedirs(P('data/private/derived'), exist_ok=True)
+with open(P('data/private/derived/stat_matches.tsv'), 'w', encoding='utf-8', newline='') as f:
     w = csv.writer(f, delimiter='\t', lineterminator='\n')
     w.writerow(['file', 'row', 'name', 'first', 'last', 'position', 'status', 'player_id', 'reason'])
     for rec in records:
         w.writerow([rec['kind'], rec['row'], rec['name'], rec['first'], rec['last'], rec['pos'], rec['status'], rec.get('bio', {}).get('PlayerID', ''), rec['why']])
-with open(P('data/derived/stat_review.tsv'), 'w', encoding='utf-8', newline='') as f:
+with open(P('data/private/derived/stat_review.tsv'), 'w', encoding='utf-8', newline='') as f:
     w = csv.writer(f, delimiter='\t', lineterminator='\n')
     w.writerow(['file', 'row', 'name', 'first', 'last', 'position', 'games', 'status', 'reason', 'candidates (id:position:born)'])
     for rec in records:
@@ -155,7 +176,7 @@ for key, rs in gpools.items():
 
 def classify(rec):
     """Confidence class and proposed leanings. Leanings only where the record measures the thing directly."""
-    merged = rec['status'] in ('matched', 'matched-by-evidence')
+    merged = rec['status'] in ('matched', 'matched-by-evidence', 'matched-by-decision')
     if rec['kind'] == 'skater':
         enough, some = rec['gp'] >= 400, rec['gp'] >= 100
         lean, tag = {}, None
@@ -200,8 +221,37 @@ index = collections.defaultdict(list)
 for rec in records: index[norm(rec['name'])].append(rec)
 samples = [profile(r) for n in SAMPLES for r in index.get(norm(n), [])]
 allp = {'note': 'Proposed leanings for review. Not read by the game.', 'samples': samples}
-with open(P('data/derived/sample_profiles.json'), 'w', encoding='utf-8') as f:
+with open(P("data/private/derived/sample_profiles.json"), 'w', encoding='utf-8') as f:
     json.dump(allp, f, indent=1, ensure_ascii=False); f.write('\n')
+
+# ---------- the one derived fact the game uses (Decision 53): finisher or playmaker, merged skaters only ----------
+with open(P('data/influences/derived_tendencies.tsv'), 'w', encoding='utf-8', newline='') as f:
+    f.write('# GENERATED by scripts/data/audit_stats.py. NHL player id and tendency. finisher: one mild offensive awareness leaning; playmaker: one mild passing leaning.\n')
+    rows_t = sorted((int(r['bio']['PlayerID']), r['tag']) for r in records if 'bio' in r and r['kind'] == 'skater' and r['tag'] in ('finisher', 'playmaker'))
+    for pid, tag in rows_t: f.write(f'{pid}\t{tag}\n')
+print('derived tendencies written', len(rows_t), dict(collections.Counter(t for _, t in rows_t)), '| decisions applied', decided)
+
+# ---------- reconciliation worklist ----------
+taken = {r['bio']['PlayerID'] for r in records if 'bio' in r}
+free = [b for b in bio if b['PlayerID'] not in taken]
+def surname(n): return norm(n.split(' ')[-1])
+free_by_surname = collections.defaultdict(list)
+for b in free: free_by_surname[surname(b['Player'])].append(b)
+with open(P('data/private/derived/reconciliation.tsv'), 'w', encoding='utf-8', newline='') as f:
+    w = csv.writer(f, delimiter='\t', lineterminator='\n')
+    w.writerow(['file', 'name', 'first', 'last', 'position', 'games', 'status', 'reason', 'suggested (id:name:position:born), best first', 'DECISION player_id or none'])
+    todo = [r for r in records if r['status'] in ('unmatched', 'conflict', 'ambiguous')]
+    with_suggestion = 0
+    for rec in sorted(todo, key=lambda r: (-float(r['raw']['games']), r['name'])):
+        if rec['status'] == 'unmatched':
+            cands = [b for b in free_by_surname.get(surname(rec['name']), []) if position_ok(rec, b) and plausible(rec, b)]
+        else:
+            cands = [b for b in by_name.get(norm(rec['name']), [])]
+        cands.sort(key=lambda b: abs((rec['first'] - int(b['Birthday'][:4])) - 21))
+        with_suggestion += bool(cands)
+        w.writerow([rec['kind'], rec['name'], rec['first'], rec['last'], rec['pos'], rec['raw']['games'], rec['status'], rec['why'],
+                    ' | '.join(f"{b['PlayerID']}:{b['Player']}:{b['Position']}:{b['Birthday'][:4]}" for b in cands[:4]), ''])
+print('reconciliation worklist', len(todo), 'records;', with_suggestion, 'have a suggested person;', sum(1 for r in todo if r['status'] == 'unmatched' and len([b for b in free_by_surname.get(surname(r['name']), []) if position_ok(r, b) and plausible(r, b)]) == 1), 'unmatched have exactly one')
 
 # ---------- summary ----------
 def tally(rs, key): return dict(collections.Counter(r[key] for r in rs).most_common())

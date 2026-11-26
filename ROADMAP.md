@@ -30,3 +30,18 @@ The roadmap follows your nine milestones in order, with a short setup step in fr
 **Nov 25 expansion briefs.** A proposed re-phasing that adds a career track (menu, Hockey Influences, attributes, four-season calendar, aging, recruitment, collectibles, Pick-Up, leaderboards, cinematics, fighting) beside Milestones 1 to 3 is in `EXPANSION_PLAN.md` section 4. Approved as the order of work by Decision 34; each Track B phase beyond the first still needs its own go-ahead.
 
 See `BACKLOG.md` for where later systems are proposed to land.
+
+## Art collections on the roadmap (creative director)
+
+| Batch | Collection | Status |
+| --- | --- | --- |
+| 16.10 | Influence, Play Style and Archetype cards | Specification approved (Decision 56); art in production |
+| 17 | Create a Team | Awaited; Create a Team V1 follows it |
+| 18 | Off-ice locations: locked visual direction | Complete on the art side (Decision 50); not yet delivered to development |
+| 19 | Career Rewards and Collectibles | Next on the art side |
+| 20-21 | Cinematics | Referred to in Decision 59; not yet seen by development |
+| 26 | **Additional career cinematics** (Decision 59): 26A arrival and pregame, 26B Program Manager, 26C postgame culture, 26D beer league disasters, 26E recurring NPC interactions. 58 proposed scenes | On the roadmap. Needs: the detailed checklist, and a cinematic framework design (contextual, reusable, skippable, event-driven, modular player appearance, dynamic text) before any build. Cinematics are not yet authorized Track B work |
+
+## Creator V1 progress (Decisions 39, 58)
+
+Done in v0.4.0: off-ice rendering profile; interface kit; profile, background, influence, play style and archetype steps; review, confirmation, stored players; no re-roll. Next: appearance record and compositor, character art category and lab, appearance, equipment and nationality steps, attribute icons, randomize and presets. Create a Team V1 waits for batch 17.
