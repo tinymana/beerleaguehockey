@@ -2,6 +2,25 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.13.0",
+      "date": "2026-11-26",
+      "title": "Play it on your phone",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Touch controls. A stick under your left thumb, Shoot, Pass and Check under your right. Works sideways or upright."
+        },
+        {
+          "tag": "improved",
+          "text": "Penalties take a beat now: the arm goes up, the whistle goes, and the guilty party skates to the box himself."
+        },
+        {
+          "tag": "new",
+          "text": "GOAL! Goals get the big splash they deserve, and Puck Falls finally has a map on the website."
+        }
+      ]
+    },
+    {
       "version": "0.12.0",
       "date": "2026-11-26",
       "title": "Stripes",

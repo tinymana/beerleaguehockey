@@ -245,6 +245,11 @@ describe('the contact button: stick check, bump, check (Decision 85)', () => {
     return { sim, me, him };
   }
   const tap = (sim: SkatingSim): SimEvent[] => [...sim.step({ ...IDLE, check: true }), ...sim.step(IDLE)];
+  /** Carry on until the referee blows a called penalty down (he holds his arm up for a beat first). */
+  const whistle = (sim: SkatingSim, events: SimEvent[]): SimEvent[] => {
+    for (let i = 0; i < 90 && !events.some((e) => e.type === 'penalty'); i++) events.push(...sim.step(IDLE));
+    return events;
+  };
 
   it('a tap in front of the carrier knocks the puck loose, cleanly', () => {
     const { sim, him } = faceUp({ referee: ALWAYS });
@@ -271,16 +276,25 @@ describe('the contact button: stick check, bump, check (Decision 85)', () => {
     const mate = sk(sim, 1);
     [mate.out, mate.x, mate.y] = [false, RINK.centerX - 120, RINK.centerY + 150];
     const events = tap(sim);
+    const m = match(sim);
+    // A beat first: his arm goes up, play is still live, nobody has left the ice.
+    expect(events.some((e) => e.type === 'call' && e.team === 0 && e.skater === 0)).toBe(true);
+    expect(events.some((e) => e.type === 'penalty' || e.type === 'whistle')).toBe(false);
+    expect([m.phase, me.out, sim.referee?.signal]).toEqual(['play', false, 'penalty']);
+    whistle(sim, events);
     const call = events.find((e) => e.type === 'penalty');
     expect(call && call.type === 'penalty' && [call.team, call.skater, call.seconds]).toEqual([0, 0, penaltySeconds()]);
-    const m = match(sim);
-    expect(me.out).toBe(true);
+    expect(sim.tick * SIM_DT).toBeGreaterThan(0.5);
+    // Then he skates to the box himself: still on the ice at the whistle, gone by the faceoff.
+    expect([me.out, me.toBox]).toEqual([false, true]);
     expect(m.stats[0].pim).toBe(2);
     expect(m.phase).toBe('whistle');
     expect(m.reason).toBe('penalty');
     // Faceoff in the offender's end; the clock does not run until the puck is dropped.
     expect(m.dot.y).toBeGreaterThan(RINK.centerY + 200);
     const clock = m.clock;
+    until(sim, 'faceoff');
+    expect([me.out, me.toBox]).toEqual([true, false]);
     until(sim, 'play');
     expect(m.clock).toBe(clock);
     expect(sim.controlled).not.toBe(0);
@@ -317,15 +331,16 @@ describe('the contact button: stick check, bump, check (Decision 85)', () => {
     expect(events).toContainEqual({ type: 'hit', team: 0, target: 5 });
     expect(him.down).toBeGreaterThan(0);
     expect(him.hasPuck).toBe(false);
+    whistle(sim, events);
     const call = events.find((e) => e.type === 'penalty');
     expect(call && call.type === 'penalty' && call.foul).toBe('roughing');
   });
 
   it('a power-play goal lets the penalized skater out, and is counted as one', () => {
     const { sim, me } = faceUp({ referee: ALWAYS, behind: true });
-    tap(sim);
-    expect(me.out).toBe(true);
+    whistle(sim, tap(sim));
     until(sim, 'play');
+    expect(me.out).toBe(true);
     for (const s of sim.skaters) s.out = s.index !== 5 || s.out;
     sim.setGoalies(false);
     const bottom = goalLineY(RINK, 'bottom');
@@ -444,12 +459,16 @@ describe('the referee on the ice', () => {
     [me.x, me.y, me.facing] = [RINK.centerX, RINK.centerY + 12, UP];
     sim.step({ ...IDLE, check: true });
     const events = sim.step(IDLE);
-    expect(events.some((e) => e.type === 'penalty')).toBe(true);
+    expect(events.some((e) => e.type === 'call')).toBe(true);
     expect(ref.signal).toBe('penalty');
+    for (let i = 0; i < 90 && !events.some((e) => e.type === 'penalty'); i++) events.push(...sim.step(IDLE));
+    expect(events.some((e) => e.type === 'penalty')).toBe(true);
     expect(refereeFrame(ref)).toMatch(/penalty_01$/);
-    for (let i = 0; i < 30; i++) sim.step(IDLE);
+    // Once play is dead he stands and holds the signal.
+    for (let i = 0; i < 45; i++) sim.step(IDLE);
+    expect(ref.signal).toBe('penalty');
     expect(Math.hypot(ref.vx, ref.vy)).toBeLessThan(6);
-    for (let i = 0; i < 120; i++) sim.step(IDLE);
+    for (let i = 0; i < 200; i++) sim.step(IDLE);
     expect(ref.signal).toBeNull();
   });
 
@@ -463,5 +482,35 @@ describe('the referee on the ice', () => {
       expect([png.readUInt32BE(16), png.readUInt32BE(20)], frame).toEqual([32, 32]);
     }
     expect(new SkatingSim(cloneTuning()).referee).toBeNull();
+  });
+});
+
+describe('a beat for the call, and the walk to the box (creative director, Nov 26)', () => {
+  it('a goal against the team about to be penalized wipes the call out', () => {
+    const sim = game({ seed: 14, referee: ALWAYS });
+    onlyThese(sim, [0, 1, 5]);
+    sim.setGoalies(false);
+    const bottom = goalLineY(RINK, 'bottom');
+    const him = take(sim, 5, RINK.centerX, bottom - 30, -UP);
+    him.possessTick = -1000;
+    const me = sk(sim, 0);
+    sim.controlled = 0;
+    // Slash at him from the side without reaching the puck, then he scores inside the beat.
+    [me.x, me.y, me.facing] = [RINK.centerX - 9, bottom - 30, 0];
+    const events = [...sim.step({ ...IDLE, check: true }), ...sim.step(IDLE)];
+    expect(events.some((e) => e.type === 'call')).toBe(true);
+    [sim.puck.state, sim.puck.x, sim.puck.y, sim.puck.vx, sim.puck.vy] = ['free', RINK.centerX, bottom - 8, 0, 300];
+    him.hasPuck = false;
+    for (let i = 0; i < 120; i++) events.push(...sim.step(IDLE));
+    expect(events.some((e) => e.type === 'goal')).toBe(true);
+    expect(events.some((e) => e.type === 'penalty')).toBe(false);
+    expect(match(sim).penalties.length).toBe(0);
+    expect(me.toBox || me.out).toBe(false);
+  });
+
+  it('puts the box where the arena art has it, and lets him out of the same door', async () => {
+    const { boxDoor } = await import('../src/match/sim/match');
+    expect(boxDoor(RINK, 0)).toEqual({ x: RINK.left + 10, y: 564 });
+    expect(boxDoor(RINK, 1)).toEqual({ x: RINK.right - 10, y: 564 });
   });
 });

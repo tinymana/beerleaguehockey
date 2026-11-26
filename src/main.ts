@@ -6,6 +6,7 @@ import { TitleScene } from './app/TitleScene';
 import { GAME_HEIGHT, GAME_WIDTH } from './app/config';
 import { LockerRoomTestScene } from './app/LockerRoomTestScene';
 import { fitStage } from './app/stage';
+import { installTouchControls } from './app/touchControls';
 import { SkatingScene } from './app/SkatingScene';
 
 const game = new Phaser.Game({
@@ -22,6 +23,7 @@ const game = new Phaser.Game({
   scene: [BootScene, TitleScene, SkatingScene, ArenaLabScene, CreatorScene, LockerRoomTestScene],
 });
 
+installTouchControls();
 fitStage(game);
 
 // Debug handle for automated browser checks.

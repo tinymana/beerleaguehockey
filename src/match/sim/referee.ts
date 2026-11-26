@@ -50,9 +50,9 @@ export function dropSpot(rink: RinkGeometry, dot: { x: number; y: number }): { x
   return { x: dot.x + (dot.x <= rink.centerX ? -REF.atDot : REF.atDot), y: dot.y };
 }
 
-export function signalReferee(ref: RefereeState, signal: RefSignal): void {
+export function signalReferee(ref: RefereeState, signal: RefSignal, seconds = REF.signal[signal]): void {
   ref.signal = signal;
-  ref.signalTime = REF.signal[signal];
+  ref.signalTime = seconds;
 }
 
 /**
@@ -79,8 +79,8 @@ export function stepReferee(ref: RefereeState, rink: RinkGeometry, puck: { x: nu
   const dx = tx - ref.x;
   const dy = ty - ref.y;
   const dist = Math.hypot(dx, dy);
-  // He stands still to signal. Otherwise he heads for his spot, easing in.
-  const want = ref.signal ? 0 : Math.min(REF.maxSpeed, dist * 5);
+  // He stands still to signal (a penalty he signals on the move: play is still going). Otherwise he heads for his spot, easing in.
+  const want = ref.signal && !(ref.signal === 'penalty' && !dot) ? 0 : Math.min(REF.maxSpeed, dist * 5);
   const wx = dist > 0.5 ? (dx / dist) * want : 0;
   const wy = dist > 0.5 ? (dy / dist) * want : 0;
   const k = Math.min(1, REF.response * dt);

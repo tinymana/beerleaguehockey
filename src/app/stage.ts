@@ -5,6 +5,8 @@
  */
 import type Phaser from 'phaser';
 import { GAME_HEIGHT, GAME_WIDTH } from './config';
+import { onTouchChange } from './touchControls';
+import { gameArea } from './touchModel';
 
 export function setTitleArtVisible(visible: boolean): void {
   const art = document.getElementById('title-art');
@@ -58,15 +60,26 @@ export function fitStage(game: Phaser.Game): void {
   if (!stage) return;
   const apply = (): void => {
     const { width, height } = PROFILES[current];
-    const { zoom, shrink } = profileFit(current, window.innerWidth, window.innerHeight);
+    // On a touch screen held upright, a game on the ice leaves the bottom of the screen to the controls.
+    const playing = document.body.classList.contains('touch-playing');
+    const area = gameArea(window.innerWidth, window.innerHeight, playing);
+    document.body.classList.toggle('portrait', window.innerHeight > window.innerWidth);
+    const fit = profileFit(current, area.width, area.height);
+    const zoom = fit.zoom;
+    // A phone needs the size more than it needs whole-number pixels: while a game is on the ice on a touch screen the
+    // stage is stretched to fill the room it has. Everywhere else pixels stay square.
+    const fill = Math.min(area.width / (width * zoom), area.height / (height * zoom));
+    const shrink = playing ? fill : fit.shrink;
     stage.style.width = `${width * zoom}px`;
     stage.style.height = `${height * zoom}px`;
     stage.style.flexShrink = '0';
-    stage.style.transform = shrink < 1 ? `scale(${shrink})` : '';
+    stage.style.transform = shrink !== 1 ? `scale(${shrink})` : '';
     game.scale.setZoom(zoom);
     game.scale.refresh();
   };
   refit = apply;
   apply();
   window.addEventListener('resize', apply);
+  window.addEventListener('orientationchange', apply);
+  onTouchChange(apply);
 }

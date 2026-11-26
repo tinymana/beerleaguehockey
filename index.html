@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Beer League Hockey</title>
     <link rel="icon" type="image/png" href="./favicon.png" />
     <style>
@@ -39,6 +39,126 @@
         display: block;
         image-rendering: pixelated;
       }
+      /* Touch controls (phones and tablets): plain pixel-style blocks, temporary until control art is supplied. */
+      body.touch {
+        touch-action: none;
+        -webkit-user-select: none;
+        user-select: none;
+        -webkit-touch-callout: none;
+        overscroll-behavior: none;
+      }
+      /* Held upright, the game sits at the top and the controls take the space under it. */
+      body.touch.touch-playing.portrait {
+        align-items: flex-start;
+      }
+      body.touch.touch-playing.portrait #stage {
+        transform-origin: top center;
+      }
+      #touch-controls {
+        position: fixed;
+        inset: 0;
+        z-index: 8;
+        pointer-events: none;
+        font: bold 13px/1 'Courier New', Courier, monospace;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #ffffff;
+      }
+      #touch-controls[hidden] {
+        display: none;
+      }
+      #touch-controls .tc-left,
+      #touch-controls .tc-right {
+        position: absolute;
+        bottom: max(14px, env(safe-area-inset-bottom));
+        pointer-events: none;
+      }
+      #touch-controls .tc-left {
+        left: max(14px, env(safe-area-inset-left));
+      }
+      #touch-controls .tc-right {
+        right: max(14px, env(safe-area-inset-right));
+        width: 168px;
+        height: 150px;
+      }
+      #touch-controls .tc-stick {
+        position: relative;
+        width: 132px;
+        height: 132px;
+        box-sizing: border-box;
+        background: rgba(11, 16, 48, 0.55);
+        border: 3px solid #bfd8ff;
+        outline: 3px solid #05071a;
+        pointer-events: auto;
+        touch-action: none;
+      }
+      #touch-controls .tc-knob {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 44px;
+        height: 44px;
+        margin: -22px 0 0 -22px;
+        box-sizing: border-box;
+        background: #ffc83a;
+        border: 3px solid #05071a;
+        pointer-events: none;
+      }
+      #touch-controls .tc-button {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-sizing: border-box;
+        background: rgba(28, 42, 102, 0.7);
+        border: 3px solid #bfd8ff;
+        outline: 3px solid #05071a;
+        pointer-events: auto;
+        touch-action: none;
+      }
+      #touch-controls .tc-button.down {
+        background: #ffc83a;
+        color: #05071a;
+      }
+      /* Shoot is the big one under the thumb; pass and check sit above and beside it. */
+      #touch-controls #tc-shoot {
+        right: 0;
+        bottom: 0;
+        width: 88px;
+        height: 88px;
+        border-color: #ffc83a;
+      }
+      #touch-controls #tc-pass {
+        right: 98px;
+        bottom: 0;
+        width: 70px;
+        height: 64px;
+      }
+      #touch-controls #tc-check {
+        right: 0;
+        bottom: 98px;
+        width: 88px;
+        height: 52px;
+      }
+      #touch-controls #tc-menu {
+        top: max(8px, env(safe-area-inset-top));
+        left: max(8px, env(safe-area-inset-left));
+        width: 58px;
+        height: 30px;
+        font-size: 11px;
+      }
+      /* Held upright there is room under the game: bigger blocks, set a little higher. */
+      body.portrait #touch-controls .tc-left,
+      body.portrait #touch-controls .tc-right {
+        bottom: max(40px, env(safe-area-inset-bottom));
+      }
+      body.portrait #touch-controls #tc-menu {
+        top: auto;
+        bottom: max(8px, env(safe-area-inset-bottom));
+        left: 50%;
+        margin-left: -29px;
+      }
+
       /* Developer tuning panel: a dev tool, styled to stay out of the way. */
       #tuning-panel {
         position: fixed;

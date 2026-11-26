@@ -120,6 +120,8 @@ These are generated at boot by code and are **not** final art. Each is labeled t
 | --- | --- | --- | --- | --- |
 | `public/assets/goals/32/goal_north.png`, `goal_south.png`, `goal_*_ripple_01` to `_04.png` | 40x32 each | Package `BLH_goals_40x32.zip` (received Nov 26), unchanged. `peg_marks.png` (40x8) delivered, not used | 1 | Goals and net ripple on the ice. Base art, not final (Decision 82) |
 | `public/assets/referee/32/referee_{front,back}_*.png` (18 frames) | 32x32 each | Package `BLH_referee_32bit.zip` (received Nov 26), unchanged. The 288x64 sheet in the package is not used | 1 | The referee on the ice. Base art (Decision 88) |
+| `public/assets/ui/broadcast/goal_splash.png`, `tag_power_play.png`, `tag_faceoff.png` | 150x78, 84x25, 84x22 | Art batch 01 `Retro_Hockey_HUD_Sprite_Sheet`, reduced by `scripts/art/process_broadcast.py` | 1 | Goal, power play and faceoff graphics on the ice. **Stopgap** until the re-issue at game sizes (Decisions 86, 89) |
+| `site/assets/art_puckfalls.webp`, `map_puckfalls.webp` | 960x540, 1670x941 | `Puck_Falls_Winter_Sunset_Townscape.png` (supplied Nov 26), converted to WebP for the website | 1 | Welcome to Puck Falls card and its full-size view. Website only |
 | `public/assets/ui/16_11/ui_atlas.png` | 256x160 | Batch 16.11 `ui_atlas.png`, unchanged | 1 | Panels, buttons, card frames |
 | `public/assets/cards/16_10/card_art.png` | 1152x480 | Batch 16.10 Large `_art` crops (38 at 144x96), packed unchanged | 1 | Play style and archetype card pictures, silhouettes |
 | `public/assets/character/face.png`, `bald.png` | 384x256, 512x256 | Batches 16.02 Revised, 16.02B atlases, unchanged | 1 | Preset portraits (64x64) |

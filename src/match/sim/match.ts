@@ -22,6 +22,12 @@ export const MATCH = {
   whistlePause: 1,
   dropWait: [0.9, 1.7] as const,
   /** Seconds after the drop in which a button press wins the draw; pressing before the drop locks a centre out this long. */
+  /** A beat between the foul and the whistle: the referee's arm goes up, play carries on, then he blows it down. */
+  callBeat: 0.7,
+  /** The longest the faceoff waits for a penalized skater to reach the box. */
+  boxWalk: 5,
+  /** The penalty boxes are this far down the ice from centre (where the arena art has them): home's on the left boards, away's on the right. */
+  boxFromCentre: 124,
   /** The longest the drop waits for the referee to reach the dot. */
   refereeWait: 4,
   drawWindow: 0.45,
@@ -139,6 +145,8 @@ export interface MatchState {
   aiPress: [number, number];
   locked: [number, number];
   penalties: Penalty[];
+  /** A foul the referee has his arm up for, not yet whistled: seconds left of the beat. */
+  pending: { skater: number; team: 0 | 1; foul: Foul; timer: number } | null;
   stats: [TeamStats, TeamStats];
   goals: GoalRecord[];
   referee: Referee;
@@ -187,6 +195,11 @@ export function lineupSpot(rink: RinkGeometry, team: 0 | 1, role: Role, dot: { x
   const x = Math.max(rink.left + 14, Math.min(rink.right - 14, dot.x + spot.x));
   const y = Math.max(rink.top + 16, Math.min(rink.bottom - 16, dot.y - attackDir(team) * spot.back));
   return { x, y };
+}
+
+/** The door of a team's penalty box, on the ice side of the boards. */
+export function boxDoor(rink: RinkGeometry, team: 0 | 1): { x: number; y: number } {
+  return { x: team === 0 ? rink.left + 10 : rink.right - 10, y: rink.centerY + MATCH.boxFromCentre };
 }
 
 /** Seconds a minor lasts. */

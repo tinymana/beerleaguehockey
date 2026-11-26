@@ -17,7 +17,8 @@ import { AIM, FEEL, ONE_TIMER, SHOOT, TEAM } from './tuning';
 import { AI, faceoffSpot, teamInputs } from './teamAi';
 import type { Role } from './teamAi';
 import { attackDir, attackEnd } from './teamAi';
-import { CONTACT, MATCH, REFEREES, emptyStats, endZoneDot, faceoffDots, lineupSpot, neutralDot, penaltySeconds } from './match';
+import { CONTACT, MATCH, REFEREES, boxDoor, emptyStats, endZoneDot, faceoffDots, lineupSpot, neutralDot, penaltySeconds } from './match';
+import { quantize8 } from './input';
 import type { Foul, MatchState, StopReason } from './match';
 import { NO_INPUT } from './input';
 import { dropSpot, makeReferee, signalReferee, stepReferee } from './referee';
@@ -73,6 +74,8 @@ export interface Skater extends Body {
   windup: number;
   aimX: number;
   aimY: number;
+  /** Penalized and skating to the box. */
+  toBox: boolean;
 }
 
 export interface Puck extends Body {
@@ -110,6 +113,7 @@ export type SimEvent =
   | { type: 'drop' }
   | { type: 'draw'; team: 0 | 1 | -1 }
   | { type: 'hit'; team: 0 | 1; target: number }
+  | { type: 'call'; team: 0 | 1; skater: number; foul: Foul }
   | { type: 'penalty'; team: 0 | 1; skater: number; foul: Foul; seconds: number }
   | { type: 'penaltyOver'; team: 0 | 1; skater: number }
   | { type: 'period'; period: number }
@@ -191,7 +195,7 @@ export class SkatingSim {
       hasPuck: false, charge: 0, pickupCooldown: 0, stride: 0,
       index, team, role, pushing: false, shootHeld: false, passHeld: false, pokeCooldown: 0,
       possessTick: -1000, shotTick: -1000, aiHold: 0, aiSide: 1, aiWait: 0, aiStill: 0, aiDodge: 0, aiCheck: 0,
-      out: false, down: 0, lock: 0, checkHeld: false, checkTime: 0, checked: false, checkCooldown: 0, windup: 0, aimX: 0, aimY: 0,
+      out: false, down: 0, lock: 0, checkHeld: false, checkTime: 0, checked: false, checkCooldown: 0, windup: 0, aimX: 0, aimY: 0, toBox: false,
     };
   }
 
@@ -264,7 +268,7 @@ export class SkatingSim {
       const dots = faceoffDots(this.rink);
       this.match = {
         phase: 'whistle', period: 1, clock: MATCH.periodSeconds, reason: 'start', dot: dots.centre, timer: 0,
-        sinceDrop: 0, taker: [0, 5], aiPress: [0, 0], locked: [0, 0], penalties: [],
+        sinceDrop: 0, taker: [0, 5], aiPress: [0, 0], locked: [0, 0], penalties: [], pending: null,
         stats: [emptyStats(), emptyStats()], goals: [], referee: this.matchRng.pick(REFEREES), shootout: null, winner: null,
       };
     }
@@ -381,7 +385,7 @@ export class SkatingSim {
     let best = this.controlled;
     let bestD = Infinity;
     for (const s of this.skaters) {
-      if (s.team !== 0 || s.out) continue;
+      if (s.team !== 0 || s.out || s.toBox) continue;
       const d = Math.hypot(s.x - this.puck.x, s.y - this.puck.y);
       if (d < bestD) {
         bestD = d;
@@ -988,7 +992,7 @@ export class SkatingSim {
     for (const g of this.goalies) g.holding = 0;
     this.passTarget = -1;
     this.release = null;
-    if (this.referee && reason !== 'start' && reason !== 'period') signalReferee(this.referee, reason === 'goal' ? 'goal' : reason === 'penalty' ? 'penalty' : 'washout');
+    if (this.referee && reason !== 'start' && reason !== 'period' && reason !== 'penalty') signalReferee(this.referee, reason === 'goal' ? 'goal' : 'washout');
     events.push({ type: 'whistle', reason });
   }
 
@@ -996,7 +1000,7 @@ export class SkatingSim {
   private lineUpAt(m: MatchState): void {
     const order: Role[] = ['C', 'LW', 'RW', 'LD', 'RD'];
     for (const team of [0, 1] as const) {
-      const on = this.skaters.filter((s) => s.team === team && !s.out).sort((a, b) => order.indexOf(a.role) - order.indexOf(b.role));
+      const on = this.skaters.filter((s) => s.team === team && !s.out && !s.toBox).sort((a, b) => order.indexOf(a.role) - order.indexOf(b.role));
       const taker = on[0];
       if (!taker) continue;
       m.taker[team] = taker.index;
@@ -1050,10 +1054,12 @@ export class SkatingSim {
     m.penalties = m.penalties.filter((p) => p !== pen);
     const s = this.skaters[pen.skater];
     if (!s) return;
-    // Out of the box and onto the ice by the boards at centre, on his own side.
+    // Out of the box door and back onto the ice.
+    const door = boxDoor(this.rink, s.team);
     s.out = false;
-    s.x = s.team === 0 ? this.rink.left + 14 : this.rink.right - 14;
-    s.y = this.rink.centerY - attackDir(s.team) * 28;
+    s.toBox = false;
+    s.x = door.x + (s.team === 0 ? 6 : -6);
+    s.y = door.y;
     s.vx = 0;
     s.vy = 0;
     s.down = 0;
@@ -1063,6 +1069,7 @@ export class SkatingSim {
 
   private endPeriod(m: MatchState, events: SimEvent[]): void {
     m.clock = 0;
+    m.pending = null;
     events.push({ type: 'period', period: m.period });
     for (const s of this.skaters) {
       s.hasPuck = false;
@@ -1102,11 +1109,30 @@ export class SkatingSim {
     const pressed = (input.shoot && !this.shootHeld) || (!!input.pass && !this.passHeld) || (!!input.check && !this.checkHeld);
     if (m.phase === 'whistle') {
       if (m.reason === 'start' && this.tick <= 1) m.timer = 0;
-      for (const s of this.skaters) this.stepSkater(s, NO_INPUT, dt);
+      // Everyone coasts, except a penalized skater: he skates to the box, and the faceoff waits for him.
+      let walking = false;
+      for (const s of this.skaters) {
+        if (!s.toBox) {
+          this.stepSkater(s, NO_INPUT, dt);
+          continue;
+        }
+        const door = boxDoor(this.rink, s.team);
+        const late = m.timer < -MATCH.boxWalk;
+        if (late || Math.hypot(door.x - s.x, door.y - s.y) < 9) {
+          s.toBox = false;
+          s.out = true;
+          s.x = -200;
+          [s.vx, s.vy] = [0, 0];
+          continue;
+        }
+        walking = true;
+        const go = quantize8(door.x - s.x, door.y - s.y, 0);
+        this.stepSkater(s, { moveX: go.x, moveY: go.y, shoot: false }, dt);
+      }
       this.separate();
       if (running && this.runClock(m, dt, events)) return;
       m.timer -= dt;
-      if (m.timer <= 0) this.lineUpAt(m);
+      if (m.timer <= 0 && !walking) this.lineUpAt(m);
     } else if (m.phase === 'faceoff') {
       if (running && this.runClock(m, dt, events)) return;
       // Jumping the drop costs the draw.
@@ -1174,10 +1200,22 @@ export class SkatingSim {
     const { rink, puck } = this;
     const goal = events.find((e) => e.type === 'goal');
     if (goal && goal.type === 'goal') {
+      // A goal against the team about to be penalized wipes the call out.
+      if (m.pending && m.pending.team !== (goal.end === 'top' ? 0 : 1)) m.pending = null;
       this.onGoal(m, goal.end, events);
       return;
     }
     if (this.runClock(m, dt, events)) return;
+    // The referee's arm has been up for a beat: now he blows it down.
+    if (m.pending && (m.pending.timer -= dt) <= 0) {
+      const call = m.pending;
+      m.pending = null;
+      const offender = this.skaters[call.skater];
+      if (offender && !offender.out) {
+        this.whistlePenalty(m, offender, call.foul, events);
+        return;
+      }
+    }
     if (puck.state === 'held') {
       const g = this.goalies.find((x) => x.holding > 0);
       this.blow('freeze', endZoneDot(rink, g ? g.end : puck.y < rink.centerY ? 'top' : 'bottom', puck.x), events);
@@ -1361,19 +1399,27 @@ export class SkatingSim {
     const m = this.match;
     if (!m || !this.rules.penalties || m.phase !== 'play' || s.out) return;
     if (this.boxed(s.team) >= MATCH.maxBoxed) return;
+    // One call at a time: while his arm is up for one foul he is not looking for another.
+    if (m.pending) return;
     const chance = Math.min(1, m.referee.calls[kind] * (fromBehind ? CONTACT.fromBehind : 1));
     if (this.matchRng.next() >= chance) return;
+    // He saw it. His arm goes up, play carries on for a beat, then the whistle.
+    m.pending = { skater: s.index, team: s.team, foul: kind, timer: MATCH.callBeat };
+    if (this.referee) signalReferee(this.referee, 'penalty', MATCH.callBeat + 1.6);
+    events.push({ type: 'call', team: s.team, skater: s.index, foul: kind });
+  }
+
+  /** The whistle for a penalty: play stops, the offender skates to the box, and the faceoff is in his end. */
+  private whistlePenalty(m: MatchState, s: Skater, kind: Foul, events: SimEvent[]): void {
     const other: 0 | 1 = s.team === 0 ? 1 : 0;
     const seconds = penaltySeconds();
     m.penalties.push({ skater: s.index, team: s.team, foul: kind, left: seconds });
     m.stats[s.team].pim += 2;
     events.push({ type: 'penalty', team: s.team, skater: s.index, foul: kind, seconds });
-    // Faceoff in the offender's end.
     this.blow('penalty', endZoneDot(this.rink, attackEnd(other), this.puck.x), events);
-    s.out = true;
-    s.x = -200;
-    s.vx = 0;
-    s.vy = 0;
+    s.toBox = true;
+    s.down = 0;
+    s.lock = 0;
     if (this.controlled === s.index) this.switchControl();
   }
 

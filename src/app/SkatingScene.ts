@@ -4,6 +4,7 @@ import { Edge, readPad } from './padInput';
 import { addText, fontText } from './pixelFont';
 import { PLAY_SCALE } from '../match/sim/rink';
 import { arenaChoice, matchMode, tuning, tuningPanel } from './session';
+import { isTouch, showTouchControls, touchState } from './touchControls';
 import { setTitleArtVisible } from './stage';
 import { directionIndex8, lerp } from '../core/math';
 import { quantize8 } from '../match/sim/input';
@@ -55,6 +56,11 @@ export class SkatingScene extends Phaser.Scene {
   private arrow!: Phaser.GameObjects.Image;
   private passRing!: Phaser.GameObjects.Ellipse;
   private refSprite!: Phaser.GameObjects.Image;
+  private goalSplash!: Phaser.GameObjects.Image;
+  private goalSub!: Phaser.GameObjects.BitmapText;
+  private tagFaceoff!: Phaser.GameObjects.Image;
+  private tagPowerPlay!: Phaser.GameObjects.Image;
+  private splashTimer = 0;
   private lastInput: SimInput = { moveX: 0, moveY: 0, shoot: false };
   private goaliePoses: { pose: GoaliePose; time: number }[] = [];
   private puck!: Phaser.GameObjects.Image;
@@ -151,9 +157,17 @@ export class SkatingScene extends Phaser.Scene {
     this.hudSpeed = this.fixed(addText(this, 4, GAME_HEIGHT - 9, '', UI.ice));
     this.hudLast = this.fixed(addText(this, GAME_WIDTH / 2, 14, '', UI.gold).setOrigin(0.5, 0));
     this.fixed(
-      addText(this, GAME_WIDTH - 4, GAME_HEIGHT - 9, matchMode.teams ? 'Space:shoot  Z:pass/switch  C:check  T:practice' : 'Tap:wrist  Hold:slap  G:goalie  R:puck  T:5 on 5  Esc:menu', UI.ice).setOrigin(1, 0),
+      // Keyboard hints; on a touch screen the buttons are on the glass.
+      addText(this, GAME_WIDTH - 4, GAME_HEIGHT - 9, isTouch() ? '' : matchMode.teams ? 'Space:shoot  Z:pass/switch  C:check  T:practice' : 'Tap:wrist  Hold:slap  G:goalie  R:puck  T:5 on 5  Esc:menu', UI.ice).setOrigin(1, 0),
     );
     this.banner = this.fixed(addText(this, GAME_WIDTH / 2, 120, '', UI.gold, 3).setOrigin(0.5, 0.5)).setVisible(false);
+    // Broadcast graphics from the supplied batch 01 sheet, reduced to game size (temporary until the re-issue, Decision 86).
+    const overlay = (key: string, x: number, y: number): Phaser.GameObjects.Image => this.add.image(x, y, key).setScrollFactor(0).setDepth(DEPTH_HUD + 1).setVisible(false);
+    this.goalSplash = overlay('ui/goal_splash', GAME_WIDTH / 2, 112);
+    this.goalSub = this.fixed(addText(this, GAME_WIDTH / 2, 160, '', UI.gold, 2).setOrigin(0.5, 0.5)).setVisible(false);
+    this.tagFaceoff = overlay('ui/tag_faceoff', GAME_WIDTH / 2, 40);
+    this.tagPowerPlay = overlay('ui/tag_power_play', 46, 28);
+    this.splashTimer = 0;
     // Intermission and final panel: plain text in the game's font until the broadcast graphics are re-issued at game size.
     this.panel = this.add.graphics().setScrollFactor(0).setDepth(DEPTH_HUD + 2).setVisible(false);
     this.panel.fillStyle(UI.navy, 0.94).fillRect(110, 70, 260, 176);
@@ -185,6 +199,9 @@ export class SkatingScene extends Phaser.Scene {
       v: 'V',
     }) as typeof this.keys;
     kb.on('keydown-T', () => this.toggleMode());
+    // Phones and tablets: the on-screen stick and buttons, for as long as this scene is up.
+    showTouchControls(true, () => this.exitToMenu());
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => showTouchControls(false));
     kb.on('keydown-R', () => this.sim.resetPuck());
     kb.on('keydown-G', () => {
       if (matchMode.teams) return;
@@ -222,7 +239,7 @@ export class SkatingScene extends Phaser.Scene {
       return;
     }
     const input = this.readInput(pad.x, pad.y, pad.action, pad.back);
-    if (matchMode.teams) input.check = this.keys.c.isDown || this.keys.v.isDown || pad.alt;
+    if (matchMode.teams) input.check = this.keys.c.isDown || this.keys.v.isDown || pad.alt || touchState.check;
     this.lastInput = input;
     // Between periods and after the final horn the shoot button carries on.
     const phase = this.sim.match?.phase;
@@ -272,8 +289,18 @@ export class SkatingScene extends Phaser.Scene {
       x = padX;
       y = padY;
     }
+    // The on-screen stick, when neither keys nor a pad are being used.
+    if (x === 0 && y === 0) {
+      x = touchState.x;
+      y = touchState.y;
+    }
     const move = quantize8(x, y);
-    return { moveX: move.x, moveY: move.y, shoot: k.space.isDown || k.j.isDown || k.x.isDown || padShoot, pass: k.z.isDown || k.k.isDown || k.shift.isDown || padPass };
+    return {
+      moveX: move.x,
+      moveY: move.y,
+      shoot: k.space.isDown || k.j.isDown || k.x.isDown || padShoot || touchState.shoot,
+      pass: k.z.isDown || k.k.isDown || k.shift.isDown || padPass || touchState.pass,
+    };
   }
 
   private capturePrev(): void {
@@ -289,8 +316,18 @@ export class SkatingScene extends Phaser.Scene {
       if (e.type === 'goal') {
         const inShootout = this.sim.match?.phase === 'shootout';
         const who = inShootout ? 'Scores!' : matchMode.teams ? (e.end === 'top' ? 'Home scores!' : 'Away scores!') : 'Goal!';
-        this.banner.setText(fontText(e.fiveHole && !matchMode.teams ? 'Five-hole!' : who)).setVisible(true);
-        this.bannerTimer = 1.2;
+        if (matchMode.teams) {
+          // The supplied GOAL! splash pops in, with who scored under it.
+          this.goalSplash.setVisible(true).setScale(0.4);
+          this.tweens.add({ targets: this.goalSplash, scale: 1, duration: 160, ease: 'Back.Out' });
+          this.goalSub.setText(fontText(who)).setVisible(true);
+          this.splashTimer = 1.5;
+          this.banner.setVisible(false);
+          this.bannerTimer = 0;
+        } else {
+          this.banner.setText(fontText(e.fiveHole ? 'Five-hole!' : who)).setVisible(true);
+          this.bannerTimer = 1.2;
+        }
         this.cameras.main.shake(180, 0.006);
         // Supplied net ripple: visual only, the goal itself was already decided by the sim.
         const end = e.end === 'top' ? 'north' : 'south';
@@ -416,6 +453,13 @@ export class SkatingScene extends Phaser.Scene {
     if (!this.sim.match) this.hudLast.setText(fontText(st.last));
 
     if (this.drawNote.time > 0) this.drawNote.time -= dt;
+    if (this.splashTimer > 0) {
+      this.splashTimer -= dt;
+      if (this.splashTimer <= 0) {
+        this.goalSplash.setVisible(false);
+        this.goalSub.setVisible(false);
+      }
+    }
     if (this.bannerTimer > 0) {
       this.bannerTimer -= dt;
       this.banner.setVisible(Math.floor(this.bannerTimer * 8) % 2 === 0);
@@ -463,10 +507,16 @@ export class SkatingScene extends Phaser.Scene {
     if (m.penalties.length) {
       this.hudLast.setText(fontText(m.penalties.map((p) => `${p.team === 0 ? 'Home' : 'Away'} ${p.foul} ${clockText(p.left)}`).join('   ')));
     } else if (m.phase === 'faceoff' || m.phase === 'draw') {
-      this.hudLast.setText(fontText(m.reason === 'start' || m.reason === 'period' ? `Referee: ${m.referee.label}` : 'Faceoff'));
+      this.hudLast.setText(fontText(m.reason === 'start' || m.reason === 'period' ? `Referee: ${m.referee.label}` : ''));
     } else {
       this.hudLast.setText(fontText(this.drawNote.time > 0 && m.phase === 'play' ? this.drawNote.text : ''));
     }
+    // Faceoff tag while the teams line up; power play tag while one side is a skater up (never both at once).
+    const short = [0, 1].map((t) => m.penalties.filter((p) => p.team === t).length);
+    const powerPlay = short[0] !== short[1] && (m.phase === 'play' || m.phase === 'faceoff' || m.phase === 'draw' || m.phase === 'whistle');
+    const facing = (m.phase === 'faceoff' || m.phase === 'draw') && this.splashTimer <= 0;
+    this.tagFaceoff.setVisible(facing && !powerPlay);
+    this.tagPowerPlay.setVisible(powerPlay);
     const show = m.phase === 'intermission' || m.phase === 'final';
     this.panel.setVisible(show);
     for (const line of this.panelLines) line.setVisible(show);
@@ -487,7 +537,7 @@ export class SkatingScene extends Phaser.Scene {
       row('PP goals', a.powerPlayGoals, b.powerPlayGoals),
       m.phase === 'final' ? winner : '',
       `Referee: ${m.referee.label}`,
-      m.phase === 'final' ? 'Space: play again   Esc: menu' : 'Space: next period',
+      m.phase === 'final' ? (isTouch() ? 'Shoot: play again' : 'Space: play again   Esc: menu') : isTouch() ? 'Shoot: next period' : 'Space: next period',
     ];
     this.panelLines.forEach((line, i) => line.setText(fontText(lines[i] ?? '')).setTint(i === 0 || i === 10 ? UI.gold : i === 12 ? UI.ice : UI.white));
   }

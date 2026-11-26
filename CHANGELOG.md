@@ -2,6 +2,26 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.13.0 - 2026-11-26 - Touch controls, a beat for the call, the GOAL! splash, the Puck Falls map
+
+234 tests. Creative director requests and answers of the afternoon (Decision 89).
+
+### Added
+- **Touch controls for phones and tablets, sideways and upright.** A thumb stick (bottom left) and Shoot, Pass and Check buttons (bottom right), plus a small Menu button. They appear only on a touch screen and only during a game on the ice; several fingers work at once (skate, hold Check, tap Shoot). Shoot also wins draws and carries on from the panels.
+  - **Sideways:** the game fills the height of the screen and the controls lie over the stands at either side, clear of the ice.
+  - **Upright:** the game sits at the top and the controls take the room under it.
+  - On a touch screen during a game the picture is stretched to fill the room it has, so pixels are not always whole-number size there (a phone needs the size more). Desktop is unchanged: whole-number pixels only.
+  - The controls are plain code-drawn blocks: no control art has been supplied.
+- **A beat for the penalty call.** When the referee sees a foul his arm goes up and play carries on for 0.7 s; then he blows it down. The offender then skates to his penalty box himself (home's on the left boards, away's on the right, where the arena art has them), and the faceoff waits for him (5 s at most). He comes back out of the same door. A goal against the team about to be penalized during the beat wipes the call out. One call at a time.
+- **Broadcast graphics on the ice (stopgap).** Three of the supplied batch 01 overlays, reduced to game size the way the skater and goalie were (`scripts/art/process_broadcast.py`): the **GOAL! splash** pops in on every goal with who scored under it, a **Faceoff** tag while the teams line up, a **Power play** tag while one side is a skater up. They are the three with no sample text painted in. Temporary until the re-issue at game sizes (Decision 86); the scorebug, penalty tag, panels and player lines still need that re-issue.
+- **Website:** the Welcome to Puck Falls card now shows the supplied town map (`Puck_Falls_Winter_Sunset_Townscape`), and opens the full-size map when clicked.
+
+### Known issues
+- Touch: untested on a real phone (checked in an emulated 390x844 phone both ways up, with real touch events). No touch way yet to switch to shooting practice (T) or open the tuning panel. Create a Player is tappable but was not designed for a phone-sized screen.
+- The stretched picture on phones can show slightly uneven pixels.
+- The walk to the box is the ordinary skating art; he vanishes at the door rather than sitting in the box.
+- The reduced overlays are soft compared with true pixel art.
+
 ## 0.12.0 - 2026-11-26 - The referee is on the ice
 
 229 tests. The referee sprites arrived (package `BLH_referee_32bit.zip`) and are in the game (Decision 88).
