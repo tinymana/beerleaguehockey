@@ -4,7 +4,9 @@ import { CREATED_PLAYER_CONFIG, CREATED_PLAYER_STORE_VERSION, MAX_CREATED_PLAYER
 import type { CreatedPlayerStore, PlayerDraft } from '../src/dynasty/createdPlayer';
 import { PROFILES, profileFit } from '../src/app/stage';
 import { APPEARANCE_VERSION, EQUIPMENT_SLOTS, NATIONALITIES, appearanceProblems, composeAppearance, defaultAppearance, equipmentOptions, nationalityByCode, optionsFor, repairAppearance, skinToneColors } from '../src/dynasty/appearance';
-import { setPlayerAppearance } from '../src/dynasty/createdPlayer';
+import { PROFILE_LIMITS, defaultProfile, repairProfile, setPlayerAppearance, setPlayerNumber } from '../src/dynasty/createdPlayer';
+import { RANDOM_FIELDS, randomizeAppearance } from '../src/dynasty/appearance';
+import { Rng } from '../src/core/rng';
 import { APPEARANCE_CATALOG } from '../src/dynasty/data/appearanceCatalog';
 
 const ready = (over: Partial<PlayerDraft> = {}): PlayerDraft => ({ ...emptyDraft(), firstName: 'Dusty', lastName: 'Bottoms', primary: 'F01', secondaries: ['F08'], playStyle: 'PS02', archetype: 'AR04', ...over });
@@ -62,7 +64,7 @@ describe('creating a player', () => {
   it('holds no seed or ratings before confirmation, so reopening the creator cannot roll again', () => {
     const text = serializeStore(withDraft(ready()));
     expect(text).not.toMatch(/seed|potential|talent|start"/);
-    expect(Object.keys(ready()).sort()).toEqual(['appearance', 'archetype', 'background', 'firstName', 'lastName', 'playStyle', 'position', 'primary', 'secondaries']);
+    expect(Object.keys(ready()).sort()).toEqual(['appearance', 'archetype', 'background', 'firstName', 'lastName', 'playStyle', 'position', 'primary', 'profile', 'secondaries']);
   });
 
   it('stops at the limit', () => {
@@ -225,5 +227,59 @@ describe('appearance (Decision 66)', () => {
     const old = JSON.parse(serializeStore(confirmed.store)) as { players: Record<string, unknown>[] };
     delete old.players[0]!.appearance;
     expect(parseStore(JSON.stringify(old)).players[0]?.appearance).toEqual(defaultAppearance());
+  });
+});
+
+describe('profile details and randomization (Decision 75)', () => {
+  it('keeps number, handedness, height, weight and hometown, repairing anything out of range', () => {
+    expect(defaultProfile()).toEqual({ number: null, shoots: 'L', heightIn: 71, weightLb: 185, hometown: '' });
+    const good = { number: 27, shoots: 'R' as const, heightIn: 74, weightLb: 210, hometown: 'Moose Jaw' };
+    expect(repairProfile(good)).toEqual(good);
+    expect(repairProfile({ number: 100, shoots: 'X', heightIn: 12, weightLb: 999, hometown: 'A1<b>Very Long Town Name Indeed' })).toEqual({ number: null, shoots: 'L', heightIn: 71, weightLb: 185, hometown: 'AbVery Long Town' });
+    expect(repairProfile({ number: 0 }).number).toBe(0);
+    expect(PROFILE_LIMITS.hometownMax).toBe(16);
+  });
+
+  it('is stored with the player, loads from an older save without it, and only the number can change after confirmation', () => {
+    const profile = { number: 9, shoots: 'R' as const, heightIn: 68, weightLb: 160, hometown: 'Flin Flon' };
+    const confirmed = confirmDraft(withDraft(ready({ profile })), 99);
+    expect(confirmed.player?.profile).toEqual(profile);
+    const back = parseStore(serializeStore(confirmed.store));
+    expect(back.players[0]?.profile).toEqual(profile);
+    const renumbered = setPlayerNumber(back, 1, 88);
+    expect(renumbered.players[0]?.profile).toEqual({ ...profile, number: 88 });
+    expect(renumbered.players[0]?.dna).toEqual(back.players[0]?.dna);
+    const old = JSON.parse(serializeStore(confirmed.store)) as { players: Record<string, unknown>[] };
+    delete old.players[0]!.profile;
+    expect(parseStore(JSON.stringify(old)).players[0]?.profile).toEqual(defaultProfile());
+  });
+
+  it('randomizes only unlocked fields, the same way for the same seed, and never touches nationality', () => {
+    const start = { ...defaultAppearance(), face: 'face:face_07', hair: 'hair_05', nationality: 'CAN', equipment: { stick: 'stick_02' } };
+    const free = randomizeAppearance(start, new Set(), new Rng(11));
+    expect(appearanceProblems(free)).toEqual([]);
+    expect(randomizeAppearance(start, new Set(), new Rng(11))).toEqual(free);
+    expect(free.nationality).toBe('CAN');
+    for (let seed = 1; seed <= 40; seed++) {
+      const locked = randomizeAppearance(start, new Set(['face', 'hair', 'equipment.stick']), new Rng(seed));
+      expect(locked.face).toBe('face:face_07');
+      expect(locked.hair).toBe('hair_05');
+      expect(locked.equipment.stick).toBe('stick_02');
+      expect(appearanceProblems(locked)).toEqual([]);
+    }
+    // With everything locked nothing changes; with nothing locked, forty rolls reach many different faces.
+    expect(randomizeAppearance(start, new Set(RANDOM_FIELDS), new Rng(3))).toEqual(start);
+    expect(new Set(Array.from({ length: 40 }, (_, k) => randomizeAppearance(start, new Set(), new Rng(k + 1)).face)).size).toBeGreaterThan(15);
+    expect(start.face).toBe('face:face_07');
+  });
+
+  it("randomizing or editing a confirmed player's look never changes the roll", () => {
+    const confirmed = confirmDraft(withDraft(ready()), 555).store;
+    const before = serializeStore(confirmed);
+    const dna = JSON.stringify(confirmed.players[0]!.dna);
+    const after = setPlayerAppearance(confirmed, 1, randomizeAppearance(confirmed.players[0]!.appearance, new Set(), new Rng(8)));
+    expect(JSON.stringify(after.players[0]!.dna)).toBe(dna);
+    expect(after.players[0]!.archetype).toBe(confirmed.players[0]!.archetype);
+    expect(serializeStore(confirmed)).toBe(before);
   });
 });

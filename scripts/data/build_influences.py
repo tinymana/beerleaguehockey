@@ -88,10 +88,14 @@ def main():
                     weights[table[code]] = value
         if not (2 <= len(signature.split()) <= 3 and 2 <= len(strong.split()) <= 5 and 2 <= len(weak.split()) <= 3):
             errors.append(f'{ident} {name}: needs 2-3 signature, 2-5 strong and 2-3 weak attributes')
+        if ident not in aliases:
+            errors.append(f'{ident}: no fictional alias in data/influences/aliases.json')
+            continue
         if norm(name.split()[-1]) in norm(blurb):
             errors.append(f'{ident}: the blurb names the player')
         out.append({
-            'id': ident, 'name': name, 'alias': aliases.get(ident), 'referenceId': '', 'position': position, 'born': int(born),
+            # Decision 74: the game shows the fictional identity everywhere. The real name stays in curated.tsv only.
+            'id': ident, 'name': aliases[ident], 'alias': aliases[ident], 'referenceId': '', 'position': position, 'born': int(born),
             'country': '', 'shoots': None, 'heightIn': None, 'weightLb': None,
             'tags': [t.strip() for t in tags.split(',') if t.strip()], 'weights': weights, 'blurb': blurb,
         })

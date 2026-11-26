@@ -23,6 +23,36 @@ export const CREATED_PLAYER_CONFIG = { maxPlayers: 8 };
 export const MAX_CREATED_PLAYERS = CREATED_PLAYER_CONFIG.maxPlayers;
 export const NAME_MAX = 12;
 
+/** Personal details chosen in the creator. None of them changes an attribute. */
+export interface PlayerProfile {
+  /** Jersey number 0 to 99, or null for none yet. */
+  number: number | null;
+  shoots: 'L' | 'R';
+  heightIn: number;
+  weightLb: number;
+  hometown: string;
+}
+
+export const PROFILE_LIMITS = { heightIn: [60, 82], weightLb: [120, 300], hometownMax: 16 } as const;
+
+export function defaultProfile(): PlayerProfile {
+  return { number: null, shoots: 'L', heightIn: 71, weightLb: 185, hometown: '' };
+}
+
+export function repairProfile(raw: unknown): PlayerProfile {
+  const base = defaultProfile();
+  if (!raw || typeof raw !== 'object') return base;
+  const r = raw as Partial<PlayerProfile>;
+  const within = (v: unknown, [lo, hi]: readonly [number, number], fallback: number): number => (typeof v === 'number' && Number.isInteger(v) && v >= lo && v <= hi ? v : fallback);
+  return {
+    number: typeof r.number === 'number' && Number.isInteger(r.number) && r.number >= 0 && r.number <= 99 ? r.number : null,
+    shoots: r.shoots === 'R' ? 'R' : 'L',
+    heightIn: within(r.heightIn, PROFILE_LIMITS.heightIn, base.heightIn),
+    weightLb: within(r.weightLb, PROFILE_LIMITS.weightLb, base.weightLb),
+    hometown: cleanName(typeof r.hometown === 'string' ? r.hometown : '', PROFILE_LIMITS.hometownMax),
+  };
+}
+
 export interface PlayerDraft {
   firstName: string;
   lastName: string;
@@ -34,6 +64,7 @@ export interface PlayerDraft {
   archetype: string | null;
   /** How the player looks. Holds no rolled values and stays editable after confirmation. */
   appearance: AppearanceRecord;
+  profile: PlayerProfile;
 }
 
 export interface CreatedPlayer {
@@ -46,6 +77,7 @@ export interface CreatedPlayer {
   archetype: string;
   dna: PlayerDNA;
   appearance: AppearanceRecord;
+  profile: PlayerProfile;
 }
 
 export interface CreatedPlayerStore {
@@ -59,20 +91,20 @@ export interface CreatedPlayerStore {
 }
 
 export function emptyDraft(): PlayerDraft {
-  return { firstName: '', lastName: '', position: 'forward', background: 'youth', primary: null, secondaries: [], playStyle: null, archetype: null, appearance: defaultAppearance() };
+  return { firstName: '', lastName: '', position: 'forward', background: 'youth', primary: null, secondaries: [], playStyle: null, archetype: null, appearance: defaultAppearance(), profile: defaultProfile() };
 }
 
 export function emptyStore(): CreatedPlayerStore {
   return { version: CREATED_PLAYER_STORE_VERSION, nextId: 1, players: [], draft: null, pickUpId: null };
 }
 
-export function cleanName(text: string): string {
-  return text.replace(/[^A-Za-z' -]/g, '').replace(/\s+/g, ' ').slice(0, NAME_MAX);
+export function cleanName(text: string, max: number = NAME_MAX): string {
+  return text.replace(/[^A-Za-z' -]/g, '').replace(/\s+/g, ' ').slice(0, max);
 }
 
 /** Drop choices that no longer make sense after the position or background changed. */
 export function reconcileDraft(draft: PlayerDraft): PlayerDraft {
-  const next = { ...draft, secondaries: [...draft.secondaries], appearance: repairAppearance(draft.appearance) };
+  const next = { ...draft, secondaries: [...draft.secondaries], appearance: repairAppearance(draft.appearance), profile: repairProfile(draft.profile) };
   if (!backgroundsForAge(CREATED_PLAYER_AGE).some((b) => b.id === next.background)) next.background = 'youth';
   const style = next.playStyle ? playStyleById(next.playStyle) : undefined;
   if (!style || !style.positions.includes(next.position)) next.playStyle = null;
@@ -123,6 +155,7 @@ export function confirmDraft(store: CreatedPlayerStore, seed: number): { store: 
     archetype: draft.archetype,
     dna: generateDNA(input),
     appearance: repairAppearance(draft.appearance),
+    profile: repairProfile(draft.profile),
   };
   return { store: { ...store, nextId: store.nextId + 1, players: [...store.players, player], draft: null, pickUpId: store.pickUpId ?? null }, player, problems: [] };
 }
@@ -148,6 +181,11 @@ export function setPlayerAppearance(store: CreatedPlayerStore, id: number, appea
   return { ...store, players: store.players.map((p) => (p.id === id ? { ...p, appearance: repairAppearance(appearance) } : p)) };
 }
 
+/** Change a confirmed player's jersey number: the one personal detail that stays editable. */
+export function setPlayerNumber(store: CreatedPlayerStore, id: number, number: number | null): CreatedPlayerStore {
+  return { ...store, players: store.players.map((p) => (p.id === id ? { ...p, profile: repairProfile({ ...p.profile, number }) } : p)) };
+}
+
 export function serializeStore(store: CreatedPlayerStore): string {
   return JSON.stringify({ ...store, players: store.players.map((p) => ({ ...p, dna: serializeDNA(p.dna) })) });
 }
@@ -161,9 +199,9 @@ export function parseStore(text: string): CreatedPlayerStore {
   if (raw.version !== CREATED_PLAYER_STORE_VERSION) throw new Error(`Created-player store version ${String(raw.version)} is not supported`);
   const players: CreatedPlayer[] = [];
   for (const entry of raw.players ?? []) {
-    const p = entry as { id?: number; firstName?: string; lastName?: string; age?: number; archetype?: string; dna?: string; appearance?: unknown };
+    const p = entry as { id?: number; firstName?: string; lastName?: string; age?: number; archetype?: string; dna?: string; appearance?: unknown; profile?: unknown };
     if (typeof p.id !== 'number' || typeof p.dna !== 'string' || !p.archetype || !startingArchetypeById(p.archetype)) throw new Error('A created player record is damaged');
-    players.push({ id: p.id, firstName: cleanName(p.firstName ?? ''), lastName: cleanName(p.lastName ?? ''), age: p.age ?? CREATED_PLAYER_AGE, archetype: p.archetype, dna: parseDNA(p.dna), appearance: repairAppearance(p.appearance) });
+    players.push({ id: p.id, firstName: cleanName(p.firstName ?? ''), lastName: cleanName(p.lastName ?? ''), age: p.age ?? CREATED_PLAYER_AGE, archetype: p.archetype, dna: parseDNA(p.dna), appearance: repairAppearance(p.appearance), profile: repairProfile(p.profile) });
   }
   if (new Set(players.map((p) => p.id)).size !== players.length) throw new Error('Two created players share an id');
   const nextId = Math.max(raw.nextId ?? 1, ...players.map((p) => p.id + 1), 1);
@@ -183,6 +221,7 @@ export function parseStore(text: string): CreatedPlayerStore {
       playStyle: typeof d.playStyle === 'string' ? d.playStyle : null,
       archetype: typeof d.archetype === 'string' ? d.archetype : null,
       appearance: repairAppearance((d as { appearance?: unknown }).appearance),
+      profile: repairProfile((d as { profile?: unknown }).profile),
     });
   }
   const pickUpId = typeof raw.pickUpId === 'number' && players.some((p) => p.id === raw.pickUpId) ? raw.pickUpId : null;

@@ -9,6 +9,7 @@
  *
  * Appearance never changes an attribute.
  */
+import type { Rng } from '../core/rng';
 import type { Position } from './attributes';
 import { APPEARANCE_CATALOG } from './data/appearanceCatalog';
 
@@ -184,4 +185,31 @@ export function composeAppearance(record: AppearanceRecord, position: Position, 
     flag: r.nationality ? { part: 'flag', frame: `flag:${r.nationality}` } : null,
     stored,
   };
+}
+
+/** The fields randomization can touch, and that can each be locked. */
+export const RANDOM_FIELDS = ['face', 'hair', 'facialHair', 'skinTone', 'bodyType', ...EQUIPMENT_SLOTS.map((s) => `equipment.${s}` as const)] as const;
+export type RandomField = (typeof RANDOM_FIELDS)[number];
+export const RANDOM_CONFIG = { noHairChance: 0.15, noFacialHairChance: 0.5, noEquipmentChance: 0.25 };
+
+/**
+ * Randomize a look. Locked fields are left exactly as they are. Nationality is never randomized (it is chosen
+ * on its own step). Only appearance is touched: there is nothing here that can reach a player's ratings.
+ */
+export function randomizeAppearance(record: AppearanceRecord, locked: ReadonlySet<string>, rng: Rng): AppearanceRecord {
+  const next = repairAppearance(record);
+  const pick = (options: CatalogOption[]): string => (options[rng.int(options.length)] as CatalogOption).id;
+  if (!locked.has('face')) next.face = pick(optionsFor('face'));
+  if (!locked.has('hair')) next.hair = rng.next() < RANDOM_CONFIG.noHairChance ? null : pick(optionsFor('hair'));
+  if (!locked.has('facialHair')) next.facialHair = rng.next() < RANDOM_CONFIG.noFacialHairChance ? null : pick(optionsFor('facialHair'));
+  if (!locked.has('skinTone')) next.skinTone = pick(optionsFor('skinTone'));
+  if (!locked.has('bodyType')) next.bodyType = pick(optionsFor('bodyType'));
+  const equipment = { ...next.equipment };
+  for (const slot of EQUIPMENT_SLOTS) {
+    if (locked.has(`equipment.${slot}`)) continue;
+    if (rng.next() < RANDOM_CONFIG.noEquipmentChance) delete equipment[slot];
+    else equipment[slot] = pick(equipmentOptions(slot));
+  }
+  next.equipment = equipment;
+  return next;
 }

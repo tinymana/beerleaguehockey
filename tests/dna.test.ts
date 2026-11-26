@@ -1,4 +1,4 @@
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { afterEach, describe, expect, it } from 'vitest';
 import { GOALIE_ATTRIBUTES, SKATER_ATTRIBUTES, applyPermanentChange, attributesFor, effectiveRating, overall, withTemporary, withoutTemporary } from '../src/dynasty/attributes';
@@ -9,9 +9,17 @@ import { PLAY_STYLES, developmentBonus, developmentFocus, developsFaster, playSt
 import { NAME_POOLS, namePoolFor, randomName } from '../src/dynasty/names';
 import { Rng } from '../src/core/rng';
 import type { DnaInput } from '../src/dynasty/dna';
-import { FALLBACK_COUNT, FICTIONAL_CONFIG, INFLUENCES, extendedInfluences, influenceById, influenceName, influenceSource, influencesFor, missingAliases, registerWiderRegistry, registryProblems, searchInfluences, widerRegistryKind } from '../src/dynasty/influences';
+import { FALLBACK_COUNT, FICTIONAL_CONFIG, INFLUENCE_NAME_SET, INFLUENCES, extendedInfluences, influenceById, influenceName, influenceSource, influencesFor, missingAliases, registerWiderRegistry, registryProblems, searchInfluences, widerRegistryKind } from '../src/dynasty/influences';
 
 const ROOT = join(__dirname, '..');
+/** Real names live only in the curated source file, never in the build. id -> real name. */
+const REAL_NAMES = new Map(
+  readFileSync(join(ROOT, 'data', 'influences', 'curated.tsv'), 'utf8')
+    .split(/\r?\n/)
+    .filter((l) => l && !l.startsWith('#'))
+    .map((l) => l.split('\t'))
+    .map((c) => [c[0] as string, c[1] as string] as const),
+);
 const skater = (over: Partial<DnaInput> = {}): DnaInput => ({ seed: 1, position: 'forward', background: 'youth', primary: 'F01', secondaries: [], ...over });
 const mean = (values: number[]) => values.reduce((a, b) => a + b, 0) / values.length;
 
@@ -55,10 +63,18 @@ describe('Hockey Influences registry', () => {
     expect(influencesFor('forward')).toEqual(influencesFor('defense'));
   });
 
-  it('includes the twelve example influences from the brief', () => {
-    const names = new Set(INFLUENCES.map((i) => i.name));
+  it('keeps the twelve example influences from the brief in the curated source, and builds no real name into the game (Decision 74)', () => {
+    const real = REAL_NAMES;
+    expect(real.size).toBe(INFLUENCES.length);
     for (const n of ['Wayne Gretzky', 'Jari Kurri', 'Teemu Selanne', 'Mario Lemieux', 'Pavel Bure', 'Steve Yzerman', 'Mark Messier', 'Brett Hull', 'Nicklas Lidstrom', 'Scott Stevens', 'Patrick Roy', 'Dominik Hasek']) {
-      expect(names.has(n), n).toBe(true);
+      expect([...real.values()], n).toContain(n);
+    }
+    const realNames = new Set(real.values());
+    const realSurnames = new Set([...real.values()].map((n) => n.split(' ').pop()!.toLowerCase()));
+    for (const i of INFLUENCES) {
+      expect(realNames.has(i.name), i.id).toBe(false);
+      expect(realSurnames.has(i.name.split(' ').pop()!.toLowerCase()), i.id).toBe(false);
+      expect(JSON.stringify(i)).not.toContain(real.get(i.id)!.split(' ').pop()!);
     }
   });
 
@@ -73,23 +89,23 @@ describe('Hockey Influences registry', () => {
     expect(existsSync(join(ROOT, 'data', 'reference', 'nhl_players.csv'))).toBe(false);
   });
 
-  it('can hide every real name: ids are neutral, blurbs name nobody, and fictional mode never shows a real name', () => {
+  it('shows the fictional identity everywhere: ids are neutral, blurbs name nobody, and each alias is a distinct identity', () => {
     for (const i of INFLUENCES) {
-      const surname = i.name.split(' ').pop() ?? '';
+      const surname = REAL_NAMES.get(i.id)!.split(' ').pop() ?? '';
       expect(i.blurb.toLowerCase().includes(surname.toLowerCase()), i.id).toBe(false);
       expect(influenceName(i, 'real')).toBe(i.name);
-      expect(influenceName(i, 'fictional')).not.toBe(i.name);
+      expect(influenceName(i, 'fictional')).toBe(i.name);
+      expect(i.alias).toBe(i.name);
     }
-    // Every curated influence has a fictional alias (Decision 68): a distinct identity, not a respelling.
+    expect(INFLUENCE_NAME_SET).toBe('fictional');
     expect(missingAliases()).toEqual([]);
     const aliases = INFLUENCES.map((i) => i.alias as string);
     expect(new Set(aliases).size).toBe(INFLUENCES.length);
-    const realWords = new Set(INFLUENCES.flatMap((i) => i.name.toLowerCase().split(/[ -]/)));
+    const realWords = new Set([...REAL_NAMES.values()].flatMap((n) => n.toLowerCase().split(/[ -]/)));
     for (const i of INFLUENCES) {
       const [first, last] = (i.alias as string).toLowerCase().split(' ');
-      expect(i.name.toLowerCase().split(/[ -]/)).not.toContain(first);
+      expect(REAL_NAMES.get(i.id)!.toLowerCase().split(/[ -]/)).not.toContain(first);
       expect(realWords.has(last as string), `${i.id} ${i.alias}`).toBe(false);
-      expect(influenceName(i, 'fictional')).toBe(i.alias);
     }
     expect(extendedInfluences().some((x) => aliases.includes(x.name))).toBe(false);
   });
@@ -419,8 +435,10 @@ describe('the wider influence registry (Decisions 53, 61)', () => {
   });
 
   it('searches by any part of a name, ignoring accents, curated first, goalies only for goalies', () => {
-    expect(searchInfluences('forward', 'lidstrom')[0]?.id).toBe('D02');
-    expect(searchInfluences('forward', 'gretz').map((i) => i.id)).toContain('F01');
+    const d02 = influenceById('D02')!;
+    expect(searchInfluences('forward', d02.name.split(' ')[1]!.toLowerCase())[0]?.id).toBe('D02');
+    expect(searchInfluences('forward', influenceById('F01')!.name.slice(0, 4).toUpperCase()).map((i) => i.id)).toContain('F01');
+    expect(searchInfluences('forward', 'gretzky')).toEqual([]);
     expect(searchInfluences('goalie', '').slice(0, 10).every((i) => i.position === 'goalie')).toBe(true);
     expect(searchInfluences('forward', '', 70).slice(0, 54).every((i) => influenceSource(i) === 'curated')).toBe(true);
     expect(influenceSource(searchInfluences('forward', '', 70)[60]!)).toBe('fictional');
@@ -450,7 +468,7 @@ describe('fictional names (Decision 64)', () => {
     expect(namePoolFor('SWE')!.last).toContain(swede.last);
     expect(randomName(new Rng(5), 'SWE')).toEqual(swede);
     expect(randomName(new Rng(7), 'ZZZ').code).toMatch(/^[A-Z]{3}$/);
-    const real = new Set(INFLUENCES.map((i) => i.name));
+    const real = new Set(REAL_NAMES.values());
     for (const pool of NAME_POOLS) for (const f of pool.first) for (const l of pool.last) expect(real.has(`${f} ${l}`), `${f} ${l}`).toBe(false);
   });
 });

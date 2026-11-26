@@ -3,11 +3,11 @@ import { Rng } from '../core/rng';
 import { ATTRIBUTE_LABELS, attributesFor, overall } from '../dynasty/attributes';
 import type { AttributeKey, Position } from '../dynasty/attributes';
 import type { AppearancePart, AppearanceRecord, CatalogOption, EquipmentSlot } from '../dynasty/appearance';
-import { EQUIPMENT_SLOTS, NATIONALITIES, composeAppearance, equipmentOptions, nationalityByCode, optionsFor, skinToneColors } from '../dynasty/appearance';
+import { EQUIPMENT_SLOTS, NATIONALITIES, RANDOM_FIELDS, composeAppearance, equipmentOptions, nationalityByCode, optionsFor, randomizeAppearance, skinToneColors } from '../dynasty/appearance';
 import { startingArchetypeById, startingArchetypesFor } from '../dynasty/archetypes';
 import { CREATED_PLAYER_AGE, backgroundById, backgroundsForAge } from '../dynasty/backgrounds';
-import type { CreatedPlayer, CreatedPlayerStore, PlayerDraft } from '../dynasty/createdPlayer';
-import { CREATED_PLAYER_CONFIG, NAME_MAX, choosePickUpPlayer, cleanName, confirmDraft, deletePlayer, draftInput, draftProblems, emptyDraft, reconcileDraft } from '../dynasty/createdPlayer';
+import type { CreatedPlayer, CreatedPlayerStore, PlayerDraft, PlayerProfile } from '../dynasty/createdPlayer';
+import { CREATED_PLAYER_CONFIG, NAME_MAX, PROFILE_LIMITS, setPlayerAppearance, setPlayerNumber, choosePickUpPlayer, cleanName, confirmDraft, deletePlayer, draftInput, draftProblems, emptyDraft, reconcileDraft } from '../dynasty/createdPlayer';
 import { attributeBounds, startingAttributes } from '../dynasty/dna';
 import { influenceById, influenceName, influenceSource, registerWiderRegistry, searchInfluences } from '../dynasty/influences';
 import { randomName } from '../dynasty/names';
@@ -86,8 +86,8 @@ interface Option {
   preview?: Partial<PlayerDraft>;
   activate: () => void;
 }
-type TextField = 'firstName' | 'lastName' | 'search';
-type Mode = 'edit' | 'confirm' | 'reveal' | 'delete';
+type TextField = 'firstName' | 'lastName' | 'search' | 'hometown';
+type Mode = 'edit' | 'confirm' | 'reveal' | 'delete' | 'look';
 
 function wrap(text: string, width: number): string[] {
   const lines: string[] = [];
@@ -103,6 +103,10 @@ function wrap(text: string, width: number): string[] {
   if (line) lines.push(line);
   return lines;
 }
+
+const feetInches = (inches: number): string => `${Math.floor(inches / 12)}'${inches % 12}`;
+const range = (lo: number, hi: number, step: number): number[] => Array.from({ length: Math.floor((hi - lo) / step) + 1 }, (_, i) => lo + i * step);
+const FIELD_LABELS: Record<string, string> = { face: 'Face', hair: 'Hair', facialHair: 'Facial hair', skinTone: 'Skin tone', bodyType: 'Body type' };
 
 const ovr = (p: CreatedPlayer): number => Math.round(overall(p.dna.start, attributesFor(p.dna.position)));
 
@@ -127,6 +131,8 @@ export class CreatorScene extends Phaser.Scene {
   private keyIndex = KEYS.length - 1;
   private picker: Picker | null = null;
   private pickerReturn = 0;
+  /** Appearance fields the randomizer must leave alone. */
+  private readonly locks = new Set<string>();
   private frames: Record<string, [string, number, number, number, number]> = {};
   private slot = 0;
   private query = '';
@@ -246,15 +252,22 @@ export class CreatorScene extends Phaser.Scene {
 
   private buildOptions(): Option[] {
     const d = this.draft;
+    if (this.picker) return this.pickerOptions(this.picker);
     if (this.mode === 'reveal') {
       const shown = this.shown;
       const out: Option[] = [{ label: 'Done', activate: () => this.leaveReveal() }];
       if (shown && this.store.players.some((p) => p.id === shown.id)) {
         const picked = this.store.pickUpId === shown.id;
         out.push({ label: picked ? 'Pick-Up player' : 'Use in Pick-Up', chosen: picked, activate: () => this.pickUp(picked ? null : shown.id) });
+        out.push({ label: 'Edit look', activate: () => this.setMode('look') });
+        out.push({ label: 'Number', right: shown.profile.number === null ? 'None' : `${shown.profile.number}`, activate: () => this.openNumberPicker(shown.profile.number, (n) => this.updateShown((st, id) => setPlayerNumber(st, id, n))) });
         out.push({ label: 'Delete player', activate: () => this.setMode('delete') });
       }
       return out;
+    }
+    if (this.mode === 'look' && this.shown) {
+      const shown = this.shown;
+      return [{ label: 'Done', activate: () => this.setMode('reveal') }, ...this.appearanceRows(shown.appearance, (next) => this.updateShown((st, id) => setPlayerAppearance(st, id, next)), this.playerCard(shown))];
     }
     if (this.mode === 'delete') {
       return [
@@ -268,7 +281,6 @@ export class CreatorScene extends Phaser.Scene {
         { label: 'Yes, lock this player in', frame: 'confirm', activate: () => this.confirm() },
       ];
     }
-    if (this.picker) return this.pickerOptions(this.picker);
     switch (STEPS[this.step]) {
       case 'Nationality': {
         const q = this.query.trim().toLowerCase();
@@ -283,46 +295,26 @@ export class CreatorScene extends Phaser.Scene {
         }
         return out;
       }
-      case 'Appearance': {
-        const a = d.appearance;
-        const labelOf = (options: CatalogOption[], id: string | null | undefined): string => (id ? clip(options.find((o) => o.id === id)?.label ?? '?', 9) : 'None');
-        const rows: Option[] = PARTS.map(({ part, label, none, note }) => ({
-          label,
-          right: labelOf(optionsFor(part), a[part]),
-          card: this.lookCard(),
-          activate: () => this.openPicker({ title: label, items: optionsFor(part), current: a[part], none, note, search: false, swatch: part === 'skinTone', pick: (id) => this.setAppearance({ [part]: none ? id : (id ?? a[part]) }) }),
-        }));
-        for (const slot of EQUIPMENT_SLOTS) {
-          const options = equipmentOptions(slot as EquipmentSlot);
-          const name = slot[0]!.toUpperCase() + slot.slice(1);
-          rows.push({
-            label: `Gear: ${name}`,
-            right: labelOf(options, a.equipment[slot]),
-            card: this.lookCard(),
-            activate: () =>
-              this.openPicker({
-                title: name,
-                items: options,
-                current: a.equipment[slot] ?? null,
-                none: true,
-                note: 'Reference thumbnail: stored, not drawn on the model. Branded items are left out.',
-                search: false,
-                pick: (id) => {
-                  const equipment = { ...a.equipment };
-                  if (id) equipment[slot] = id;
-                  else delete equipment[slot];
-                  this.setAppearance({ equipment });
-                },
-              }),
-          });
-        }
-        return rows;
-      }
+      case 'Appearance':
+        return this.appearanceRows(d.appearance, (next) => this.setDraft({ appearance: next }), this.lookCard());
       case 'Profile':
         return [
           { label: 'First name', right: this.fieldText('firstName', d.firstName), activate: () => this.startTyping('firstName') },
           { label: 'Last name', right: this.fieldText('lastName', d.lastName), activate: () => this.startTyping('lastName') },
           { label: 'Random name', activate: () => this.rollName() },
+          { label: 'Hometown', right: clip(this.fieldText('hometown', d.profile.hometown), 12), activate: () => this.startTyping('hometown') },
+          { label: 'Number', right: d.profile.number === null ? 'None' : `${d.profile.number}`, activate: () => this.openNumberPicker(d.profile.number, (n) => this.setProfile({ number: n })) },
+          { label: 'Shoots', right: d.profile.shoots === 'L' ? 'Left' : 'Right', activate: () => this.setProfile({ shoots: d.profile.shoots === 'L' ? 'R' : 'L' }) },
+          {
+            label: 'Height',
+            right: feetInches(d.profile.heightIn),
+            activate: () => this.openPicker({ title: 'Height', items: range(PROFILE_LIMITS.heightIn[0], PROFILE_LIMITS.heightIn[1], 1).map((v) => ({ id: `${v}`, label: feetInches(v) })), current: `${d.profile.heightIn}`, none: false, note: 'For your profile. Changes no ratings.', search: false, pick: (id) => id && this.setProfile({ heightIn: Number(id) }) }),
+          },
+          {
+            label: 'Weight',
+            right: `${d.profile.weightLb} lb`,
+            activate: () => this.openPicker({ title: 'Weight', items: range(PROFILE_LIMITS.weightLb[0], PROFILE_LIMITS.weightLb[1], 5).map((v) => ({ id: `${v}`, label: `${v} lb` })), current: `${d.profile.weightLb}`, none: false, note: 'For your profile. Changes no ratings.', search: false, pick: (id) => id && this.setProfile({ weightLb: Number(id) }) }),
+          },
           ...POSITIONS.map((p) => ({ label: p.label, chosen: d.position === p.id, preview: { position: p.id }, activate: () => this.setDraft({ position: p.id }) })),
         ];
       case 'Background':
@@ -384,7 +376,7 @@ export class CreatorScene extends Phaser.Scene {
     const a = startingArchetypeById(p.archetype);
     const primary = influenceById(p.dna.primary);
     const style = p.dna.playStyle ? playStyleById(p.dna.playStyle) : undefined;
-    return { colour: 'green', title: `${p.firstName} ${p.lastName}`, tag: a?.name.toUpperCase() ?? 'PLAYER', images: [{ frame: p.appearance.face, x: 4, y: 32 }, { frame: `model:${p.dna.position === 'goalie' ? 'goalie' : 'skater'}_front`, x: 76, y: 0 }, ...(p.appearance.nationality ? [{ frame: `flag:${p.appearance.nationality}`, x: 20, y: 0 }] : [])], badge: p.dna.position === 'goalie' ? 'G' : p.dna.position === 'defense' ? 'D' : 'F', body: `Age ${p.age}. ${backgroundById(p.dna.background)?.label ?? ''}. Grew up watching ${primary ? influenceName(primary) : '?'}. ${style ? style.name : 'No style'}.`, footer: [`Overall ${ovr(p)}`, 'Locked in'] };
+    return { colour: 'green', title: `${p.firstName} ${p.lastName}`, tag: a?.name.toUpperCase() ?? 'PLAYER', images: [{ frame: p.appearance.face, x: 4, y: 32 }, { frame: `model:${p.dna.position === 'goalie' ? 'goalie' : 'skater'}_front`, x: 76, y: 0 }, ...(p.appearance.nationality ? [{ frame: `flag:${p.appearance.nationality}`, x: 20, y: 0 }] : [])], badge: p.dna.position === 'goalie' ? 'G' : p.dna.position === 'defense' ? 'D' : 'F', body: `${p.profile.number === null ? '' : `No. ${p.profile.number}. `}Age ${p.age}, ${feetInches(p.profile.heightIn)}, ${p.profile.weightLb} lb, shoots ${p.profile.shoots}.${p.profile.hometown ? ` From ${p.profile.hometown}.` : ''} ${backgroundById(p.dna.background)?.label ?? ''}. Grew up watching ${primary ? influenceName(primary) : '?'}. ${style ? style.name : 'No style'}.`, footer: [`Overall ${ovr(p)}`, 'Locked in'] };
   }
 
   private fieldText(field: TextField, value: string): string {
@@ -490,7 +482,7 @@ export class CreatorScene extends Phaser.Scene {
     if (!field) return;
     if (label === 'DONE') this.typing = null;
     else if (label === 'DEL') this.setTyped(field, this.typed(field).slice(0, -1));
-    else if (this.typed(field).length < NAME_MAX) this.setTyped(field, this.typed(field) + (label === 'SPACE' ? ' ' : this.typed(field) && !this.typed(field).endsWith(' ') && !this.typed(field).endsWith('-') ? label.toLowerCase() : label));
+    else if (this.typed(field).length < this.maxFor(field)) this.setTyped(field, this.typed(field) + (label === 'SPACE' ? ' ' : this.typed(field) && !this.typed(field).endsWith(' ') && !this.typed(field).endsWith('-') ? label.toLowerCase() : label));
     this.dirty = true;
   }
 
@@ -526,13 +518,23 @@ export class CreatorScene extends Phaser.Scene {
   }
 
   private typed(field: TextField): string {
-    return field === 'search' ? this.query : this.draft[field];
+    return field === 'search' ? this.query : field === 'hometown' ? this.draft.profile.hometown : this.draft[field];
+  }
+
+  private maxFor(field: TextField): number {
+    return field === 'hometown' ? PROFILE_LIMITS.hometownMax : NAME_MAX;
+  }
+
+  private setProfile(change: Partial<PlayerProfile>): void {
+    this.setDraft({ profile: { ...this.draft.profile, ...change } });
   }
 
   private setTyped(field: TextField, value: string): void {
     if (field === 'search') {
       this.query = cleanName(value);
       this.dirty = true;
+    } else if (field === 'hometown') {
+      this.setProfile({ hometown: cleanName(value, PROFILE_LIMITS.hometownMax) });
     } else {
       this.setDraft({ [field]: cleanName(value) });
     }
@@ -554,7 +556,7 @@ export class CreatorScene extends Phaser.Scene {
       else if (key === 'ArrowDown') this.moveKey(0, 1);
       else if (key === 'ArrowLeft') this.moveKey(-1, 0);
       else if (key === 'ArrowRight') this.moveKey(1, 0);
-      else if (key.length === 1 && this.typed(field).length < NAME_MAX) this.setTyped(field, this.typed(field) + key);
+      else if (key.length === 1 && this.typed(field).length < this.maxFor(field)) this.setTyped(field, this.typed(field) + key);
       event.preventDefault();
       return;
     }
@@ -604,7 +606,7 @@ export class CreatorScene extends Phaser.Scene {
       this.scroll = 0;
       this.dirty = true;
     } else if (this.mode === 'confirm') this.setMode('edit');
-    else if (this.mode === 'delete') this.setMode('reveal');
+    else if (this.mode === 'delete' || this.mode === 'look') this.setMode('reveal');
     else if (this.mode === 'reveal') this.leaveReveal();
     else if (this.column === 'options') {
       this.column = 'nav';
@@ -683,7 +685,7 @@ export class CreatorScene extends Phaser.Scene {
 
     // Options
     this.slice(224, 60, 304, 424, 'panel');
-    const heading = this.picker && !this.typing ? this.picker.title.toUpperCase() : this.typing ? (this.typing === 'search' ? 'SEARCH' : this.typing === 'firstName' ? 'FIRST NAME' : 'LAST NAME') : this.mode === 'confirm' ? 'LOCK IN?' : this.mode === 'delete' ? 'DELETE?' : this.mode === 'reveal' ? 'YOUR PLAYER' : (STEPS[this.step] ?? '').toUpperCase();
+    const heading = this.picker && !this.typing ? this.picker.title.toUpperCase() : this.typing ? (this.typing === 'search' ? 'SEARCH' : this.typing === 'firstName' ? 'FIRST NAME' : this.typing === 'hometown' ? 'HOMETOWN' : 'LAST NAME') : this.mode === 'confirm' ? 'LOCK IN?' : this.mode === 'delete' ? 'DELETE?' : this.mode === 'look' ? 'EDIT LOOK' : this.mode === 'reveal' ? 'YOUR PLAYER' : (STEPS[this.step] ?? '').toUpperCase();
     this.text(236, 72, heading, UI.gold);
     if (this.options.length > OPT.rows) this.text(440, 76, `${this.index + 1} / ${this.options.length}${this.options.length >= RESULT_LIMIT ? '+' : ''}`, UI.dim, 1);
     if (this.typing) this.drawKeyboard();
@@ -712,7 +714,7 @@ export class CreatorScene extends Phaser.Scene {
 
     // Card for the highlighted option
     const focusedOption = this.column === 'options' ? this.options[this.index] : undefined;
-    const card = (this.mode === 'reveal' || this.mode === 'delete') && this.shown ? (this.mode === 'delete' ? { ...this.playerCard(this.shown), body: 'Deleting removes this player from this browser for good. Their number is never used again.', footer: ['Cannot be undone'] } : this.playerCard(this.shown)) : this.mode === 'confirm' ? this.confirmCard() : (focusedOption?.card ?? this.stepCard());
+    const card = focusedOption?.card && this.picker ? focusedOption.card : (this.mode === 'reveal' || this.mode === 'delete' || this.mode === 'look') && this.shown ? (this.mode === 'delete' ? { ...this.playerCard(this.shown), body: 'Deleting removes this player from this browser for good. Their number is never used again.', footer: ['Cannot be undone'] } : this.playerCard(this.shown)) : this.mode === 'confirm' ? this.confirmCard() : (focusedOption?.card ?? this.stepCard());
     this.drawCard(card);
 
     // Notes under the card
@@ -753,7 +755,7 @@ export class CreatorScene extends Phaser.Scene {
       this.text(lx + Math.floor((lw - shown.length * 12) / 2) + 1, y + 10, shown, focused ? UI.navy : UI.white);
     });
     if (field === 'search') this.text(OPT.x, OPT.y + 44 + 5 * 40 + 8, `${Math.max(0, this.buildOptions().length - 2)} MATCHES`, UI.dim, 1);
-    else wrap('Letters, spaces, apostrophes and hyphens. Up to 12.', 44).forEach((line, i) => this.text(OPT.x, OPT.y + 44 + 5 * 40 + 8 + i * 10, line, UI.dim, 1));
+    else wrap(`Letters, spaces, apostrophes and hyphens. Up to ${this.maxFor(field)}.`, 44).forEach((line, i) => this.text(OPT.x, OPT.y + 44 + 5 * 40 + 8 + i * 10, line, UI.dim, 1));
   }
 
   private stepDone(i: number): boolean {
@@ -777,6 +779,87 @@ export class CreatorScene extends Phaser.Scene {
       default:
         return false;
     }
+  }
+
+  private openNumberPicker(current: number | null, pick: (n: number | null) => void): void {
+    this.openPicker({ title: 'Number', items: range(0, 99, 1).map((v) => ({ id: `${v}`, label: `Number ${v}` })), current: current === null ? null : `${current}`, none: true, note: 'Your jersey number. You can change it later.', search: false, pick: (id) => pick(id === null ? null : Number(id)) });
+  }
+
+  /** The appearance rows, for a draft or for a confirmed player: same choices, different place to save them. */
+  private appearanceRows(a: AppearanceRecord, save: (next: AppearanceRecord) => void, card: CardInfo): Option[] {
+    const labelOf = (options: CatalogOption[], id: string | null | undefined): string => (id ? clip(options.find((o) => o.id === id)?.label ?? '?', 9) : 'None');
+    const lock = (field: string): string => (this.locks.has(field) ? '(L) ' : '');
+    const rows: Option[] = [
+      {
+        label: 'Randomize look',
+        right: this.locks.size ? `${this.locks.size} locked` : '',
+        card,
+        // The clock only seeds which look comes up. Locked fields are left alone, and nothing but appearance is touched.
+        activate: () => save(randomizeAppearance(a, this.locks, new Rng((Date.now() ^ Math.floor(performance.now() * 1000)) >>> 0))),
+      },
+      {
+        label: 'Locks',
+        right: `${this.locks.size} of ${RANDOM_FIELDS.length}`,
+        card,
+        activate: () =>
+          this.openPicker({
+            title: 'Lock fields',
+            items: RANDOM_FIELDS.map((f) => ({ id: f, label: `${this.locks.has(f) ? '(L) ' : ''}${FIELD_LABELS[f] ?? `Gear ${f.split('.')[1]}`}` })),
+            current: null,
+            none: false,
+            note: 'A locked field (L) is kept when you randomize. Choose a field to lock or unlock it.',
+            search: false,
+            pick: (id) => {
+              if (!id) return;
+              if (this.locks.has(id)) this.locks.delete(id);
+              else this.locks.add(id);
+            },
+          }),
+      },
+    ];
+    for (const { part, label, none, note } of PARTS) {
+      rows.push({
+        label: `${lock(part)}${label}`,
+        right: labelOf(optionsFor(part), a[part]),
+        card,
+        activate: () => this.openPicker({ title: label, items: optionsFor(part), current: a[part], none, note, search: false, swatch: part === 'skinTone', pick: (id) => save({ ...a, [part]: none ? id : (id ?? a[part]) }) }),
+      });
+    }
+    for (const slot of EQUIPMENT_SLOTS) {
+      const options = equipmentOptions(slot as EquipmentSlot);
+      const name = slot[0]!.toUpperCase() + slot.slice(1);
+      rows.push({
+        label: `${lock(`equipment.${slot}`)}Gear: ${name}`,
+        right: labelOf(options, a.equipment[slot]),
+        card,
+        activate: () =>
+          this.openPicker({
+            title: name,
+            items: options,
+            current: a.equipment[slot] ?? null,
+            none: true,
+            note: 'Reference thumbnail: stored, not drawn on the model. Branded items are left out.',
+            search: false,
+            pick: (id) => {
+              const equipment = { ...a.equipment };
+              if (id) equipment[slot] = id;
+              else delete equipment[slot];
+              save({ ...a, equipment });
+            },
+          }),
+      });
+    }
+    return rows;
+  }
+
+  /** Save a change to the confirmed player being shown. Only the look or the number: the roll is never touched. */
+  private updateShown(change: (store: CreatedPlayerStore, id: number) => CreatedPlayerStore): void {
+    if (!this.shown) return;
+    const id = this.shown.id;
+    this.store = change(this.store, id);
+    this.persist();
+    this.shown = this.store.players.find((p) => p.id === id) ?? this.shown;
+    this.dirty = true;
   }
 
   private setAppearance(change: Partial<AppearanceRecord>): void {
@@ -894,7 +977,7 @@ export class CreatorScene extends Phaser.Scene {
 
   private notes(): string[] {
     const d = this.draft;
-    if ((this.mode === 'reveal' || this.mode === 'delete') && this.shown) {
+    if ((this.mode === 'reveal' || this.mode === 'delete' || this.mode === 'look') && this.shown) {
       const p = this.shown;
       const label = (k: AttributeKey): string => ATTRIBUTE_LABELS[k];
       return ['STRENGTHS', ...p.dna.strengths.map((k) => ` ${label(k)}`), '', 'WEAKNESSES', ...p.dna.weaknesses.map((k) => ` ${label(k)}`), '', ...wrap(`Tendencies: ${p.dna.tendencies.join(', ') || 'none'}`, 23)];
@@ -911,7 +994,7 @@ export class CreatorScene extends Phaser.Scene {
     this.layer.add(g);
     const barX = ATTR.x + 146;
     const px = (rating: number): number => Math.round((rating / 99) * ATTR.bar);
-    if ((this.mode === 'reveal' || this.mode === 'delete') && this.shown) {
+    if ((this.mode === 'reveal' || this.mode === 'delete' || this.mode === 'look') && this.shown) {
       const attributes = startingAttributes(this.shown.dna);
       this.text(ATTR.x, 72, `OVERALL ${ovr(this.shown)}`, UI.gold);
       for (const [row, key] of attributesFor(this.shown.dna.position).entries()) {

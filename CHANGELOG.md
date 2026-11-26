@@ -2,6 +2,29 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.6.0 - 2026-11-25 - A fictional hockey universe; profile details; randomize with locks; edit a saved player's look
+
+166 tests.
+
+### Added
+- **Profile details:** hometown, jersey number, shoots left or right, height and weight. None changes a rating.
+- **Randomize look** with **field locks**: locked fields are kept; nationality is never randomized.
+- **Edit a saved player:** change their look or jersey number from Saved Players. The roll, influences and ratings are never touched (tested).
+- `COMPOSITOR_ART_SPEC.md` and `docs/compositor_template.png`: the exact layer specification and alignment template for the art team.
+
+### Changed
+- **Fictional names everywhere (Decision 74):** the 64 curated influences appear under their fictional identities, and no real name is built into the game. Ids are unchanged, so saved players load as before.
+- Fictional professionals are confirmed at full strength: no influence is mechanically better than another.
+- Batch 19 master package moved out of the repository to external art storage (Decision 75).
+
+### Known issues
+- **Attribute icons are not in yet.** The batch 16.09 icons are 32x32 at their smallest and the attribute rows are 14 px tall; art is never resampled, so the attribute panel needs a new layout first.
+- **Name pools are not expanded yet** (about 3,000 combinations against the 100,000 target).
+- The batch 19 zip is still in the branch's history (50 MB) until a second history clean-up, which needs approval.
+- The deployed equipment atlas still contains the excluded branded items as unused pixels.
+- Batches 09 to 16 master packages are still in the repository.
+- Skating checkpoint approved (Decision 73), but on-ice work has not started: the net-size ruling is open.
+
 ## 0.5.0 - 2026-11-25 - Appearance and nationality; fictional professionals and aliases; history rewritten
 
 162 tests.

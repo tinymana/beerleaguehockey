@@ -15,9 +15,9 @@ import { PLAY_STYLES, playStyleWeight } from './playStyles';
 
 export interface InfluenceRecord {
   id: string;
-  /** Real name, used during development (Decision 34). */
+  /** The name shown. For curated influences this is the fictional identity (Decision 74): the build holds no real names. */
   name: string;
-  /** Fictional replacement, when one has been written. */
+  /** Same as name for curated influences; null elsewhere. Kept so older code and saves read the same. */
   alias: string | null;
   /** An outside reference id, when one is known. Empty in the public registry. */
   referenceId: string;
@@ -47,8 +47,8 @@ export type InfluenceSource = 'curated' | 'derived' | 'limited' | 'fictional';
 
 export type InfluenceNameSet = 'real' | 'fictional';
 
-/** Which names the game shows. 'real' during development; switch to 'fictional' if a release requires it. */
-export const INFLUENCE_NAME_SET: InfluenceNameSet = 'real';
+/** Kept for compatibility. Every standard build is fictional (Decision 74); 'real' now shows the same names, because no real names are built in. */
+export const INFLUENCE_NAME_SET: InfluenceNameSet = 'fictional';
 
 export const INFLUENCES: readonly InfluenceRecord[] = INFLUENCE_DATA;
 
@@ -251,9 +251,9 @@ export function searchInfluences(position: Position, query: string, limit = 50):
   return out;
 }
 
-/** The name to show. With fictional names on, an influence without an alias shows its id rather than a real name. */
-export function influenceName(influence: InfluenceRecord, nameSet: InfluenceNameSet = INFLUENCE_NAME_SET): string {
-  return nameSet === 'real' ? influence.name : (influence.alias ?? `Influence ${influence.id}`);
+/** The name to show: always the name built into the record. Curated influences are built with their fictional identity (Decision 74). */
+export function influenceName(influence: InfluenceRecord, _nameSet: InfluenceNameSet = INFLUENCE_NAME_SET): string {
+  return influence.alias ?? influence.name;
 }
 
 /** Goalies learn from goalies; skaters may take any skater as an influence, whatever position either plays. */

@@ -101,3 +101,28 @@ These are generated at boot by code and are **not** final art. Each is labeled t
 | 5x7 pixel font | `src/app/pixelFont.ts` | Approved retro sports typography |
 | End and corner boards, stands, nets (stand-ins) | `src/match/view/textures.ts` | Arena batches 10, 11 and 13 |
 | Puck and shadow | `src/match/view/textures.ts` | Approved sprites |
+
+## Artwork storage and production manifest (Decision 75)
+
+**Where things live.**
+
+| Category | Where | In the repository |
+| --- | --- | --- |
+| Original artwork | Art team; a copy in external art storage `original_artwork/` | No |
+| Master asset packages (full delivery zips) | External art storage `master_packages/` | No. Batch 19 was moved out in v0.6.0. Batches 09 to 16 are still under `art/packages/` and `art/character_packages/` from before the ruling, because the ingest scripts read them there |
+| Production-ready assets | `public/assets/` | Yes: only what the game loads |
+| Reference mockups | External art storage `reference_mockups/` | No |
+| Deprecated artwork | External art storage `deprecated/` | No |
+
+**Production assets added by the creator work.**
+
+| Production file | Size | Source | Version | Used for |
+| --- | --- | --- | --- | --- |
+| `public/assets/ui/16_11/ui_atlas.png` | 256x160 | Batch 16.11 `ui_atlas.png`, unchanged | 1 | Panels, buttons, card frames |
+| `public/assets/cards/16_10/card_art.png` | 1152x480 | Batch 16.10 Large `_art` crops (38 at 144x96), packed unchanged | 1 | Play style and archetype card pictures, silhouettes |
+| `public/assets/character/face.png`, `bald.png` | 384x256, 512x256 | Batches 16.02 Revised, 16.02B atlases, unchanged | 1 | Preset portraits (64x64) |
+| `public/assets/character/model.png` | 384x192 | Batch 16.01 Final atlas, unchanged | 1 | Body preview (64x96) |
+| `public/assets/character/flag.png` | 512x512 | Batch 16.08 atlas, unchanged | 1 | Flags (32x32) |
+| `public/assets/character/hair.png`, `beard.png`, `body.png`, `equipment.png` | 640x576, 448x320, 384x192, 512x448 | Batches 16.03, 16.04, 16.06, 16.07 atlases, unchanged | 1 | Reference thumbnails in pickers. **Reference art, to be replaced by the layer package.** The equipment atlas still contains the excluded branded helmets and gloves as pixels, though the game never shows them: it should be re-cut without them |
+
+Not deployed: any zip, any full-resolution reference sheet, anything under `art/`.

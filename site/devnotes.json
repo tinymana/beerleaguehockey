@@ -2,6 +2,29 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.6.0",
+      "date": "2026-11-25",
+      "title": "Meet the legends you never heard of",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Beer League Hockey now has its own hockey universe: every pro your player grew up watching is one of ours."
+        },
+        {
+          "tag": "new",
+          "text": "Give your player a hometown, a number, a height, a weight and a shooting hand."
+        },
+        {
+          "tag": "new",
+          "text": "Randomize your look, and lock the bits you like so they stay put."
+        },
+        {
+          "tag": "improved",
+          "text": "Changed your mind about the moustache? Saved players can change their look and number any time."
+        }
+      ]
+    },
+    {
       "version": "0.5.0",
       "date": "2026-11-25",
       "title": "Put a face to the name",
