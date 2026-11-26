@@ -6,7 +6,7 @@ import type { AttributeKey, Position } from '../src/dynasty/attributes';
 import { BACKGROUNDS, CREATED_PLAYER_AGE, backgroundsForAge } from '../src/dynasty/backgrounds';
 import { DNA_CONFIG, DNA_VERSION, attributeBounds, dnaInputProblems, generateDNA, influenceBias, parseDNA, serializeDNA, startingAttributes, startingBias } from '../src/dynasty/dna';
 import { PLAY_STYLES, developmentBonus, developmentFocus, developsFaster, playStyleById, playStylesFor } from '../src/dynasty/playStyles';
-import { NAME_POOLS, namePoolFor, randomName } from '../src/dynasty/names';
+import { CORE_POOL_SIZE, NAME_POOLS, isSkippedPair, nameCombinations, namePoolFor, randomName } from '../src/dynasty/names';
 import { Rng } from '../src/core/rng';
 import type { DnaInput } from '../src/dynasty/dna';
 import { FALLBACK_COUNT, FICTIONAL_CONFIG, INFLUENCE_NAME_SET, INFLUENCES, extendedInfluences, influenceById, influenceName, influenceSource, influencesFor, missingAliases, registerWiderRegistry, registryProblems, searchInfluences, widerRegistryKind } from '../src/dynasty/influences';
@@ -523,5 +523,54 @@ describe('PS18 Hybrid Goalie (Decision 62)', () => {
         expect(developmentBonus(style, key, 0.2)).toBe(style.toward.includes(key) ? 0.2 : 0);
       }
     }
+  });
+});
+
+describe('name pools at scale (Decision 75)', () => {
+  it('make more than 100,000 different names, every one of them typeable, with the core names first and unmoved', () => {
+    expect(nameCombinations()).toBeGreaterThan(100000);
+    for (const pool of NAME_POOLS) {
+      expect(pool.first.length).toBeGreaterThanOrEqual(48);
+      expect(pool.last.length).toBeGreaterThanOrEqual(140);
+      expect(new Set(pool.first).size).toBe(pool.first.length);
+      expect(new Set(pool.last).size).toBe(pool.last.length);
+      for (const n of [...pool.first, ...pool.last]) expect(n, `${pool.code} ${n}`).toMatch(/^[A-Z][A-Za-z' -]{1,11}$/);
+    }
+    expect(CORE_POOL_SIZE).toBe(16);
+    // The fictional professionals are drawn from the core names only, so they keep their names as pools grow.
+    const core = new Map(NAME_POOLS.map((p) => [p.code, { first: new Set(p.first.slice(0, CORE_POOL_SIZE)), last: new Set(p.last.slice(0, CORE_POOL_SIZE)) }]));
+    for (const pro of extendedInfluences()) {
+      const [first, last] = pro.name.split(' ');
+      expect(core.get(pro.country)?.first.has(first as string), pro.name).toBe(true);
+      expect(core.get(pro.country)?.last.has(last as string), pro.name).toBe(true);
+    }
+    expect(influenceById('X001')?.name).toBe(extendedInfluences().find((i) => i.id === 'X001')?.name);
+  });
+
+  it.skipIf(!existsSync(join(ROOT, 'data', 'private', 'reference', 'nhl_players.csv')))('cannot generate any name on the private list of real professionals', () => {
+    const norm = (t: string): string => t.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z]/g, '');
+    const real = new Set(readFileSync(join(ROOT, 'data', 'private', 'reference', 'nhl_players.csv'), 'utf8').split('\n').slice(1).map((l) => norm(l.split(',')[1] ?? '')));
+    let reachable = 0;
+    for (const pool of NAME_POOLS) pool.first.forEach((f, i) => pool.last.forEach((l, j) => { if (real.has(norm(f + l)) && !isSkippedPair(pool.code, i, j)) reachable++; }));
+    expect(reachable).toBe(0);
+    expect(extendedInfluences().filter((x) => real.has(norm(x.name)))).toEqual([]);
+    expect(INFLUENCES.filter((x) => real.has(norm(x.name)))).toEqual([]);
+  });
+
+  it('still draws nationality-appropriate names, repeatably for a seed', () => {
+    for (const pool of NAME_POOLS) {
+      const a = randomName(new Rng(77), pool.code);
+      expect(a.code).toBe(pool.code);
+      expect(pool.first).toContain(a.first);
+      expect(pool.last).toContain(a.last);
+      expect(randomName(new Rng(77), pool.code)).toEqual(a);
+    }
+    const seen = new Set<string>();
+    const rng = new Rng(5);
+    for (let i = 0; i < 500; i++) {
+      const n = randomName(rng, 'FIN');
+      seen.add(`${n.first} ${n.last}`);
+    }
+    expect(seen.size).toBeGreaterThan(450);
   });
 });

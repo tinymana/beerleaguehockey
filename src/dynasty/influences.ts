@@ -10,7 +10,7 @@ import type { AttributeKey, Position } from './attributes';
 import { attributesFor } from './attributes';
 import { INFLUENCE_DATA } from './data/curatedInfluences';
 import { Rng } from '../core/rng';
-import { NAME_POOLS } from './names';
+import { CORE_POOL_SIZE, NAME_POOLS } from './names';
 import { PLAY_STYLES, playStyleWeight } from './playStyles';
 
 export interface InfluenceRecord {
@@ -119,7 +119,8 @@ function buildFallback(): InfluenceRecord[] {
       let code = '';
       do {
         const pool = NAME_POOLS[rng.int(NAME_POOLS.length)] as (typeof NAME_POOLS)[number];
-        name = `${pool.first[rng.int(pool.first.length)]} ${pool.last[rng.int(pool.last.length)]}`;
+        // Only the core names: the pools grow, the professionals keep their names.
+        name = `${pool.first[rng.int(CORE_POOL_SIZE)]} ${pool.last[rng.int(CORE_POOL_SIZE)]}`;
         code = pool.code;
       } while (used.has(name));
       used.add(name);

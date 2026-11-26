@@ -2,6 +2,23 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.9.1 - 2026-11-26 - Attribute icons; 112,000 names; the 32 px scale locked
+
+188 tests (three need private files and are skipped without them).
+
+### Added
+- **Attribute panel with icons (Decision 77):** two columns, each attribute with its batch 16.09 icon at 32 px, its name, a bar and its numbers. Move into it with Right from the list, through it with the arrows or stick, or click an attribute; the card shows the icon large with the exact range or rating.
+- **Name pools: about 112,000 combinations (Decision 75).** Forty more given names per nationality and surnames composed the way each language builds them (Lind + qvist, Koski + nen, Fed + enko). The fictional professionals keep their names: they draw only from the original core names.
+- The generator cannot produce a name matching a real professional on the private check list: the surnames and the few pairs that would are left out.
+
+### Changed
+- **The 32 px scale is locked for art production (Decision 81).**
+
+### Known issues
+- **Icons missing from batch 16.09** (32x32 and 64x64 each): `balance`, `faceoffs`, `recovery` have none and show an empty labelled tile. Wrist and slap shot power share `shot_power`; wrist and slap accuracy share `shot_accuracy`; glove hand and blocker share `save_hands`; reflexes and pad saves share `goaltending`; offensive awareness uses `shooting`. Nine more icons would give every attribute its own: `wrist_shot_power`, `wrist_shot_accuracy`, `slap_shot_power`, `slap_shot_accuracy`, `offensive_awareness`, `glove_hand`, `blocker`, `pad_saves`, `reflexes`.
+- Some composed surnames will read as unusual to a native speaker; the pools are easy to prune.
+- Names are still plain letters: no accents until the font can draw them.
+
 ## 0.9.0 - 2026-11-26 - The 32-pixel scale
 
 185 tests. The creative director chose the smaller scale after a side-by-side comparison (Decision 80).

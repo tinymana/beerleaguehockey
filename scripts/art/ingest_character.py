@@ -78,6 +78,14 @@ for name, key, cls in PACKAGES:
             if key in ('equipment', 'hair'): item['category'] = category
             items.append(item)
         catalog[key] = {'class': cls, 'batch': m.get('batch', ''), 'items': items}
+# Attribute icons (batch 16.09 V2): the 32 px atlas, unchanged.
+with zipfile.ZipFile(os.path.join(SRC, 'BLH_Batch_16_09_V2.zip')) as z:
+    m = json.loads(z.read('manifest.json'))
+    with open(os.path.join(OUT, 'icons.png'), 'wb') as f:
+        f.write(z.read(m['atlas32']))
+    for a in m['assets']:
+        frames[f"icon:{a['id']}"] = ['icons'] + list(a['rect32'])
+    catalog['icon'] = {'class': 'production', 'batch': m.get('batch', ''), 'items': [{'id': a['id']} for a in m['assets']]}
 with zipfile.ZipFile(os.path.join(SRC, 'BLH_Batch_16_05.zip')) as z:
     m = json.loads(z.read('manifest.json'))
     catalog['skin'] = {'class': 'data', 'batch': m.get('batch', ''), 'items': [{'id': a['id'], 'colors': a['colors']} for a in m['assets']]}

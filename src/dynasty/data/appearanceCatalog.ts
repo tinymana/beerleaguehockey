@@ -2039,6 +2039,108 @@ export const APPEARANCE_CATALOG = {
    }
   ]
  },
+ "icon": {
+  "class": "production",
+  "batch": "16.09v2",
+  "items": [
+   {
+    "id": "skating"
+   },
+   {
+    "id": "acceleration"
+   },
+   {
+    "id": "agility"
+   },
+   {
+    "id": "shooting"
+   },
+   {
+    "id": "shot_power"
+   },
+   {
+    "id": "shot_accuracy"
+   },
+   {
+    "id": "passing"
+   },
+   {
+    "id": "puck_control"
+   },
+   {
+    "id": "stickhandling"
+   },
+   {
+    "id": "deking"
+   },
+   {
+    "id": "checking"
+   },
+   {
+    "id": "strength"
+   },
+   {
+    "id": "physicality"
+   },
+   {
+    "id": "defense"
+   },
+   {
+    "id": "goaltending"
+   },
+   {
+    "id": "save_hands"
+   },
+   {
+    "id": "rebound_control"
+   },
+   {
+    "id": "positioning"
+   },
+   {
+    "id": "endurance"
+   },
+   {
+    "id": "durability"
+   },
+   {
+    "id": "discipline"
+   },
+   {
+    "id": "leadership"
+   },
+   {
+    "id": "chemistry"
+   },
+   {
+    "id": "hockey_iq"
+   },
+   {
+    "id": "potential"
+   },
+   {
+    "id": "training"
+   },
+   {
+    "id": "experience"
+   },
+   {
+    "id": "consistency"
+   },
+   {
+    "id": "clutch"
+   },
+   {
+    "id": "composure"
+   },
+   {
+    "id": "work_ethic"
+   },
+   {
+    "id": "intangibles"
+   }
+  ]
+ },
  "skin": {
   "class": "data",
   "batch": "16.05",

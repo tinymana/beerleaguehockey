@@ -31,7 +31,20 @@ const W = PROFILES.offIce.width;
 const STEPS = ['Profile', 'Nationality', 'Appearance', 'Background', 'Influences', 'Play Style', 'Archetype', 'Review', 'Saved Players'] as const;
 type StepName = (typeof STEPS)[number];
 const stepAt = (name: StepName): number => STEPS.indexOf(name);
-const CHARACTER = { frames: 'character-frames', framesUrl: './assets/character/frames.json', atlases: ['model', 'face', 'bald', 'hair', 'beard', 'body', 'equipment', 'flag'] };
+const CHARACTER = { frames: 'character-frames', framesUrl: './assets/character/frames.json', atlases: ['model', 'face', 'bald', 'hair', 'beard', 'body', 'equipment', 'flag', 'icons'] };
+/**
+ * Which batch 16.09 icon stands for each attribute. Where the batch has no icon of its own for an attribute, a related
+ * one is shared (wrist and slap shots share the shot icons) or none is shown (balance, faceoffs, recovery).
+ */
+const ATTRIBUTE_ICONS: Partial<Record<AttributeKey, string>> = {
+  skatingSpeed: 'skating', acceleration: 'acceleration', agility: 'agility', endurance: 'endurance',
+  wristShotPower: 'shot_power', wristShotAccuracy: 'shot_accuracy', slapShotPower: 'shot_power', slapShotAccuracy: 'shot_accuracy',
+  passing: 'passing', puckControl: 'puck_control', offensiveAwareness: 'shooting', defensiveAwareness: 'defense',
+  checking: 'checking', strength: 'strength', discipline: 'discipline', durability: 'durability', leadership: 'leadership',
+  composure: 'composure', hockeyIQ: 'hockey_iq', reflexes: 'goaltending', positioning: 'positioning', gloveHand: 'save_hands',
+  blocker: 'save_hands', padSaves: 'goaltending', reboundControl: 'rebound_control', puckHandling: 'stickhandling',
+};
+const GRID = { x: 710, y: 92, colW: 121, rowH: 34, rows: 11, bar: 76 };
 const PARTS: readonly { part: AppearancePart; label: string; none: boolean; note: string }[] = [
   { part: 'face', label: 'Face', none: false, note: 'Preset portrait' },
   { part: 'hair', label: 'Hair', none: true, note: 'Reference: stored, not drawn yet' },
@@ -58,7 +71,6 @@ const SLOTS = ['Primary 60%', '2nd 25%', '3rd 15%'] as const;
 const NAV = { x: 16, y: 70, w: 192, h: 30, gap: 34 };
 const OPT = { x: 232, y: 100, w: 288, h: 28, gap: 30, rows: 12 };
 const CARD = { x: 536, y: 60, w: 160, h: 224 };
-const ATTR = { x: 712, y: 92, row: 14, bar: 84 };
 const GREEN = 0x5fd16b;
 const RESULT_LIMIT = 200;
 
@@ -124,7 +136,8 @@ export class CreatorScene extends Phaser.Scene {
   private store!: CreatedPlayerStore;
   private warning: string | null = null;
   private step = 0;
-  private column: 'nav' | 'options' = 'nav';
+  private column: 'nav' | 'options' | 'attrs' = 'nav';
+  private attrIndex = 0;
   private index = 0;
   private scroll = 0;
   private typing: TextField | null = null;
@@ -571,7 +584,10 @@ export class CreatorScene extends Phaser.Scene {
   }
 
   private move(delta: number): void {
-    if (this.column === 'nav' && this.mode === 'edit' && !this.picker) {
+    if (this.column === 'attrs') {
+      const count = this.attributeKeys().length;
+      this.attrIndex = (this.attrIndex + delta + count) % count;
+    } else if (this.column === 'nav' && this.mode === 'edit' && !this.picker) {
       this.goToStep(this.step + delta);
     } else if (this.options.length) {
       this.index = (this.index + delta + this.options.length) % this.options.length;
@@ -582,10 +598,27 @@ export class CreatorScene extends Phaser.Scene {
   }
 
   private side(delta: number): void {
-    if (this.mode !== 'edit' || this.picker) return;
-    if (delta > 0 && this.options.length) this.column = 'options';
-    if (delta < 0) this.column = 'nav';
+    if (this.picker) return;
+    const count = this.attributeKeys().length;
+    if (this.column === 'attrs') {
+      // The attribute grid has two columns of its own; left from the first goes back to the list.
+      const inSecond = this.attrIndex >= GRID.rows;
+      if (delta > 0 && !inSecond && this.attrIndex + GRID.rows < count) this.attrIndex += GRID.rows;
+      else if (delta < 0 && inSecond) this.attrIndex -= GRID.rows;
+      else if (delta < 0) this.column = this.options.length ? 'options' : 'nav';
+    } else if (this.column === 'options') {
+      if (delta > 0 && count) this.column = 'attrs';
+      else if (delta < 0 && this.mode === 'edit') this.column = 'nav';
+    } else if (delta > 0 && this.mode === 'edit') {
+      this.column = this.options.length ? 'options' : count ? 'attrs' : 'nav';
+    }
     this.dirty = true;
+  }
+
+  /** The attributes shown in the panel right now: the confirmed player's, or the draft's once it has a primary influence. */
+  private attributeKeys(): readonly AttributeKey[] {
+    if (this.mode !== 'edit' && this.mode !== 'confirm' && this.shown) return attributesFor(this.shown.dna.position);
+    return this.draft.primary ? attributesFor(this.draft.position) : [];
   }
 
   private activate(): void {
@@ -594,6 +627,7 @@ export class CreatorScene extends Phaser.Scene {
       this.dirty = true;
       return;
     }
+    if (this.column === 'attrs') return;
     this.options[this.index]?.activate();
     this.dirty = true;
   }
@@ -608,7 +642,10 @@ export class CreatorScene extends Phaser.Scene {
     } else if (this.mode === 'confirm') this.setMode('edit');
     else if (this.mode === 'delete' || this.mode === 'look') this.setMode('reveal');
     else if (this.mode === 'reveal') this.leaveReveal();
-    else if (this.column === 'options') {
+    else if (this.column === 'attrs') {
+      this.column = this.options.length ? 'options' : 'nav';
+      this.dirty = true;
+    } else if (this.column === 'options') {
       this.column = 'nav';
       this.dirty = true;
     } else this.scene.start(SCENES.title);
@@ -715,7 +752,7 @@ export class CreatorScene extends Phaser.Scene {
     // Card for the highlighted option
     const focusedOption = this.column === 'options' ? this.options[this.index] : undefined;
     const card = focusedOption?.card && this.picker ? focusedOption.card : (this.mode === 'reveal' || this.mode === 'delete' || this.mode === 'look') && this.shown ? (this.mode === 'delete' ? { ...this.playerCard(this.shown), body: 'Deleting removes this player from this browser for good. Their number is never used again.', footer: ['Cannot be undone'] } : this.playerCard(this.shown)) : this.mode === 'confirm' ? this.confirmCard() : (focusedOption?.card ?? this.stepCard());
-    this.drawCard(card);
+    this.drawCard(this.column === 'attrs' ? (this.attributeCard(focusedOption?.preview) ?? card) : card);
 
     // Notes under the card
     this.slice(CARD.x, 292, CARD.w, 192, 'panel');
@@ -727,7 +764,7 @@ export class CreatorScene extends Phaser.Scene {
 
     // Footer
     this.slice(8, 492, W - 16, 40, 'panel');
-    const hint = this.typing ? 'TYPE, OR MOVE AND PRESS ENTER / A   B / BACKSPACE: DELETE   ESC: DONE' : 'ARROWS / STICK: MOVE   ENTER / A: CHOOSE   ESC / B: BACK   MOUSE: CLICK';
+    const hint = this.column === 'attrs' ? 'ARROWS / STICK: MOVE THROUGH ATTRIBUTES   LEFT / ESC / B: BACK   MOUSE: CLICK' : this.typing ? 'TYPE, OR MOVE AND PRESS ENTER / A   B / BACKSPACE: DELETE   ESC: DONE' : 'ARROWS / STICK: MOVE   ENTER / A: CHOOSE   ESC / B: BACK   MOUSE: CLICK';
     this.text(24, 505, this.warning ? clip(this.warning, 76) : hint, this.warning ? UI.red : UI.dim);
   }
 
@@ -989,44 +1026,75 @@ export class CreatorScene extends Phaser.Scene {
     return lines;
   }
 
-  private drawAttributes(preview?: Partial<PlayerDraft>): void {
-    const g = this.add.graphics();
-    this.layer.add(g);
-    const barX = ATTR.x + 146;
-    const px = (rating: number): number => Math.round((rating / 99) * ATTR.bar);
-    if ((this.mode === 'reveal' || this.mode === 'delete' || this.mode === 'look') && this.shown) {
+  /** Numbers for one attribute: a confirmed player's rating and potential, or the range the current choices lead to. */
+  private attributeValues(key: AttributeKey, preview?: Partial<PlayerDraft>): { now?: number; potential?: number; start?: [number, number]; ceiling?: [number, number] } | null {
+    if (this.mode !== 'edit' && this.mode !== 'confirm' && this.shown) {
       const attributes = startingAttributes(this.shown.dna);
-      this.text(ATTR.x, 72, `OVERALL ${ovr(this.shown)}`, UI.gold);
-      for (const [row, key] of attributesFor(this.shown.dna.position).entries()) {
-        const y = ATTR.y + 10 + row * ATTR.row;
-        const now = attributes.current[key] ?? 0;
-        const potential = attributes.potential[key] ?? 0;
-        this.text(ATTR.x, y, ATTRIBUTE_LABELS[key], UI.white, 1);
-        g.fillStyle(UI.navyLight).fillRect(barX, y, ATTR.bar, 7);
-        g.fillStyle(UI.dim).fillRect(barX, y, px(potential), 7);
-        g.fillStyle(GREEN).fillRect(barX, y, px(now), 7);
-        this.text(barX - 18, y, `${now}`, UI.ice, 1);
-      }
-      this.text(ATTR.x, 462, 'GREEN: NOW   GREY: POTENTIAL', UI.dim, 1);
-      return;
+      return { now: attributes.current[key] ?? 0, potential: attributes.potential[key] ?? 0 };
     }
     const draft = reconcileDraft({ ...this.draft, ...(preview ?? {}) });
     const input = draftInput(draft, 0);
-    this.text(ATTR.x, 72, preview ? 'IF YOU PICK THIS' : 'WHERE YOU START', UI.gold);
-    if (!input) {
-      wrap('Choose a primary influence to see how your player will be shaped.', 19).forEach((line, i) => this.text(ATTR.x, 100 + i * 20, line, UI.dim));
+    if (!input || !attributesFor(draft.position).includes(key)) return null;
+    const bounds = attributeBounds(input, key);
+    return { start: bounds.current, ceiling: bounds.potential };
+  }
+
+  private attributeCard(preview?: Partial<PlayerDraft>): CardInfo | null {
+    const keys = this.attributeKeys();
+    const key = keys[Math.min(this.attrIndex, keys.length - 1)];
+    if (!key) return null;
+    const v = this.attributeValues(key, preview);
+    const icon = ATTRIBUTE_ICONS[key];
+    const body = !v ? '' : v.now !== undefined ? `Now ${v.now}. Potential ${v.potential}. Locked in: this is who your player is.` : `Starts between ${v.start?.[0]} and ${v.start?.[1]}. Potential between ${v.ceiling?.[0]} and ${v.ceiling?.[1]}. Rolled once, when you confirm.`;
+    return { colour: 'panel', title: ATTRIBUTE_LABELS[key], tag: 'ATTRIBUTE', body, images: icon ? [{ frame: `icon:${icon}`, x: 40, y: 16, scale: 2 }] : undefined, footer: icon ? undefined : ['No icon in batch 16.09'] };
+  }
+
+  /** The attribute panel: two columns of 32 px icons (batch 16.09), each with its name and a bar. Keyboard, gamepad and mouse can move through it. */
+  private drawAttributes(preview?: Partial<PlayerDraft>): void {
+    const g = this.add.graphics();
+    this.layer.add(g);
+    const keys = this.attributeKeys();
+    const shown = this.mode !== 'edit' && this.mode !== 'confirm' && this.shown ? this.shown : null;
+    this.text(712, 72, shown ? `OVERALL ${ovr(shown)}` : preview ? 'IF YOU PICK THIS' : 'WHERE YOU START', UI.gold);
+    if (!keys.length) {
+      wrap('Choose a primary influence to see how your player will be shaped.', 19).forEach((line, i) => this.text(712, 100 + i * 20, line, UI.dim));
       return;
     }
-    for (const [row, key] of attributesFor(draft.position).entries()) {
-      const y = ATTR.y + 10 + row * ATTR.row;
-      const bounds = attributeBounds(input, key);
-      this.text(ATTR.x, y, ATTRIBUTE_LABELS[key], UI.white, 1);
-      g.fillStyle(UI.navyLight).fillRect(barX, y, ATTR.bar, 7);
-      g.fillStyle(UI.dim).fillRect(barX + px(bounds.potential[0]), y + 5, Math.max(1, px(bounds.potential[1]) - px(bounds.potential[0])), 2);
-      g.fillStyle(UI.ice).fillRect(barX + px(bounds.current[0]), y, Math.max(1, px(bounds.current[1]) - px(bounds.current[0])), 4);
-    }
-    this.text(ATTR.x, 440, 'BLUE: STARTING RANGE', UI.dim, 1);
-    this.text(ATTR.x, 451, 'GREY: POTENTIAL RANGE', UI.dim, 1);
-    this.text(ATTR.x, 462, 'ROLLED ONCE, WHEN YOU CONFIRM', UI.dim, 1);
+    if (this.attrIndex >= keys.length) this.attrIndex = keys.length - 1;
+    const px = (rating: number): number => Math.round((rating / 99) * GRID.bar);
+    keys.forEach((key, i) => {
+      const x = GRID.x + Math.floor(i / GRID.rows) * GRID.colW;
+      const y = GRID.y + (i % GRID.rows) * GRID.rowH;
+      const focused = this.column === 'attrs' && this.attrIndex === i;
+      if (focused) g.lineStyle(1, UI.gold).strokeRect(x - 2, y - 1, GRID.colW - 3, GRID.rowH - 1);
+      const icon = ATTRIBUTE_ICONS[key];
+      if (icon && this.frames[`icon:${icon}`]) this.layer.add(this.add.image(x, y, 'character-icons', `icon:${icon}`).setOrigin(0, 0));
+      else {
+        // No icon supplied for this attribute: an empty tile with its initials, so the gap is visible rather than hidden.
+        g.lineStyle(1, UI.dim).strokeRect(x + 0.5, y + 0.5, 31, 31);
+        this.text(x + 7, y + 12, ATTRIBUTE_LABELS[key].slice(0, 3), UI.dim, 1);
+      }
+      const tx = x + 36;
+      this.text(tx, y + 2, clip(ATTRIBUTE_LABELS[key].replace('awareness', 'aware.').replace('accuracy', 'acc.'), 13), focused ? UI.gold : UI.white, 1);
+      g.fillStyle(UI.navyLight).fillRect(tx, y + 13, GRID.bar, 7);
+      const v = this.attributeValues(key, preview);
+      if (v?.now !== undefined) {
+        g.fillStyle(UI.dim).fillRect(tx, y + 13, px(v.potential ?? 0), 7);
+        g.fillStyle(GREEN).fillRect(tx, y + 13, px(v.now), 7);
+        this.text(tx, y + 23, `${v.now} / ${v.potential}`, UI.ice, 1);
+      } else if (v?.start && v.ceiling) {
+        g.fillStyle(UI.dim).fillRect(tx + px(v.ceiling[0]), y + 18, Math.max(1, px(v.ceiling[1]) - px(v.ceiling[0])), 2);
+        g.fillStyle(UI.ice).fillRect(tx + px(v.start[0]), y + 13, Math.max(1, px(v.start[1]) - px(v.start[0])), 4);
+        this.text(tx, y + 23, `${v.start[0]}-${v.start[1]}`, UI.ice, 1);
+      }
+      const hit = this.add.zone(x - 2, y - 1, GRID.colW - 3, GRID.rowH - 1).setOrigin(0, 0).setInteractive({ useHandCursor: true });
+      hit.on('pointerdown', () => {
+        this.column = 'attrs';
+        this.attrIndex = i;
+        this.dirty = true;
+      });
+      this.layer.add(hit);
+    });
+    this.text(712, 470, shown ? 'GREEN: NOW   GREY: POTENTIAL' : 'BLUE: START   GREY: POTENTIAL', UI.dim, 1);
   }
 }

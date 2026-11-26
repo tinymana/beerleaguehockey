@@ -2,6 +2,21 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.9.1",
+      "date": "2026-11-26",
+      "title": "Icons, and a hundred thousand names",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Every rating in Create a Player now has its own icon. Click one to see exactly where you will start and how far you can go."
+        },
+        {
+          "tag": "improved",
+          "text": "The random-name button now knows more than a hundred thousand names. You will not meet the same Finn twice."
+        }
+      ]
+    },
+    {
       "version": "0.9.0",
       "date": "2026-11-26",
       "title": "Smaller players, bigger ice",
