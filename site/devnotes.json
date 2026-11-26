@@ -2,6 +2,25 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.11.0",
+      "date": "2026-11-26",
+      "title": "Drop the puck",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Pick-Up is a real game now: three periods, faceoffs, icing, offside, and a shootout if nobody wins it."
+        },
+        {
+          "tag": "new",
+          "text": "New button: C. Tap for a stick check, hold to lean on a guy. Hold too long and you have flattened him, which the referee may or may not have seen."
+        },
+        {
+          "tag": "new",
+          "text": "Penalties and power plays. Every game has a different referee, and each one lets different things go. You will learn them."
+        }
+      ]
+    },
+    {
       "version": "0.10.1",
       "date": "2026-11-26",
       "title": "Tidier ends",

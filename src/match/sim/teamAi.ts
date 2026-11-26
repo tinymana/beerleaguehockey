@@ -9,6 +9,7 @@
 import type { Rng } from '../../core/rng';
 import type { Goalie } from './goalie';
 import { quantize8 } from './input';
+import { CONTACT } from './match';
 import type { SimInput } from './input';
 import { goalLineY } from './rink';
 import type { RinkEnd, RinkGeometry } from './rink';
@@ -31,6 +32,13 @@ export const AI = {
   /** An opponent this close ahead of the carrier is pressure; a teammate with no opponent this close is open. */
   pressure: 30,
   open: 24,
+  /** Ticks between the computer's stick checks, least and the extra at random; and the chance one of them is held into a check. */
+  checkWait: [16, 22] as const,
+  rough: 0.05,
+  /** How often the computer's shooter picks a corner; otherwise he just shoots where he is facing. */
+  pickCorner: 0.5,
+  /** Attackers without the puck wait this far short of the blue line until it is in the zone. */
+  onside: 10,
   /** Chance per tick of passing when pressured and a teammate is open. */
   passChance: 0.12,
   /** Ticks a carrier waits after a decision before making another. */
@@ -55,10 +63,13 @@ export interface AiSkater {
   role: Role;
   hasPuck: boolean;
   aiHold: number;
-  aiSide: -1 | 1;
+  aiSide: -1 | 0 | 1;
   aiWait: number;
   aiStill: number;
   aiDodge: number;
+  aiCheck: number;
+  out: boolean;
+  facing: number;
 }
 
 export interface TeamView {
@@ -75,6 +86,9 @@ export interface TeamView {
   drawDelay: [number, number];
   /** Every skater is the computer's: nobody is treated as the player's. For tests and measurements. */
   demo: boolean;
+  /** A full game: the computer uses the contact button, and attackers stay onside. */
+  contact: boolean;
+  offside: boolean;
 }
 
 /** +1 if the team attacks down the screen, -1 if up. Team 0 attacks the top net. */
@@ -106,7 +120,7 @@ const clamp = (v: number, lo: number, hi: number): number => Math.max(lo, Math.m
  * Where a skater without the puck wants to be. Positions are worked out as "how far up the ice toward
  * the net we attack" so both teams share one set of numbers.
  */
-export function formationSpot(rink: RinkGeometry, s: AiSkater, puck: { x: number; y: number }, possession: 0 | 1 | -1): { x: number; y: number } {
+export function formationSpot(rink: RinkGeometry, s: Pick<AiSkater, 'team' | 'role'>, puck: { x: number; y: number }, possession: 0 | 1 | -1, onside = false): { x: number; y: number } {
   const dir = attackDir(s.team);
   const half = goalLineY(rink, 'bottom') - rink.centerY;
   const up = (puck.y - rink.centerY) * dir;
@@ -130,6 +144,8 @@ export function formationSpot(rink: RinkGeometry, s: AiSkater, puck: { x: number
     else if (s.role === 'LW' || s.role === 'RW') [x, u] = [left * 70, up - 5];
     else [x, u] = [left * 28 + side * 0.3, up - 75];
   }
+  // Onside: nobody waits inside the attacking zone for a puck that is still outside it.
+  if (onside && up < rink.blueLineOffset) u = Math.min(u, rink.blueLineOffset - AI.onside);
   u = clamp(u, -half + 22, half - 20);
   return { x: clamp(rink.centerX + x, rink.left + 16, rink.right - 16), y: rink.centerY + dir * u };
 }
@@ -146,7 +162,8 @@ function toward(s: AiSkater, x: number, y: number, arrive: number): { moveX: num
 export function teamInputs(v: TeamView, human: SimInput): SimInput[] {
   const { puck, rink } = v;
   const mine = v.demo ? -1 : v.controlled;
-  const carrier = v.skaters.find((s) => s.hasPuck) ?? null;
+  const on = v.skaters.filter((s) => !s.out);
+  const carrier = on.find((s) => s.hasPuck) ?? null;
   const possession: 0 | 1 | -1 = carrier ? carrier.team : -1;
   const dist = (s: AiSkater): number => Math.hypot(s.x - puck.x, s.y - puck.y);
 
@@ -155,7 +172,7 @@ export function teamInputs(v: TeamView, human: SimInput): SimInput[] {
   for (const team of [0, 1] as const) {
     if (possession === team) continue;
     let best: AiSkater | null = null;
-    for (const s of v.skaters) {
+    for (const s of on) {
       if (s.team !== team || s.index === mine) continue;
       if (!best || dist(s) < dist(best)) best = s;
     }
@@ -169,6 +186,7 @@ export function teamInputs(v: TeamView, human: SimInput): SimInput[] {
   }
 
   return v.skaters.map((s) => {
+    if (s.out) return { moveX: 0, moveY: 0, shoot: false };
     if (s.index === mine) return human;
     // Nobody jumps the puck drop: each team's computer skaters react a moment after it.
     if (v.tick - v.dropTick < v.drawDelay[s.team]) return { moveX: 0, moveY: 0, shoot: false };
@@ -184,8 +202,26 @@ export function teamInputs(v: TeamView, human: SimInput): SimInput[] {
       const t = Math.min(0.6, dist(s) / v.tuning.maxSpeed);
       return { ...toward(s, puck.x + puck.vx * t, puck.y + puck.vy * t, 0), shoot: false };
     }
-    if (carrier && s.index === chaser[s.team]) return { ...toward(s, puck.x + carrier.vx * 0.2, puck.y + carrier.vy * 0.2, 0), shoot: false };
-    const spot = formationSpot(rink, s, puck, possession);
+    if (carrier && s.index === chaser[s.team]) {
+      const move = toward(s, puck.x + carrier.vx * 0.2, puck.y + carrier.vy * 0.2, 0);
+      if (!v.contact) return { ...move, shoot: false };
+      // In a game the puck does not come off on touch: he has to use his stick.
+      if (s.aiCheck > 0) {
+        s.aiCheck--;
+        return { ...move, shoot: false, check: true };
+      }
+      const bx = s.x + Math.cos(s.facing) * 8;
+      const by = s.y + Math.sin(s.facing) * 8;
+      const reach = Math.min(Math.hypot(puck.x - bx, puck.y - by), Math.hypot(puck.x - s.x, puck.y - s.y));
+      if (reach <= CONTACT.reach * 0.8 && s.aiWait === 0) {
+        s.aiWait = AI.checkWait[0] + v.aiRng.int(AI.checkWait[1]);
+        // Now and then he does not let go, and it becomes a hit.
+        if (v.aiRng.next() < AI.rough) s.aiCheck = Math.ceil(CONTACT.checkAfter * 60) + 6;
+        return { ...move, shoot: false, check: true };
+      }
+      return { ...move, shoot: false };
+    }
+    const spot = formationSpot(rink, s, puck, possession, v.offside);
     return { ...toward(s, spot.x, spot.y, AI.arrive), shoot: false };
   }
 }
@@ -233,6 +269,8 @@ function carry(v: TeamView, s: AiSkater): SimInput {
     s.aiHold--;
     if (s.aiHold === 0) {
       s.aiWait = AI.wait;
+      // He lets it go at a corner, or (aiSide 0) straight at the net from where he is.
+      if (s.aiSide === 0) return { ...toward(s, rink.centerX, line, 0), shoot: false };
       return { moveX: s.aiSide * Math.SQRT1_2, moveY: dir * Math.SQRT1_2, shoot: false };
     }
     return { ...toward(s, rink.centerX, line - dir * 30, 0), shoot: true };
@@ -244,17 +282,19 @@ function carry(v: TeamView, s: AiSkater): SimInput {
     s.aiHold = slap ? AI.slapTicks[0] + v.aiRng.int(AI.slapTicks[1] - AI.slapTicks[0] + 1) : AI.wristTicks;
     // He picks a side without reading the goalie: a coin toss.
     s.aiSide = v.aiRng.next() < 0.5 ? -1 : 1;
+    if (v.aiRng.next() >= AI.pickCorner) s.aiSide = 0;
     return { ...toward(s, rink.centerX, line - dir * 30, 0), shoot: true };
   }
 
   if (s.aiWait === 0) {
-    const pressed = v.skaters.some((o) => o.team !== s.team && Math.hypot(o.x - s.x, o.y - s.y) < AI.pressure && (o.y - s.y) * dir > -6);
+    const on = v.skaters.filter((o) => !o.out);
+    const pressed = on.some((o) => o.team !== s.team && Math.hypot(o.x - s.x, o.y - s.y) < AI.pressure && (o.y - s.y) * dir > -6);
     if (pressed && v.aiRng.next() < AI.passChance) {
       let mate: AiSkater | null = null;
-      for (const m of v.skaters) {
+      for (const m of on) {
         if (m.team !== s.team || m === s) continue;
         if ((m.y - s.y) * dir < -10) continue;
-        if (v.skaters.some((o) => o.team !== s.team && Math.hypot(o.x - m.x, o.y - m.y) < AI.open)) continue;
+        if (on.some((o) => o.team !== s.team && Math.hypot(o.x - m.x, o.y - m.y) < AI.open)) continue;
         if (!mate || (m.y - mate.y) * dir > 0) mate = m;
       }
       if (mate) {
@@ -262,6 +302,14 @@ function carry(v: TeamView, s: AiSkater): SimInput {
         return { ...toward(s, mate.x, mate.y, 0), shoot: false, pass: true };
       }
     }
+  }
+
+  // Onside: with a teammate still inside the zone and the puck outside it, he holds up short of the blue line.
+  if (v.offside) {
+    const blue = rink.centerY + dir * rink.blueLineOffset;
+    const outside = (s.y - blue) * dir < 0;
+    const mateAhead = v.skaters.some((m) => m.team === s.team && m !== s && !m.out && (m.y - blue) * dir > 2);
+    if (outside && mateAhead && (blue - s.y) * dir < 30) return { ...toward(s, s.x + (off > 0 ? -40 : 40), blue - dir * 22, 6), shoot: false };
   }
 
   // Skate in: up his own lane until the top of the circles, then to the slot on his side.

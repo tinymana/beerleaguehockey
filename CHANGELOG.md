@@ -2,6 +2,41 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.11.0 - 2026-11-26 - A full pick-up game
+
+223 tests. Built on the creative director's nine rulings on the match plan (Decision 86): "just build out now and we can scale back".
+
+### Added
+- **A game with a start and an end.** Pick-Up is now three 3:00 periods on a running clock, an intermission summary after each, and a final panel with the winner. The clock keeps running through a freeze, an icing or an offside and stops for goals, penalties and period breaks.
+- **Faceoffs** at all nine dots. Both teams line up on their own sides, the puck is dropped after a short wait that varies, and the first centre to press a button after the drop wins it, back to his defence or wherever the player is holding. Pressing before the drop loses it. You take the draws.
+- **Whistles:** goal, the goalie freezing the puck, icing (no-touch, not called on a short-handed team), offside (immediate). Icing and offside each have a switch (`sim.rules`); on by default.
+- **The contact button** (C or V; Y on a pad), on defence:
+  - **Tap: stick check.** Knocks the puck off a carrier within reach. From behind it may be called hooking. A stick that finds a skater instead of the puck may be called tripping or slashing. Reaching nothing leaves you flat-footed for a moment.
+  - **Hold: bump.** Leaning on an opponent slows him.
+  - **Hold too long: check.** He goes down and the puck is free. Likely called roughing, or boarding near the boards.
+  - The puck no longer comes off on touch in a game: it takes the button. The computer's skaters use the same button, and now and then hold it too long.
+- **Penalties and power plays.** Five minors, each a tenth of a period (18 s at 3:00). The offender leaves the ice, his team plays short (never more than two in the box), a power-play goal lets him out, and the faceoff is in his end.
+- **Referees who miss things.** Each game draws one of three placeholder referees ("By the book", "Lets them play", "Hates stick work") who call each foul with different likelihoods, and more often from behind. The referee is named at the opening faceoff and on the summary panels.
+- **Shootout** for a tie after three periods: three shots each, decided early when one side cannot be caught, then sudden death. One shot, no rebounds. Shootout goals stay off the score.
+- **Game numbers:** goals with scorer and up to two assists, shots, saves, faceoffs won, takeaways, penalty minutes, power-play goals; shown on the intermission and final panels.
+- The computer's attackers wait at the blue line for the puck, and its carrier holds up when a teammate is still in the zone.
+- The computer's shooter picks a corner only half the time.
+
+### Measured (computer against computer, three whole games)
+- Goals per game 7, 14 and 20; shots 74 to 86; offside whistles 13 to 15; penalties 5 to 10; freezes 2 to 6; icing 0 (the computer does not dump the puck). Play is live for about 80% of the time.
+
+### Known issues
+- **No referee on the ice yet:** the supplied sheet has no back view (north-facing row). Whistles and calls happen without him being drawn.
+- **Presentation is plain text** in the game's font. The supplied broadcast graphics are to be re-issued at game sizes (Decision 86) before they go in.
+- **No names or numbers:** the scorer is recorded but not announced. No three stars.
+- A knocked-down skater is the standing art laid on its side (no fallen frame at this size yet).
+- A penalized skater simply disappears and reappears by the boards; he is not shown in the penalty box.
+- A third penalty against a team with two already in the box is not called.
+- Offside is immediate: no delayed offside or tag-up. The computer still goes offside fairly often.
+- A shootout between two computer teams can run long: their shooters are not good at it.
+- Shooting practice (T) is unchanged and has no clock or rules.
+- No sound. Team colours are still the temporary gold tint. No overtime period: a tie goes straight to the shootout, as ruled.
+
 ## 0.10.1 - 2026-11-26 - End boards drawn as one piece
 
 205 tests.

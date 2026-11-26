@@ -1,6 +1,6 @@
 # Match plan: what a full game looks like
 
-**Status: proposal for the creative director (Nov 26). Nothing here is approved except where a decision number is given.**
+**Status: the nine questions of section 13 were answered on Nov 26 (Decision 86) and steps 1 to 4 and 6 of section 12 are built in v0.11.0 as starting values. Still to do: the referee on the ice, the presentation graphics (step 5, waiting for the re-issue at game sizes), names and numbers, sound. Sections below are the plan as proposed; where a ruling changed it, section 14 says so.**
 The creative director asked to lock in what a full game looks like first; the adventure play between places is locked in later (Decision 85).
 
 Today (v0.10.1) the 5-on-5 test game has skating, shooting, goalies, passing, control switching, pucks knocked loose, a simple computer team, line-ups after goals, a score and a running clock. It never ends and nothing stops play except a goal.
@@ -133,3 +133,19 @@ Steps 1 and 2 give a game that can be finished and played like pick-up. Sound ca
 7. Which style of the faceoff, power play and penalty tags.
 8. Placeholder team names and colours for testing until real teams are designed.
 9. Player switching: stay manual, or switch automatically when the other team takes the puck?
+
+## 14. Rulings (Decision 86) and what was built
+
+| Question | Ruling | Built in v0.11.0 |
+| --- | --- | --- |
+| 1. Periods | Three of 3:00, running clock | Yes |
+| 2. Icing and offside | On, each with a switch | Yes (`sim.rules`); no Options screen yet |
+| 3. Contact button | Yes, but not always called: rec referees miss a lot | Yes: tap, hold, hold too long; three referee profiles with different call chances |
+| 4. Penalties | A tenth of a period; the five minors to start | Yes |
+| 5. Ties | Shootout | Yes: straight to a shootout, no overtime period |
+| 6. Graphics | Re-issue at game sizes | Waiting for the art; plain text meanwhile |
+| 7. Tag style | Development's choice | The flat ribbon tags (third row of the overlay sheet), to match the lower thirds |
+| 8. Teams | Build out now | Home and Away placeholders: no team identities are approved yet |
+| 9. Switching | On a button, like NHL '94 | Yes (the pass button, without the puck) |
+
+**Knowing the referee (idea from the creative director, not designed):** in rec hockey you learn each referee, what he lets go, and you have a relationship with him. The first step is in: each game draws a referee who calls each foul with his own likelihood. Where it could go is in `BACKLOG.md`.

@@ -9,6 +9,8 @@ import { directionIndex8, lerp } from '../core/math';
 import { quantize8 } from '../match/sim/input';
 import type { SimInput } from '../match/sim/input';
 import { SIM_DT, SkatingSim } from '../match/sim/skatingSim';
+import { clockText, periodText } from '../match/sim/match';
+import type { MatchState } from '../match/sim/match';
 import type { SimEvent, Skater } from '../match/sim/skatingSim';
 import { cameraTargetY, stepCamera } from '../match/view/cameraModel';
 import { GOALIE_SHEET, goalieFrame } from '../match/view/goalieSprite';
@@ -59,8 +61,12 @@ export class SkatingScene extends Phaser.Scene {
   private banner!: Phaser.GameObjects.BitmapText;
   private chargeBar!: Phaser.GameObjects.Graphics;
   private bannerTimer = 0;
+  private panel!: Phaser.GameObjects.Graphics;
+  private panelLines: Phaser.GameObjects.BitmapText[] = [];
+  private readonly padGo = new Edge();
+  private drawNote = { text: '', time: 0 };
 
-  private keys!: Record<'up' | 'down' | 'left' | 'right' | 'w' | 'a' | 's' | 'd' | 'space' | 'j' | 'x' | 'z' | 'k' | 'shift', Phaser.Input.Keyboard.Key>;
+  private keys!: Record<'up' | 'down' | 'left' | 'right' | 'w' | 'a' | 's' | 'd' | 'space' | 'j' | 'x' | 'z' | 'k' | 'shift' | 'c' | 'v', Phaser.Input.Keyboard.Key>;
   private readonly padSelect = new Edge();
   private readonly padStart = new Edge();
   private readonly padAlt = new Edge();
@@ -86,7 +92,9 @@ export class SkatingScene extends Phaser.Scene {
     // Milestone 1 shooting prototype (Decision 78): a basic goalie in each net. G takes them out or puts them back.
     this.sim.setGoalies(true);
     // The 5-on-5 test game: two teams of five, the computer playing everyone the player does not control.
-    this.sim.setTeams(matchMode.teams);
+    // Pick-Up is a full game: clock, whistles, the contact button, penalties (Decision 86). Each game draws its own referee.
+    matchMode.games++;
+    this.sim.setTeams(matchMode.teams, matchMode.teams, 11 + matchMode.games * 7919);
     this.goalieSprites = [];
     this.goaliePoses = [];
     for (const g of this.sim.goalies) {
@@ -121,14 +129,22 @@ export class SkatingScene extends Phaser.Scene {
     hud.fillStyle(UI.navy, 0.8);
     hud.fillRect(0, 0, GAME_WIDTH, 12);
     hud.fillRect(0, GAME_HEIGHT - 12, GAME_WIDTH, 12);
-    this.fixed(addText(this, 4, 3, matchMode.teams ? '5 on 5 test' : 'Shooting practice', UI.gold));
+    this.fixed(addText(this, 4, 3, matchMode.teams ? 'Pick-up' : 'Shooting practice', UI.gold));
     this.hudGoals = this.fixed(addText(this, GAME_WIDTH - 4, 3, 'Goals 0', UI.white).setOrigin(1, 0));
     this.hudSpeed = this.fixed(addText(this, 4, GAME_HEIGHT - 9, '', UI.ice));
     this.hudLast = this.fixed(addText(this, GAME_WIDTH / 2, 14, '', UI.gold).setOrigin(0.5, 0));
     this.fixed(
-      addText(this, GAME_WIDTH - 4, GAME_HEIGHT - 9, matchMode.teams ? 'Space:shoot  Z:pass/switch  R:faceoff  T:practice  Esc:menu' : 'Tap:wrist  Hold:slap  G:goalie  R:puck  T:5 on 5  Esc:menu', UI.ice).setOrigin(1, 0),
+      addText(this, GAME_WIDTH - 4, GAME_HEIGHT - 9, matchMode.teams ? 'Space:shoot  Z:pass/switch  C:check  T:practice  Esc:menu' : 'Tap:wrist  Hold:slap  G:goalie  R:puck  T:5 on 5  Esc:menu', UI.ice).setOrigin(1, 0),
     );
     this.banner = this.fixed(addText(this, GAME_WIDTH / 2, 120, '', UI.gold, 3).setOrigin(0.5, 0.5)).setVisible(false);
+    // Intermission and final panel: plain text in the game's font until the broadcast graphics are re-issued at game size.
+    this.panel = this.add.graphics().setScrollFactor(0).setDepth(DEPTH_HUD + 2).setVisible(false);
+    this.panel.fillStyle(UI.navy, 0.94).fillRect(110, 70, 260, 176);
+    this.panel.lineStyle(1, UI.gold, 1).strokeRect(110.5, 70.5, 259, 175);
+    this.panelLines = [];
+    for (let i = 0; i < 13; i++) {
+      this.panelLines.push(addText(this, GAME_WIDTH / 2, 78 + i * 12, '', UI.white).setOrigin(0.5, 0).setScrollFactor(0).setDepth(DEPTH_HUD + 3).setVisible(false));
+    }
     this.chargeBar = this.add.graphics().setDepth(DEPTH_FRONT_BOARDS + 1);
 
     const kb = this.input.keyboard;
@@ -148,6 +164,8 @@ export class SkatingScene extends Phaser.Scene {
       z: 'Z',
       k: 'K',
       shift: 'SHIFT',
+      c: 'C',
+      v: 'V',
     }) as typeof this.keys;
     kb.on('keydown-T', () => this.toggleMode());
     kb.on('keydown-R', () => this.sim.resetPuck());
@@ -170,7 +188,7 @@ export class SkatingScene extends Phaser.Scene {
   update(_time: number, deltaMs: number): void {
     const pad = readPad(this);
     if (this.padSelect.pressed(pad.select)) tuningPanel().toggle();
-    if (this.padAlt.pressed(pad.alt)) this.sim.resetPuck();
+    if (!matchMode.teams && this.padAlt.pressed(pad.alt)) this.sim.resetPuck();
     if (this.padStart.pressed(pad.start)) {
       this.exitToMenu();
       return;
@@ -187,6 +205,16 @@ export class SkatingScene extends Phaser.Scene {
       return;
     }
     const input = this.readInput(pad.x, pad.y, pad.action, pad.back);
+    if (matchMode.teams) input.check = this.keys.c.isDown || this.keys.v.isDown || pad.alt;
+    // Between periods and after the final horn the shoot button carries on.
+    const phase = this.sim.match?.phase;
+    if (this.padGo.pressed(input.shoot) && (phase === 'intermission' || phase === 'final')) {
+      if (phase === 'final') {
+        this.scene.restart();
+        return;
+      }
+      this.sim.advance();
+    }
     // Clamp long frames (tab switches) so the sim never spirals.
     this.accumulator += Math.min(deltaMs, 100) / 1000;
     while (this.accumulator >= SIM_DT) {
@@ -241,7 +269,8 @@ export class SkatingScene extends Phaser.Scene {
   private handleEvents(events: SimEvent[]): void {
     for (const e of events) {
       if (e.type === 'goal') {
-        const who = matchMode.teams ? (e.end === 'top' ? 'Home scores!' : 'Away scores!') : 'Goal!';
+        const inShootout = this.sim.match?.phase === 'shootout';
+        const who = inShootout ? 'Scores!' : matchMode.teams ? (e.end === 'top' ? 'Home scores!' : 'Away scores!') : 'Goal!';
         this.banner.setText(fontText(e.fiveHole && !matchMode.teams ? 'Five-hole!' : who)).setVisible(true);
         this.bannerTimer = 1.2;
         this.cameras.main.shake(180, 0.006);
@@ -260,6 +289,19 @@ export class SkatingScene extends Phaser.Scene {
           const pose = this.goaliePoses[i];
           if (pose) [pose.pose, pose.time] = [e.kind === 'body' ? 'cover' : e.kind, SAVE_POSE_TIME];
         }
+      } else if (e.type === 'whistle' && e.reason !== 'goal' && e.reason !== 'start') {
+        const text = e.reason === 'icing' ? 'Icing' : e.reason === 'offside' ? 'Offside' : e.reason === 'freeze' ? 'Whistle' : '';
+        if (text) this.flash(text, 1);
+      } else if (e.type === 'penalty') {
+        this.flash(`${e.team === 0 ? 'Home' : 'Away'} ${e.foul}`, 1.8);
+      } else if (e.type === 'hit') {
+        this.cameras.main.shake(90, 0.004);
+      } else if (e.type === 'draw' && e.team !== -1 && this.sim.match?.reason !== 'start') {
+        this.drawNote = { text: e.team === 0 ? 'Draw won' : 'Draw lost', time: 1.2 };
+      } else if (e.type === 'period') {
+        this.flash(e.period >= 3 ? 'Final horn' : `End of the ${periodText(e.period)}`, 1.2);
+      } else if (e.type === 'attempt' && !e.goal) {
+        this.flash('No goal', 0.9);
       } else if (e.type === 'shot') {
         if (e.power > 0.8) this.cameras.main.shake(60, 0.002);
       }
@@ -333,14 +375,14 @@ export class SkatingScene extends Phaser.Scene {
     // The speed readout is for tuning the skating; the 5-on-5 controls need the room.
     this.hudSpeed.setText(fontText(matchMode.teams ? '' : `Skater ${Math.round(speed)}  Puck ${puckSpeed}`));
     const st = this.sim.stats;
-    if (matchMode.teams) {
-      const seconds = Math.floor(this.sim.tick * SIM_DT);
-      this.hudGoals.setText(fontText(`Home ${this.sim.score[0]}  Away ${this.sim.score[1]}   ${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`));
+    if (this.sim.match) {
+      this.drawMatch(this.sim.match);
     } else {
       this.hudGoals.setText(fontText(`Shots ${st.shots}  Saves ${st.saves}  Iron ${st.posts + st.crossbars}  Goals ${this.sim.goals}`));
     }
-    this.hudLast.setText(fontText(st.last));
+    if (!this.sim.match) this.hudLast.setText(fontText(st.last));
 
+    if (this.drawNote.time > 0) this.drawNote.time -= dt;
     if (this.bannerTimer > 0) {
       this.bannerTimer -= dt;
       this.banner.setVisible(Math.floor(this.bannerTimer * 8) % 2 === 0);
@@ -365,7 +407,56 @@ export class SkatingScene extends Phaser.Scene {
       sinceShot: (this.sim.tick - sk.shotTick) * SIM_DT,
     });
     const look = skaterFrame(directionIndex8(sk.facing), pose, sk.stride / STRIDE_LENGTH);
-    sprite.setFrame(look.frame).setFlipX(look.flip).setPosition(x, y).setDepth(y);
+    // Off the ice (penalty box, shootout) he is not drawn; knocked down, the same art is laid on its side (temporary: no fallen frame yet).
+    sprite.setVisible(!sk.out).setAngle(sk.down > 0 ? 90 : 0);
+    sprite.setFrame(look.frame).setFlipX(look.flip).setPosition(x, sk.down > 0 ? y - 5 : y).setDepth(y);
+  }
+
+  private flash(text: string, seconds: number): void {
+    this.banner.setText(fontText(text)).setVisible(true);
+    this.bannerTimer = seconds;
+  }
+
+  /** The scorebug line, the penalty clocks under it, and the intermission and final panel. Text only, for now. */
+  private drawMatch(m: MatchState): void {
+    const [home, away] = this.sim.score;
+    const so = m.shootout;
+    if (so && m.phase === 'shootout') {
+      const marks = (r: boolean[]): string => r.map((g) => (g ? 'O' : 'X')).join('') || '-';
+      this.hudGoals.setText(fontText(`Shootout  Home ${marks(so.results[0])}  Away ${marks(so.results[1])}`));
+    } else {
+      this.hudGoals.setText(fontText(`Home ${home}   ${periodText(m.period)} ${clockText(m.clock)}   Away ${away}`));
+    }
+    if (m.penalties.length) {
+      this.hudLast.setText(fontText(m.penalties.map((p) => `${p.team === 0 ? 'Home' : 'Away'} ${p.foul} ${clockText(p.left)}`).join('   ')));
+    } else if (m.phase === 'faceoff' || m.phase === 'draw') {
+      this.hudLast.setText(fontText(m.reason === 'start' || m.reason === 'period' ? `Referee: ${m.referee.label}` : 'Faceoff'));
+    } else {
+      this.hudLast.setText(fontText(this.drawNote.time > 0 && m.phase === 'play' ? this.drawNote.text : ''));
+    }
+    const show = m.phase === 'intermission' || m.phase === 'final';
+    this.panel.setVisible(show);
+    for (const line of this.panelLines) line.setVisible(show);
+    if (!show) return;
+    const [a, b] = m.stats;
+    const row = (label: string, x: number, y: number): string => `${String(x).padStart(3)}   ${label.padEnd(12)}${String(y).padStart(3)}`;
+    const winner = m.winner === null ? '' : m.winner === 0 ? 'Home wins' : 'Away wins';
+    const lines = [
+      m.phase === 'final' ? `Final${so ? ' (shootout)' : ''}` : `End of the ${periodText(m.period)} period`,
+      '',
+      'Home               Away',
+      row('Goals', home, away),
+      row('Shots', a.shots, b.shots),
+      row('Saves', a.saves, b.saves),
+      row('Faceoffs', a.faceoffs, b.faceoffs),
+      row('Takeaways', a.takeaways, b.takeaways),
+      row('Penalty min', a.pim, b.pim),
+      row('PP goals', a.powerPlayGoals, b.powerPlayGoals),
+      m.phase === 'final' ? winner : '',
+      `Referee: ${m.referee.label}`,
+      m.phase === 'final' ? 'Space: play again   Esc: menu' : 'Space: next period',
+    ];
+    this.panelLines.forEach((line, i) => line.setText(fontText(lines[i] ?? '')).setTint(i === 0 || i === 10 ? UI.gold : i === 12 ? UI.ice : UI.white));
   }
 
   private exitToMenu(): void {

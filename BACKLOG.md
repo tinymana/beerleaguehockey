@@ -91,3 +91,11 @@ Equipment life and skate sharpening meters with pro shop visits; point-and-click
 ## Annual membership renewal (storyline, Nov 25)
 
 Yearly membership renewal with rink staff who never stop asking. Proposed home: the lifestyle track, tied to the calendar year. Proposed home only. Not authorized.
+
+## Knowing the referee (idea, creative director, Nov 26)
+
+In a rec league you get to know the referees: what each lets go, what sets him off, and you have a relationship with him. Possible shape: a small cast of named referee characters with their own blind spots and moods; the player learns them over a season (what was called and what was missed is remembered and shown); how you treat a referee (arguing, flattening him, buying him a beer at the bar) moves his patience with you and your team; the schedule says who is working tonight. Ties into the approved "referees can get hurt" direction and the dynasty's reputation ideas. First step built in v0.11.0: three placeholder profiles with different call chances, one per game. Proposed home: Track A for the on-ice calls, the dynasty and lifestyle tracks for the relationship. Not designed. Not authorized.
+
+## Touch controls for phones (requirement, creative director, Nov 26)
+
+"For mobile we will need touch controls." Today only the menus respond to touch (the title menu and Create a Player are tappable); the game on the ice needs a keyboard or a gamepad. Proposed first version: a thumb stick on the left that snaps to the same eight directions, and four buttons on the right (shoot, pass or switch, check, and one to carry on at panels), shown only on a touch screen, drawn in the game's pixel style, with the playfield kept clear. Open: landscape only or portrait as well; button layout and size; whether aiming needs anything beyond the diagonal aim help. Proposed home: Track A, next after the full game. Not built.

@@ -1,6 +1,6 @@
 {
   "name": "beer-league-hockey",
-  "version": "0.10.1",
+  "version": "0.11.0",
   "private": true,
   "description": "Beer League Hockey - a recreational hockey universe by Tiny Mana Studios",
   "type": "module",

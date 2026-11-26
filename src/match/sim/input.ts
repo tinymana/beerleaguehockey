@@ -5,6 +5,8 @@ export interface SimInput {
   shoot: boolean;
   /** Pass to a teammate; without the puck, take control of the teammate nearest it. 5-on-5 only. */
   pass?: boolean;
+  /** The contact button, in a full game: tap to stick check, hold to bump, hold too long and it is a check. */
+  check?: boolean;
 }
 
 export const NO_INPUT: Readonly<SimInput> = Object.freeze({ moveX: 0, moveY: 0, shoot: false });

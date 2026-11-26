@@ -173,7 +173,7 @@ describe('5-on-5 test game', () => {
     const puck = { x: RINK.centerX + 40, y: RINK.centerY };
     for (const team of [0, 1] as const) {
       const at = (role: 'C' | 'LW' | 'RW' | 'LD' | 'RD', possession: 0 | 1 | -1) => {
-        const spot = formationSpot(RINK, { x: 0, y: 0, vx: 0, vy: 0, index: 0, team, role, hasPuck: false, aiHold: 0, aiSide: 1, aiWait: 0, aiStill: 0, aiDodge: 0 }, puck, possession);
+        const spot = formationSpot(RINK, { team, role }, puck, possession);
         return { x: spot.x, up: (spot.y - puck.y) * attackDir(team) };
       };
       const other = team === 0 ? 1 : 0;
@@ -204,7 +204,7 @@ describe('5-on-5 test game', () => {
     // Ten minutes of play. The puck never sits still for five seconds.
     expect(longestStall).toBeLessThan(300);
     for (const key of ['pickup0', 'pickup1', 'pass0', 'pass1', 'poke0', 'poke1']) expect(count[key] ?? 0, key).toBeGreaterThan(20);
-    expect(count.shot ?? 0).toBeGreaterThan(30);
+    expect((count.shot0 ?? 0) + (count.shot1 ?? 0)).toBeGreaterThan(30);
     expect(sim.score[0]).toBeGreaterThan(0);
     expect(sim.score[1]).toBeGreaterThan(0);
     expect(sim.score[0] + sim.score[1]).toBe(sim.goals);

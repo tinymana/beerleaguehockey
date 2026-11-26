@@ -9,7 +9,7 @@ loadSavedTuning(tuning);
 export const arenaChoice = { id: 'standard' };
 
 /** What Pick-Up opens: the 5-on-5 test game, or one skater for skating and shooting practice. T switches. */
-export const matchMode = { teams: true };
+export const matchMode = { teams: true, games: 0 };
 
 let panel: TuningPanel | null = null;
 
