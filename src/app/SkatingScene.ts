@@ -10,6 +10,7 @@ import { quantize8 } from '../match/sim/input';
 import type { SimInput } from '../match/sim/input';
 import { SIM_DT, SkatingSim } from '../match/sim/skatingSim';
 import { clockText, periodText } from '../match/sim/match';
+import { refereeFrame } from '../match/sim/referee';
 import type { MatchState } from '../match/sim/match';
 import type { SimEvent, Skater } from '../match/sim/skatingSim';
 import { cameraTargetY, stepCamera } from '../match/view/cameraModel';
@@ -53,6 +54,7 @@ export class SkatingScene extends Phaser.Scene {
   private marker!: Phaser.GameObjects.Ellipse;
   private arrow!: Phaser.GameObjects.Image;
   private passRing!: Phaser.GameObjects.Ellipse;
+  private refSprite!: Phaser.GameObjects.Image;
   private lastInput: SimInput = { moveX: 0, moveY: 0, shoot: false };
   private goaliePoses: { pose: GoaliePose; time: number }[] = [];
   private puck!: Phaser.GameObjects.Image;
@@ -130,6 +132,8 @@ export class SkatingScene extends Phaser.Scene {
       g.destroy();
     }
     this.arrow = this.add.image(0, 0, 'tmp-you').setOrigin(0.5, 1).setVisible(matchMode.teams);
+    // The referee: supplied 32 px art, feet on row 27 of the frame.
+    this.refSprite = this.add.image(0, 0, 'ref/referee_front_idle_01').setOrigin(0.5, 28 / 32).setVisible(false);
     // The teammate a pass would go to: a thin white ring at his skates.
     this.passRing = this.add.ellipse(0, 0, 18, 9).setStrokeStyle(1, UI.white, 0.9).setVisible(false);
 
@@ -342,6 +346,12 @@ export class SkatingScene extends Phaser.Scene {
 
     const speed = Math.hypot(skater.vx, skater.vy);
     this.sim.skaters.forEach((sk, i) => this.drawSkater(sk, i, alpha));
+    const ref = this.sim.referee;
+    this.refSprite.setVisible(ref !== null);
+    if (ref) {
+      const ry = Math.round(projectY(ref.y, k));
+      this.refSprite.setTexture(`ref/${refereeFrame(ref)}`).setPosition(Math.round(ref.x), ry).setDepth(ry);
+    }
     const mine = matchMode.teams && !skater.out;
     this.marker.setPosition(skaterX, skaterY).setDepth(skaterY - 0.7).setVisible(mine);
     this.arrow.setPosition(skaterX, skaterY - 21 + Math.round(Math.sin(this.sim.tick / 9) * 1.5)).setDepth(skaterY + 400).setVisible(mine);

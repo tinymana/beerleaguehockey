@@ -20,6 +20,8 @@ import { attackDir, attackEnd } from './teamAi';
 import { CONTACT, MATCH, REFEREES, emptyStats, endZoneDot, faceoffDots, lineupSpot, neutralDot, penaltySeconds } from './match';
 import type { Foul, MatchState, StopReason } from './match';
 import { NO_INPUT } from './input';
+import { dropSpot, makeReferee, signalReferee, stepReferee } from './referee';
+import type { RefereeState } from './referee';
 import type { Tuning } from './tuning';
 
 export const SIM_DT = 1 / 60;
@@ -148,6 +150,8 @@ export class SkatingSim {
   private checkHeld = false;
   /** A full game around the 5-on-5 play (clock, whistles, penalties), or null for free play. */
   match: MatchState | null = null;
+  /** The referee on the ice, in a full game. */
+  referee: RefereeState | null = null;
   private matchOn = false;
   private matchSeed = 11;
   /** Rule switches (Options, later). */
@@ -255,6 +259,7 @@ export class SkatingSim {
     this.chain = [];
     this.matchRng = new Rng(this.matchSeed).fork('match');
     this.match = null;
+    this.referee = this.matchOn ? makeReferee(this.rink) : null;
     if (this.matchOn) {
       const dots = faceoffDots(this.rink);
       this.match = {
@@ -318,6 +323,10 @@ export class SkatingSim {
     this.tick++;
 
     const m = this.match;
+    if (m && this.referee) {
+      const stopped = m.phase === 'whistle' || m.phase === 'faceoff' || m.phase === 'draw';
+      stepReferee(this.referee, this.rink, this.puck, stopped ? m.dot : null, dt);
+    }
     if (m && m.phase !== 'play') {
       this.stepStopped(m, input, events);
       this.shootHeld = input.shoot;
@@ -979,6 +988,7 @@ export class SkatingSim {
     for (const g of this.goalies) g.holding = 0;
     this.passTarget = -1;
     this.release = null;
+    if (this.referee && reason !== 'start' && reason !== 'period') signalReferee(this.referee, reason === 'goal' ? 'goal' : reason === 'penalty' ? 'penalty' : 'washout');
     events.push({ type: 'whistle', reason });
   }
 
@@ -1101,6 +1111,15 @@ export class SkatingSim {
       if (running && this.runClock(m, dt, events)) return;
       // Jumping the drop costs the draw.
       if (pressed && !this.demo) m.locked[0] = MATCH.earlyLock;
+      // The puck is not dropped until the referee is at the dot (he is given a few seconds to get there).
+      const ref = this.referee;
+      if (ref && m.sinceDrop < MATCH.refereeWait) {
+        const spot = dropSpot(this.rink, m.dot);
+        if (Math.hypot(ref.x - spot.x, ref.y - spot.y) > 3) {
+          m.sinceDrop += dt;
+          return;
+        }
+      }
       m.timer -= dt;
       if (m.timer <= 0) {
         m.phase = 'draw';
@@ -1469,6 +1488,7 @@ export class SkatingSim {
     }
     if (result === null) return;
     so.results[so.team].push(result);
+    if (this.referee) signalReferee(this.referee, result ? 'goal' : 'washout');
     so.live = false;
     so.timer = -MATCH.attemptPause;
     shooter.hasPuck = false;

@@ -1,6 +1,6 @@
 # Match plan: what a full game looks like
 
-**Status: the nine questions of section 13 were answered on Nov 26 (Decision 86) and steps 1 to 4 and 6 of section 12 are built in v0.11.0 as starting values. Still to do: the referee on the ice, the presentation graphics (step 5, waiting for the re-issue at game sizes), names and numbers, sound. Sections below are the plan as proposed; where a ruling changed it, section 14 says so.**
+**Status: the nine questions of section 13 were answered on Nov 26 (Decision 86) and steps 1 to 4 and 6 of section 12 are built in v0.11.0 as starting values. The referee is on the ice since v0.12.0. Still to do: the presentation graphics (step 5, waiting for the re-issue at game sizes), names and numbers, sound. Sections below are the plan as proposed; where a ruling changed it, section 14 says so.**
 The creative director asked to lock in what a full game looks like first; the adventure play between places is locked in later (Decision 85).
 
 Today (v0.10.1) the 5-on-5 test game has skating, shooting, goalies, passing, control switching, pucks knocked loose, a simple computer team, line-ups after goals, a score and a running clock. It never ends and nothing stops play except a goal.

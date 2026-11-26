@@ -22,6 +22,8 @@ export const MATCH = {
   whistlePause: 1,
   dropWait: [0.9, 1.7] as const,
   /** Seconds after the drop in which a button press wins the draw; pressing before the drop locks a centre out this long. */
+  /** The longest the drop waits for the referee to reach the dot. */
+  refereeWait: 4,
   drawWindow: 0.45,
   earlyLock: 0.4,
   /** How long the computer's centre takes to press, least and most. */

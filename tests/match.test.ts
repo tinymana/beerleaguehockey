@@ -393,3 +393,75 @@ describe('referees and whole games', () => {
     expect(play()).toBe(play());
   });
 });
+
+describe('the referee on the ice', () => {
+  it('comes to the dot for a faceoff, beside it and not between the centres, then follows play from the far boards', async () => {
+    const { dropSpot, refereeFrame, REF, REFEREE_FRAMES } = await import('../src/match/sim/referee');
+    const sim = game({ demo: true, seed: 12 });
+    const ref = sim.referee;
+    if (!ref) throw new Error('no referee');
+    until(sim, 'draw');
+    const spot = dropSpot(RINK, match(sim).dot);
+    expect(Math.hypot(ref.x - spot.x, ref.y - spot.y)).toBeLessThan(4);
+    expect(Math.abs(ref.x - RINK.centerX)).toBe(REF.atDot);
+    until(sim, 'play');
+    const frames = new Set<string>();
+    let wide = 0;
+    let across = 0;
+    for (let i = 0; i < 60 * 40; i++) {
+      sim.step(IDLE);
+      frames.add(refereeFrame(ref));
+      if (match(sim).phase === 'intermission') sim.advance();
+      // Always on the ice, inside the boards.
+      expect(ref.x).toBeGreaterThan(RINK.left + 8);
+      expect(ref.x).toBeLessThan(RINK.right - 8);
+      expect(ref.y).toBeGreaterThan(goalLineY(RINK, 'top'));
+      expect(ref.y).toBeLessThan(goalLineY(RINK, 'bottom'));
+      if (match(sim).phase === 'play' && Math.abs(sim.puck.x - RINK.centerX) > 80) {
+        wide++;
+        if (Math.sign(ref.x - RINK.centerX) !== Math.sign(sim.puck.x - RINK.centerX)) across++;
+      }
+    }
+    // With the puck out wide he is mostly across the ice from it (he needs a moment to get there).
+    expect(wide).toBeGreaterThan(100);
+    expect(across / wide).toBeGreaterThan(0.6);
+    // Every frame he shows is one of the supplied ones, in both views, standing and skating.
+    for (const frame of frames) expect(REFEREE_FRAMES).toContain(frame);
+    expect([...frames].some((f) => f.includes('front_skate'))).toBe(true);
+    expect([...frames].some((f) => f.includes('back_'))).toBe(true);
+  });
+
+  it('signals a goal, a penalty and a stoppage, and stands still while he does', async () => {
+    const { refereeFrame } = await import('../src/match/sim/referee');
+    const sim = game({ seed: 13, referee: ALWAYS });
+    onlyThese(sim, [0, 1, 5]);
+    const ref = sim.referee;
+    if (!ref) throw new Error('no referee');
+    const him = take(sim, 5, RINK.centerX, RINK.centerY, UP);
+    him.possessTick = -1000;
+    const me = sk(sim, 0);
+    sim.controlled = 0;
+    [me.x, me.y, me.facing] = [RINK.centerX, RINK.centerY + 12, UP];
+    sim.step({ ...IDLE, check: true });
+    const events = sim.step(IDLE);
+    expect(events.some((e) => e.type === 'penalty')).toBe(true);
+    expect(ref.signal).toBe('penalty');
+    expect(refereeFrame(ref)).toMatch(/penalty_01$/);
+    for (let i = 0; i < 30; i++) sim.step(IDLE);
+    expect(Math.hypot(ref.vx, ref.vy)).toBeLessThan(6);
+    for (let i = 0; i < 120; i++) sim.step(IDLE);
+    expect(ref.signal).toBeNull();
+  });
+
+  it('has every referee frame on disk at 32x32, and none without a match', async () => {
+    const { REFEREE_FRAMES } = await import('../src/match/sim/referee');
+    const { readFileSync } = await import('node:fs');
+    const { join } = await import('node:path');
+    expect(REFEREE_FRAMES.length).toBe(18);
+    for (const frame of REFEREE_FRAMES) {
+      const png = readFileSync(join(__dirname, '..', 'public', 'assets', 'referee', '32', `${frame}.png`));
+      expect([png.readUInt32BE(16), png.readUInt32BE(20)], frame).toEqual([32, 32]);
+    }
+    expect(new SkatingSim(cloneTuning()).referee).toBeNull();
+  });
+});

@@ -3,6 +3,7 @@ import { ArenaRenderer } from '../match/view/arena/ArenaRenderer';
 import { REGISTRY_KEY, REGISTRY_URL } from '../match/view/arena/registry';
 import type { ArenaRegistry } from '../match/view/arena/registry';
 import { GOALIE_SHEET } from '../match/view/goalieSprite';
+import { REFEREE_FRAMES } from '../match/sim/referee';
 import { SKATER_SHEET } from '../match/view/skaterSprite';
 import { SCENES } from './config';
 import { registerPixelFont } from './pixelFont';
@@ -16,6 +17,8 @@ export class BootScene extends Phaser.Scene {
   preload(): void {
     this.load.spritesheet(SKATER_SHEET.key, SKATER_SHEET.url, { frameWidth: SKATER_SHEET.cell, frameHeight: SKATER_SHEET.cell });
     this.load.spritesheet(GOALIE_SHEET.key, GOALIE_SHEET.url, { frameWidth: GOALIE_SHEET.cell, frameHeight: GOALIE_SHEET.cell });
+    // The referee, drawn at the 32 px scale: one file a frame, shown unchanged.
+    for (const frame of REFEREE_FRAMES) this.load.image(`ref/${frame}`, `assets/referee/32/${frame}.png`);
     // The registry lists every arena asset; queue them as soon as it arrives.
     this.load.json(REGISTRY_KEY, REGISTRY_URL);
     this.load.once(`filecomplete-json-${REGISTRY_KEY}`, () => {

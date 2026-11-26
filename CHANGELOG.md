@@ -2,6 +2,22 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.12.0 - 2026-11-26 - The referee is on the ice
+
+229 tests. The referee sprites arrived (package `BLH_referee_32bit.zip`) and are in the game (Decision 88).
+
+### Added
+- **A referee on the ice**, drawn with the supplied 32 px art, unchanged: front and back views, standing, skating, and three signals. `scripts/art/ingest_referee.py` copies the 18 frames and stops if one is not 32x32.
+- He follows the play from along the side boards, across the ice from the puck; comes to the dot for every faceoff and stands beside it, not between the centres; the puck is not dropped until he is there. He signals a goal (pointing), a penalty (arm up) and other stoppages (wash-out), standing still while he does.
+- Rules for him are in `src/match/sim/referee.ts`. He is not a body yet: skaters and the puck pass through him.
+
+### Art as measured
+- 18 frames of 32x32 plus a 288x64 sheet that matches them exactly; clean transparency, 21 to 25 colours, feet on row 27 as specified, so he needs no adjustment. `skate_02` and `skate_04` are the same picture as `idle_01` in both views, so the stride is three distinct pictures. No side views, no falling or dazed frames (the earlier batch 01 sheet has those, not at this size).
+- He is the first figure on the ice at the true 32 px scale: beside him the skaters and goalies (48 px art shown at two-thirds) look softer.
+
+### Not done
+- **Puck Falls map on the website:** still not received.
+
 ## 0.11.1 - 2026-11-26 - One-timers, and who you are
 
 226 tests. Creative director requests after playing v0.11.0 (Decision 87).
