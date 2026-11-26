@@ -1,0 +1,51 @@
+/**
+ * Names and numbers for a pick-up game, so a goal can say who scored. Drawn from the fictional name pools
+ * with a seeded stream: the same seed gives the same two teams. These are throwaway pick-up players, not
+ * league rosters; they have no attributes and are not saved.
+ */
+import { Rng } from '../core/rng';
+import { randomName } from './names';
+
+export interface RosterPlayer {
+  number: number;
+  first: string;
+  last: string;
+}
+
+export const PICKUP_ROSTER = {
+  /** Skaters a side. */
+  size: 5,
+  /** Sweater numbers are drawn from this range; no two on a team share one. */
+  numbers: [2, 98] as const,
+};
+
+/** Two teams of skaters, in the order the game holds them: home's five, then away's five. */
+export function makePickupRoster(seed: number): RosterPlayer[] {
+  const rng = new Rng(seed).fork('pickup-roster');
+  const players: RosterPlayer[] = [];
+  const names = new Set<string>();
+  for (let team = 0; team < 2; team++) {
+    const taken = new Set<number>();
+    for (let i = 0; i < PICKUP_ROSTER.size; i++) {
+      let number = 0;
+      do number = PICKUP_ROSTER.numbers[0] + rng.int(PICKUP_ROSTER.numbers[1] - PICKUP_ROSTER.numbers[0] + 1);
+      while (taken.has(number));
+      taken.add(number);
+      let name = randomName(rng);
+      while (names.has(`${name.first} ${name.last}`)) name = randomName(rng);
+      names.add(`${name.first} ${name.last}`);
+      players.push({ number, first: name.first, last: name.last });
+    }
+  }
+  return players;
+}
+
+/** "#19 Marty Kowalski" */
+export function fullLine(p: RosterPlayer): string {
+  return `#${p.number} ${p.first} ${p.last}`;
+}
+
+/** "#19 M. Kowalski" */
+export function shortLine(p: RosterPlayer): string {
+  return `#${p.number} ${p.first.charAt(0)}. ${p.last}`;
+}

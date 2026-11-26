@@ -11,6 +11,8 @@ import { quantize8 } from '../match/sim/input';
 import type { SimInput } from '../match/sim/input';
 import { SIM_DT, SkatingSim } from '../match/sim/skatingSim';
 import { clockText, periodText } from '../match/sim/match';
+import { fullLine, makePickupRoster, shortLine } from '../dynasty/pickupRoster';
+import type { RosterPlayer } from '../dynasty/pickupRoster';
 import { refereeFrame } from '../match/sim/referee';
 import type { MatchState } from '../match/sim/match';
 import type { SimEvent, Skater } from '../match/sim/skatingSim';
@@ -61,6 +63,9 @@ export class SkatingScene extends Phaser.Scene {
   private tagFaceoff!: Phaser.GameObjects.Image;
   private tagPowerPlay!: Phaser.GameObjects.Image;
   private splashTimer = 0;
+  private roster: RosterPlayer[] = [];
+  private goalCard!: Phaser.GameObjects.Graphics;
+  private goalLines: Phaser.GameObjects.BitmapText[] = [];
   private lastInput: SimInput = { moveX: 0, moveY: 0, shoot: false };
   private goaliePoses: { pose: GoaliePose; time: number }[] = [];
   private puck!: Phaser.GameObjects.Image;
@@ -106,6 +111,8 @@ export class SkatingScene extends Phaser.Scene {
     // Pick-Up is a full game: clock, whistles, the contact button, penalties (Decision 86). Each game draws its own referee.
     matchMode.games++;
     this.sim.setTeams(matchMode.teams, matchMode.teams, 11 + matchMode.games * 7919);
+    // Fictional names and numbers for tonight's two sides, so a goal can say who scored.
+    this.roster = makePickupRoster(11 + matchMode.games * 7919);
     this.goalieSprites = [];
     this.goaliePoses = [];
     for (const g of this.sim.goalies) {
@@ -163,7 +170,13 @@ export class SkatingScene extends Phaser.Scene {
     this.banner = this.fixed(addText(this, GAME_WIDTH / 2, 120, '', UI.gold, 3).setOrigin(0.5, 0.5)).setVisible(false);
     // Broadcast graphics from the supplied batch 01 sheet, reduced to game size (temporary until the re-issue, Decision 86).
     const overlay = (key: string, x: number, y: number): Phaser.GameObjects.Image => this.add.image(x, y, key).setScrollFactor(0).setDepth(DEPTH_HUD + 1).setVisible(false);
-    this.goalSplash = overlay('ui/goal_splash', GAME_WIDTH / 2, 112);
+    this.goalSplash = overlay('ui/goal_splash', GAME_WIDTH / 2, 92);
+    // After a goal: who scored, who helped, when, and the score (plain text in a box until the scorer graphic is re-issued).
+    this.goalCard = this.add.graphics().setScrollFactor(0).setDepth(DEPTH_HUD).setVisible(false);
+    this.goalCard.fillStyle(UI.navy, 0.94).fillRect(100, 138, 280, 62);
+    this.goalCard.fillStyle(UI.red, 1).fillRect(100, 138, 280, 2);
+    this.goalCard.lineStyle(1, UI.gold, 1).strokeRect(100.5, 138.5, 279, 61);
+    this.goalLines = [0, 1, 2, 3].map((i) => this.fixed(addText(this, GAME_WIDTH / 2, 144 + i * 13, '', i === 0 ? UI.gold : i === 3 ? UI.ice : UI.white).setOrigin(0.5, 0)).setVisible(false));
     this.goalSub = this.fixed(addText(this, GAME_WIDTH / 2, 160, '', UI.gold, 2).setOrigin(0.5, 0.5)).setVisible(false);
     this.tagFaceoff = overlay('ui/tag_faceoff', GAME_WIDTH / 2, 40);
     this.tagPowerPlay = overlay('ui/tag_power_play', 46, 28);
@@ -243,7 +256,10 @@ export class SkatingScene extends Phaser.Scene {
     this.lastInput = input;
     // Between periods and after the final horn the shoot button carries on.
     const phase = this.sim.match?.phase;
-    if (this.padGo.pressed(input.shoot) && (phase === 'intermission' || phase === 'final')) {
+    const go = this.padGo.pressed(input.shoot);
+    // Shoot gets past the goal card once it has been read.
+    if (go) this.sim.skipGoalPause();
+    if (go && (phase === 'intermission' || phase === 'final')) {
       if (phase === 'final') {
         this.scene.restart();
         return;
@@ -320,8 +336,9 @@ export class SkatingScene extends Phaser.Scene {
           // The supplied GOAL! splash pops in, with who scored under it.
           this.goalSplash.setVisible(true).setScale(0.4);
           this.tweens.add({ targets: this.goalSplash, scale: 1, duration: 160, ease: 'Back.Out' });
-          this.goalSub.setText(fontText(who)).setVisible(true);
-          this.splashTimer = 1.5;
+          // In a game the card under the splash says who; in a shootout a line of text is enough.
+          this.goalSub.setText(fontText(who)).setVisible(inShootout || !this.sim.match);
+          this.splashTimer = inShootout ? 1.2 : 4;
           this.banner.setVisible(false);
           this.bannerTimer = 0;
         } else {
@@ -510,6 +527,27 @@ export class SkatingScene extends Phaser.Scene {
       this.hudLast.setText(fontText(m.reason === 'start' || m.reason === 'period' ? `Referee: ${m.referee.label}` : ''));
     } else {
       this.hudLast.setText(fontText(this.drawNote.time > 0 && m.phase === 'play' ? this.drawNote.text : ''));
+    }
+    // The goal card: up for as long as play is stopped for the goal.
+    const scored = m.phase === 'whistle' && m.reason === 'goal' ? m.goals[m.goals.length - 1] : undefined;
+    this.goalCard.setVisible(scored !== undefined);
+    for (const line of this.goalLines) line.setVisible(scored !== undefined);
+    if (scored) {
+      const side = scored.team === 0 ? 'Home' : 'Away';
+      const who = this.roster[scored.scorer];
+      // His goals tonight, counting this one.
+      const tally = m.goals.filter((g) => g.scorer === scored.scorer && scored.scorer >= 0).length;
+      const helpers = scored.assists.map((i) => this.roster[i]).filter((p): p is RosterPlayer => p !== undefined);
+      const lines = [
+        `${side} goal${scored.powerPlay ? '  -  power play' : ''}`,
+        who ? `${fullLine(who)} (${tally})` : 'Off a defender',
+        helpers.length ? `Assists: ${helpers.map(shortLine).join(', ')}` : who ? 'Unassisted' : '',
+        `${periodText(scored.period)} ${clockText(scored.time)}     Home ${home}  Away ${away}`,
+      ];
+      this.goalLines.forEach((line, i) => line.setText(fontText(lines[i] ?? '')));
+    } else if (m.phase !== 'shootout' && this.splashTimer > 0 && this.goalSplash.visible && !(m.phase === 'whistle' && m.reason === 'goal')) {
+      // Skipped ahead: the splash goes with the card.
+      this.splashTimer = 0.01;
     }
     // Faceoff tag while the teams line up; power play tag while one side is a skater up (never both at once).
     const short = [0, 1].map((t) => m.penalties.filter((p) => p.team === t).length);

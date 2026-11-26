@@ -2,6 +2,20 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.13.1 - 2026-11-26 - Who scored
+
+236 tests. Creative director request (Decision 90): after a goal, a screen showing who scored and who assisted, as in the NHL games.
+
+### Added
+- **Goal card.** After every goal play stops for 4 seconds and a card comes up under the GOAL! splash: which side scored (and whether on the power play), the scorer's number and name with his goals tonight, up to two assists in passing order (or "Unassisted"), the period and time, and the score. Shoot (Space, pad A, or the touch button) moves on to the faceoff early.
+- **Names and numbers.** Each pick-up game gets two sides of five fictional skaters from the name pools, with sweater numbers that do not repeat on a team (`src/dynasty/pickupRoster.ts`). A new game draws new players.
+- A goal that goes in off the defending team is shown as "Off a defender" with no scorer.
+
+### Known issues
+- The card is plain text in a box: the supplied scorer graphic has a face painted in and waits for the re-issue. No portrait is shown.
+- Names appear only on the goal card: not yet on penalties, the intermission and final panels, or over the players. Goalies have no names.
+- The sides are still Home and Away.
+
 ## 0.13.0 - 2026-11-26 - Touch controls, a beat for the call, the GOAL! splash, the Puck Falls map
 
 234 tests. Creative director requests and answers of the afternoon (Decision 89).

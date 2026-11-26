@@ -973,7 +973,7 @@ export class SkatingSim {
     m.phase = 'whistle';
     m.reason = reason;
     m.dot = dot;
-    m.timer = reason === 'goal' ? FEEL.goalPause : MATCH.whistlePause;
+    m.timer = reason === 'goal' ? MATCH.goalPause : MATCH.whistlePause;
     for (const s of this.skaters) {
       s.hasPuck = false;
       s.charge = 0;
@@ -1088,6 +1088,12 @@ export class SkatingSim {
       m.phase = 'final';
       events.push({ type: 'final', winner: m.winner });
     }
+  }
+
+  /** The player has read who scored: get on with the faceoff. */
+  skipGoalPause(): void {
+    const m = this.match;
+    if (m && m.phase === 'whistle' && m.reason === 'goal' && m.timer > MATCH.goalSkip) m.timer = MATCH.goalSkip;
   }
 
   /** Carry on from an intermission: the next period starts with a faceoff at centre. */

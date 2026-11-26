@@ -514,3 +514,40 @@ describe('a beat for the call, and the walk to the box (creative director, Nov 2
     expect(boxDoor(RINK, 1)).toEqual({ x: RINK.right - 10, y: 564 });
   });
 });
+
+describe('after a goal: time to read who scored', () => {
+  it('holds play for the goal card, records scorer and assists in passing order, and the shoot button moves it on', () => {
+    const sim = game({ seed: 15, referee: NEVER });
+    onlyThese(sim, [0, 1, 2]);
+    sim.setGoalies(false);
+    // Left wing to centre to right wing, who scores into the empty net.
+    take(sim, 1, RINK.centerX - 70, top + 90, 0);
+    sim.step({ moveX: 1, moveY: 0, shoot: false, pass: true });
+    const c = sk(sim, 0);
+    [c.x, c.y, c.facing] = [RINK.centerX, top + 90, Math.PI];
+    for (let i = 0; i < 90 && !c.hasPuck; i++) sim.step(IDLE);
+    expect(c.hasPuck).toBe(true);
+    const rw = sk(sim, 2);
+    [rw.x, rw.y, rw.facing] = [RINK.centerX + 70, top + 90, Math.PI];
+    sim.step({ moveX: 1, moveY: 0, shoot: false, pass: false });
+    sim.step({ moveX: 1, moveY: 0, shoot: false, pass: true });
+    for (let i = 0; i < 90 && !rw.hasPuck; i++) sim.step(IDLE);
+    expect(rw.hasPuck).toBe(true);
+    [rw.x, rw.y, rw.facing] = [RINK.centerX, top + 40, UP];
+    sim.step({ moveX: 0, moveY: 0, shoot: true });
+    const events: SimEvent[] = [];
+    for (let i = 0; i < 60 && !events.some((e) => e.type === 'goal'); i++) events.push(...sim.step(IDLE));
+    expect(events.some((e) => e.type === 'goal')).toBe(true);
+    const m = match(sim);
+    expect(m.goals[0]).toMatchObject({ team: 0, scorer: 2, assists: [0, 1], period: 1, powerPlay: false });
+    // The card stays up for seconds, not a blink.
+    expect(m.timer).toBeGreaterThan(3);
+    for (let i = 0; i < 120; i++) sim.step(IDLE);
+    expect([m.phase, m.reason]).toEqual(['whistle', 'goal']);
+    // Shoot: on with the faceoff.
+    sim.skipGoalPause();
+    for (let i = 0; i < 30; i++) sim.step(IDLE);
+    expect(m.phase).toBe('faceoff');
+    expect([m.dot.x, m.dot.y]).toEqual([RINK.centerX, RINK.centerY]);
+  });
+});

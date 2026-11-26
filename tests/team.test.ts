@@ -307,3 +307,22 @@ describe('5-on-5 test game', () => {
     expect(sim.tick - sim.dropTick).toBeLessThan(60);
   });
 });
+
+describe('pick-up roster: names and numbers so a goal can say who scored', () => {
+  it('gives ten different fictional players, no shared number on a team, the same for the same seed', async () => {
+    const { makePickupRoster, fullLine, shortLine } = await import('../src/dynasty/pickupRoster');
+    const a = makePickupRoster(42);
+    expect(a.length).toBe(10);
+    expect(new Set(a.map((p) => `${p.first} ${p.last}`)).size).toBe(10);
+    for (const team of [a.slice(0, 5), a.slice(5)]) {
+      expect(new Set(team.map((p) => p.number)).size).toBe(5);
+      for (const p of team) expect(p.number >= 2 && p.number <= 98).toBe(true);
+    }
+    expect(makePickupRoster(42)).toEqual(a);
+    expect(makePickupRoster(43)).not.toEqual(a);
+    const first = a[0];
+    if (!first) throw new Error('empty roster');
+    expect(fullLine(first)).toBe(`#${first.number} ${first.first} ${first.last}`);
+    expect(shortLine(first)).toBe(`#${first.number} ${first.first[0]}. ${first.last}`);
+  });
+});

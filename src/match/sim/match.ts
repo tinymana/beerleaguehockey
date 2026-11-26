@@ -22,6 +22,9 @@ export const MATCH = {
   whistlePause: 1,
   dropWait: [0.9, 1.7] as const,
   /** Seconds after the drop in which a button press wins the draw; pressing before the drop locks a centre out this long. */
+  /** Seconds play stops after a goal, long enough to read who scored; the shoot button cuts it to `goalSkip`. */
+  goalPause: 4,
+  goalSkip: 0.3,
   /** A beat between the foul and the whistle: the referee's arm goes up, play carries on, then he blows it down. */
   callBeat: 0.7,
   /** The longest the faceoff waits for a penalized skater to reach the box. */
