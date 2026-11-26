@@ -2,6 +2,21 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.11.1",
+      "date": "2026-11-26",
+      "title": "One-timers",
+      "items": [
+        {
+          "tag": "new",
+          "text": "One-timers. Pass it across, hold shoot before it gets there, and hammer it first time."
+        },
+        {
+          "tag": "improved",
+          "text": "A gold arrow now floats over the player you control, and a white ring shows who your pass is going to."
+        }
+      ]
+    },
+    {
       "version": "0.11.0",
       "date": "2026-11-26",
       "title": "Drop the puck",

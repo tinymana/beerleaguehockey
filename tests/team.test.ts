@@ -134,6 +134,73 @@ describe('5-on-5 test game', () => {
     expect(sim.skater.index).toBe(2);
   });
 
+  it('one-timer: holding shoot before a pass arrives hits it first time, at the net, harder than the same shot from a standstill', () => {
+    const sim = teams();
+    give(sim, 0);
+    const passer = sim.skaters[0];
+    const wing = sim.skaters[2];
+    if (!passer || !wing) throw new Error('no skaters');
+    for (const s of sim.skaters) if (s !== passer && s !== wing) [s.x, s.y] = [RINK.left + 30, RINK.bottom - 60 - s.index * 14];
+    sim.setGoalies(false);
+    [passer.x, passer.y, passer.facing] = [RINK.centerX - 60, line + 70, 0];
+    [wing.x, wing.y, wing.facing] = [RINK.centerX + 30, line + 70, Math.PI];
+    sim.step({ moveX: 1, moveY: 0, shoot: false, pass: true });
+    expect(sim.controlled).toBe(2);
+    // Now the receiver: hold shoot, holding nothing else, and wait for the puck.
+    const events: SimEvent[] = [];
+    for (let i = 0; i < 90 && !events.some((e) => e.type === 'shot'); i++) events.push(...sim.step({ moveX: 0, moveY: 0, shoot: true }));
+    const shot = events.find((e) => e.type === 'shot');
+    expect(shot && shot.type === 'shot' && shot.oneTimer).toBe(true);
+    expect(events.some((e) => e.type === 'pickup')).toBe(false);
+    expect(wing.hasPuck).toBe(false);
+    // It is going at the net he attacks, and faster than a wrist shot would.
+    expect(sim.puck.vy).toBeLessThan(-250);
+    const xAtLine = sim.puck.x + (sim.puck.vx / sim.puck.vy) * (line - sim.puck.y);
+    expect(Math.abs(xAtLine - RINK.centerX)).toBeLessThan(RINK.mouthHalfWidth);
+    for (let i = 0; i < 60 && !events.some((e) => e.type === 'goal'); i++) events.push(...sim.step(IDLE));
+    expect(events.some((e) => e.type === 'goal')).toBe(true);
+  });
+
+  it('one-timer: a diagonal held toward the net picks that corner, and a puck lying still is just picked up', () => {
+    const sim = teams();
+    give(sim, 0);
+    const passer = sim.skaters[0];
+    const wing = sim.skaters[2];
+    if (!passer || !wing) throw new Error('no skaters');
+    for (const s of sim.skaters) if (s !== passer && s !== wing) [s.x, s.y] = [RINK.left + 30, RINK.bottom - 60 - s.index * 14];
+    [passer.x, passer.y, passer.facing] = [RINK.centerX - 60, line + 70, 0];
+    [wing.x, wing.y, wing.facing] = [RINK.centerX + 30, line + 70, Math.PI];
+    sim.step({ moveX: 1, moveY: 0, shoot: false, pass: true });
+    const events: SimEvent[] = [];
+    for (let i = 0; i < 90 && !events.some((e) => e.type === 'shot'); i++) {
+      // Held in place so the test is about the aim, not about skating onto the pass.
+      [wing.x, wing.y, wing.vx, wing.vy, wing.facing] = [RINK.centerX + 30, line + 70, 0, 0, Math.PI];
+      events.push(...sim.step({ moveX: -D, moveY: -D, shoot: true }));
+    }
+    expect(events.some((e) => e.type === 'shot' && e.oneTimer)).toBe(true);
+    const xAtLine = sim.puck.x + (sim.puck.vx / sim.puck.vy) * (line - sim.puck.y);
+    expect(xAtLine).toBeLessThan(RINK.centerX - 4);
+    expect(xAtLine).toBeGreaterThan(RINK.centerX - RINK.mouthHalfWidth - AIM.spread);
+
+    // A dead puck: holding shoot and skating onto it is a pickup, and the hold becomes an ordinary wind-up.
+    const still = teams();
+    const me = still.skater;
+    for (const s of still.skaters) if (s !== me) [s.x, s.y] = [RINK.left + 30, RINK.bottom - 60 - s.index * 14];
+    [still.puck.x, still.puck.y] = [still.bladeX(me), still.bladeY(me)];
+    const got = still.step({ moveX: 0, moveY: 0, shoot: true });
+    expect(got.some((e) => e.type === 'pickup')).toBe(true);
+    expect(got.some((e) => e.type === 'shot')).toBe(false);
+    expect(me.hasPuck).toBe(true);
+  });
+
+  it('shows who a pass would go to: the teammate the held direction points at', () => {
+    const sim = teams();
+    give(sim, 0);
+    expect(sim.passMate(sim.skater, { moveX: 1, moveY: 0, shoot: false })?.role).toBe('RW');
+    expect(sim.passMate(sim.skater, { moveX: -1, moveY: 0, shoot: false })?.role).toBe('LW');
+    expect(sim.passMate(sim.skater, { moveX: 0, moveY: -1, shoot: false })).toBeNull();
+  });
+
   it('gives the player the teammate nearest the puck when the pass button is pressed without it', () => {
     const sim = teams();
     sim.puck.x = RINK.centerX - 90;

@@ -13,7 +13,7 @@ import type { Body, RinkEnd, RinkGeometry } from './rink';
 import { Rng } from '../../core/rng';
 import type { Goalie, SaveKind } from './goalie';
 import { GOALIE, makeGoalie, reboundVelocity, resolveShot, stepGoalie } from './goalie';
-import { AIM, FEEL, SHOOT, TEAM } from './tuning';
+import { AIM, FEEL, ONE_TIMER, SHOOT, TEAM } from './tuning';
 import { AI, faceoffSpot, teamInputs } from './teamAi';
 import type { Role } from './teamAi';
 import { attackDir, attackEnd } from './teamAi';
@@ -67,6 +67,10 @@ export interface Skater extends Body {
   checkTime: number;
   checked: boolean;
   checkCooldown: number;
+  /** Seconds the shoot button has been held without the puck (winding up for a one-timer), and the direction held. */
+  windup: number;
+  aimX: number;
+  aimY: number;
 }
 
 export interface Puck extends Body {
@@ -91,7 +95,7 @@ export interface ShootingStats {
 }
 
 export type SimEvent =
-  | { type: 'shot'; power: number; kind: ShotKind; team: 0 | 1 }
+  | { type: 'shot'; power: number; kind: ShotKind; team: 0 | 1; oneTimer?: boolean }
   | { type: 'save'; kind: SaveKind; end: RinkEnd }
   | { type: 'post'; end: RinkEnd }
   | { type: 'crossbar'; end: RinkEnd }
@@ -183,7 +187,7 @@ export class SkatingSim {
       hasPuck: false, charge: 0, pickupCooldown: 0, stride: 0,
       index, team, role, pushing: false, shootHeld: false, passHeld: false, pokeCooldown: 0,
       possessTick: -1000, shotTick: -1000, aiHold: 0, aiSide: 1, aiWait: 0, aiStill: 0, aiDodge: 0, aiCheck: 0,
-      out: false, down: 0, lock: 0, checkHeld: false, checkTime: 0, checked: false, checkCooldown: 0,
+      out: false, down: 0, lock: 0, checkHeld: false, checkTime: 0, checked: false, checkCooldown: 0, windup: 0, aimX: 0, aimY: 0,
     };
   }
 
@@ -476,7 +480,8 @@ export class SkatingSim {
   }
 
   /** Send the puck to the teammate the stick (or the held direction) points at, or straight ahead if there is none. */
-  private pass(s: Skater, input: SimInput, events: SimEvent[]): void {
+  /** The teammate a pass would go to: the one the held direction (or the stick) points at best. Null if nobody is in line. */
+  passMate(s: Skater, input: SimInput): Skater | null {
     let dirX = Math.cos(s.facing);
     let dirY = Math.sin(s.facing);
     if (input.moveX !== 0 || input.moveY !== 0) {
@@ -499,6 +504,17 @@ export class SkatingSim {
         mate = m;
       }
     }
+    return mate;
+  }
+
+  private pass(s: Skater, input: SimInput, events: SimEvent[]): void {
+    let dirX = Math.cos(s.facing);
+    let dirY = Math.sin(s.facing);
+    if (input.moveX !== 0 || input.moveY !== 0) {
+      dirX = input.moveX;
+      dirY = input.moveY;
+    }
+    const mate = this.passMate(s, input);
     const bx = this.bladeX(s);
     const by = this.bladeY(s);
     if (mate) {
@@ -557,8 +573,13 @@ export class SkatingSim {
     if (s.out || s.down > 0) return;
     if (!s.hasPuck) {
       s.charge = 0;
+      // Holding shoot without the puck is winding up: a pass that arrives is hit first time.
+      s.windup = input.shoot ? Math.min(s.windup + dt, FEEL.maxChargeTime) : 0;
+      s.aimX = input.moveX;
+      s.aimY = input.moveY;
       return;
     }
+    s.windup = 0;
     if (this.teams && input.pass && !s.passHeld) {
       this.pass(s, input, events);
       return;
@@ -570,25 +591,29 @@ export class SkatingSim {
     if (!s.shootHeld) return;
 
     // Button released with the puck: shoot where the stick is pointed.
-    const t = this.tuning;
-    const power = Math.min(s.charge / FEEL.maxChargeTime, 1);
-    const factor = FEEL.minShotFactor + (1 - FEEL.minShotFactor) * power;
     let dirX = Math.cos(s.facing);
     let dirY = Math.sin(s.facing);
     if (input.moveX !== 0 || input.moveY !== 0) {
       dirX = input.moveX;
       dirY = input.moveY;
     }
+    this.fire(s, dirX, dirY, input.moveX, Math.min(s.charge / FEEL.maxChargeTime, 1), 1, false, events);
+  }
+
+  /** The puck leaves his stick as a shot. */
+  private fire(s: Skater, dirX: number, dirY: number, sideways: number, power: number, boost: number, oneTimer: boolean, events: SimEvent[]): void {
+    const t = this.tuning;
+    const factor = FEEL.minShotFactor + (1 - FEEL.minShotFactor) * power;
     const p = this.puck;
     p.state = 'free';
     p.x = this.bladeX(s);
     p.y = this.bladeY(s);
-    const speed = t.shotVelocity * factor;
+    const speed = t.shotVelocity * factor * boost;
     const inheritX = s.vx * FEEL.shotInherit;
     const inheritY = s.vy * FEEL.shotInherit;
     p.vx = dirX * speed + inheritX;
     p.vy = dirY * speed + inheritY;
-    const aim = this.aimAtCorner(s, dirX, dirY, input.moveX);
+    const aim = this.aimAtCorner(s, dirX, dirY, sideways);
     if (aim) {
       // Aimed at the corner: the skater's own drift is allowed for, so the puck travels along the aimed line.
       const along = aim.x * inheritX + aim.y * inheritY;
@@ -602,19 +627,50 @@ export class SkatingSim {
     p.vz = kind === 'slap' ? SHOOT.slapLift : SHOOT.wristLift;
     this.launchTick = this.tick;
     this.stats.shots++;
-    this.stats.last = kind === 'slap' ? 'Slap shot' : 'Wrist shot';
+    this.stats.last = oneTimer ? 'One-timer' : kind === 'slap' ? 'Slap shot' : 'Wrist shot';
     this.beatGoalie = false;
     this.throughFiveHole = false;
     s.hasPuck = false;
     s.charge = 0;
+    s.windup = 0;
     s.pickupCooldown = FEEL.pickupCooldown;
     s.shotTick = this.tick;
     this.passTarget = -1;
-    events.push({ type: 'shot', power, kind, team: s.team });
+    events.push(oneTimer ? { type: 'shot', power, kind, team: s.team, oneTimer: true } : { type: 'shot', power, kind, team: s.team });
     if (this.match) {
       this.match.stats[s.team].shots++;
       this.release = { team: s.team, x: s.x, y: s.y };
     }
+  }
+
+  /**
+   * A one-timer: a skater winding up (shoot held, no puck) meets a moving puck and hits it first time.
+   * It goes where he is holding if that is toward the net he attacks, otherwise straight at that net.
+   */
+  private oneTime(s: Skater, events: SimEvent[]): void {
+    const bx = this.bladeX(s);
+    const by = this.bladeY(s);
+    let dirX = s.aimX;
+    let dirY = s.aimY;
+    let sideways = s.aimX;
+    const held = dirX !== 0 || dirY !== 0;
+    if (this.teams) {
+      const nx = this.rink.centerX - bx;
+      const ny = goalLineY(this.rink, attackEnd(s.team)) - by;
+      const len = Math.hypot(nx, ny) || 1;
+      if (!held || (dirX * nx + dirY * ny) / len < ONE_TIMER.towardNet) {
+        [dirX, dirY, sideways] = [nx / len, ny / len, 0];
+      }
+    } else if (!held) {
+      [dirX, dirY] = [Math.cos(s.facing), Math.sin(s.facing)];
+    }
+    // He counts as having touched it: the pass before it is an assist.
+    if (this.lastTouch !== s.team) this.chain = [];
+    if (this.chain[this.chain.length - 1] !== s.index) this.chain.push(s.index);
+    this.lastTouch = s.team;
+    this.puck.z = 0;
+    const power = Math.max(ONE_TIMER.minPower, s.windup / FEEL.maxChargeTime);
+    this.fire(s, dirX, dirY, sideways, power, ONE_TIMER.boost, true, events);
   }
 
   private stepGoalies(dt: number): void {
@@ -830,12 +886,18 @@ export class SkatingSim {
       const nearBlade = blade <= t.pickupRadius;
       const nearBody = Math.hypot(p.x - k.x, p.y - k.y) <= FEEL.skaterRadius + FEEL.puckRadius;
       const relSpeed = Math.hypot(p.vx - k.vx, p.vy - k.vy);
-      if ((nearBlade || nearBody) && relSpeed <= FEEL.pickupMaxRelativeSpeed && blade < nearest) {
+      // A skater winding up can meet a harder pass than one who is trying to settle it.
+      const limit = k.windup > 0 ? ONE_TIMER.maxPuckSpeed : FEEL.pickupMaxRelativeSpeed;
+      if ((nearBlade || nearBody) && relSpeed <= limit && blade < nearest) {
         nearest = blade;
         taker = k;
       }
     }
     // A puck in the air over the skaters' sticks cannot be collected.
+    if (taker && taker.windup > 0 && p.z <= TEAM.pickupHeight && Math.hypot(p.vx, p.vy) >= ONE_TIMER.minPuckSpeed) {
+      this.oneTime(taker, events);
+      return;
+    }
     if (taker && (!this.teams || p.z <= TEAM.pickupHeight)) {
       p.state = 'carried';
       p.z = 0;

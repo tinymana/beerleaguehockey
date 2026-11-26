@@ -51,6 +51,9 @@ export class SkatingScene extends Phaser.Scene {
 
   private skaterSprites: Phaser.GameObjects.Image[] = [];
   private marker!: Phaser.GameObjects.Ellipse;
+  private arrow!: Phaser.GameObjects.Image;
+  private passRing!: Phaser.GameObjects.Ellipse;
+  private lastInput: SimInput = { moveX: 0, moveY: 0, shoot: false };
   private goaliePoses: { pose: GoaliePose; time: number }[] = [];
   private puck!: Phaser.GameObjects.Image;
   private puckShadow!: Phaser.GameObjects.Ellipse;
@@ -117,8 +120,18 @@ export class SkatingScene extends Phaser.Scene {
       if (s.team === 1) sprite.setTint(AWAY_TINT);
       return sprite;
     });
-    // Temporary marker under the skater the player controls.
-    this.marker = this.add.ellipse(0, 0, 18, 9).setStrokeStyle(1, UI.gold, 1).setVisible(matchMode.teams);
+    // Who you control (temporary, code-drawn): a gold ring at his skates and a gold arrow bobbing over his head.
+    this.marker = this.add.ellipse(0, 0, 22, 11).setStrokeStyle(2, UI.gold, 1).setVisible(matchMode.teams);
+    if (!this.textures.exists('tmp-you')) {
+      const g = this.make.graphics({ x: 0, y: 0 }, false);
+      g.fillStyle(UI.navy, 1).fillTriangle(0, 0, 11, 0, 5.5, 8);
+      g.fillStyle(UI.gold, 1).fillTriangle(2, 1, 9, 1, 5.5, 6);
+      g.generateTexture('tmp-you', 11, 8);
+      g.destroy();
+    }
+    this.arrow = this.add.image(0, 0, 'tmp-you').setOrigin(0.5, 1).setVisible(matchMode.teams);
+    // The teammate a pass would go to: a thin white ring at his skates.
+    this.passRing = this.add.ellipse(0, 0, 18, 9).setStrokeStyle(1, UI.white, 0.9).setVisible(false);
 
     this.cameras.main.setBounds(0, 0, rink.worldWidth, this.worldHeight);
     this.camY = projectY(this.sim.skater.y, this.tilt);
@@ -134,7 +147,7 @@ export class SkatingScene extends Phaser.Scene {
     this.hudSpeed = this.fixed(addText(this, 4, GAME_HEIGHT - 9, '', UI.ice));
     this.hudLast = this.fixed(addText(this, GAME_WIDTH / 2, 14, '', UI.gold).setOrigin(0.5, 0));
     this.fixed(
-      addText(this, GAME_WIDTH - 4, GAME_HEIGHT - 9, matchMode.teams ? 'Space:shoot  Z:pass/switch  C:check  T:practice  Esc:menu' : 'Tap:wrist  Hold:slap  G:goalie  R:puck  T:5 on 5  Esc:menu', UI.ice).setOrigin(1, 0),
+      addText(this, GAME_WIDTH - 4, GAME_HEIGHT - 9, matchMode.teams ? 'Space:shoot  Z:pass/switch  C:check  T:practice' : 'Tap:wrist  Hold:slap  G:goalie  R:puck  T:5 on 5  Esc:menu', UI.ice).setOrigin(1, 0),
     );
     this.banner = this.fixed(addText(this, GAME_WIDTH / 2, 120, '', UI.gold, 3).setOrigin(0.5, 0.5)).setVisible(false);
     // Intermission and final panel: plain text in the game's font until the broadcast graphics are re-issued at game size.
@@ -206,6 +219,7 @@ export class SkatingScene extends Phaser.Scene {
     }
     const input = this.readInput(pad.x, pad.y, pad.action, pad.back);
     if (matchMode.teams) input.check = this.keys.c.isDown || this.keys.v.isDown || pad.alt;
+    this.lastInput = input;
     // Between periods and after the final horn the shoot button carries on.
     const phase = this.sim.match?.phase;
     if (this.padGo.pressed(input.shoot) && (phase === 'intermission' || phase === 'final')) {
@@ -303,6 +317,7 @@ export class SkatingScene extends Phaser.Scene {
       } else if (e.type === 'attempt' && !e.goal) {
         this.flash('No goal', 0.9);
       } else if (e.type === 'shot') {
+        if (e.oneTimer) this.drawNote = { text: 'One-timer!', time: 1.2 };
         if (e.power > 0.8) this.cameras.main.shake(60, 0.002);
       }
     }
@@ -327,7 +342,15 @@ export class SkatingScene extends Phaser.Scene {
 
     const speed = Math.hypot(skater.vx, skater.vy);
     this.sim.skaters.forEach((sk, i) => this.drawSkater(sk, i, alpha));
-    this.marker.setPosition(skaterX, skaterY).setDepth(skaterY - 0.7);
+    const mine = matchMode.teams && !skater.out;
+    this.marker.setPosition(skaterX, skaterY).setDepth(skaterY - 0.7).setVisible(mine);
+    this.arrow.setPosition(skaterX, skaterY - 21 + Math.round(Math.sin(this.sim.tick / 9) * 1.5)).setDepth(skaterY + 400).setVisible(mine);
+    const mate = mine && skater.hasPuck ? this.sim.passMate(skater, this.lastInput) : null;
+    this.passRing.setVisible(mate !== null);
+    if (mate) {
+      const my = Math.round(projectY(mate.y, k));
+      this.passRing.setPosition(Math.round(mate.x), my).setDepth(my - 0.7);
+    }
     const carrier = this.sim.carrier();
     const carrierY = carrier ? Math.round(projectY(carrier.y, k)) : skaterY;
     // A carried puck sits on the blade; draw it just in front of or behind the body as the stick points.

@@ -2,6 +2,22 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.11.1 - 2026-11-26 - One-timers, and who you are
+
+226 tests. Creative director requests after playing v0.11.0 (Decision 87).
+
+### Added
+- **One-timers.** Hold shoot before a pass reaches you and the puck is hit first time instead of settled: at least 60% of a full slap shot however briefly you wound up, 12% faster than the same shot from a standstill, and low like a slap shot. It goes where you are holding if that is toward the net you attack (a diagonal picks that corner), otherwise straight at the net. A puck lying still is just picked up. The passer gets the assist. The computer's skaters one-time passes that reach them in shooting range.
+- **Who you control:** a thicker gold ring at the skates and a gold arrow bobbing over the head (temporary, code-drawn).
+- **Who the pass goes to:** while you carry the puck, a thin white ring marks the teammate the held direction points at.
+
+### Measured (computer against computer, three games)
+- 3, 6 and 9 one-timers a game, 2 of the 18 scored. Final scores 5-3, 5-5, 5-10.
+
+### Not done, and why
+- **Referee sprites:** the file attached as the referee sprites was the goal package again (byte-for-byte the same `BLH_goals_40x32.zip`). Nothing to put in yet.
+- **Puck Falls map on the website:** no map image has been received in any upload or art package, so the Welcome to Puck Falls card is unchanged.
+
 ## 0.11.0 - 2026-11-26 - A full pick-up game
 
 223 tests. Built on the creative director's nine rulings on the match plan (Decision 86): "just build out now and we can scale back".

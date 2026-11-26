@@ -151,3 +151,19 @@ export const TEAM = {
   /** A puck higher than this goes over the skaters' sticks. */
   pickupHeight: 6 * PLAY_SCALE,
 };
+
+/**
+ * One-timers (creative director, Nov 26): hold shoot before a pass arrives and it is hit first time.
+ * Starting values for hands-on testing.
+ */
+export const ONE_TIMER = {
+  /** The puck must be moving at least this fast to be one-timed (a puck lying still is just picked up), and no faster than this. */
+  minPuckSpeed: 70,
+  maxPuckSpeed: 700,
+  /** The least power a one-timer has however briefly he wound up, as a share of a full slap shot. */
+  minPower: 0.6,
+  /** A one-timer leaves this much faster than the same shot from a standstill. */
+  boost: 1.12,
+  /** The held direction counts as "at the net" when it is at least this much toward it (cosine); otherwise the shot goes at the net. */
+  towardNet: 0.3,
+};

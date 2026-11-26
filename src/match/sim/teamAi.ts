@@ -200,7 +200,10 @@ export function teamInputs(v: TeamView, human: SimInput): SimInput[] {
     if (puck.state === 'free' && (s.index === v.passTarget || s.index === chaser[s.team])) {
       // Go to where the puck will be, not where it is.
       const t = Math.min(0.6, dist(s) / v.tuning.maxSpeed);
-      return { ...toward(s, puck.x + puck.vx * t, puck.y + puck.vy * t, 0), shoot: false };
+      // A pass coming to him in shooting range: he winds up and one-times it.
+      const out = (goalLineY(rink, attackEnd(s.team)) - s.y) * attackDir(s.team);
+      const oneTime = s.index === v.passTarget && out > AI.tooClose && out < AI.shootRange && Math.abs(s.x - rink.centerX) < out * 1.1 + 18;
+      return { ...toward(s, puck.x + puck.vx * t, puck.y + puck.vy * t, 0), shoot: oneTime };
     }
     if (carrier && s.index === chaser[s.team]) {
       const move = toward(s, puck.x + carrier.vx * 0.2, puck.y + carrier.vy * 0.2, 0);
