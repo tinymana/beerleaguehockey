@@ -2,7 +2,7 @@
 
 The career universe: people, teams, seasons, history. Pure TypeScript.
 
-**Built so far (Track B, authorized Nov 25):** player attributes (`attributes.ts`), the Hockey Influences registry (`influences.ts`, generated `data/influences.ts`), hockey backgrounds (`backgrounds.ts`) and Player DNA generation (`dna.ts`).
+**Built so far (Track B, authorized Nov 25):** player attributes (`attributes.ts`), the Hockey Influences registry (`influences.ts`, generated `data/curatedInfluences.ts`), hockey backgrounds (`backgrounds.ts`) and Player DNA generation (`dna.ts`).
 
 **Not started:** league, calendar, seasons, standings, rosters, finances, aging, recruitment, history, saves.
 

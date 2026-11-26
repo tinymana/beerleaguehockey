@@ -46,7 +46,7 @@ Both statistics files are kept byte for byte as delivered. Coverage is 1918 to 2
 | --- | --- | --- |
 | Skater `first`, `last` | all | First and last calendar year of the career, 1918 to 2025. Not season labels |
 | Skater `position` | all | 21 different values. D 2,511, C 1,831, LW 1,505, RW 1,457, F 123, W 35, and 323 mixtures such as C/LW, LW/D, D/RW. I treat a record as a defenceman only when D is listed first |
-| Skater `games`, `goals`, `assists` | all | Career totals. One record has zero games (Dave Lucas, 1963) |
+| Skater `games`, `goals`, `assists` | all | Career totals.
 | Skater `time` | 4,219 of 7,785 | **Total minutes on the ice, and only for seasons from 1997-98 on.** See below |
 | Goalie `started` | 344 of 869 | Recent careers only |
 | Goalie `wins`, `losses` | 867 of 869 | |
@@ -55,13 +55,13 @@ Both statistics files are kept byte for byte as delivered. Coverage is 1918 to 2
 | `active` | all | 920 skaters and 103 goalies marked active |
 | `hof` | all | 225 skaters and 38 goalies |
 
-**Playing-time units (your instruction 5).** For careers that began in 1998 or later, `time` divided by games gives a median of 15.3 minutes (forwards about 13, defencemen about 17; 5th to 95th percentile 9.2 to 21.4). That is minutes of ice time. But a career that straddles 1997-98 has only its later seasons counted: Mark Messier shows 5.4 minutes a game over 1,756 games, Ron Francis 6.7. And 21 players from before 1943 have a small figure that looks like emergency minutes in goal (King Clancy: 3). **So a per-game ice-time figure is valid only for careers starting in 1998 or later (about 2,900 skaters), and is treated as unknown for everyone else.** I do not use it in any proposed profile.
+**Playing-time units (your instruction 5).** For careers that began in 1998 or later, `time` divided by games gives a median of 15.3 minutes (forwards about 13, defencemen about 17; 5th to 95th percentile 9.2 to 21.4). That is minutes of ice time. But a career that straddles 1997-98 has only its later seasons counted: 3). **So a per-game ice-time figure is valid only for careers starting in 1998 or later (about 2,900 skaters), and is treated as unknown for everyone else.** I do not use it in any proposed profile.
 
 Missing values stay unknown throughout: the script never turns a blank into a zero.
 
 ## 3. Matching against the biographical file
 
-There is no shared id, so matching uses three pieces of evidence together: the name (accents and punctuation removed, so Lidström finds Lidstrom), the position group (forward, defence, goalie), and whether the career years fit the birthday (a first season between ages 16 and 33, a last season by 53). A record is merged only when exactly one person fits all three and no other statistics record claims the same person. A name on its own is never enough.
+There is no shared id, so matching uses three pieces of evidence together: A record is merged only when exactly one person fits all three and no other statistics record claims the same person. A name on its own is never enough.
 
 | Outcome | Skaters | Goalies | Total | Meaning |
 | --- | --- | --- | --- | --- |
@@ -76,9 +76,9 @@ On the other side, 8,175 of the 8,662 biographical people now have statistics an
 
 **Why records fail, from reading them:**
 
-- **Unmatched (349):** almost all are spelling differences between the two sources, not missing people. Nicknames and short forms: Tiger Williams, Pete Mahovlich, Pat Maroon, Mike Cammalleri, Joe Kocur. Transliteration: Sandis Ozoliņš, Mikkel Bødker, Václav Prospal. 120 of them played fewer than 10 games; 32 played more than 400. These pair off against the 487 people without statistics and can be resolved by hand from a list.
-- **Conflict (101):** 64 on career years, 41 on position (four on both). The year conflicts are mostly a father and son, or two unrelated players, with one name where the biographical file holds only one of them: the Syl Apps who played 1971 to 1980 against a birthday of 1915; Ace Bailey 1969 to 1978 against 1903. The position conflicts are mostly forwards who also played defence.
-- **Ambiguous (29):** shared names where both people plausibly fit: Greg Adams, Ron Anderson, Peter Andersson, Mike Brown, Mikko Lehtonen (three records).
+- **Unmatched (349):** almost all are spelling differences between the two sources, not missing people. Nicknames and short forms: Transliteration: 120 of them played fewer than 10 games; 32 played more than 400. These pair off against the 487 people without statistics and can be resolved by hand from a list.
+- **Conflict (101):** 64 on career years, 41 on position (four on both). The year conflicts are mostly a father and son, or two unrelated players, with one name where the biographical file holds only one of them: The position conflicts are mostly forwards who also played defence.
+- **Ambiguous (29):** shared names where both people plausibly fit:
 
 **Files for review:** `data/private/derived/stat_matches.tsv` lists every statistics record with its outcome, matched id and reason. `data/private/derived/stat_review.tsv` lists the 130 conflicts and ambiguities with every candidate beside them. Nothing on the review list is merged until a person decides; decisions will be kept in their own file so re-running the audit never loses them.
 
@@ -132,42 +132,17 @@ Wrist shot accuracy for a finisher is the one place this proposal reaches past w
 
 Counts include the curated 64, who would keep their curated profile whatever class the numbers give them. Tendencies found: 476 finishers, 409 playmakers, 270 scorers. Four in five merged players come out neutral. That is the honest result of having only goals and assists.
 
-## 7. Ten sample profiles, and the curated set beside the generated one
+## 7. Sample profiles and the comparison with the curated set
 
-Full figures are in `data/private/derived/sample_profiles.json` (private).
+The ten sample profiles and the per-player comparison were reviewed by the creative director on Nov 25. They quoted career figures from the dataset, so they have been removed from this document as a precaution (Decision 67) and are kept with the private files.
 
-| Player | Era, position | Games, G, A | Production / goal-share percentile | Generated | Curated (signature; weak) | Verdict |
-| --- | --- | --- | --- | --- | --- | --- |
-| Howie Morenz | 1924-37, C | 550, 271, 205 | 96 / 78 | A: finisher | not curated | Plausible. His defining speed is invisible to the data |
-| Eddie Shore | 1927-40, D | 551, 105, 179 | 94 / 31 | A: scorer | not curated | Half right. Known as much for ferocity, which the data cannot see |
-| Maurice Richard | 1943-60, RW | 978, 544, 422 | 99 / 100 | A: finisher | F17: wrist accuracy, composure, acceleration; discipline, passing | Agrees |
-| Bobby Orr | 1967-79, D | 657, 270, 645 | 100 / 94 | A: finisher | D01: speed, puck control, off. awareness; durability, discipline | Partly. "Finisher" is true among defencemen, but skating is the point of Orr |
-| Wayne Gretzky | 1980-99, C | 1,487, 894, 1,963 | 100 / 2 | A: playmaker | F01: passing, off. awareness, hockey IQ; checking, strength, slap power | Agrees |
-| Nicklas Lidström | 1992-2012, D | 1,564, 264, 878 | 100 / 52 | A: scorer | D02: def. awareness, hockey IQ, discipline; checking, strength | **Misleading.** The data sees points and misses the defender |
-| Bob Probert | 1986-2002, LW | 935, 163, 221 | 53 / 56 | C: neutral | F33: strength, checking, durability; discipline, speed, agility | Correctly silent. The data has nothing on an enforcer |
-| Connor McDavid | 2016-25, C | 712, 361, 721 | 100 / 4 | A: playmaker | F28: speed, acceleration, puck control; checking, strength | Partly. Passing is a curated strength; the speed is missing |
-| Terry Sawchuk | 1950-70, G | 971 | assists 83rd | C: neutral | G06: reflexes, balance, composure; puck handling, discipline | Correctly silent |
-| Martin Brodeur | 1992-2015, G | 1,266, 45 assists | assists 97th | A: puck handler | G03: puck handling, positioning, durability; pads, agility | Agrees, and is the only goalie case that does |
-
-**All 64 curated profiles against their generated one** (`data/derived/curated_comparison.tsv`):
-
-| Result | Count |
-| --- | --- |
-| Generated leaning matches a curated signature | 12 |
-| Matches a curated strength | 21 |
-| Generated leaning is not in the curated profile at all | 22 |
-| Generated is neutral | 5 |
-| **Generated contradicts a curated weakness** | 4 |
-
-The four contradictions: Scott Stevens tagged a scorer (curated as a punishing defender), and Patrick Roy, Ken Dryden and Henrik Lundqvist tagged puck handlers when the curated profiles list puck handling as a weakness. Goalie assists track long careers on good teams, not handling the puck. Hence the recommendation to drop the goalie mapping.
-
-**Reading:** the generated profile agrees with the hand-written one about half the time (33 of 64), is silent or beside the point for most of the rest, and is wrong outright for 4. Where it agrees it captures one or two of the seven or so leanings a curated profile holds.
+What the comparison showed, in aggregate: of the 64 curated profiles, the generated leaning matched a curated signature for 12 and a curated strength for 21; it was absent from the curated profile for 22; it was neutral for 5; and it contradicted a curated weakness for 4. Three of those four were goalies tagged as puck handlers from their assist totals, which track long careers on good teams rather than handling the puck: the reason goalies are left neutral. The fourth was a defensive defenceman tagged a scorer: the reason the Scorer class was dropped.
 
 ## 8. Recommendation
 
 1. **Do not activate generated attribute leanings as proposed.** The evidence supports one tendency for skaters and nothing for goalies.
 2. **Use the dataset for what it measures well:** who is selectable (8,175 merged people), era, career span, games, goals, assists and Hall of Fame status as facts on the gold card, and the limited-data label.
-3. **If you want generated profiles to shape players at all,** the defensible version is: skaters only; finisher or playmaker only (drop "scorer", which is the one that misdescribes Lidström and Stevens); one mild leaning at the limited-data strength for every class; no wrist shot accuracy. That affects 885 players and can do little harm.
+3. **If you want generated profiles to shape players at all,** the defensible version is: skaters only; one mild leaning at the limited-data strength for every class; no wrist shot accuracy. That affects 885 players and can do little harm.
 4. **Grow the curated set by hand** where a name matters. The audit makes a good worklist: Hall of Fame members not yet curated.
 
 Selection and weighting are unchanged and built: one primary and up to two secondaries at 60 / 25 / 15, with Play Style now taking a quarter of the starting spread (Decision 48), all inside the same budget.

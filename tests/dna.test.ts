@@ -8,9 +8,8 @@ import { DNA_CONFIG, DNA_VERSION, attributeBounds, dnaInputProblems, generateDNA
 import { PLAY_STYLES, developmentBonus, developmentFocus, developsFaster, playStyleById, playStylesFor } from '../src/dynasty/playStyles';
 import { NAME_POOLS, namePoolFor, randomName } from '../src/dynasty/names';
 import { Rng } from '../src/core/rng';
-import type { InfluenceRecord } from '../src/dynasty/influences';
 import type { DnaInput } from '../src/dynasty/dna';
-import { FALLBACK_COUNT, INFLUENCES, extendedInfluences, influenceById, influenceName, influenceSource, influencesFor, missingAliases, registerWiderRegistry, registryProblems, searchInfluences, widerRegistryKind } from '../src/dynasty/influences';
+import { FALLBACK_COUNT, FICTIONAL_CONFIG, INFLUENCES, extendedInfluences, influenceById, influenceName, influenceSource, influencesFor, missingAliases, registerWiderRegistry, registryProblems, searchInfluences, widerRegistryKind } from '../src/dynasty/influences';
 
 const ROOT = join(__dirname, '..');
 const skater = (over: Partial<DnaInput> = {}): DnaInput => ({ seed: 1, position: 'forward', background: 'youth', primary: 'F01', secondaries: [], ...over });
@@ -81,8 +80,18 @@ describe('Hockey Influences registry', () => {
       expect(influenceName(i, 'real')).toBe(i.name);
       expect(influenceName(i, 'fictional')).not.toBe(i.name);
     }
-    // Development uses real names (Decision 34). This is the list still to write before they could be switched off.
-    expect(missingAliases().length).toBe(INFLUENCES.length);
+    // Every curated influence has a fictional alias (Decision 68): a distinct identity, not a respelling.
+    expect(missingAliases()).toEqual([]);
+    const aliases = INFLUENCES.map((i) => i.alias as string);
+    expect(new Set(aliases).size).toBe(INFLUENCES.length);
+    const realWords = new Set(INFLUENCES.flatMap((i) => i.name.toLowerCase().split(/[ -]/)));
+    for (const i of INFLUENCES) {
+      const [first, last] = (i.alias as string).toLowerCase().split(' ');
+      expect(i.name.toLowerCase().split(/[ -]/)).not.toContain(first);
+      expect(realWords.has(last as string), `${i.id} ${i.alias}`).toBe(false);
+      expect(influenceName(i, 'fictional')).toBe(i.alias);
+    }
+    expect(extendedInfluences().some((x) => aliases.includes(x.name))).toBe(false);
   });
 });
 
@@ -341,35 +350,41 @@ describe('the wider influence registry (Decisions 53, 61)', () => {
     expect(influenceSource(influenceById('F01')!)).toBe('curated');
   });
 
-  it('gives a derived skater exactly one mild leaning, and nothing else to anyone, in the fallback and in a supplied registry', () => {
-    const check = (list: readonly InfluenceRecord[]): number => {
-      let derived = 0;
-      for (const i of list) {
-        const entries = Object.entries(i.weights);
-        if (influenceSource(i) === 'derived') {
-          derived++;
-          expect(i.position).not.toBe('goalie');
-          expect(entries.length).toBe(1);
-          expect(entries[0]![1]).toBe(1);
-          expect(['offensiveAwareness', 'passing']).toContain(entries[0]![0]);
-          expect(i.tags).toEqual([entries[0]![0] === 'passing' ? 'playmaker' : 'finisher']);
-        } else {
-          expect(influenceSource(i)).toBe('limited');
-          expect(entries).toEqual([]);
-          expect(i.tags).toEqual([]);
-        }
+  it('fictional professionals span nationalities, generations, positions, styles and accomplishments, with balanced profiles', () => {
+    const wider = extendedInfluences();
+    expect(wider.every((i) => influenceSource(i) === 'fictional')).toBe(true);
+    expect(new Set(wider.map((i) => i.country)).size).toBeGreaterThanOrEqual(10);
+    expect(new Set(wider.map((i) => Math.floor(i.born / 10))).size).toBeGreaterThanOrEqual(5);
+    expect(new Set(wider.map((i) => i.tags[0])).size).toBe(18);
+    expect(new Set(wider.map((i) => i.blurb.split('.')[0])).size).toBe(FICTIONAL_CONFIG.accomplishments.length);
+    const right = wider.filter((i) => i.shoots === 'R').length / wider.length;
+    expect(FICTIONAL_CONFIG.rightHandedShare).toBe(0.25);
+    expect(right).toBeGreaterThan(0.17);
+    expect(right).toBeLessThan(0.33);
+    for (const i of wider) {
+      const allowed = new Set<string>(attributesFor(i.position));
+      const values = Object.entries(i.weights);
+      for (const [key, w] of values) {
+        expect(allowed.has(key), `${i.id} ${key}`).toBe(true);
+        expect([2, 1, -1]).toContain(w);
       }
-      return derived;
-    };
-    const fallbackDerived = check(extendedInfluences());
-    expect(fallbackDerived).toBeGreaterThan(25);
-    expect(fallbackDerived).toBeLessThan(80);
+      // Balanced: every profile that leans anywhere also gives something up. A hybrid goalie leans nowhere.
+      if (values.length) {
+        expect(values.some(([, w]) => w > 0)).toBe(true);
+        expect(values.some(([, w]) => w < 0)).toBe(true);
+      } else expect(i.tags).toEqual(['hybrid goalie']);
+      expect(['L', 'R']).toContain(i.shoots);
+    }
+  });
+
+  it('gives a supplied derived skater exactly one mild leaning, and nothing else to anyone', () => {
     expect(registerWiderRegistry(SAMPLE)).toBe(4);
     expect(widerRegistryKind()).toBe('supplied');
-    expect(check(extendedInfluences())).toBe(2);
+    const list = extendedInfluences();
+    expect(list.filter((i) => influenceSource(i) === 'derived').map((i) => i.weights)).toEqual([{ offensiveAwareness: 1 }, { passing: 1 }]);
+    expect(list.filter((i) => influenceSource(i) === 'limited').every((i) => Object.keys(i.weights).length === 0 && i.tags.length === 0)).toBe(true);
     expect(influenceById('N9000004')?.weights).toEqual({}); // goalies are always neutral
-    expect(influenceById('N9000001')?.weights).toEqual({ offensiveAwareness: 1 });
-    // Fallback ids keep resolving while a supplied registry is loaded.
+    // Fictional ids keep resolving while a supplied registry is loaded.
     expect(influenceById('X001')).toBeDefined();
   });
 
@@ -387,18 +402,20 @@ describe('the wider influence registry (Decisions 53, 61)', () => {
     }
   });
 
-  it('a limited-data influence shapes nothing; a derived one leans mildly; both stay inside the budget', () => {
-    const wider = extendedInfluences();
-    const neutral = wider.find((i) => influenceSource(i) === 'limited' && i.position === 'forward')!;
-    const finisher = wider.find((i) => influenceSource(i) === 'derived' && i.weights.offensiveAwareness === 1)!;
-    const flat = influenceBias(skater({ primary: neutral.id }));
+  it('a limited-data influence shapes nothing; a derived one leans mildly; a fictional one leans like its style; all stay inside the budget', () => {
+    const fictional = extendedInfluences().find((i) => i.position === 'forward' && i.tags[0] === 'sniper')!;
+    const shaped = influenceBias(skater({ primary: fictional.id }));
+    expect(shaped.wristShotAccuracy!).toBeGreaterThan(shaped.passing!);
+    expect(SKATER_ATTRIBUTES.reduce((a, k) => a + (shaped[k] ?? 0), 0)).toBeCloseTo(0, 9);
+    expect(dnaInputProblems(skater({ position: 'goalie', primary: fictional.id })).length).toBeGreaterThan(0);
+    registerWiderRegistry(SAMPLE);
+    const flat = influenceBias(skater({ primary: 'N9000003' }));
     for (const key of SKATER_ATTRIBUTES) expect(flat[key]).toBeCloseTo(0, 9);
-    const lean = influenceBias(skater({ primary: finisher.id }));
+    const lean = influenceBias(skater({ primary: 'N9000001' }));
     expect(lean.offensiveAwareness!).toBeGreaterThan(0.9);
     expect(SKATER_ATTRIBUTES.reduce((a, k) => a + (lean[k] ?? 0), 0)).toBeCloseTo(0, 9);
-    const mixed = influenceBias(skater({ primary: 'F33', secondaries: ['F08', finisher.id] }));
+    const mixed = influenceBias(skater({ primary: 'F33', secondaries: ['F08', 'N9000001'] }));
     expect(mixed.strength!).toBeGreaterThan(mixed.offensiveAwareness!);
-    expect(dnaInputProblems(skater({ position: 'goalie', primary: neutral.id })).length).toBeGreaterThan(0);
   });
 
   it('searches by any part of a name, ignoring accents, curated first, goalies only for goalies', () => {
@@ -406,6 +423,7 @@ describe('the wider influence registry (Decisions 53, 61)', () => {
     expect(searchInfluences('forward', 'gretz').map((i) => i.id)).toContain('F01');
     expect(searchInfluences('goalie', '').slice(0, 10).every((i) => i.position === 'goalie')).toBe(true);
     expect(searchInfluences('forward', '', 70).slice(0, 54).every((i) => influenceSource(i) === 'curated')).toBe(true);
+    expect(influenceSource(searchInfluences('forward', '', 70)[60]!)).toBe('fictional');
     expect(searchInfluences('forward', 'zzzzqq')).toEqual([]);
     expect(searchInfluences('forward', '', 25).length).toBe(25);
     registerWiderRegistry(SAMPLE);

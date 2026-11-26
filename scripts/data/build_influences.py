@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build src/dynasty/data/influences.ts from the curated registry.
+"""Build src/dynasty/data/curatedInfluences.ts from the curated registry.
 
 Reads data/influences/curated.tsv (hand-written style profiles) and, for the facts a
 profile does not carry (position, shooting side, birthday, country, height, weight),
@@ -18,7 +18,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 CURATED = os.path.join(ROOT, 'data', 'influences', 'curated.tsv')
 ALIASES = os.path.join(ROOT, 'data', 'influences', 'aliases.json')
 REFERENCE = os.path.join(ROOT, 'data', 'private', 'reference', 'nhl_players.csv')  # private, optional
-OUT = os.path.join(ROOT, 'src', 'dynasty', 'data', 'influences.ts')
+OUT = os.path.join(ROOT, 'src', 'dynasty', 'data', 'curatedInfluences.ts')
 
 SKATER = {'spd': 'skatingSpeed', 'acc': 'acceleration', 'agi': 'agility', 'bal': 'balance', 'end': 'endurance',
           'wsp': 'wristShotPower', 'wsa': 'wristShotAccuracy', 'ssp': 'slapShotPower', 'ssa': 'slapShotAccuracy',

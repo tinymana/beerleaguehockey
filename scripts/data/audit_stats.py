@@ -327,6 +327,21 @@ print('SPOT-CHECK (every %dth high-confidence match, by career length):' % step)
 for r, w, c in sorted(high, key=lambda t: -float(t[0]['raw']['games']))[::step][:14]:
     print(f"  {r['name']} ({r['pos']}, {r['first']}-{r['last']}, {r['raw']['games']} GP) -> {c['Player']} ({c['Position']}, born {c['Birthday'][:4]}) | {w.split(', ')[1]}")
 weak = [(r, w, c) for r, w, c in high if debut_age(r, c) in (17, 29, 30) or float(r['raw']['games']) < 3 or {given(r['name']), given(c['Player'])} == {'vinny', 'vaclav'}]
+# Decision 67: the unflagged high-confidence matches are approved, after a last check that no two of them, and no
+# existing merge, claim the same person. Written to the private decisions file only when asked: ACCEPT_UNFLAGGED=1.
+if os.environ.get('ACCEPT_UNFLAGGED') == '1':
+    flagged = {id(r) for r, _, _ in weak}
+    taken_now = {r['bio']['PlayerID'] for r in records if 'bio' in r}
+    accept, refused, seen_ids = [], [], set()
+    for r, w, c in high:
+        if id(r) in flagged: continue
+        pid = c['PlayerID']
+        if pid in taken_now or pid in seen_ids: refused.append((r['name'], pid)); continue
+        seen_ids.add(pid); accept.append((r, c))
+    with open(dpath, 'a', encoding='utf-8') as f:
+        f.write('# Accepted by the creative director, Decision 67: unflagged high-confidence matches\n')
+        for r, c in accept: f.write('\t'.join([r['kind'], r['name'], str(r['first']), str(r['last']), c['PlayerID']]) + '\n')
+    print('ACCEPTED', len(accept), 'refused by the duplicate-id check', refused)
 print('high-confidence but flagged for a second look:', len(weak))
 for r, w, c in sorted(weak, key=lambda t: -float(t[0]['raw']['games']))[:12]:
     print(f"  ? {r['name']} ({r['first']}-{r['last']}, {r['raw']['games']} GP) -> {c['Player']} (born {c['Birthday'][:4]}) | {w.split(', ')[1]}, debut at {debut_age(r, c)}")

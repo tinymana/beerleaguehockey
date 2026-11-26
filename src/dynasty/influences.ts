@@ -8,9 +8,10 @@
  */
 import type { AttributeKey, Position } from './attributes';
 import { attributesFor } from './attributes';
-import { INFLUENCE_DATA } from './data/influences';
+import { INFLUENCE_DATA } from './data/curatedInfluences';
 import { Rng } from '../core/rng';
 import { NAME_POOLS } from './names';
+import { PLAY_STYLES, playStyleWeight } from './playStyles';
 
 export interface InfluenceRecord {
   id: string;
@@ -40,8 +41,9 @@ export interface InfluenceRecord {
 /**
  * curated: hand-written, the featured set. derived: one mild leaning from the career record (Decision 53).
  * limited: selectable, shapes nothing, shown with a limited-data label.
+ * fictional: an invented professional in the fallback registry, with an authored-by-rule style profile (Decision 68).
  */
-export type InfluenceSource = 'curated' | 'derived' | 'limited';
+export type InfluenceSource = 'curated' | 'derived' | 'limited' | 'fictional';
 
 export type InfluenceNameSet = 'real' | 'fictional';
 
@@ -80,20 +82,38 @@ function widerRecord(id: string, referenceId: string, name: string, position: Po
   };
 }
 
-/** Proposed size of the fictional fallback registry. */
+/** The fictional professional registry (Decision 68). Settings, not rules. */
 export const FALLBACK_COUNT = { forward: 120, defense: 80, goalie: 40 } as const;
+export const FICTIONAL_CONFIG = {
+  /** Share of fictional professionals who shoot (or catch) right-handed. */
+  rightHandedShare: 0.25,
+  /** Career accomplishment tiers and how common each is. Flavour only: they change no numbers. */
+  accomplishments: [
+    { label: 'Hall of Fame career', share: 0.05 },
+    { label: 'Perennial all-star', share: 0.15 },
+    { label: 'Long-time regular', share: 0.5 },
+    { label: 'Brief stay in the big league', share: 0.3 },
+  ],
+} as const;
 
 /**
- * The fallback wider registry (Decision 61): fictional professionals, generated from the fictional name
- * pools with a fixed seed, so the game works with no outside data at all. Ids "X001" onward are stable
- * for as long as the pools and the seed are unchanged. About one skater in four carries a mild leaning.
+ * The fictional professional registry: invented professionals, generated from the fictional name pools with a
+ * fixed seed, so the game works with no outside data at all. Ids "X001" onward and their names are stable for as
+ * long as the pools and the seed are unchanged. Each has a nationality, a generation, a position, a handedness,
+ * a career accomplishment (flavour), and a balanced style profile taken from one of the approved play styles:
+ * the style's main attribute counts 2, its others 1, the ones it leans away from -1.
+ * This registry is separate from the recreational player population, which is generated elsewhere.
  */
 function buildFallback(): InfluenceRecord[] {
-  const rng = new Rng(20261125).fork('fallback-influences');
+  const root = new Rng(20261125);
+  const rng = root.fork('fallback-influences');
+  // Separate stream, so adding traits never changes who the people are.
+  const traits = root.fork('fictional-traits');
   const out: InfluenceRecord[] = [];
   const used = new Set<string>(INFLUENCES.map((i) => i.name));
   let n = 0;
   for (const position of ['forward', 'defense', 'goalie'] as const) {
+    const styles = PLAY_STYLES.filter((st) => st.positions.includes(position));
     for (let k = 0; k < FALLBACK_COUNT[position]; k++) {
       let name = '';
       let code = '';
@@ -104,9 +124,33 @@ function buildFallback(): InfluenceRecord[] {
       } while (used.has(name));
       used.add(name);
       const born = 1950 + rng.int(55);
-      const roll = rng.next();
+      rng.next(); // kept so the names that follow do not change (this draw used to pick a leaning)
       n++;
-      out.push(widerRecord(`X${String(n).padStart(3, '0')}`, '', name, position, born, code, roll < 0.12 ? 'f' : roll < 0.24 ? 'p' : ''));
+      const style = styles[traits.int(styles.length)] as (typeof styles)[number];
+      const shoots = traits.next() < FICTIONAL_CONFIG.rightHandedShare ? 'R' : 'L';
+      let roll = traits.next();
+      const tier = FICTIONAL_CONFIG.accomplishments.find((a) => (roll -= a.share) < 0) ?? FICTIONAL_CONFIG.accomplishments[2];
+      const weights: Partial<Record<AttributeKey, number>> = {};
+      for (const key of attributesFor(position)) {
+        const w = playStyleWeight(style, key);
+        if (w !== 0) weights[key] = w;
+      }
+      out.push({
+        id: `X${String(n).padStart(3, '0')}`,
+        name,
+        alias: null,
+        referenceId: '',
+        position,
+        born,
+        country: code,
+        shoots,
+        heightIn: null,
+        weightLb: null,
+        tags: [style.name.toLowerCase()],
+        weights,
+        blurb: `${tier.label}. Played as a ${style.name.toLowerCase()}.`,
+        source: 'fictional',
+      });
     }
   }
   return out.sort((a, b) => (a.name.split(' ')[1] ?? '').localeCompare(b.name.split(' ')[1] ?? '') || a.name.localeCompare(b.name));

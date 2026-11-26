@@ -203,7 +203,7 @@ export class CreatorScene extends Phaser.Scene {
   private influenceCard(i: InfluenceRecord): CardInfo {
     const source = influenceSource(i);
     const where = i.position === 'goalie' ? 'G' : i.position === 'defense' ? 'D' : 'F';
-    const footer = source === 'limited' ? ['Limited data', 'Shapes nothing'] : [clip(i.tags.join(', '), 24), source === 'derived' ? 'Career record: mild' : 'Curated profile'];
+    const footer = source === 'limited' ? ['Limited data', 'Shapes nothing'] : [clip(i.tags.join(', '), 24), source === 'derived' ? 'Career record: mild' : source === 'fictional' ? `Fictional pro${i.shoots ? `, shoots ${i.shoots}` : ''}` : 'Curated profile'];
     return { colour: 'gold', title: influenceName(i), tag: 'HOCKEY INFLUENCE', art: `silhouette_${i.position}`, badge: where, body: `${i.blurb}${i.born ? ` Born ${i.born}${i.country ? `, ${i.country}` : ''}.` : ''}`, footer };
   }
 
