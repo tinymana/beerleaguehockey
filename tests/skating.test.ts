@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { NO_INPUT, quantize8 } from '../src/match/sim/input';
 import type { SimInput } from '../src/match/sim/input';
 import { SIM_DT, SkatingSim } from '../src/match/sim/skatingSim';
-import { DEFAULT_TUNING, FEEL, TUNING_SPECS, cloneTuning } from '../src/match/sim/tuning';
+import { DEFAULT_TUNING, FEEL, TUNING_SPECS, cloneTuning, SHOOT } from '../src/match/sim/tuning';
 
 const UP: SimInput = { moveX: 0, moveY: -1, shoot: false };
 const DOWN: SimInput = { moveX: 0, moveY: 1, shoot: false };
@@ -230,7 +230,8 @@ describe('possession and shooting', () => {
     const tap = shotSpeed(SIM_DT);
     const full = shotSpeed(1);
     expect(full).toBeGreaterThan(tap);
-    expect(full).toBeCloseTo(DEFAULT_TUNING.shotVelocity * Math.exp(-DEFAULT_TUNING.puckFriction * SIM_DT), 1);
+    // A shot leaves the ice, so for its first step it is slowed by the air and not by the ice.
+    expect(full).toBeCloseTo(DEFAULT_TUNING.shotVelocity * Math.exp(-SHOOT.airDrag * SIM_DT), 1);
   });
 
   it('does not instantly re-collect a puck it just shot', () => {

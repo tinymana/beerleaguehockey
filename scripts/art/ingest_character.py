@@ -26,14 +26,46 @@ PACKAGES = [  # zip, key, class
     ('BLH_Batch_16_07.zip', 'equipment', 'reference'),
     ('BLH_Batch_16_08.zip', 'flag', 'production'),
 ]
+def clear_wedge(sheet, rect):
+    """Clear the near-white region that touches the ice between the feet of one 64x96 frame, if there is a real one."""
+    x0, y0, w, h = rect
+    px = sheet.load()
+    white = lambda p: p[3] == 255 and min(p[:3]) >= 232
+    opaque_rows = [y for y in range(h) for x in range(w) if px[x0 + x, y0 + y][3] == 255]
+    if not opaque_rows: return 0
+    bottom = max(opaque_rows)
+    stack = [(x, y) for y in range(bottom - 6, bottom + 1) for x in range(24, 40) if white(px[x0 + x, y0 + y])]
+    seen, region = set(), []
+    while stack:
+        x, y = stack.pop()
+        if (x, y) in seen or not (0 <= x < w and 0 <= y < h): continue
+        seen.add((x, y))
+        if not white(px[x0 + x, y0 + y]): continue
+        region.append((x, y)); stack += [(x + 1, y), (x - 1, y), (x, y + 1), (x, y - 1)]
+    ys = [y for _, y in region]
+    if len(region) < 60 or max(ys) - min(ys) < 12: return 0
+    for x, y in region: px[x0 + x, y0 + y] = (0, 0, 0, 0)
+    return len(region)
+
+
 os.makedirs(OUT, exist_ok=True)
 frames, catalog = {}, {}
 for name, key, cls in PACKAGES:
     with zipfile.ZipFile(os.path.join(SRC, name)) as z:
         m = json.loads(z.read('manifest.json'))
         atlas = m['atlas'] if isinstance(m['atlas'], str) else m['atlas'].get('file')
-        with open(os.path.join(OUT, f'{key}.png'), 'wb') as f:
-            f.write(z.read(atlas))
+        if key == 'model':
+            # Decision 78: the wedge-corrected frames are the alignment baseline. The supplied front and rear frames
+            # have a near-white leftover between the legs; that one region is made transparent, nothing else.
+            import io
+            from PIL import Image
+            sheet = Image.open(io.BytesIO(z.read(atlas))).convert('RGBA')
+            for a in m['assets']:
+                clear_wedge(sheet, a['atlasRect'])
+            sheet.save(os.path.join(OUT, f'{key}.png'))
+        else:
+            with open(os.path.join(OUT, f'{key}.png'), 'wb') as f:
+                f.write(z.read(atlas))
         items = []
         for a in m['assets']:
             ident = a.get('id') or a.get('alpha3') or os.path.splitext(a['file'])[0]

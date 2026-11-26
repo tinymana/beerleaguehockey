@@ -9,7 +9,10 @@ import { rotateToward } from '../../core/math';
 import type { SimInput } from './input';
 import { RINK, collideWithBoards, collideWithBox, goalLineY, netBox } from './rink';
 import type { Body, RinkEnd, RinkGeometry } from './rink';
-import { FEEL } from './tuning';
+import { Rng } from '../../core/rng';
+import type { Goalie, SaveKind } from './goalie';
+import { GOALIE, makeGoalie, reboundVelocity, resolveShot, stepGoalie } from './goalie';
+import { FEEL, SHOOT } from './tuning';
 import type { Tuning } from './tuning';
 
 export const SIM_DT = 1 / 60;
@@ -26,14 +29,35 @@ export interface Skater extends Body {
 }
 
 export interface Puck extends Body {
-  state: 'free' | 'carried' | 'inNet';
+  state: 'free' | 'carried' | 'inNet' | 'held';
+  /** Height off the ice and its rate of change. */
+  z: number;
+  vz: number;
+}
+
+export type ShotKind = 'wrist' | 'slap';
+
+export interface ShootingStats {
+  shots: number;
+  goals: number;
+  saves: number;
+  posts: number;
+  crossbars: number;
+  over: number;
+  fiveHole: number;
+  /** The last thing a shot did, for the test readout. */
+  last: string;
 }
 
 export type SimEvent =
-  | { type: 'shot'; power: number }
+  | { type: 'shot'; power: number; kind: ShotKind }
+  | { type: 'save'; kind: SaveKind; end: RinkEnd }
+  | { type: 'post'; end: RinkEnd }
+  | { type: 'crossbar'; end: RinkEnd }
+  | { type: 'over'; end: RinkEnd }
   | { type: 'boards'; speed: number }
   | { type: 'pickup' }
-  | { type: 'goal'; end: RinkEnd };
+  | { type: 'goal'; end: RinkEnd; fiveHole: boolean };
 
 export class SkatingSim {
   readonly rink: RinkGeometry;
@@ -45,6 +69,14 @@ export class SkatingSim {
   goals = 0;
   private goalTimer = 0;
   private shootHeld = false;
+  /** Goalies are off unless switched on: the skating prototype and its tests run without them. */
+  goalies: Goalie[] = [];
+  stats: ShootingStats = { shots: 0, goals: 0, saves: 0, posts: 0, crossbars: 0, over: 0, fiveHole: 0, last: '' };
+  private rng = new Rng(1).fork('rebounds');
+  /** Where the puck has been, so a goalie reacts to the past and not the present. */
+  private seen: { x: number; y: number }[] = [];
+  private beatGoalie = false;
+  private overNet = false;
 
   constructor(tuning: Tuning, rink: RinkGeometry = RINK) {
     this.tuning = tuning;
@@ -65,7 +97,11 @@ export class SkatingSim {
       pickupCooldown: 0,
       stride: 0,
     };
-    this.puck = { x: centerX, y: centerY, vx: 0, vy: 0, state: 'free' };
+    this.puck = { x: centerX, y: centerY, vx: 0, vy: 0, state: 'free', z: 0, vz: 0 };
+    this.stats = { shots: 0, goals: 0, saves: 0, posts: 0, crossbars: 0, over: 0, fiveHole: 0, last: '' };
+    this.rng = new Rng(1).fork('rebounds');
+    this.seen = [];
+    if (this.goalies.length) this.goalies = [makeGoalie(this.rink, 'top'), makeGoalie(this.rink, 'bottom')];
     this.tick = 0;
     this.goals = 0;
     this.goalTimer = 0;
@@ -81,7 +117,15 @@ export class SkatingSim {
     this.puck.vx = 0;
     this.puck.vy = 0;
     this.puck.state = 'free';
+    this.puck.z = 0;
+    this.puck.vz = 0;
     this.goalTimer = 0;
+    for (const g of this.goalies) g.holding = 0;
+  }
+
+  /** Put a basic goalie in each net, or take them out. */
+  setGoalies(on: boolean): void {
+    this.goalies = on ? [makeGoalie(this.rink, 'top'), makeGoalie(this.rink, 'bottom')] : [];
   }
 
   /** Shot power 0..1 for the current wind-up. */
@@ -105,6 +149,7 @@ export class SkatingSim {
 
     this.stepSkater(input, dt);
     this.stepShooting(input, dt, events);
+    this.stepGoalies(dt);
     this.stepPuck(dt, events);
 
     this.shootHeld = input.shoot;
@@ -199,16 +244,51 @@ export class SkatingSim {
     p.y = this.bladeY();
     p.vx = dirX * t.shotVelocity * factor + s.vx * FEEL.shotInherit;
     p.vy = dirY * t.shotVelocity * factor + s.vy * FEEL.shotInherit;
+    // A quick release is a wrist shot: slower, and it climbs. A full wind-up is a slap shot: hard and low.
+    const kind: ShotKind = power >= SHOOT.slapThreshold ? 'slap' : 'wrist';
+    p.z = SHOOT.releaseHeight;
+    p.vz = kind === 'slap' ? SHOOT.slapLift : SHOOT.wristLift;
+    this.stats.shots++;
+    this.stats.last = kind === 'slap' ? 'Slap shot' : 'Wrist shot';
+    this.beatGoalie = false;
     s.hasPuck = false;
     s.charge = 0;
     s.pickupCooldown = FEEL.pickupCooldown;
-    events.push({ type: 'shot', power });
+    events.push({ type: 'shot', power, kind });
+  }
+
+  private stepGoalies(dt: number): void {
+    if (!this.goalies.length) return;
+    this.seen.push({ x: this.puck.x, y: this.puck.y });
+    const delay = Math.round(GOALIE.reaction / SIM_DT);
+    while (this.seen.length > delay + 1) this.seen.shift();
+    const saw = this.seen[0] as { x: number; y: number };
+    for (const g of this.goalies) {
+      const had = g.holding > 0;
+      stepGoalie(this.rink, g, saw.x, saw.y, dt);
+      if (had && g.holding === 0 && this.puck.state === 'held') {
+        // He drops the puck to his glove side for play to go on.
+        const away = g.end === 'top' ? 1 : -1;
+        this.puck.state = 'free';
+        this.puck.x = g.x + g.gloveSide * 6;
+        this.puck.y = g.y + away * 6;
+        this.puck.vx = g.gloveSide * 45;
+        this.puck.vy = away * 25;
+        this.puck.z = 0;
+        this.puck.vz = 0;
+      } else if (g.holding > 0 && this.puck.state === 'held') {
+        this.puck.x = g.x + g.gloveSide * 4;
+        this.puck.y = g.y;
+      }
+    }
   }
 
   private stepPuck(dt: number, events: SimEvent[]): void {
     const p = this.puck;
     const s = this.skater;
     const t = this.tuning;
+
+    if (p.state === 'held') return;
 
     if (p.state === 'inNet') {
       this.goalTimer -= dt;
@@ -228,7 +308,16 @@ export class SkatingSim {
       return;
     }
 
-    const drag = Math.exp(-t.puckFriction * dt);
+    // Height: a lifted puck flies, falls and lands. The ice only slows it while it is on the ice.
+    if (p.z > 0 || p.vz > 0) {
+      p.z += p.vz * dt;
+      p.vz -= SHOOT.gravity * dt;
+      if (p.z <= 0) {
+        p.z = 0;
+        p.vz = 0;
+      }
+    }
+    const drag = Math.exp(-(p.z > 0 ? SHOOT.airDrag : t.puckFriction) * dt);
     p.vx *= drag;
     p.vy *= drag;
     if (Math.hypot(p.vx, p.vy) < 1) {
@@ -246,27 +335,99 @@ export class SkatingSim {
     for (const end of ['top', 'bottom'] as const) {
       const line = goalLineY(this.rink, end);
       const box = netBox(this.rink, end);
-      // A goal needs the whole puck between the posts: the same opening the goal art shows.
-      const inMouth = Math.abs(p.x - this.rink.centerX) <= this.rink.mouthHalfWidth - FEEL.puckRadius;
+      const toward = end === 'top' ? -1 : 1;
+      const off = Math.abs(p.x - this.rink.centerX);
+
+      // The goalie stands in front of the line: a puck heading for the net reaches him first.
+      const goalie = this.goalies.find((g) => g.end === end);
+      if (goalie && !this.beatGoalie && Math.sign(p.vy) === toward) {
+        const reached = end === 'top' ? prevY > goalie.y && p.y <= goalie.y : prevY < goalie.y && p.y >= goalie.y;
+        if (reached) {
+          // Judge the shot where it actually crossed his line, not where the step ended.
+          const at = prevX + ((p.x - prevX) * (prevY - goalie.y)) / (prevY - p.y || 1);
+          p.x = at;
+          const outcome = resolveShot(goalie, at - goalie.x, p.z);
+          if (outcome.saved) {
+            this.stats.saves++;
+            this.stats.last = `${outcome.saved[0]?.toUpperCase()}${outcome.saved.slice(1)} save`;
+            events.push({ type: 'save', kind: outcome.saved, end });
+            p.y = goalie.y;
+            p.z = 0;
+            p.vz = 0;
+            if (outcome.saved === 'glove' || outcome.saved === 'body') {
+              p.state = 'held';
+              p.vx = 0;
+              p.vy = 0;
+              goalie.holding = GOALIE.holdTime;
+              return;
+            }
+            const v = reboundVelocity(goalie, outcome.saved, p.x - goalie.x, p.vx, p.vy, this.rng);
+            p.vx = v.vx;
+            p.vy = v.vy;
+            p.y = goalie.y - toward;
+            continue;
+          }
+          this.beatGoalie = true;
+          if (outcome.fiveHole) this.stats.last = 'Five-hole';
+        }
+      }
+
       const cameFromFront = end === 'top' ? prevY > line : prevY < line;
-      if (cameFromFront && inMouth) {
-        const crossed = end === 'top' ? p.y <= line : p.y >= line;
-        if (crossed) {
+      const crossed = end === 'top' ? p.y <= line : p.y >= line;
+      // Where the puck crossed the goal line, not where the step ended: an angled shot must not drift onto a post.
+      const xAtLine = cameFromFront && crossed ? prevX + ((p.x - prevX) * (prevY - line)) / (prevY - p.y || 1) : p.x;
+      const offAtLine = Math.abs(xAtLine - this.rink.centerX);
+      if (cameFromFront && crossed && offAtLine <= this.rink.netHalfWidth + FEEL.puckRadius) {
+        const bar = this.rink.netFrontHeight;
+        // A goal needs the whole puck between the posts and under the bar: the same opening the goal art shows.
+        const betweenPosts = offAtLine <= this.rink.mouthHalfWidth - FEEL.puckRadius;
+        if (p.z > bar + SHOOT.barThickness) {
+          // Over the net: it carries on above the goal frame until it comes down.
+          if (!this.overNet) {
+            this.overNet = true;
+            this.stats.over++;
+            this.stats.last = 'Over the net';
+            events.push({ type: 'over', end });
+          }
+        } else if (betweenPosts && p.z < bar - SHOOT.barThickness) {
+          const fiveHole = this.stats.last === 'Five-hole';
           p.state = 'inNet';
           p.vx = 0;
           p.vy = 0;
+          p.z = 0;
+          p.vz = 0;
           p.y = end === 'top' ? line - this.rink.netDepth / 2 : line + this.rink.netDepth / 2;
           this.goals++;
+          this.stats.goals++;
+          if (fiveHole) this.stats.fiveHole++;
+          this.stats.last = fiveHole ? 'Goal: five-hole' : 'Goal';
           this.goalTimer = FEEL.goalPause;
-          events.push({ type: 'goal', end });
+          events.push({ type: 'goal', end, fiveHole });
           return;
+        } else {
+          // Iron: the crossbar if it was between the posts, otherwise a post. The puck comes back out.
+          const crossbar = betweenPosts;
+          if (crossbar) this.stats.crossbars++;
+          else this.stats.posts++;
+          this.stats.last = crossbar ? 'Crossbar' : 'Post';
+          events.push({ type: crossbar ? 'crossbar' : 'post', end });
+          p.x = xAtLine;
+          p.y = line - toward * (FEEL.puckRadius + 0.5);
+          p.vy = -p.vy * SHOOT.ironRestitution;
+          if (!crossbar) p.vx += Math.sign(p.x - this.rink.centerX) * Math.abs(p.vy) * 0.5;
+          p.vz = crossbar ? -Math.abs(p.vz) : p.vz;
+          continue;
         }
-        continue;
       }
+      // Coming at the goal from the front: the goal line decides what happens (goal, post or bar), not the net's box.
+      if (cameFromFront && !crossed && off <= this.rink.netHalfWidth + FEEL.puckRadius) continue;
+      // A puck above the frame does not hit the net; once it drops below the back bar it does.
+      if (this.overNet && p.z > this.rink.netBackHeight) continue;
       if (collideWithBox(p, prevX, prevY, FEEL.puckRadius, t.boardRestitution, box)) {
         events.push({ type: 'boards', speed: Math.hypot(p.vx, p.vy) });
       }
     }
+    if (p.z === 0) this.overNet = false;
 
     // Possession: a loose puck near the blade is collected.
     if (s.pickupCooldown <= 0) {

@@ -255,6 +255,8 @@ All in screen pixels at the 0.74 camera tilt, 1 art pixel = 1 screen pixel.
 
 **Collision boundaries (for information; the game enforces them).** Skaters and the puck collide with a box 52 px wide and 21 px deep on screen, starting at the goal line and running back. A goal counts when the whole puck crosses the goal line between the posts: the 48 px opening, less the puck's own width at each side. The picture's posts must therefore sit exactly on columns given below, or shots will appear to score through a post.
 
+**Pixel templates.** `art/templates/goal_north_template_64x48.png` and `goal_south_template_64x48.png` are the two goals drawn to these exact rows and columns at true size, with enlarged guides beside them (`*_guide.png`). Give the art tool the template and ask it to paint over it without moving a post, bar or edge. Approved as the production baseline (Decision 78).
+
 ### 11.2 North goal (top of the rink, mouth faces down the screen)
 
 | | Value |

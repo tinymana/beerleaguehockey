@@ -40,20 +40,22 @@ describe('the goal (Decision 76)', () => {
     }
   });
 
-  const shoot = (width: number, end: 'top' | 'bottom', offset: number): { goals: number; state: string } => {
+  const shoot = (width: number, end: 'top' | 'bottom', offset: number, height = 0): { goals: number; state: string; last: string } => {
     const rink = makeRink(width);
     const sim = new SkatingSim(cloneTuning(), rink);
     const line = goalLineY(rink, end);
     const dir = end === 'top' ? -1 : 1;
-    const p = sim.puck as unknown as { x: number; y: number; vx: number; vy: number; state: string; carrier?: unknown };
+    const p = sim.puck;
     p.state = 'free';
     p.x = rink.centerX + offset;
     p.y = line - dir * 30;
     p.vx = 0;
     p.vy = dir * 300;
+    p.z = height;
+    p.vz = 0;
     const idle = { x: 0, y: 0, shoot: false, turbo: false } as never;
     for (let i = 0; i < 40 && sim.goals === 0; i++) sim.step(idle);
-    return { goals: sim.goals, state: p.state };
+    return { goals: sim.goals, state: p.state, last: sim.stats.last };
   };
 
   it('scores through the mouth and not through a post, the same at both ends and both widths', () => {

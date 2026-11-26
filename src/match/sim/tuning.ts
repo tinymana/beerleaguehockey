@@ -93,3 +93,19 @@ export const FEEL = Object.freeze({
 export function cloneTuning(source: Readonly<Tuning> = DEFAULT_TUNING): Tuning {
   return { ...source };
 }
+
+/** Shooting and puck flight for the Milestone 1 prototype (Decision 78). Starting values for hands-on testing, not balance. */
+export const SHOOT = {
+  /** Wind-up, as a share of a full one, at which a shot becomes a slap shot. */
+  slapThreshold: 0.5,
+  releaseHeight: 1,
+  /** How fast each shot climbs off the blade. A wrist shot rises; a slap shot stays low. */
+  wristLift: 90,
+  slapLift: 50,
+  gravity: 120,
+  /** Slowing while airborne (the ice slows it far more once it lands). */
+  airDrag: 0.15,
+  /** Half the thickness of the crossbar, in height. */
+  barThickness: 1.5,
+  ironRestitution: 0.55,
+} as const;

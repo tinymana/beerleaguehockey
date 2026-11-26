@@ -2,6 +2,27 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.8.0 - 2026-11-25 - Milestone 1: shooting and a basic goalie
+
+182 tests. In Pick-Up.
+
+### Added
+- **Wrist and slap shots:** a quick release is a wrist shot that climbs; holding past half the wind-up is a slap shot, harder and lower. The puck now has height, with a shadow under it.
+- **Posts and crossbar:** a puck on the iron comes back out; one above the bar sails over the net. Shots are judged at the exact point they cross the goal line.
+- **A basic goalie in each net:** he stands on the line between the puck and the middle of the net, slides at a fixed speed, and reacts to where the puck was a moment ago. Pads stop low shots and kick out rebounds; the body and glove hold the puck and drop it; the blocker steers it wide. A low shot through the middle gets by only while he is sliding (five-hole). The north and south goalies catch with the same hand, so their glove sides are mirrored on screen.
+- **Readout:** shots, saves, iron and goals, and what the last shot did. G removes or restores the goalies.
+- Pixel templates for the north and south goal art (`art/templates/goal_*_template_*.png`).
+
+### Changed
+- The body model in Create a Player uses the wedge-corrected frames.
+
+### Known issues
+- **Starting values, not balance.** Nothing was tuned to make the bigger net harder; shot lift, goalie speed, reach and reaction are settings for you to judge.
+- The goalie is a labelled code-drawn stand-in. He does not come out, drop, poke-check, cover loose pucks or play the puck, and the skater can pass through him.
+- Shot direction is the stick direction or the held direction; there is no separate aim for high or low.
+- No opponents, passing or teammates.
+- Attribute panel redesign and name pool expansion are still not done.
+
 ## 0.7.0 - 2026-11-25 - The 48-pixel goal
 
 171 tests (2 need the private authoring file and are skipped without it).

@@ -2,6 +2,25 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.8.0",
+      "date": "2026-11-25",
+      "title": "Somebody is in the net",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Goalies. They play the angle, kick out rebounds, flash the glove and wave the blocker. Catch them sliding and go five-hole."
+        },
+        {
+          "tag": "new",
+          "text": "Tap for a wrist shot that climbs, or wind up for a slap shot that stays low and hurts."
+        },
+        {
+          "tag": "new",
+          "text": "Posts and crossbars now ring. So close."
+        }
+      ]
+    },
+    {
       "version": "0.7.0",
       "date": "2026-11-25",
       "title": "Bigger nets",

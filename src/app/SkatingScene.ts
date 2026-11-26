@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { GAME_HEIGHT, GAME_WIDTH, SCENES, UI } from './config';
 import { Edge, readPad } from './padInput';
 import { addText, fontText } from './pixelFont';
+import { GOALIE } from '../match/sim/goalie';
 import { arenaChoice, tuning, tuningPanel } from './session';
 import { setTitleArtVisible } from './stage';
 import { directionIndex8, lerp } from '../core/math';
@@ -41,6 +42,9 @@ export class SkatingScene extends Phaser.Scene {
 
   private skater!: Phaser.GameObjects.Image;
   private puck!: Phaser.GameObjects.Image;
+  private puckShadow!: Phaser.GameObjects.Ellipse;
+  private goalieSprites: Phaser.GameObjects.Image[] = [];
+  private hudLast!: Phaser.GameObjects.BitmapText;
   private hudSpeed!: Phaser.GameObjects.BitmapText;
   private hudGoals!: Phaser.GameObjects.BitmapText;
   private banner!: Phaser.GameObjects.BitmapText;
@@ -71,6 +75,13 @@ export class SkatingScene extends Phaser.Scene {
     this.worldHeight = this.arena.worldHeight;
     this.wearTimer = 0;
 
+    // Milestone 1 shooting prototype (Decision 78): a basic goalie in each net. G takes them out or puts them back.
+    this.sim.setGoalies(true);
+    this.goalieSprites = [];
+    this.makeGoalieTexture();
+    for (const g of this.sim.goalies) this.goalieSprites.push(this.add.image(g.x, 0, 'tmp-goalie').setOrigin(0.5, 1).setFlipX(g.gloveSide < 0));
+    this.puckShadow = this.add.ellipse(0, 0, 5, 3, 0x1b2a5a, 0.45).setVisible(false);
+
     this.puck = this.add.image(0, 0, TEX.puck);
     this.skater = this.add
       .image(0, 0, SKATER_SHEET.key, 0)
@@ -89,8 +100,9 @@ export class SkatingScene extends Phaser.Scene {
     this.fixed(addText(this, GAME_WIDTH / 2, 3, 'Temp art - style test', UI.dim).setOrigin(0.5, 0));
     this.hudGoals = this.fixed(addText(this, GAME_WIDTH - 4, 3, 'Goals 0', UI.white).setOrigin(1, 0));
     this.hudSpeed = this.fixed(addText(this, 4, GAME_HEIGHT - 9, '', UI.ice));
+    this.hudLast = this.fixed(addText(this, GAME_WIDTH / 2, 14, '', UI.gold).setOrigin(0.5, 0));
     this.fixed(
-      addText(this, GAME_WIDTH - 4, GAME_HEIGHT - 9, 'Move:arrows  Shoot:space  R:puck  `:tuning  Esc:menu', UI.ice).setOrigin(1, 0),
+      addText(this, GAME_WIDTH - 4, GAME_HEIGHT - 9, 'Tap:wrist  Hold:slap  G:goalie  R:puck  `:tuning  Esc:menu', UI.ice).setOrigin(1, 0),
     );
     this.banner = this.fixed(addText(this, GAME_WIDTH / 2, 120, '', UI.gold, 3).setOrigin(0.5, 0.5)).setVisible(false);
     this.chargeBar = this.add.graphics().setDepth(DEPTH_FRONT_BOARDS + 1);
@@ -111,6 +123,11 @@ export class SkatingScene extends Phaser.Scene {
       x: 'X',
     }) as typeof this.keys;
     kb.on('keydown-R', () => this.sim.resetPuck());
+    kb.on('keydown-G', () => {
+      const on = this.sim.goalies.length === 0;
+      this.sim.setGoalies(on);
+      for (const sprite of this.goalieSprites) sprite.setVisible(on);
+    });
     kb.on('keydown-BACKTICK', () => tuningPanel().toggle());
     kb.on('keydown-ESC', () => this.exitToMenu());
 
@@ -181,10 +198,26 @@ export class SkatingScene extends Phaser.Scene {
     this.prev.py = this.sim.puck.y;
   }
 
+  /** A code-drawn stand-in goalie: temporary, until goalie sprites are supplied. Glove (light) on one side, blocker (dark) on the other. */
+  private makeGoalieTexture(): void {
+    if (this.textures.exists('tmp-goalie')) return;
+    const g = this.make.graphics({ x: 0, y: 0 }, false);
+    const w = (GOALIE.halfBody + GOALIE.gloveReach) * 2;
+    const mid = w / 2;
+    g.fillStyle(0x1b2a5a).fillRect(mid - 8, 0, 16, 20); // outline
+    g.fillStyle(0xe8e8ee).fillRect(mid - 7, 9, 14, 10); // pads
+    g.fillStyle(0xc8343c).fillRect(mid - 6, 3, 12, 7); // jersey
+    g.fillStyle(0xf2f2f6).fillRect(mid - 3, 0, 6, 4); // mask
+    g.fillStyle(0xb98a4a).fillRect(mid + 7, 5, 6, 6); // glove, on his left (the viewer's right for the north goalie)
+    g.fillStyle(0x2b3a7a).fillRect(mid - 13, 4, 6, 8); // blocker
+    g.generateTexture('tmp-goalie', w, 20);
+    g.destroy();
+  }
+
   private handleEvents(events: SimEvent[]): void {
     for (const e of events) {
       if (e.type === 'goal') {
-        this.banner.setText(fontText('Goal!')).setVisible(true);
+        this.banner.setText(fontText(e.fiveHole ? 'Five-hole!' : 'Goal!')).setVisible(true);
         this.bannerTimer = 1.2;
         this.cameras.main.shake(180, 0.006);
         // Supplied net ripple: visual only, the goal itself was already decided by the sim.
@@ -193,6 +226,10 @@ export class SkatingScene extends Phaser.Scene {
         // Goal lamp and crowd: also visual only. With no teams yet, the whole building celebrates.
         this.arena.flashLamp(end);
         this.arena.crowdReact('goal');
+      } else if (e.type === 'save' || e.type === 'post' || e.type === 'crossbar' || e.type === 'over') {
+        const text = e.type === 'save' ? `${e.kind} save` : e.type === 'post' ? 'Post!' : e.type === 'crossbar' ? 'Crossbar!' : 'Over the net';
+        this.banner.setText(fontText(text)).setVisible(true);
+        this.bannerTimer = 0.9;
       } else if (e.type === 'shot') {
         this.sinceShot = 0;
         if (e.power > 0.8) this.cameras.main.shake(60, 0.002);
@@ -228,7 +265,14 @@ export class SkatingScene extends Phaser.Scene {
     this.skater.setFrame(look.frame).setFlipX(look.flip);
     this.skater.setPosition(skaterX, skaterY).setDepth(skaterY);
     // A carried puck sits on the blade; draw it just in front of or behind the body as the stick points.
-    this.puck.setPosition(puckX, puckY).setDepth(puck.state === 'carried' ? skaterY + (puckY >= skaterY ? 0.5 : -0.5) : puckY - 0.5);
+    // A lifted puck is drawn above its shadow by its height, seen through the camera tilt.
+    const lift = Math.round(puck.z * Math.sqrt(1 - k * k));
+    this.puckShadow.setVisible(lift > 0).setPosition(puckX, puckY).setDepth(puckY - 0.6);
+    this.sim.goalies.forEach((g, i) => {
+      const gy = Math.round(projectY(g.y, k));
+      this.goalieSprites[i]?.setPosition(Math.round(g.x), gy + 2).setDepth(gy);
+    });
+    this.puck.setPosition(puckX, puckY - lift).setDepth(puck.state === 'carried' ? skaterY + (puckY >= skaterY ? 0.5 : -0.5) : puckY - 0.5);
 
     // Wind-up meter under the skater.
     this.chargeBar.clear();
@@ -257,7 +301,9 @@ export class SkatingScene extends Phaser.Scene {
 
     const puckSpeed = Math.round(Math.hypot(puck.vx, puck.vy));
     this.hudSpeed.setText(fontText(`Skater ${Math.round(speed)}  Puck ${puckSpeed}`));
-    this.hudGoals.setText(fontText(`Goals ${this.sim.goals}`));
+    const st = this.sim.stats;
+    this.hudGoals.setText(fontText(`Shots ${st.shots}  Saves ${st.saves}  Iron ${st.posts + st.crossbars}  Goals ${this.sim.goals}`));
+    this.hudLast.setText(fontText(st.last));
 
     if (this.bannerTimer > 0) {
       this.bannerTimer -= dt;
