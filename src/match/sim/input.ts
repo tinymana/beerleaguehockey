@@ -3,6 +3,8 @@ export interface SimInput {
   moveX: number;
   moveY: number;
   shoot: boolean;
+  /** Pass to a teammate; without the puck, take control of the teammate nearest it. 5-on-5 only. */
+  pass?: boolean;
 }
 
 export const NO_INPUT: Readonly<SimInput> = Object.freeze({ moveX: 0, moveY: 0, shoot: false });

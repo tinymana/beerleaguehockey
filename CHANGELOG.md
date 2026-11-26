@@ -2,6 +2,31 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.10.0 - 2026-11-26 - 5-on-5 test game, shot aim help, goalie art
+
+204 tests. Three things the creative director asked for after playing v0.9.2 (Decision 83).
+
+### Added
+- **5-on-5 test game.** Pick-Up now opens two teams of five with a goalie each. You control one home skater (gold ring); the computer plays the other nine with the same eight-way stick and buttons you have. Home attacks the top net.
+  - **Pass** (Z, K or Shift; B on a pad): to the teammate the held direction points at, led to where he is going. Control follows the pass. Without the puck the same button gives you the teammate nearest the puck. You always control your team's puck carrier.
+  - **Puck battles:** an opponent's stick or body on a carried puck knocks it loose. Skaters cannot skate through each other. No body checks.
+  - **Computer team** (`src/match/sim/teamAi.ts`): a formation that follows the puck, one skater to the puck, a carrier who skates in, passes under pressure and shoots in range. Reacts to a puck drop after a short random delay so the player can win it.
+  - After a goal everyone lines up at centre again. Score and running clock on screen. T switches to one-skater shooting practice and back; R restarts from a faceoff.
+  - **Not in it:** offsides, icing, penalties, periods, line changes, checking, fatigue, attributes. Every skater is identical.
+- **Shot aim help.** A shot with a diagonal held toward a net is aimed at the corner on that side, allowing for the skater's own drift, when that is within 200 px of the goal line and no more than about 50 degrees off where the stick points. The aim point wanders up to 6 px either way (seeded), so some find the post or the goalie. Straight shots are untouched. Values in `AIM` (`tuning.ts`); the computer's skaters use the same help.
+- **Goalie art** from the supplied batch 01 sheet (`Blue_and_Red_Hockey_Goalie_Sprite_Sheet`), brought to game size by the same pass as the skater (`scripts/art/process_goalie.py`): ready, shuffle, glove, blocker, pad and cover poses, facing the camera in the far net and from behind in the near net. Replaces the code-drawn stand-in.
+
+### Measured
+- **Aim help, goalie set, shooter standing, 300 shots each, diagonal held toward the far or open corner:** slot wrist 35% goals (34% saved, 31% post), slot slap 48%; high slot wrist 13%, slap 40%; circle wrist 21%, slap 53%; point slap 34%. Before the help the same diagonals from the slot, high slot and point missed the net entirely (0 of 300 on goal). The goalie is unchanged.
+- **Computer against computer, ten minutes:** 87 shots, 14 goals (9 to 5), possession 13,197 to 13,004 ticks.
+
+### Known issues
+- **Slap shots beat a set goalie often** (40 to 53% from good ice with the aim help): his glove and pads take 0.3 s to reach and a hard shot arrives sooner. Left alone: goalie values are not changed without a ruling.
+- Team colours are temporary: the away side is the home art through a gold tint. The skater and goalie are still 48 px art shown at two-thirds.
+- The computer's skaters steer in eight directions and can bunch up along the boards and behind the net; a skater who is stuck steps sideways, and a stuck carrier passes or shoots.
+- Skaters still pass through the goalies. The near goalie is partly hidden by the south net's solid back netting.
+- No sound.
+
 ## 0.9.2 - 2026-11-26 - Goals at the 32 px scale
 
 190 tests. The first goal art delivered at the true size is in the game, in place of the stand-in nets.

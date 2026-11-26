@@ -17,7 +17,7 @@ The five-module architecture is **approved**. Data shapes for systems beyond the
 | Path | Contents |
 | --- | --- |
 | `src/core` | Seeded RNG with named streams, math helpers |
-| `src/match/sim` | Skating prototype simulation: skater, puck, rink collision, tuning data. Pure TypeScript, fixed 60 Hz step |
+| `src/match/sim` | On-ice simulation: skaters, puck, rink collision, shooting, goalies, the 5-on-5 test game and its computer team (`teamAi.ts`), tuning data. Pure TypeScript, fixed 60 Hz step |
 | `src/match/view` | Phaser-side helpers for the match: temporary code-drawn textures, camera maths |
 | `src/app` | Phaser boot, title screen and menu, skating scene, pixel font, gamepad helper, developer tuning panel, integer-scaled stage |
 | `src/dynasty`, `src/lifestyle` | Placeholders with module rules. Not started |

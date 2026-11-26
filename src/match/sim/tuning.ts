@@ -113,3 +113,41 @@ export const SHOOT = {
   /** A loose puck faster than this counts as a shot for a goalie's reaction clock. */
   launchSpeed: 150,
 } as const;
+
+/**
+ * Shot aim help (creative director feedback, Nov 26: corner shots are hard to aim on a keyboard).
+ * Starting values for hands-on testing. Applies to every skater, the computer's included.
+ */
+export const AIM = {
+  /** Only this close to the goal line, in px. */
+  range: 200,
+  /** The biggest change of direction the help will make, in radians. Beyond it the shot goes where the stick points. */
+  maxTurn: 0.9,
+  /** How far inside the post the aim point is, beyond the puck's own radius. */
+  cornerInset: 1.5,
+  /** The aim point lands anywhere within this many px either side of the corner: some shots find the post or the goalie. */
+  spread: 6,
+};
+
+/** The 5-on-5 test game: passing and puck battles. Starting values for hands-on testing, not balance. */
+export const TEAM = {
+  passSpeed: 330,
+  /** Teammates nearer or farther than this are not passing targets. */
+  passMin: 14,
+  passMax: 300,
+  /** How closely a teammate must line up with the stick or held direction (cosine). */
+  passCone: 0.45,
+  /** Seconds of the receiver's travel a pass allows for, at most. */
+  passLead: 0.6,
+  /** Seconds a receiver keeps going to a pass. */
+  passWatch: 1.5,
+  /** An opponent's blade or body this close to a carried puck knocks it loose. */
+  pokeRadius: 9 * PLAY_SCALE,
+  pokeSpeed: 70,
+  /** Seconds before the same skater can poke again, before the old carrier can pick it back up, and of safety after gaining the puck. */
+  pokeCooldown: 0.9,
+  strippedCooldown: 0.5,
+  pokeGrace: 0.3,
+  /** A puck higher than this goes over the skaters' sticks. */
+  pickupHeight: 6 * PLAY_SCALE,
+};

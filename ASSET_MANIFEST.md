@@ -66,7 +66,7 @@ As of v0.3.1: 16,577 assets from 80 packages, 0 errors; batch 15 (locker room) a
 | Skater sheet with labels (`Pixel_Hockey_Player_Sprite_Sheet`) | Reference only | Same art with a grid and text baked in |
 | Skater sheet with a sixth row (`Retro_Hockey_Player_Animation_Sprite_Sheet`) | Usable later | Adds hit, down, dazed and helped-up frames |
 | Skater extras, 6 frames | Usable later | Two celebrations, gassed, down, ready, faceoff |
-| Goalie, 10 poses x 2 directions (`Blue_and_Red_Hockey_Goalie_Sprite_Sheet`) | Usable for Milestone 1 | Good match to the brief |
+| Goalie, 10 poses x 2 directions (`Blue_and_Red_Hockey_Goalie_Sprite_Sheet`) | **In the game (v0.10.0)** | `public/assets/goalie_base.png`, 10 x 2 cells of 48 px, by `scripts/art/process_goalie.py` (the skater's pass; scaled so a standing goalie is the skater's height). Shown at two-thirds like the skater. To be redrawn at the 32 px scale |
 | Goalie with injury row (`Retro_Hockey_Goalie_Sprite_Sheet_1`) | Usable later | Same plus hurt frames |
 | Goalie, 18 poses (`Retro_Hockey_Goalie_Sprite_Sheet`) and labeled version | Reference only | South-facing only; labels baked in |
 | Referee (`Retro_Hockey_Referee_Sprite_Sheet`) | Usable for Milestone 2 | Side and front views only: no back (north) row. Includes hit, down and dazed frames for the knock-out mechanic |

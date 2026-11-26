@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { ArenaRenderer } from '../match/view/arena/ArenaRenderer';
 import { REGISTRY_KEY, REGISTRY_URL } from '../match/view/arena/registry';
 import type { ArenaRegistry } from '../match/view/arena/registry';
+import { GOALIE_SHEET } from '../match/view/goalieSprite';
 import { SKATER_SHEET } from '../match/view/skaterSprite';
 import { SCENES } from './config';
 import { registerPixelFont } from './pixelFont';
@@ -14,6 +15,7 @@ export class BootScene extends Phaser.Scene {
 
   preload(): void {
     this.load.spritesheet(SKATER_SHEET.key, SKATER_SHEET.url, { frameWidth: SKATER_SHEET.cell, frameHeight: SKATER_SHEET.cell });
+    this.load.spritesheet(GOALIE_SHEET.key, GOALIE_SHEET.url, { frameWidth: GOALIE_SHEET.cell, frameHeight: GOALIE_SHEET.cell });
     // The registry lists every arena asset; queue them as soon as it arrives.
     this.load.json(REGISTRY_KEY, REGISTRY_URL);
     this.load.once(`filecomplete-json-${REGISTRY_KEY}`, () => {

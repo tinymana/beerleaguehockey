@@ -8,6 +8,9 @@ loadSavedTuning(tuning);
 /** Which arena configuration the game uses. Chosen in the Arena Asset Lab. */
 export const arenaChoice = { id: 'standard' };
 
+/** What Pick-Up opens: the 5-on-5 test game, or one skater for skating and shooting practice. T switches. */
+export const matchMode = { teams: true };
+
 let panel: TuningPanel | null = null;
 
 export function tuningPanel(): TuningPanel {

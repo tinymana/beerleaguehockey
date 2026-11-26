@@ -13,7 +13,7 @@ interface MenuItem {
 }
 
 const MENU: readonly MenuItem[] = [
-  { label: 'Pick-Up', action: 'skating', note: 'Skating prototype' },
+  { label: 'Pick-Up', action: 'skating', note: '5 on 5 test game' },
   { label: 'League Dynasty', note: 'Coming soon' },
   { label: 'Create', action: 'creator', note: 'Create a player' },
   { label: 'Leaderboard', note: 'Coming soon' },
