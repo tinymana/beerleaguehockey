@@ -234,3 +234,48 @@ The batch 11 goals are larger than the net the puck hits. The ruling is to redra
 - Bottle knock-off and dislodged goal: 8 frames of 48 x 40 in one strip, 384 x 40, with the 32 x 24 goal at offset `[8, 8]` in every frame (11.05, 11.06, 11.09, 11.10). A dislodged goal should move no more than 8 px in any direction.
 
 Package format as before: named PNGs, the strip as the atlas, `manifest.json` carrying these anchors, a preview image, one ZIP per batch. If the camera tilt changes (decision P13), the 11 px depth changes with it and I will reissue this table.
+
+## 11. Correction request for the art tool: goals, ice and crowd at the right scale (Nov 25)
+
+Written after the skating checkpoint (Decision 73). **Assumes the recommended 40 px net, which is not yet ruled.** If the net stays 24 px, use section 10 for the goals instead. Paste the block below as one message.
+
+```text
+You are producing corrected game sprites for "Beer League Hockey", a retro hockey game. Fix scale and technical problems only. Keep the existing characters, palette and style. Do not redesign anything.
+
+STYLE (all assets)
+- Detailed 32-bit era pixel art, bold dark outlines, warm arena lighting, saturated colours. Same look as the game's Batch 18 art.
+- True pixel art on a 1:1 pixel grid. No painterly blending, no soft gradients, no anti-aliased edges, no blur, no glow.
+- Seen from a high overhead camera tilted toward the top of the screen: vertical distances on the ice are drawn at 74% of horizontal ones. The rink runs top to bottom.
+- No text, numbers, logos, brand names, real teams or real people anywhere.
+
+TECHNICAL RULES (all assets)
+- PNG with a transparent background. Every pixel is either fully opaque or fully transparent. No semi-transparent pixels.
+- Exact canvas sizes below, in pixels. Do not upscale, pad or crop differently.
+- Nothing touching the canvas edge except where stated. No frame, border, drop shadow, label or checkerboard.
+- One sprite per file, named exactly as listed. Animation frames are separate files numbered _01, _02...
+
+SCALE REFERENCE
+- A skater is drawn inside a 48 x 48 frame and stands about 40 px tall.
+- The goal must look right next to that skater: 40 px wide, post to post.
+
+A. GOALS (the current ones are far too small next to the skaters)
+- goal_north.png, 48 x 32. Goal at the top of the rink, mouth facing down the screen. Red posts 2 px wide at columns 4-5 and 42-43. Posts stand on row 27 (the goal line). White netting and frame fill rows 10 to 27 behind the mouth. Rows 0 to 9 empty.
+- goal_south.png, 48 x 32. Goal at the bottom of the rink, mouth facing up the screen, seen from behind through the netting. Posts at columns 4-5 and 42-43, standing on row 4. Netting fills rows 4 to 21. Rows 22 to 31 empty.
+- goal_north_net_ripple_01 to _04.png and goal_south_net_ripple_01 to _04.png, 48 x 32, same position: the netting bulging from a puck.
+
+B. ICE
+- ice_base_01 to _04.png, 32 x 32, fully opaque, seamless on all four edges: clean white-blue ice with very subtle variation.
+- ice_scratch_01 to _08.png, 32 x 32, transparent: thin pale skate cuts only.
+- circle_centre.png, 120 x 89: blue centre circle, 2 px line, with a red centre dot.
+- circle_faceoff.png, 120 x 89: red faceoff circle, 2 px line, with hash marks and a red dot.
+- crease_north.png and crease_south.png, 72 x 28: light blue goal crease with a 2 px red outline, flat edge on the goal line.
+- line_red.png and line_blue.png, 32 x 6 and 32 x 8, fully opaque, tile seamlessly left to right.
+
+C. CROWD (fans must be in proportion to the 48 px skaters)
+- seats_row.png, 48 x 32, tiles seamlessly left to right: one row of two empty arena seats, seen from the same camera.
+- fan_a to fan_f, six different everyday adult fans, each 24 x 32, seated, cut off at the seat:
+  fan_a_sit_01 to _02, fan_a_cheer_01 to _04, fan_a_stand_01 to _02 (and the same nine frames for fan_b to fan_f).
+  Mixed ages, builds and plain clothing in varied colours. No jerseys with markings.
+
+Deliver a zip with one folder per section (goals, ice, crowd) and a manifest.json listing each file name and its pixel size.
+```
