@@ -246,7 +246,8 @@ export class SkatingSim {
     for (const end of ['top', 'bottom'] as const) {
       const line = goalLineY(this.rink, end);
       const box = netBox(this.rink, end);
-      const inMouth = Math.abs(p.x - this.rink.centerX) <= this.rink.netHalfWidth - 1;
+      // A goal needs the whole puck between the posts: the same opening the goal art shows.
+      const inMouth = Math.abs(p.x - this.rink.centerX) <= this.rink.mouthHalfWidth - FEEL.puckRadius;
       const cameFromFront = end === 'top' ? prevY > line : prevY < line;
       if (cameFromFront && inMouth) {
         const crossed = end === 'top' ? p.y <= line : p.y >= line;

@@ -6,3 +6,6 @@ dist-site
 .vite
 data/private/
 public/private/
+art/packages/*.zip
+art/character_packages/*.zip
+art/reference_packages/

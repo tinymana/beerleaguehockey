@@ -26,7 +26,14 @@ import numpy as np
 from PIL import Image
 
 ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', '..')
-PACKAGES = os.path.join(ROOT, 'art', 'packages')
+def art_dir():
+    """Where the master art packages are kept: outside the repository (Decision 77).
+    Set BLH_ART_DIR to that folder; it must contain packages/ and character_packages/.
+    With nothing set, an untracked art/ folder beside the code is used, so the scripts still run on a machine that keeps them there."""
+    import os as _os
+    return _os.environ.get('BLH_ART_DIR') or _os.path.join(ROOT, 'art')
+
+PACKAGES = os.path.join(art_dir(), 'packages')
 OUT = os.path.join(ROOT, 'public', 'assets', 'arena')
 SLOTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'arena_slots.json')
 TILE = 8

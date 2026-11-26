@@ -332,17 +332,16 @@ describe('goal nets', () => {
     expect(south?.depth).toBeGreaterThan(screenY(RINK, TILT, goalLineY(RINK, 'bottom')) + 20);
   });
 
-  it('reports that the supplied goals are larger than the physics net, and still sit on the ice', () => {
+  it('reports how the supplied goals compare with the physics net, and still sit on the ice', () => {
     const fit = goalFit(RINK, TILT, standard, lookup);
     expect(fit.length).toBe(2);
     for (const f of fit) {
-      expect(f.physicsMouth).toBe(24);
+      // Since Decision 76 the gameplay net is 52 px outside (48 px mouth): the batch 11 art is now too small, not too big.
+      expect(f.physicsMouth).toBe(52);
       expect(f.artMouth).toBe(37);
-      expect(f.artDepth).toBeGreaterThan(f.physicsDepth);
       expect(f.clearBehind).toBeGreaterThan(0);
     }
-    // The gameplay net is untouched by the art.
-    expect([RINK.netHalfWidth, RINK.netDepth, RINK.goalLineInset]).toEqual([12, 14, 44]);
+    expect([RINK.netHalfWidth, RINK.netDepth, RINK.goalLineInset]).toEqual([26, 28, 58]);
   });
 
   it('keeps stand-in nets, at the size the puck hits, in the standard arena until redrawn goals arrive', () => {

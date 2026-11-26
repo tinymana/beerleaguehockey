@@ -13,8 +13,11 @@ import { FALLBACK_COUNT, FICTIONAL_CONFIG, INFLUENCE_NAME_SET, INFLUENCES, exten
 
 const ROOT = join(__dirname, '..');
 /** Real names live only in the curated source file, never in the build. id -> real name. */
+const AUTHORING = join(ROOT, 'data', 'private', 'authoring', 'curated.tsv');
+/** Present only on a machine that holds the private authoring file. The checks against real names run there; everywhere else they are skipped. */
+const HAS_AUTHORING = existsSync(AUTHORING);
 const REAL_NAMES = new Map(
-  readFileSync(join(ROOT, 'data', 'influences', 'curated.tsv'), 'utf8')
+  (HAS_AUTHORING ? readFileSync(AUTHORING, 'utf8') : '')
     .split(/\r?\n/)
     .filter((l) => l && !l.startsWith('#'))
     .map((l) => l.split('\t'))
@@ -63,7 +66,7 @@ describe('Hockey Influences registry', () => {
     expect(influencesFor('forward')).toEqual(influencesFor('defense'));
   });
 
-  it('keeps the twelve example influences from the brief in the curated source, and builds no real name into the game (Decision 74)', () => {
+  it.skipIf(!HAS_AUTHORING)('keeps the twelve example influences from the brief in the curated source, and builds no real name into the game (Decision 74)', () => {
     const real = REAL_NAMES;
     expect(real.size).toBe(INFLUENCES.length);
     for (const n of ['Wayne Gretzky', 'Jari Kurri', 'Teemu Selanne', 'Mario Lemieux', 'Pavel Bure', 'Steve Yzerman', 'Mark Messier', 'Brett Hull', 'Nicklas Lidstrom', 'Scott Stevens', 'Patrick Roy', 'Dominik Hasek']) {
@@ -89,7 +92,13 @@ describe('Hockey Influences registry', () => {
     expect(existsSync(join(ROOT, 'data', 'reference', 'nhl_players.csv'))).toBe(false);
   });
 
-  it('shows the fictional identity everywhere: ids are neutral, blurbs name nobody, and each alias is a distinct identity', () => {
+  it('keeps the curated authoring file out of the repository tree', () => {
+    expect(existsSync(join(ROOT, 'data', 'influences', 'curated.tsv'))).toBe(false);
+    expect(INFLUENCES.length).toBe(64);
+    for (const i of INFLUENCES) expect(i.alias).toBe(i.name);
+  });
+
+  it.skipIf(!HAS_AUTHORING)('shows the fictional identity everywhere: ids are neutral, blurbs name nobody, and each alias is a distinct identity', () => {
     for (const i of INFLUENCES) {
       const surname = REAL_NAMES.get(i.id)!.split(' ').pop() ?? '';
       expect(i.blurb.toLowerCase().includes(surname.toLowerCase()), i.id).toBe(false);

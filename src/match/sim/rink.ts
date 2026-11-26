@@ -33,13 +33,64 @@ export interface RinkGeometry {
   centerY: number;
   /** Distance from end boards to the goal line. */
   goalLineInset: number;
+  /** Half the outside width of the net, post to post: the collision width. */
   netHalfWidth: number;
   netDepth: number;
+  /** Half the clear opening between the posts: what a puck must pass through to score. */
+  mouthHalfWidth: number;
+  postWidth: number;
+  /** Height of the crossbar and of the back bar above the ice, for drawing. */
+  netFrontHeight: number;
+  netBackHeight: number;
   /** Distance from centre line to each blue line. */
   blueLineOffset: number;
 }
 
-export function makeRink(): RinkGeometry {
+/**
+ * Goal dimensions (Decision 76). The production baseline is a 48 px goal mouth, chosen by the creative director
+ * against the current skater sprites; 40 is kept as a test value. Everything else follows from the mouth width,
+ * so the picture, the collision box and the scoring test can never disagree. All of it is data.
+ */
+export const GOAL_CONFIG = {
+  /** Clear opening between the posts, in world pixels. */
+  mouthWidth: 48,
+  /** Values offered for testing. */
+  testWidths: [40, 48] as const,
+  postWidth: 2,
+  /** Depth behind the goal line as a share of the mouth (a real net is 44 in deep and 72 in wide). */
+  depthRatio: 7 / 12,
+  /** Crossbar and back-bar height as a share of the mouth (a real net is 48 in high). */
+  heightRatio: 2 / 3,
+  backHeightRatio: 5 / 12,
+  /** Ice kept between the back of the net and the end boards, so play behind the net survives a bigger net. */
+  clearanceBehind: 30,
+};
+
+export interface GoalDimensions {
+  mouthWidth: number;
+  outsideWidth: number;
+  postWidth: number;
+  depth: number;
+  frontHeight: number;
+  backHeight: number;
+  goalLineInset: number;
+}
+
+export function goalDimensions(mouthWidth: number = GOAL_CONFIG.mouthWidth): GoalDimensions {
+  const depth = Math.round(mouthWidth * GOAL_CONFIG.depthRatio);
+  return {
+    mouthWidth,
+    outsideWidth: mouthWidth + GOAL_CONFIG.postWidth * 2,
+    postWidth: GOAL_CONFIG.postWidth,
+    depth,
+    frontHeight: Math.round(mouthWidth * GOAL_CONFIG.heightRatio),
+    backHeight: Math.round(mouthWidth * GOAL_CONFIG.backHeightRatio),
+    goalLineInset: GOAL_CONFIG.clearanceBehind + depth,
+  };
+}
+
+export function makeRink(mouthWidth: number = GOAL_CONFIG.mouthWidth): RinkGeometry {
+  const goal = goalDimensions(mouthWidth);
   const worldWidth = 480;
   const worldHeight = 880;
   const width = 340;
@@ -56,9 +107,13 @@ export function makeRink(): RinkGeometry {
     cornerRadius: 112,
     centerX: worldWidth / 2,
     centerY: worldHeight / 2,
-    goalLineInset: 44,
-    netHalfWidth: 12,
-    netDepth: 14,
+    goalLineInset: goal.goalLineInset,
+    netHalfWidth: goal.outsideWidth / 2,
+    netDepth: goal.depth,
+    mouthHalfWidth: goal.mouthWidth / 2,
+    postWidth: goal.postWidth,
+    netFrontHeight: goal.frontHeight,
+    netBackHeight: goal.backHeight,
     blueLineOffset: 100,
   };
 }

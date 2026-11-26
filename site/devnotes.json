@@ -2,6 +2,17 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.7.0",
+      "date": "2026-11-25",
+      "title": "Bigger nets",
+      "items": [
+        {
+          "tag": "improved",
+          "text": "The goals were tiny. Now they are the right size next to the players: twice as wide, and it shows. Hit the post and it still does not count."
+        }
+      ]
+    },
+    {
       "version": "0.6.0",
       "date": "2026-11-25",
       "title": "Meet the legends you never heard of",

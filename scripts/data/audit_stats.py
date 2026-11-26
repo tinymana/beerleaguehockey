@@ -196,7 +196,7 @@ def classify(rec):
 for rec in records: rec['class'], rec['lean'], rec['tag'] = classify(rec)
 
 curated = {}
-with open(P('data/influences/curated.tsv'), encoding='utf-8') as f:
+with open(P('data/private/authoring/curated.tsv'), encoding='utf-8') as f:
     for line in f:
         if line.startswith('#') or not line.strip(): continue
         c = line.rstrip('\n').split('\t')

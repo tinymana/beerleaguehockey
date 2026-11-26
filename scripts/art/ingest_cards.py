@@ -5,7 +5,14 @@ Run: python3 -I scripts/art/ingest_cards.py   (reads art/character_packages/BLH_
 import io, json, os, zipfile
 from PIL import Image
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-SRC = os.path.join(ROOT, 'art', 'character_packages', 'BLH_Batch_16_10.zip')
+def art_dir():
+    """Where the master art packages are kept: outside the repository (Decision 77).
+    Set BLH_ART_DIR to that folder; it must contain packages/ and character_packages/.
+    With nothing set, an untracked art/ folder beside the code is used, so the scripts still run on a machine that keeps them there."""
+    import os as _os
+    return _os.environ.get('BLH_ART_DIR') or _os.path.join(ROOT, 'art')
+
+SRC = os.path.join(art_dir(), 'character_packages', 'BLH_Batch_16_10.zip')
 OUT = os.path.join(ROOT, 'public', 'assets', 'cards', '16_10')
 W, H, COLS = 144, 96, 8
 def stable(name):

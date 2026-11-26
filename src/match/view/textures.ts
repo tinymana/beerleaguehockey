@@ -209,9 +209,9 @@ export interface NetLayout {
 /** Sizes of the standing net sprites for a given tilt. */
 export function netLayout(rink: RinkGeometry, end: 'top' | 'bottom', tilt: number): NetLayout {
   const depth = Math.round(rink.netDepth * tilt);
-  const front = Math.round(riseOf(HEIGHTS.netFront, tilt));
-  const backRise = Math.round(riseOf(HEIGHTS.netBack, tilt));
-  const width = rink.netHalfWidth * 2 + 2;
+  const front = Math.round(riseOf(rink.netFrontHeight, tilt));
+  const backRise = Math.round(riseOf(rink.netBackHeight, tilt));
+  const width = rink.netHalfWidth * 2;
   if (end === 'top') {
     // Mouth faces the camera. Rows: back bar, top netting, crossbar, open mouth, goal line.
     const above = Math.max(front, depth + backRise);
@@ -223,8 +223,8 @@ export function netLayout(rink: RinkGeometry, end: 'top' | 'bottom', tilt: numbe
 
 function drawNets(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
   const depth = Math.round(rink.netDepth * tilt);
-  const frontRise = Math.round(riseOf(HEIGHTS.netFront, tilt));
-  const backRise = Math.round(riseOf(HEIGHTS.netBack, tilt));
+  const frontRise = Math.round(riseOf(rink.netFrontHeight, tilt));
+  const backRise = Math.round(riseOf(rink.netBackHeight, tilt));
   const red = rgb(PAL.red);
   const redDark = rgb(PAL.redDark);
   const mesh = rgb(PAL.netMesh);
@@ -239,7 +239,7 @@ function drawNets(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
     // Netting is a see-through checker so a puck in the net still shows.
     const netting = (row0: number, row1: number, color: Rgb): void => {
       for (let y = row0; y <= row1; y++) {
-        for (let x = 1; x < last; x++) if ((x + y) % 2 === 0) buf.set(x, y, color);
+        for (let x = rink.postWidth; x <= last - rink.postWidth; x++) if ((x + y) % 2 === 0) buf.set(x, y, color);
       }
     };
     const bar = (y: number, color: Rgb): void => {
@@ -247,8 +247,11 @@ function drawNets(scene: Phaser.Scene, rink: RinkGeometry, tilt: number): void {
     };
     const posts = (row0: number, row1: number, color: Rgb): void => {
       for (let y = row0; y <= row1; y++) {
-        buf.set(0, y, color);
-        buf.set(last, y, color);
+        // Posts as wide as the collision geometry says, so the opening drawn is the opening that scores.
+        for (let k = 0; k < rink.postWidth; k++) {
+          buf.set(k, y, color);
+          buf.set(last - k, y, color);
+        }
       }
     };
 
@@ -320,5 +323,5 @@ export function buildTemporaryTextures(scene: Phaser.Scene, rink: RinkGeometry, 
 /** Screen-space box of a net's goal mouth, for placing its sprite. */
 export function netScreenAnchor(rink: RinkGeometry, end: 'top' | 'bottom', tilt: number): { x: number; y: number } {
   const box = netBox(rink, end);
-  return { x: box.left - 1, y: Math.round(projectY(goalLineY(rink, end), tilt)) };
+  return { x: box.left, y: Math.round(projectY(goalLineY(rink, end), tilt)) };
 }

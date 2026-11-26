@@ -2,6 +2,28 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.7.0 - 2026-11-25 - The 48-pixel goal
+
+171 tests (2 need the private authoring file and are skipped without it).
+
+### Changed
+- **Goal mouth widened from 24 to 48 px (Decision 76).** 2 px posts, 52 px outside, deeper and taller in proportion, with the goal line moved out so the ice behind the net is unchanged. The stand-in net, the collision box and the scoring test all come from one setting; 40 px is kept as a test value. A goal now needs the whole puck between the posts.
+- The supplied creases are shown at twice their size to match, until redrawn.
+- Master art packages moved out of the repository; ingest scripts read them from a configurable folder (`BLH_ART_DIR`).
+- The curated authoring file moved to private storage. The game and its tests run without it.
+
+### Added
+- `ART_BRIEF.md` section 11: exact goal, crease, bottle, ripple, knock-off and dislodged-net specification; section 12: the updated request for the art tool.
+- `COMPOSITOR_ART_SPEC.md`: clarifications, approved counts, 12 casual outfits, fit classes, and the proof-of-concept package.
+
+### Known issues
+- **Not locked:** the goal dimensions wait on shooting and goaltending tests.
+- Faceoff circles are still thick and the ice still blue: both are supplied art, which the game never recolours or redraws. New art is specified.
+- Shooting feel was tuned for the old net and has not been retuned. There is no goalie yet.
+- Switching between 40 and 48 is a one-number change in code, not an in-game switch.
+- The attribute panel redesign and the name pool expansion are not done.
+- The batch 11 goal art is now smaller than the net (37 px against 52) and remains fit-test only.
+
 ## 0.6.0 - 2026-11-25 - A fictional hockey universe; profile details; randomize with locks; edit a saved player's look
 
 166 tests.

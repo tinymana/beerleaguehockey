@@ -15,7 +15,7 @@ import sys
 import unicodedata
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-CURATED = os.path.join(ROOT, 'data', 'influences', 'curated.tsv')
+CURATED = os.path.join(ROOT, 'data', 'private', 'authoring', 'curated.tsv')  # private authoring file (Decision 77)
 ALIASES = os.path.join(ROOT, 'data', 'influences', 'aliases.json')
 REFERENCE = os.path.join(ROOT, 'data', 'private', 'reference', 'nhl_players.csv')  # private, optional
 OUT = os.path.join(ROOT, 'src', 'dynasty', 'data', 'curatedInfluences.ts')
@@ -40,6 +40,10 @@ def main():
     """The curated registry is built from data/influences/curated.tsv alone, so it never needs or carries outside data.
     When the private biographical file is present (development machines only) it is used to cross-check the curated
     names, and a wider registry is written to public/private/, which is git-ignored and left out of site builds."""
+    if not os.path.exists(CURATED):
+        print('The curated authoring file is kept in private storage (data/private/authoring/curated.tsv) and is not present.')
+        print('Nothing to rebuild: the committed src/dynasty/data/curatedInfluences.ts is the registry the game uses.')
+        return
     errors = []
     people = []
     if os.path.exists(REFERENCE):
