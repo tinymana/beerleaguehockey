@@ -9,7 +9,8 @@
 import type { AttributeKey, Position } from './attributes';
 import { attributesFor } from './attributes';
 import { INFLUENCE_DATA } from './data/influences';
-import { EXTENDED_INFLUENCE_LINES } from './data/influencesExtended';
+import { Rng } from '../core/rng';
+import { NAME_POOLS } from './names';
 
 export interface InfluenceRecord {
   id: string;
@@ -17,7 +18,7 @@ export interface InfluenceRecord {
   name: string;
   /** Fictional replacement, when one has been written. */
   alias: string | null;
-  /** Row in data/reference/nhl_players.csv this record's facts came from. */
+  /** An outside reference id, when one is known. Empty in the public registry. */
   referenceId: string;
   position: Position;
   born: number;
@@ -32,6 +33,8 @@ export interface InfluenceRecord {
   blurb: string;
   /** Where the style profile came from. Absent means curated. */
   source?: InfluenceSource;
+  /** True for a stable id whose record is not in this build. Position is unknown, so it is not checked. */
+  unlisted?: boolean;
 }
 
 /**
@@ -51,56 +54,118 @@ const BY_ID = new Map(INFLUENCES.map((i) => [i.id, i]));
 
 const EXTENDED_POSITION: Record<string, Position> = { F: 'forward', D: 'defense', G: 'goalie' };
 
+const MILD: Record<string, { weights: Partial<Record<AttributeKey, number>>; tags: string[]; blurb: string }> = {
+  f: { weights: { offensiveAwareness: 1 }, tags: ['finisher'], blurb: 'Career record leans toward finishing.' },
+  p: { weights: { passing: 1 }, tags: ['playmaker'], blurb: 'Career record leans toward setting others up.' },
+};
+
+function widerRecord(id: string, referenceId: string, name: string, position: Position, born: number, country: string, letter: string): InfluenceRecord {
+  // One mild leaning for a skater whose record leans clearly one way (Decision 53). Goalies are always neutral.
+  const mild = position === 'goalie' ? undefined : MILD[letter];
+  return {
+    id,
+    name,
+    alias: null,
+    referenceId,
+    position,
+    born,
+    country,
+    shoots: null,
+    heightIn: null,
+    weightLb: null,
+    tags: mild?.tags ?? [],
+    weights: mild?.weights ?? {},
+    blurb: mild?.blurb ?? 'Limited data: no playing style on file.',
+    source: mild ? 'derived' : 'limited',
+  };
+}
+
+/** Proposed size of the fictional fallback registry. */
+export const FALLBACK_COUNT = { forward: 120, defense: 80, goalie: 40 } as const;
+
 /**
- * The wider registry: everyone else in the reference file. Ids are "N" plus the NHL id.
- * Skaters whose career record leans clearly one way get a single mild leaning: a finisher toward
- * offensive awareness, a playmaker toward passing. Nothing else is inferred, and goalies are always neutral.
+ * The fallback wider registry (Decision 61): fictional professionals, generated from the fictional name
+ * pools with a fixed seed, so the game works with no outside data at all. Ids "X001" onward are stable
+ * for as long as the pools and the seed are unchanged. About one skater in four carries a mild leaning.
  */
-function parseExtended(lines: string): InfluenceRecord[] {
+function buildFallback(): InfluenceRecord[] {
+  const rng = new Rng(20261125).fork('fallback-influences');
+  const out: InfluenceRecord[] = [];
+  const used = new Set<string>(INFLUENCES.map((i) => i.name));
+  let n = 0;
+  for (const position of ['forward', 'defense', 'goalie'] as const) {
+    for (let k = 0; k < FALLBACK_COUNT[position]; k++) {
+      let name = '';
+      let code = '';
+      do {
+        const pool = NAME_POOLS[rng.int(NAME_POOLS.length)] as (typeof NAME_POOLS)[number];
+        name = `${pool.first[rng.int(pool.first.length)]} ${pool.last[rng.int(pool.last.length)]}`;
+        code = pool.code;
+      } while (used.has(name));
+      used.add(name);
+      const born = 1950 + rng.int(55);
+      const roll = rng.next();
+      n++;
+      out.push(widerRecord(`X${String(n).padStart(3, '0')}`, '', name, position, born, code, roll < 0.12 ? 'f' : roll < 0.24 ? 'p' : ''));
+    }
+  }
+  return out.sort((a, b) => (a.name.split(' ')[1] ?? '').localeCompare(b.name.split(' ')[1] ?? '') || a.name.localeCompare(b.name));
+}
+
+/**
+ * A wider registry supplied from outside the repository: one line per person,
+ * "reference id | name | F, D or G | birth year | country | f, p or empty". Ids become "N" plus the reference id.
+ * Used only in private development builds while the source data's licence is unverified.
+ */
+export function parseWiderRegistry(lines: string): InfluenceRecord[] {
   const out: InfluenceRecord[] = [];
   for (const line of lines.split('\n')) {
-    const [referenceId, name, pos, born, country, letter] = line.split('|');
+    const [referenceId, name, pos, born, country, letter] = line.trim().split('|');
     const position = EXTENDED_POSITION[pos ?? ''];
     if (!referenceId || !name || !position) continue;
-    const tendency = position === 'goalie' ? '' : letter;
-    const weights: Partial<Record<AttributeKey, number>> = tendency === 'f' ? { offensiveAwareness: 1 } : tendency === 'p' ? { passing: 1 } : {};
-    out.push({
-      id: `N${referenceId}`,
-      name,
-      alias: null,
-      referenceId,
-      position,
-      born: Number(born) || 0,
-      country: country ?? '',
-      shoots: null,
-      heightIn: null,
-      weightLb: null,
-      tags: tendency === 'f' ? ['finisher'] : tendency === 'p' ? ['playmaker'] : [],
-      weights,
-      blurb: tendency === 'f' ? 'Career record leans toward finishing.' : tendency === 'p' ? 'Career record leans toward setting others up.' : 'Limited data: no playing style on file.',
-      source: tendency === 'f' || tendency === 'p' ? 'derived' : 'limited',
-    });
+    out.push(widerRecord(`N${referenceId}`, referenceId, name, position, Number(born) || 0, country ?? '', letter ?? ''));
   }
   return out;
 }
 
-let extended: InfluenceRecord[] | null = null;
-let extendedById: Map<string, InfluenceRecord> | null = null;
+let fallback: InfluenceRecord[] | null = null;
+let supplied: InfluenceRecord[] | null = null;
+let widerById: Map<string, InfluenceRecord> | null = null;
 
-/** Everyone outside the curated set, in surname order. Parsed on first use. */
-export function extendedInfluences(): readonly InfluenceRecord[] {
-  if (!extended) {
-    extended = parseExtended(EXTENDED_INFLUENCE_LINES);
-    extendedById = new Map(extended.map((i) => [i.id, i]));
+function index(): Map<string, InfluenceRecord> {
+  if (!widerById) {
+    fallback ??= buildFallback();
+    widerById = new Map([...fallback, ...(supplied ?? [])].map((i) => [i.id, i]));
   }
-  return extended;
+  return widerById;
+}
+
+/** Replace the fictional fallback with a supplied registry for browsing. Fallback ids keep resolving, so no saved player breaks. */
+export function registerWiderRegistry(lines: string | null): number {
+  supplied = lines ? parseWiderRegistry(lines) : null;
+  widerById = null;
+  return supplied?.length ?? 0;
+}
+
+export function widerRegistryKind(): 'fictional fallback' | 'supplied' {
+  return supplied && supplied.length ? 'supplied' : 'fictional fallback';
+}
+
+/** Everyone outside the curated set that can be browsed: the supplied registry when there is one, otherwise the fictional fallback. */
+export function extendedInfluences(): readonly InfluenceRecord[] {
+  index();
+  return supplied && supplied.length ? supplied : (fallback as InfluenceRecord[]);
 }
 
 export function influenceById(id: string): InfluenceRecord | undefined {
   const curated = BY_ID.get(id);
-  if (curated || !id.startsWith('N')) return curated;
-  extendedInfluences();
-  return extendedById?.get(id);
+  if (curated) return curated;
+  const wider = index().get(id);
+  if (wider) return wider;
+  // A stable "N" id whose record is not in this build (the supplied registry is absent): the id stays valid
+  // and resolves to a neutral placeholder, so a player saved with it still loads. Nothing is invented about them.
+  if (/^N\d+$/.test(id)) return { ...widerRecord(id, id.slice(1), 'Unlisted professional', 'forward', 0, '', ''), unlisted: true };
+  return undefined;
 }
 
 export function influenceSource(influence: InfluenceRecord): InfluenceSource {

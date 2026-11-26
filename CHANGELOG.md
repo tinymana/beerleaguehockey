@@ -2,6 +2,32 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.4.1 - 2026-11-25 - Data precautions; Hybrid Goalie; delete, Pick-Up choice, name entry; card pictures
+
+155 tests.
+
+### Added
+- **PS18 Hybrid Goalie (Decision 62):** flat starting allocation; 7% faster development on six technique attributes; nothing slowed.
+- **Stored players (Decision 63):** delete a created player, with an explicit confirmation; choose one for Pick-Up; ids are never reused; the limit of eight is a setting.
+- **Name entry (Decision 64):** an on-screen keyboard for gamepad and mouse, a random-name button drawing on fictional name pools for twelve nationalities, and physical keyboard typing as before. Random names can be edited.
+- **Card pictures (batch 16.10):** play style and starting archetype cards show their illustrations; influences show a silhouette.
+- **Fictional fallback registry (Decision 61):** 240 invented professionals so the wider influence list works with no outside data.
+- **Reconciliation, classified (Decision 65):** 208 high confidence, 224 for manual review, 6 rejected, 41 unresolved. Nothing is accepted until reviewed.
+- `REPO_HISTORY_REWRITE.md`: backup, affected references and proposed commands. Not executed.
+
+### Changed
+- **The biographical file and everything generated from licence-unverified data are out of the repository tree** and git-ignored. The curated registry is built from its own file alone and no longer carries country, handedness, height, weight or outside ids.
+- The real wider registry is loaded only by the development server from private data. Builds use the fictional fallback.
+
+### Known issues
+- **Older commits still contain the removed files** until the history rewrite is approved and run.
+- The appearance work authorized in Decision 66 has not been started.
+- Random names pick a nationality pool at random until the nationality step exists.
+- Choosing a Pick-Up player records the choice; the skating prototype does not use a created player's ratings yet (on-ice work is gated).
+- No dynasty careers exist, so career protection on delete is a tested hook with nothing to protect yet.
+- Hybrid Goalie has no card picture in the package; batch 16.10 art has transparency and cropping issues (`CARD_ART_SPEC.md` section 9).
+- A player made in v0.4.0 with a real wider-registry influence still loads, showing that influence as an unlisted professional.
+
 ## 0.4.0 - 2026-11-25 - Create a Player V1 (first build); the wider influence registry
 
 145 tests. On the ice nothing changed.

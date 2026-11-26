@@ -79,7 +79,7 @@ Ids are stable and never shown to players. Display names can change without touc
 | G09 | Carey Price | G | 1987 | hybrid | **positioning, composure, rebounds**; puck handling, glove, hockey IQ | durability, recovery | So calm it looks easy. |
 | G10 | Ron Hextall | G | 1964 | puck-handler, competitor | **puck handling, strength, leadership**; reflexes, composure, endurance | discipline, rebounds, positioning | Shoots the puck, swings the stick, owns the crease. |
 
-## 2. Play Styles (ice blue cards): approved (Decisions 43, 48, 57)
+## 2. Play Styles (ice blue cards): approved (Decisions 43, 48, 57, 62)
 
 **Ruling:** Play Style is a player-selected gameplay identity. It influences attribute allocation tendencies, development priorities and AI behaviour, works inside the existing attribute budget, is position-appropriate, and can evolve over a career.
 
@@ -115,23 +115,15 @@ Ids are stable and never shown to players. Display names can change without touc
 
 Dropped since the first draft: Faceoff Specialist (too narrow to be an identity; faceoffs now sit under Two-Way Forward).
 
-### 2a. Proposed: PS18 Hybrid Goalie (for review; not implemented)
+### 2a. PS18 Hybrid Goalie: approved and built (Decision 62)
 
-Requested in Decision 57: an explicitly selectable balanced goalie style, not the absence of one.
-
-| Field | Proposal |
+| Field | Value |
 | --- | --- |
 | Id, name, eligibility | PS18, Hybrid Goalie, goalies only |
-| Description | "Butterfly when it suits, stand-up when it does not. No habits to exploit, no party trick either." |
-| **Starting allocation** | **No toward or away attributes.** The style's 25% share of the starting spread is flat. The effect is real and fits the name: the influences' leanings are worn down by a quarter, so a Hybrid goalie starts a little more even than his heroes made him. Same budget, no added points, ceilings untouched |
-| **Development** | Every other style speeds up two or three attributes by 20%. Hybrid instead speeds up the six technique attributes (reflexes, positioning, glove hand, blocker, pad saves, recovery) by **7% each**: roughly the same total benefit as 20% on two, spread evenly. Nothing is slowed |
-| Why not "a little of everything, +20%" | Six attributes at 20% would make Hybrid strictly the best choice for development |
-| Card | Blue card `style_PS18`: a goalie caught halfway between standing and dropping, reading the shooter |
-| Engine changes needed | A style may have an empty toward list; a per-style development rate (7% here) beside the default 20%; the "develops faster" list becomes its own field. Small, with tests |
-
-Alternative if you would rather it lean somewhere: toward positioning and recovery (the two attributes every technique shares), away from nothing, standard 20% development on those two. Simpler, but then it is a fifth specialist rather than a balanced style. I recommend the table above.
-
-**Question:** flat allocation with 7% on six attributes (recommended), or the alternative?
+| Description | Versatility rather than specialization. Butterfly when it suits, stand-up when it does not |
+| Starting allocation | Flat: no toward or away attributes. Its 25% share of the starting spread is kept even, so the influences' leanings are worn down by a quarter. No added points; ceilings untouched |
+| Development | 7% faster in reflexes, positioning, glove hand, blocker, pad saves and recovery. Nothing is slowed. The rate is data on the style |
+| Card | The alternate Hybrid Goalie illustration already in the art collection; it was not in the batch 16.10 package, so the game shows a labelled placeholder until it is supplied as `style_PS18` |
 
 ## 3. Beer League Archetypes (green cards): approved for artwork (Decisions 44, 54, 55)
 

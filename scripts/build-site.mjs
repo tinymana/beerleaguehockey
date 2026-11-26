@@ -16,4 +16,7 @@ rmSync(out, { recursive: true, force: true });
 mkdirSync(out, { recursive: true });
 cpSync(join(root, 'site'), out, { recursive: true });
 cpSync(game, join(out, 'play'), { recursive: true });
+// Private development data (licence unverified) never goes into a site build.
+rmSync(join(out, 'play', 'private'), { recursive: true, force: true });
+rmSync(join(game, 'private'), { recursive: true, force: true });
 console.log(`Website assembled in ${out}`);

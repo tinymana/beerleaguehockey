@@ -2,6 +2,29 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.4.1",
+      "date": "2026-11-25",
+      "title": "Name that skater",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Stuck for a name? Hit Random name and meet your new alter ego. Or spell it out on the on-screen keyboard with a gamepad."
+        },
+        {
+          "tag": "new",
+          "text": "Hybrid Goalie joins the play styles: no party trick, no weakness."
+        },
+        {
+          "tag": "new",
+          "text": "Play style and archetype cards now have pictures."
+        },
+        {
+          "tag": "improved",
+          "text": "You can delete a created player (it asks first) and choose who you take to Pick-Up."
+        }
+      ]
+    },
+    {
       "version": "0.4.0",
       "date": "2026-11-25",
       "title": "Create a Player, for real this time",

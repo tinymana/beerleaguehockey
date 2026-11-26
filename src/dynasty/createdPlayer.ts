@@ -15,8 +15,10 @@ import { dnaInputProblems, generateDNA, parseDNA, serializeDNA } from './dna';
 import { playStyleById } from './playStyles';
 
 export const CREATED_PLAYER_STORE_VERSION = 1;
-/** Proposed limit on confirmed players kept in one browser. */
-export const MAX_CREATED_PLAYERS = 8;
+/** Settings (Decision 63). Eight slots for Creator V1. */
+export const CREATED_PLAYER_CONFIG = { maxPlayers: 8 };
+/** Kept for callers that only want the number. */
+export const MAX_CREATED_PLAYERS = CREATED_PLAYER_CONFIG.maxPlayers;
 export const NAME_MAX = 12;
 
 export interface PlayerDraft {
@@ -47,6 +49,8 @@ export interface CreatedPlayerStore {
   nextId: number;
   players: CreatedPlayer[];
   draft: PlayerDraft | null;
+  /** The created player chosen for Pick-Up games, if any. No dynasty career is needed. */
+  pickUpId?: number | null;
 }
 
 export function emptyDraft(): PlayerDraft {
@@ -54,7 +58,7 @@ export function emptyDraft(): PlayerDraft {
 }
 
 export function emptyStore(): CreatedPlayerStore {
-  return { version: CREATED_PLAYER_STORE_VERSION, nextId: 1, players: [], draft: null };
+  return { version: CREATED_PLAYER_STORE_VERSION, nextId: 1, players: [], draft: null, pickUpId: null };
 }
 
 export function cleanName(text: string): string {
@@ -103,7 +107,7 @@ export function confirmDraft(store: CreatedPlayerStore, seed: number): { store: 
   const draft = store.draft;
   if (!draft) return { store, player: null, problems: ['No player is being created'] };
   const problems = draftProblems(draft);
-  if (store.players.length >= MAX_CREATED_PLAYERS) problems.push(`No more than ${MAX_CREATED_PLAYERS} created players`);
+  if (store.players.length >= CREATED_PLAYER_CONFIG.maxPlayers) problems.push(`No more than ${CREATED_PLAYER_CONFIG.maxPlayers} created players`);
   const input = draftInput(draft, seed);
   if (problems.length || !input || !draft.archetype) return { store, player: null, problems };
   const player: CreatedPlayer = {
@@ -114,7 +118,23 @@ export function confirmDraft(store: CreatedPlayerStore, seed: number): { store: 
     archetype: draft.archetype,
     dna: generateDNA(input),
   };
-  return { store: { ...store, nextId: store.nextId + 1, players: [...store.players, player], draft: null }, player, problems: [] };
+  return { store: { ...store, nextId: store.nextId + 1, players: [...store.players, player], draft: null, pickUpId: store.pickUpId ?? null }, player, problems: [] };
+}
+
+/**
+ * Delete a created player. Only ever called after the player has explicitly confirmed.
+ * A character in an active dynasty career is protected: `inCareer` says which ids those are (career saves are
+ * stored separately and are never touched from here). The id is never handed out again.
+ */
+export function deletePlayer(store: CreatedPlayerStore, id: number, inCareer: (id: number) => boolean = () => false): { store: CreatedPlayerStore; problems: string[] } {
+  if (!store.players.some((p) => p.id === id)) return { store, problems: ['No such player'] };
+  if (inCareer(id)) return { store, problems: ['This player is in an active career and cannot be deleted'] };
+  return { store: { ...store, players: store.players.filter((p) => p.id !== id), pickUpId: store.pickUpId === id ? null : (store.pickUpId ?? null) }, problems: [] };
+}
+
+/** Choose (or clear) the created player used in Pick-Up games. */
+export function choosePickUpPlayer(store: CreatedPlayerStore, id: number | null): CreatedPlayerStore {
+  return { ...store, pickUpId: id !== null && store.players.some((p) => p.id === id) ? id : null };
 }
 
 export function serializeStore(store: CreatedPlayerStore): string {
@@ -126,7 +146,7 @@ export function serializeStore(store: CreatedPlayerStore): string {
  * read fails with the reason, so the caller can keep the original text for recovery.
  */
 export function parseStore(text: string): CreatedPlayerStore {
-  const raw = JSON.parse(text) as { version?: number; nextId?: number; players?: unknown[]; draft?: Partial<PlayerDraft> | null };
+  const raw = JSON.parse(text) as { version?: number; nextId?: number; players?: unknown[]; draft?: Partial<PlayerDraft> | null; pickUpId?: number | null };
   if (raw.version !== CREATED_PLAYER_STORE_VERSION) throw new Error(`Created-player store version ${String(raw.version)} is not supported`);
   const players: CreatedPlayer[] = [];
   for (const entry of raw.players ?? []) {
@@ -153,5 +173,6 @@ export function parseStore(text: string): CreatedPlayerStore {
       archetype: typeof d.archetype === 'string' ? d.archetype : null,
     });
   }
-  return { version: CREATED_PLAYER_STORE_VERSION, nextId, players, draft };
+  const pickUpId = typeof raw.pickUpId === 'number' && players.some((p) => p.id === raw.pickUpId) ? raw.pickUpId : null;
+  return { version: CREATED_PLAYER_STORE_VERSION, nextId, players, draft, pickUpId };
 }

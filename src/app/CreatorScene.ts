@@ -5,11 +5,13 @@ import type { AttributeKey, Position } from '../dynasty/attributes';
 import { startingArchetypeById, startingArchetypesFor } from '../dynasty/archetypes';
 import { CREATED_PLAYER_AGE, backgroundById, backgroundsForAge } from '../dynasty/backgrounds';
 import type { CreatedPlayer, CreatedPlayerStore, PlayerDraft } from '../dynasty/createdPlayer';
-import { MAX_CREATED_PLAYERS, NAME_MAX, cleanName, confirmDraft, draftInput, draftProblems, emptyDraft, reconcileDraft } from '../dynasty/createdPlayer';
+import { CREATED_PLAYER_CONFIG, NAME_MAX, choosePickUpPlayer, cleanName, confirmDraft, deletePlayer, draftInput, draftProblems, emptyDraft, reconcileDraft } from '../dynasty/createdPlayer';
 import { attributeBounds, startingAttributes } from '../dynasty/dna';
-import { influenceById, influenceName, influenceSource, searchInfluences } from '../dynasty/influences';
+import { influenceById, influenceName, influenceSource, registerWiderRegistry, searchInfluences } from '../dynasty/influences';
+import { randomName } from '../dynasty/names';
 import type { InfluenceRecord } from '../dynasty/influences';
-import { playStyleById, playStylesFor } from '../dynasty/playStyles';
+import { developmentFocus, playStyleById, playStylesFor } from '../dynasty/playStyles';
+import { DNA_CONFIG } from '../dynasty/dna';
 import { SCENES, UI, VERSION } from './config';
 import { loadCreatedPlayers, saveCreatedPlayers } from './createdPlayerStore';
 import { Edge, readPad } from './padInput';
@@ -17,6 +19,10 @@ import { addText, fontText } from './pixelFont';
 import { createdPlayer } from './session';
 import { PROFILES, setProfile, setTitleArtVisible } from './stage';
 
+export const CARD_ART = { key: 'cards-16-10', url: './assets/cards/16_10/card_art.png', manifestKey: 'cards-16-10-manifest', manifestUrl: './assets/cards/16_10/manifest.json' };
+/** On-screen keyboard, for gamepad and mouse. A physical keyboard types straight in. */
+const KEYS = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ', "'", '-', 'SPACE', 'DEL', 'DONE'] as const;
+const KEY_COLS = 7;
 export const UI_KIT = { key: 'ui-16-11', url: './assets/ui/16_11/ui_atlas.png', manifestKey: 'ui-16-11-manifest', manifestUrl: './assets/ui/16_11/manifest.json' };
 
 const W = PROFILES.offIce.width;
@@ -39,6 +45,8 @@ interface CardInfo {
   colour: CardColour;
   title: string;
   tag: string;
+  /** Frame name in the batch 16.10 card art atlas, when there is a picture for this card. */
+  art?: string;
   badge?: string;
   body: string;
   footer?: string[];
@@ -54,7 +62,7 @@ interface Option {
   activate: () => void;
 }
 type TextField = 'firstName' | 'lastName' | 'search';
-type Mode = 'edit' | 'confirm' | 'reveal';
+type Mode = 'edit' | 'confirm' | 'reveal' | 'delete';
 
 function wrap(text: string, width: number): string[] {
   const lines: string[] = [];
@@ -91,6 +99,7 @@ export class CreatorScene extends Phaser.Scene {
   private index = 0;
   private scroll = 0;
   private typing: TextField | null = null;
+  private keyIndex = KEYS.length - 1;
   private slot = 0;
   private query = '';
   private mode: Mode = 'edit';
@@ -109,6 +118,8 @@ export class CreatorScene extends Phaser.Scene {
   preload(): void {
     if (!this.textures.exists(UI_KIT.key)) this.load.image(UI_KIT.key, UI_KIT.url);
     if (!this.cache.json.exists(UI_KIT.manifestKey)) this.load.json(UI_KIT.manifestKey, UI_KIT.manifestUrl);
+    if (!this.textures.exists(CARD_ART.key)) this.load.image(CARD_ART.key, CARD_ART.url);
+    if (!this.cache.json.exists(CARD_ART.manifestKey)) this.load.json(CARD_ART.manifestKey, CARD_ART.manifestUrl);
   }
 
   create(): void {
@@ -125,6 +136,20 @@ export class CreatorScene extends Phaser.Scene {
     if (manifest) {
       this.insets = manifest.nineSliceInsets;
       for (const [id, [x, y, w, h]] of Object.entries(manifest.frames)) if (!texture.has(id)) texture.add(id, 0, x, y, w, h);
+    }
+
+    const cards = this.cache.json.get(CARD_ART.manifestKey) as { frames: Record<string, [number, number, number, number]> } | undefined;
+    const cardTexture = this.textures.get(CARD_ART.key);
+    if (cards) for (const [id, [x, y, w, h]] of Object.entries(cards.frames)) if (!cardTexture.has(id)) cardTexture.add(id, 0, x, y, w, h);
+
+    // Development only: a wider registry kept outside the repository (licence unverified). Builds never look for it.
+    if ((import.meta as unknown as { env?: { DEV?: boolean } }).env?.DEV) {
+      void fetch('./private/influences_wider.txt')
+        .then((r) => (r.ok ? r.text() : ''))
+        .then((text) => {
+          if (text.includes('|') && registerWiderRegistry(text)) this.dirty = true;
+        })
+        .catch(() => undefined);
     }
 
     const loaded = loadCreatedPlayers();
@@ -179,12 +204,27 @@ export class CreatorScene extends Phaser.Scene {
     const source = influenceSource(i);
     const where = i.position === 'goalie' ? 'G' : i.position === 'defense' ? 'D' : 'F';
     const footer = source === 'limited' ? ['Limited data', 'Shapes nothing'] : [clip(i.tags.join(', '), 24), source === 'derived' ? 'Career record: mild' : 'Curated profile'];
-    return { colour: 'gold', title: influenceName(i), tag: 'HOCKEY INFLUENCE', badge: where, body: `${i.blurb} Born ${i.born || '?'}${i.country ? `, ${i.country}` : ''}.`, footer };
+    return { colour: 'gold', title: influenceName(i), tag: 'HOCKEY INFLUENCE', art: `silhouette_${i.position}`, badge: where, body: `${i.blurb}${i.born ? ` Born ${i.born}${i.country ? `, ${i.country}` : ''}.` : ''}`, footer };
   }
 
   private buildOptions(): Option[] {
     const d = this.draft;
-    if (this.mode === 'reveal') return [{ label: 'Done', activate: () => this.leaveReveal() }];
+    if (this.mode === 'reveal') {
+      const shown = this.shown;
+      const out: Option[] = [{ label: 'Done', activate: () => this.leaveReveal() }];
+      if (shown && this.store.players.some((p) => p.id === shown.id)) {
+        const picked = this.store.pickUpId === shown.id;
+        out.push({ label: picked ? 'Pick-Up player' : 'Use in Pick-Up', chosen: picked, activate: () => this.pickUp(picked ? null : shown.id) });
+        out.push({ label: 'Delete player', activate: () => this.setMode('delete') });
+      }
+      return out;
+    }
+    if (this.mode === 'delete') {
+      return [
+        { label: 'No, keep this player', activate: () => this.setMode('reveal') },
+        { label: 'Yes, delete forever', frame: 'confirm', activate: () => this.deleteShown() },
+      ];
+    }
     if (this.mode === 'confirm') {
       return [
         { label: 'No, keep editing', activate: () => this.setMode('edit') },
@@ -196,6 +236,7 @@ export class CreatorScene extends Phaser.Scene {
         return [
           { label: 'First name', right: this.fieldText('firstName', d.firstName), activate: () => this.startTyping('firstName') },
           { label: 'Last name', right: this.fieldText('lastName', d.lastName), activate: () => this.startTyping('lastName') },
+          { label: 'Random name', activate: () => this.rollName() },
           ...POSITIONS.map((p) => ({ label: p.label, chosen: d.position === p.id, preview: { position: p.id }, activate: () => this.setDraft({ position: p.id }) })),
         ];
       case 'Background':
@@ -226,20 +267,20 @@ export class CreatorScene extends Phaser.Scene {
           label: s.name,
           chosen: d.playStyle === s.id,
           preview: { playStyle: s.id },
-          card: { colour: 'blue' as const, title: s.name, tag: 'PLAY STYLE', badge: s.positions.map((p) => (p === 'goalie' ? 'G' : p === 'defense' ? 'D' : 'F')).join(''), body: `A quarter of how your starting ability is spread. Develops faster: ${s.toward.map((k) => ATTRIBUTE_LABELS[k]).join(', ')}.`, footer: [clip(`+ ${s.toward.map((k) => ATTRIBUTE_LABELS[k]).join(', ')}`, 24), clip(`- ${s.away.map((k) => ATTRIBUTE_LABELS[k]).join(', ')}`, 24)] },
+          card: { colour: 'blue' as const, title: s.name, tag: 'PLAY STYLE', art: s.id, badge: s.positions.map((p) => (p === 'goalie' ? 'G' : p === 'defense' ? 'D' : 'F')).join(''), body: s.toward.length ? `A quarter of how your starting ability is spread. Develops faster: ${s.toward.map((k) => ATTRIBUTE_LABELS[k]).join(', ')}.` : 'Versatile. A quarter of your starting spread is kept even. Six technique skills develop a little faster.', footer: s.toward.length ? [clip(`+ ${s.toward.map((k) => ATTRIBUTE_LABELS[k]).join(', ')}`, 24), clip(`- ${s.away.map((k) => ATTRIBUTE_LABELS[k]).join(', ')}`, 24)] : ['Balanced start', `+${Math.round((s.developmentRate ?? DNA_CONFIG.playStyleDevelopment) * 100)}% on ${developmentFocus(s).length} skills`] },
           activate: () => this.setDraft({ playStyle: s.id }),
         }));
       case 'Archetype':
         return startingArchetypesFor(d.position, d.background).map((a) => ({
           label: a.name,
           chosen: d.archetype === a.id,
-          card: { colour: 'green' as const, title: a.name, tag: 'ARCHETYPE', body: a.description, footer: ['Who you are in the room', 'Changes no ratings'] },
+          card: { colour: 'green' as const, title: a.name, tag: 'ARCHETYPE', art: a.id, body: a.description, footer: ['Who you are in the room', 'Changes no ratings'] },
           activate: () => this.setDraft({ archetype: a.id }),
         }));
       case 'Review': {
         const problems = draftProblems(d);
-        const full = this.store.players.length >= MAX_CREATED_PLAYERS;
-        if (full) return [{ label: `${MAX_CREATED_PLAYERS} players saved: full`, frame: 'disabled', activate: () => undefined }];
+        const full = this.store.players.length >= CREATED_PLAYER_CONFIG.maxPlayers;
+        if (full) return [{ label: `${CREATED_PLAYER_CONFIG.maxPlayers} players saved: full`, frame: 'disabled', activate: () => undefined }];
         if (problems.length) return problems.map((p) => ({ label: `Missing: ${clip(p, 13)}`, frame: 'disabled' as const, activate: () => this.goToProblem(p) }));
         return [{ label: 'Confirm player', frame: 'confirm', activate: () => this.setMode('confirm') }];
       }
@@ -257,7 +298,7 @@ export class CreatorScene extends Phaser.Scene {
     const a = startingArchetypeById(p.archetype);
     const primary = influenceById(p.dna.primary);
     const style = p.dna.playStyle ? playStyleById(p.dna.playStyle) : undefined;
-    return { colour: 'green', title: `${p.firstName} ${p.lastName}`, tag: a?.name.toUpperCase() ?? 'PLAYER', badge: p.dna.position === 'goalie' ? 'G' : p.dna.position === 'defense' ? 'D' : 'F', body: `Age ${p.age}. ${backgroundById(p.dna.background)?.label ?? ''}. Grew up watching ${primary ? influenceName(primary) : '?'}. ${style ? style.name : 'No style'}.`, footer: [`Overall ${ovr(p)}`, 'Locked in'] };
+    return { colour: 'green', title: `${p.firstName} ${p.lastName}`, tag: a?.name.toUpperCase() ?? 'PLAYER', art: p.archetype, badge: p.dna.position === 'goalie' ? 'G' : p.dna.position === 'defense' ? 'D' : 'F', body: `Age ${p.age}. ${backgroundById(p.dna.background)?.label ?? ''}. Grew up watching ${primary ? influenceName(primary) : '?'}. ${style ? style.name : 'No style'}.`, footer: [`Overall ${ovr(p)}`, 'Locked in'] };
   }
 
   private fieldText(field: TextField, value: string): string {
@@ -329,6 +370,52 @@ export class CreatorScene extends Phaser.Scene {
     this.reveal(result.player);
   }
 
+  private pickUp(id: number | null): void {
+    this.store = choosePickUpPlayer(this.store, id);
+    this.persist();
+    createdPlayer.dna = this.store.players.find((p) => p.id === id)?.dna ?? null;
+    this.dirty = true;
+  }
+
+  private deleteShown(): void {
+    if (!this.shown) return;
+    // No dynasty careers exist yet. When they do, a character in an active career is protected here.
+    const result = deletePlayer(this.store, this.shown.id, () => false);
+    if (result.problems.length) {
+      this.warning = result.problems[0] ?? null;
+      this.setMode('reveal');
+      return;
+    }
+    this.store = result.store;
+    this.persist();
+    this.leaveReveal();
+  }
+
+  private rollName(): void {
+    // The clock only picks which fictional name comes up; the result can be edited like any typed name.
+    const name = randomName(new Rng((Date.now() ^ Math.floor(performance.now() * 1000)) >>> 0));
+    this.setDraft({ firstName: name.first.slice(0, NAME_MAX), lastName: name.last.slice(0, NAME_MAX) });
+  }
+
+  private pressKey(label: string): void {
+    const field = this.typing;
+    if (!field) return;
+    if (label === 'DONE') this.typing = null;
+    else if (label === 'DEL') this.setTyped(field, this.typed(field).slice(0, -1));
+    else if (this.typed(field).length < NAME_MAX) this.setTyped(field, this.typed(field) + (label === 'SPACE' ? ' ' : this.typed(field) && !this.typed(field).endsWith(' ') && !this.typed(field).endsWith('-') ? label.toLowerCase() : label));
+    this.dirty = true;
+  }
+
+  private moveKey(dx: number, dy: number): void {
+    const rows = Math.ceil(KEYS.length / KEY_COLS);
+    let col = this.keyIndex % KEY_COLS;
+    let row = Math.floor(this.keyIndex / KEY_COLS);
+    col = (col + dx + KEY_COLS) % KEY_COLS;
+    row = (row + dy + rows) % rows;
+    this.keyIndex = Math.min(KEYS.length - 1, row * KEY_COLS + col);
+    this.dirty = true;
+  }
+
   private reveal(player: CreatedPlayer): void {
     this.shown = player;
     this.step = 6;
@@ -346,6 +433,7 @@ export class CreatorScene extends Phaser.Scene {
 
   private startTyping(field: TextField): void {
     this.typing = field;
+    this.keyIndex = KEYS.length - 1;
     this.dirty = true;
   }
 
@@ -369,17 +457,16 @@ export class CreatorScene extends Phaser.Scene {
     const key = event.key;
     if (this.typing) {
       const field = this.typing;
-      if (key === 'Enter' || key === 'Escape' || key === 'Tab') {
+      if (key === 'Escape' || key === 'Tab') {
         this.typing = null;
         this.dirty = true;
-      } else if (key === 'Backspace') {
-        this.setTyped(field, this.typed(field).slice(0, -1));
-      } else if (key === 'ArrowUp' || key === 'ArrowDown') {
-        this.typing = null;
-        this.move(key === 'ArrowUp' ? -1 : 1);
-      } else if (key.length === 1 && this.typed(field).length < NAME_MAX) {
-        this.setTyped(field, this.typed(field) + key);
-      }
+      } else if (key === 'Enter') this.pressKey(KEYS[this.keyIndex] ?? 'DONE');
+      else if (key === 'Backspace') this.setTyped(field, this.typed(field).slice(0, -1));
+      else if (key === 'ArrowUp') this.moveKey(0, -1);
+      else if (key === 'ArrowDown') this.moveKey(0, 1);
+      else if (key === 'ArrowLeft') this.moveKey(-1, 0);
+      else if (key === 'ArrowRight') this.moveKey(1, 0);
+      else if (key.length === 1 && this.typed(field).length < NAME_MAX) this.setTyped(field, this.typed(field) + key);
       event.preventDefault();
       return;
     }
@@ -423,6 +510,7 @@ export class CreatorScene extends Phaser.Scene {
 
   private back(): void {
     if (this.mode === 'confirm') this.setMode('edit');
+    else if (this.mode === 'delete') this.setMode('reveal');
     else if (this.mode === 'reveal') this.leaveReveal();
     else if (this.column === 'options') {
       this.column = 'nav';
@@ -432,7 +520,14 @@ export class CreatorScene extends Phaser.Scene {
 
   update(): void {
     const pad = readPad(this);
-    if (!this.typing) {
+    if (this.typing) {
+      if (this.edges.up.pressed(pad.y < -0.5)) this.moveKey(0, -1);
+      if (this.edges.down.pressed(pad.y > 0.5)) this.moveKey(0, 1);
+      if (this.edges.left.pressed(pad.x < -0.5)) this.moveKey(-1, 0);
+      if (this.edges.right.pressed(pad.x > 0.5)) this.moveKey(1, 0);
+      if (this.edges.action.pressed(pad.action)) this.pressKey(KEYS[this.keyIndex] ?? 'DONE');
+      if (this.edges.back.pressed(pad.back)) this.pressKey('DEL');
+    } else {
       if (this.edges.up.pressed(pad.y < -0.5)) this.move(-1);
       if (this.edges.down.pressed(pad.y > 0.5)) this.move(1);
       if (this.edges.left.pressed(pad.x < -0.5)) this.side(-1);
@@ -472,7 +567,7 @@ export class CreatorScene extends Phaser.Scene {
     this.slice(8, 8, W - 16, 44, 'panel');
     this.text(24, 19, 'CREATE A PLAYER', UI.gold, 3);
     const name = `${this.draft.firstName} ${this.draft.lastName}`.trim();
-    this.text(400, 23, this.mode === 'reveal' && this.shown ? `${this.shown.firstName} ${this.shown.lastName}` : name || 'New player', UI.ice);
+    this.text(400, 23, this.mode !== 'edit' && this.mode !== 'confirm' && this.shown ? `${this.shown.firstName} ${this.shown.lastName}` : name || 'New player', UI.ice);
     this.text(W - 150, 26, `V1  ${VERSION}`, UI.dim, 1);
 
     // Steps
@@ -491,14 +586,15 @@ export class CreatorScene extends Phaser.Scene {
       if (done) this.text(NAV.x + NAV.w - 20, y + 9, '+', GREEN);
     });
     this.text(20, 348, 'TEMPORARY IN V1:', UI.dim, 1);
-    ['Font and card pictures.', 'Appearance, gear and', 'nationality come next.', '', 'CUR = curated profile'].forEach((line, i) => this.text(20, 360 + i * 10, line, UI.dim, 1));
+    ['The font. Hybrid Goalie', 'card picture. Appearance,', 'gear and nationality', 'come next.', 'CUR = curated profile'].forEach((line, i) => this.text(20, 360 + i * 10, line, UI.dim, 1));
 
     // Options
     this.slice(224, 60, 304, 424, 'panel');
-    const heading = this.mode === 'confirm' ? 'LOCK IN?' : this.mode === 'reveal' ? 'YOUR PLAYER' : (STEPS[this.step] ?? '').toUpperCase();
+    const heading = this.typing ? (this.typing === 'search' ? 'SEARCH' : this.typing === 'firstName' ? 'FIRST NAME' : 'LAST NAME') : this.mode === 'confirm' ? 'LOCK IN?' : this.mode === 'delete' ? 'DELETE?' : this.mode === 'reveal' ? 'YOUR PLAYER' : (STEPS[this.step] ?? '').toUpperCase();
     this.text(236, 72, heading, UI.gold);
     if (this.options.length > OPT.rows) this.text(440, 76, `${this.index + 1} / ${this.options.length}${this.options.length >= RESULT_LIMIT ? '+' : ''}`, UI.dim, 1);
-    this.options.slice(this.scroll, this.scroll + OPT.rows).forEach((option, row) => {
+    if (this.typing) this.drawKeyboard();
+    (this.typing ? [] : this.options.slice(this.scroll, this.scroll + OPT.rows)).forEach((option, row) => {
       const i = this.scroll + row;
       const focused = this.column === 'options' && this.index === i;
       const y = OPT.y + row * OPT.gap;
@@ -519,11 +615,11 @@ export class CreatorScene extends Phaser.Scene {
         this.text(OPT.x + OPT.w - 10 - right.length * 12, y + 7, right, onGold ? UI.navy : option.chosen ? GREEN : UI.ice);
       }
     });
-    if (!this.options.length) wrap(this.step === 6 ? 'No players yet. Confirm one and they are kept here.' : 'Nothing matches.', 22).forEach((line, i) => this.text(236, 104 + i * 20, line, UI.dim));
+    if (!this.options.length && !this.typing) wrap(this.step === 6 ? 'No players yet. Confirm one and they are kept here.' : 'Nothing matches.', 22).forEach((line, i) => this.text(236, 104 + i * 20, line, UI.dim));
 
     // Card for the highlighted option
     const focusedOption = this.column === 'options' ? this.options[this.index] : undefined;
-    const card = this.mode === 'reveal' && this.shown ? this.playerCard(this.shown) : this.mode === 'confirm' ? this.confirmCard() : (focusedOption?.card ?? this.stepCard());
+    const card = (this.mode === 'reveal' || this.mode === 'delete') && this.shown ? (this.mode === 'delete' ? { ...this.playerCard(this.shown), body: 'Deleting removes this player from this browser for good. Their number is never used again.', footer: ['Cannot be undone'] } : this.playerCard(this.shown)) : this.mode === 'confirm' ? this.confirmCard() : (focusedOption?.card ?? this.stepCard());
     this.drawCard(card);
 
     // Notes under the card
@@ -536,8 +632,35 @@ export class CreatorScene extends Phaser.Scene {
 
     // Footer
     this.slice(8, 492, W - 16, 40, 'panel');
-    const hint = this.typing ? 'TYPE   ENTER: DONE   BACKSPACE: DELETE' : 'ARROWS / STICK: MOVE   ENTER / A: CHOOSE   ESC / B: BACK   MOUSE: CLICK';
+    const hint = this.typing ? 'TYPE, OR MOVE AND PRESS ENTER / A   B / BACKSPACE: DELETE   ESC: DONE' : 'ARROWS / STICK: MOVE   ENTER / A: CHOOSE   ESC / B: BACK   MOUSE: CLICK';
     this.text(24, 505, this.warning ? clip(this.warning, 76) : hint, this.warning ? UI.red : UI.dim);
+  }
+
+  private drawKeyboard(): void {
+    const field = this.typing;
+    if (!field) return;
+    this.slice(OPT.x, OPT.y, OPT.w, OPT.h, 'button_selected');
+    this.text(OPT.x + 10, OPT.y + 7, `${this.typed(field)}_`, UI.navy);
+    KEYS.forEach((label, i) => {
+      const wide = label.length > 1;
+      const x = OPT.x + (i % KEY_COLS) * 41;
+      const y = OPT.y + 44 + Math.floor(i / KEY_COLS) * 40;
+      const w = wide ? (label === 'SPACE' ? 80 : 39) : 39;
+      // The last row holds the three wide keys: lay them out by hand.
+      const lastRow = i >= 28;
+      const lx = lastRow ? OPT.x + [0, 84, 146][i - 28]! : x;
+      const lw = lastRow ? [80, 58, 80][i - 28]! : w;
+      const focused = this.keyIndex === i;
+      const button = this.slice(lx, y, lw, 34, focused ? 'button_selected' : label === 'DONE' ? 'button_confirm' : 'button_idle');
+      button.setInteractive({ useHandCursor: true }).on('pointerdown', () => {
+        this.keyIndex = i;
+        this.pressKey(label);
+      });
+      const shown = label === 'SPACE' ? 'SPACE' : label;
+      this.text(lx + Math.floor((lw - shown.length * 12) / 2) + 1, y + 10, shown, focused ? UI.navy : UI.white);
+    });
+    if (field === 'search') this.text(OPT.x, OPT.y + 44 + 5 * 40 + 8, `${searchInfluences(this.draft.position, this.query, RESULT_LIMIT).length} MATCHES`, UI.dim, 1);
+    else wrap('Letters, spaces, apostrophes and hyphens. Up to 12.', 44).forEach((line, i) => this.text(OPT.x, OPT.y + 44 + 5 * 40 + 8 + i * 10, line, UI.dim, 1));
   }
 
   private stepDone(i: number): boolean {
@@ -560,14 +683,14 @@ export class CreatorScene extends Phaser.Scene {
       }
       case 'Play Style': {
         const s = d.playStyle ? playStyleById(d.playStyle) : undefined;
-        return { colour: 'blue', title: s?.name ?? 'How do you play?', tag: 'PLAY STYLE', body: s ? `Develops faster: ${s.toward.map((k) => ATTRIBUTE_LABELS[k]).join(', ')}.` : 'Pick one. It can be changed between seasons.' };
+        return { colour: 'blue', title: s?.name ?? 'How do you play?', tag: 'PLAY STYLE', art: s?.id, body: s ? `Develops faster: ${developmentFocus(s).map((k) => ATTRIBUTE_LABELS[k]).join(', ')}.` : 'Pick one. It can be changed between seasons.' };
       }
       case 'Archetype': {
         const a = d.archetype ? startingArchetypeById(d.archetype) : undefined;
-        return { colour: 'green', title: a?.name ?? 'Who are you?', tag: 'ARCHETYPE', body: a?.description ?? 'Your identity in the room. It changes over a career. It never changes a rating.' };
+        return { colour: 'green', title: a?.name ?? 'Who are you?', tag: 'ARCHETYPE', art: a?.id, body: a?.description ?? 'Your identity in the room. It changes over a career. It never changes a rating.' };
       }
       case 'Saved Players':
-        return { colour: 'green', title: 'Saved players', tag: 'LOCKED IN', body: `${this.store.players.length} of ${MAX_CREATED_PLAYERS}. Kept in this browser. A confirmed player is never rolled again.` };
+        return { colour: 'green', title: 'Saved players', tag: 'LOCKED IN', body: `${this.store.players.length} of ${CREATED_PLAYER_CONFIG.maxPlayers}. Kept in this browser. A confirmed player is never rolled again.` };
       default:
         return { colour: 'panel', title: `${d.firstName} ${d.lastName}`.trim() || 'New player', tag: `AGE ${CREATED_PLAYER_AGE}`, badge: d.position === 'goalie' ? 'G' : d.position === 'defense' ? 'D' : 'F', body: `${backgroundById(d.background)?.label ?? ''}. Every created player starts at ${CREATED_PLAYER_AGE}.` };
     }
@@ -586,17 +709,23 @@ export class CreatorScene extends Phaser.Scene {
     else this.text(CARD.x + 10, CARD.y + 14, clip(card.title, 23), tint, 1);
     this.text(CARD.x + 10, CARD.y + 29, card.tag, UI.dim, 1);
     if (card.badge) this.text(CARD.x + CARD.w - 12 - card.badge.length * 6, CARD.y + 29, card.badge, UI.white, 1);
-    const art = this.add.rectangle(CARD.x + 8, CARD.y + 42, 144, 96, UI.navy, 0.85).setOrigin(0, 0).setStrokeStyle(1, UI.dim);
-    this.layer.add(art);
-    this.text(CARD.x + 44, CARD.y + 80, 'ART PENDING', UI.dim, 1);
-    this.text(CARD.x + 38, CARD.y + 92, '(PLACEHOLDER)', UI.dim, 1);
+    const hasArt = card.art !== undefined && this.textures.get(CARD_ART.key).has(card.art);
+    if (hasArt) {
+      // Batch 16.10 illustration, shown at its native 144x96.
+      this.layer.add(this.add.image(CARD.x + 8, CARD.y + 42, CARD_ART.key, card.art).setOrigin(0, 0));
+    } else {
+      const art = this.add.rectangle(CARD.x + 8, CARD.y + 42, 144, 96, UI.navy, 0.85).setOrigin(0, 0).setStrokeStyle(1, UI.dim);
+      this.layer.add(art);
+      this.text(CARD.x + 44, CARD.y + 80, 'ART PENDING', UI.dim, 1);
+      this.text(CARD.x + 38, CARD.y + 92, '(PLACEHOLDER)', UI.dim, 1);
+    }
     wrap(card.body, 23).slice(0, 4).forEach((line, i) => this.text(CARD.x + 10, CARD.y + 144 + i * 10, line, UI.white, 1));
     (card.footer ?? []).slice(0, 2).forEach((line, i) => this.text(CARD.x + 10, CARD.y + 190 + i * 13, line, tint, 1));
   }
 
   private notes(): string[] {
     const d = this.draft;
-    if (this.mode === 'reveal' && this.shown) {
+    if ((this.mode === 'reveal' || this.mode === 'delete') && this.shown) {
       const p = this.shown;
       const label = (k: AttributeKey): string => ATTRIBUTE_LABELS[k];
       return ['STRENGTHS', ...p.dna.strengths.map((k) => ` ${label(k)}`), '', 'WEAKNESSES', ...p.dna.weaknesses.map((k) => ` ${label(k)}`), '', ...wrap(`Tendencies: ${p.dna.tendencies.join(', ') || 'none'}`, 23)];
@@ -613,7 +742,7 @@ export class CreatorScene extends Phaser.Scene {
     this.layer.add(g);
     const barX = ATTR.x + 146;
     const px = (rating: number): number => Math.round((rating / 99) * ATTR.bar);
-    if (this.mode === 'reveal' && this.shown) {
+    if ((this.mode === 'reveal' || this.mode === 'delete') && this.shown) {
       const attributes = startingAttributes(this.shown.dna);
       this.text(ATTR.x, 72, `OVERALL ${ovr(this.shown)}`, UI.gold);
       for (const [row, key] of attributesFor(this.shown.dna.position).entries()) {

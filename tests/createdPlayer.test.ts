@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { startingArchetypesFor, STARTING_ARCHETYPES } from '../src/dynasty/archetypes';
-import { CREATED_PLAYER_STORE_VERSION, MAX_CREATED_PLAYERS, cleanName, confirmDraft, draftProblems, emptyDraft, emptyStore, parseStore, reconcileDraft, serializeStore } from '../src/dynasty/createdPlayer';
+import { CREATED_PLAYER_CONFIG, CREATED_PLAYER_STORE_VERSION, MAX_CREATED_PLAYERS, choosePickUpPlayer, cleanName, confirmDraft, deletePlayer, draftProblems, emptyDraft, emptyStore, parseStore, reconcileDraft, serializeStore } from '../src/dynasty/createdPlayer';
 import type { CreatedPlayerStore, PlayerDraft } from '../src/dynasty/createdPlayer';
 import { PROFILES, profileFit } from '../src/app/stage';
 
@@ -87,6 +87,51 @@ describe('creating a player', () => {
     expect(repaired.draft?.primary).toBeNull();
     expect(repaired.draft?.playStyle).toBeNull();
     expect(repaired.players).toEqual(store.players);
+  });
+});
+
+describe('stored players (Decision 63)', () => {
+  const three = (): CreatedPlayerStore => {
+    let store = emptyStore();
+    for (let i = 0; i < 3; i++) store = confirmDraft(withDraft(ready({ firstName: `P${'abc'[i]}` }), store), i + 1).store;
+    return store;
+  };
+
+  it('has eight slots, as a setting', () => {
+    expect(CREATED_PLAYER_CONFIG.maxPlayers).toBe(8);
+  });
+
+  it('deletes only the player named, never reuses an id, and frees the slot', () => {
+    const store = three();
+    const result = deletePlayer(store, 2);
+    expect(result.problems).toEqual([]);
+    expect(result.store.players.map((p) => p.id)).toEqual([1, 3]);
+    expect(result.store.players[0]).toBe(store.players[0]);
+    expect(result.store.nextId).toBe(4);
+    const next = confirmDraft(withDraft(ready(), result.store), 50);
+    expect(next.player?.id).toBe(4);
+    expect(deletePlayer(store, 99).problems).toEqual(['No such player']);
+    expect(parseStore(serializeStore(result.store))).toEqual(result.store);
+  });
+
+  it('refuses to delete a character in an active career', () => {
+    const store = three();
+    const result = deletePlayer(store, 2, (id) => id === 2);
+    expect(result.store).toBe(store);
+    expect(result.problems.join()).toMatch(/active career/);
+  });
+
+  it('lets a created player be chosen for Pick-Up without a career, and clears the choice if they are deleted', () => {
+    let store = choosePickUpPlayer(three(), 3);
+    expect(store.pickUpId).toBe(3);
+    expect(parseStore(serializeStore(store)).pickUpId).toBe(3);
+    expect(choosePickUpPlayer(store, 42).pickUpId).toBeNull();
+    store = deletePlayer(store, 3).store;
+    expect(store.pickUpId).toBeNull();
+    // A store saved before this field existed still loads.
+    const old = JSON.parse(serializeStore(three())) as Record<string, unknown>;
+    delete old.pickUpId;
+    expect(parseStore(JSON.stringify(old)).pickUpId).toBeNull();
   });
 });
 

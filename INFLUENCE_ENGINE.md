@@ -4,16 +4,29 @@ Beer League Hockey - Tiny Mana Studios. Dataset review requested by the creative
 
 **Status: reviewed and ruled (Decision 53). The limited approach is built in v0.4.0.** Sections 1 to 9 are the audit as submitted; section 0 is what was ruled and built.
 
-## 0. Ruling and what is in the game
+## 0. Rulings and what is in the game (Decisions 53, 61, 65)
 
-- **Curated (64):** unchanged, the featured set, listed first.
-- **Derived (830 skaters):** exactly one mild leaning (weight 1). Finisher: offensive awareness. Playmaker: passing. No wrist shot accuracy. The Scorer class is not used.
-- **Limited data (7,768):** selectable, shape nothing, labelled "limited data" on the card. Every goalie outside the curated ten is here.
-- Total selectable: 8,662, everyone in the biographical file. Ids outside the curated set are "N" plus the NHL id, so saves hold no names.
-- The only fact taken from the statistics is one letter per skater (`data/influences/derived_tendencies.tsv`: 861 ids, of which 31 belong to curated players and are ignored). No statistics are shipped in the game.
-- **Raw dataset: internal only.** It lives in `data/private/`, which is git-ignored, with the match and review lists that restate it. The licence is still unverified.
-- **Reconciliation worklist:** `data/private/derived/reconciliation.tsv`, 479 records, largest careers first, each with suggested people. 419 have a suggestion; for 286 of the 349 unmatched there is exactly one candidate (same surname, position and plausible years, and no statistics of their own). Rulings go in `data/influences/reconciliation_decisions.tsv` (file, name, first, last, NHL id or "none"); the audit applies them and never guesses.
-- Reproduce with `npm run data:audit` (needs the private files) then `npm run data:influences`.
+**In the public repository and every build:**
+
+- **Curated (64):** unchanged profiles, built from `data/influences/curated.tsv` alone. They carry name, birth year, tags, leanings and blurb, and nothing from any outside dataset.
+- **Fictional fallback (240):** 120 forwards, 80 defencemen and 40 goalies with invented names from the fictional name pools, ids `X001` to `X240`, generated from a fixed seed. About a quarter of the skaters carry one mild leaning; the rest, and all goalies, are neutral. This is what makes the game whole without any dataset.
+
+**Private development only (licence unverified):**
+
+- The real wider registry: 8,598 people with ids "N" plus the NHL id; 830 skaters with one mild leaning (finisher: offensive awareness; playmaker: passing); everyone else neutral. Written to `public/private/`, which is git-ignored, removed from site builds, and loaded only by the development server.
+- A player saved with an "N" id still loads in a build without that registry: the id stays valid and shows as an unlisted professional with no leaning. Nothing is invented.
+- Raw statistics, the biographical file, tendencies, match lists and reconciliation files: all in `data/private/`.
+
+**Reconciliation (Decision 65), 479 unmerged records, nothing accepted yet:**
+
+| Class | Count | Rule |
+| --- | --- | --- |
+| High confidence | 208 | Same surname; given names identical, a short form (Don / Donnie) or a known alias (Mike / Michael); position agrees; debut between 17 and 30; the only candidate; no other record points at the same person |
+| Manual review | 224 | A candidate exists but a test fails: unrelated given names, several candidates, a one-letter surname difference, an unusual debut age, or a position difference |
+| Rejected | 6 | Same name but the birth year makes it impossible (a different person). The record stays unresolved |
+| Unresolved | 41 | No candidate. Stays neutral |
+
+36 of the 208 are flagged for a second look (debut at 17, 29 or 30; fewer than three games; or the one unusual alias, Vinny for Vaclav). The classified list is `data/private/derived/reconciliation_validated.tsv`; the original worklist is preserved beside it; accepted decisions go in `data/private/reconciliation_decisions.tsv` and only then are applied.
 
 ## 1. What was delivered
 

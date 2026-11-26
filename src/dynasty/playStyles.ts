@@ -5,8 +5,7 @@
  * others, inside the same budget the influences use (Decision 48), and marks which
  * attributes will develop faster once progression exists. It never raises a ceiling.
  *
- * The 17 styles and their leanings are the proposed registry in REGISTRIES.md section 2:
- * provisional balancing data until the creative director confirms them.
+ * The styles and their leanings are approved as initial balancing values (Decisions 57, 62).
  */
 import type { AttributeKey, Position } from './attributes';
 
@@ -14,9 +13,13 @@ export interface PlayStyle {
   id: string;
   name: string;
   positions: readonly Position[];
-  /** Leans toward, most characteristic first. */
+  /** Leans toward, most characteristic first. Empty for a balanced style. */
   toward: readonly AttributeKey[];
   away: readonly AttributeKey[];
+  /** Attributes that develop faster, when they are not simply the ones leaned toward. */
+  develops?: readonly AttributeKey[];
+  /** How much faster, when it is not the standard rate in DNA_CONFIG.playStyleDevelopment. */
+  developmentRate?: number;
 }
 
 const F: readonly Position[] = ['forward'];
@@ -42,6 +45,8 @@ export const PLAY_STYLES: readonly PlayStyle[] = [
   { id: 'PS15', name: 'Stand-Up Goalie', positions: G, toward: ['positioning', 'gloveHand', 'balance'], away: ['padSaves', 'recovery'] },
   { id: 'PS16', name: 'Acrobat', positions: G, toward: ['reflexes', 'recovery', 'agility'], away: ['positioning', 'reboundControl'] },
   { id: 'PS17', name: 'Puck-Handling Goalie', positions: G, toward: ['puckHandling', 'composure'], away: ['padSaves', 'discipline'] },
+  // Decision 62: versatility rather than specialization. A flat allocation, and a small development edge spread over six technique attributes.
+  { id: 'PS18', name: 'Hybrid Goalie', positions: G, toward: [], away: [], develops: ['reflexes', 'positioning', 'gloveHand', 'blocker', 'padSaves', 'recovery'], developmentRate: 0.07 },
 ];
 
 const BY_ID = new Map(PLAY_STYLES.map((style) => [style.id, style]));
@@ -64,5 +69,15 @@ export function playStyleWeight(style: PlayStyle, key: AttributeKey): number {
 
 /** Whether this attribute is one the style develops faster (used by progression, when it exists). */
 export function developsFaster(style: PlayStyle, key: AttributeKey): boolean {
-  return style.toward.includes(key);
+  return (style.develops ?? style.toward).includes(key);
+}
+
+/** The attributes this style develops faster. */
+export function developmentFocus(style: PlayStyle): readonly AttributeKey[] {
+  return style.develops ?? style.toward;
+}
+
+/** How much faster this attribute develops under this style: 0 when it is not one of the style's. Nothing is ever slowed (Decision 57). */
+export function developmentBonus(style: PlayStyle, key: AttributeKey, standardRate: number): number {
+  return developsFaster(style, key) ? (style.developmentRate ?? standardRate) : 0;
 }

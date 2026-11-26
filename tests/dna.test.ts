@@ -1,13 +1,16 @@
-import { readFileSync } from 'node:fs';
+import { existsSync } from 'node:fs';
 import { join } from 'node:path';
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it } from 'vitest';
 import { GOALIE_ATTRIBUTES, SKATER_ATTRIBUTES, applyPermanentChange, attributesFor, effectiveRating, overall, withTemporary, withoutTemporary } from '../src/dynasty/attributes';
 import type { AttributeKey, Position } from '../src/dynasty/attributes';
 import { BACKGROUNDS, CREATED_PLAYER_AGE, backgroundsForAge } from '../src/dynasty/backgrounds';
 import { DNA_CONFIG, DNA_VERSION, attributeBounds, dnaInputProblems, generateDNA, influenceBias, parseDNA, serializeDNA, startingAttributes, startingBias } from '../src/dynasty/dna';
-import { PLAY_STYLES, developsFaster, playStyleById, playStylesFor } from '../src/dynasty/playStyles';
+import { PLAY_STYLES, developmentBonus, developmentFocus, developsFaster, playStyleById, playStylesFor } from '../src/dynasty/playStyles';
+import { NAME_POOLS, namePoolFor, randomName } from '../src/dynasty/names';
+import { Rng } from '../src/core/rng';
+import type { InfluenceRecord } from '../src/dynasty/influences';
 import type { DnaInput } from '../src/dynasty/dna';
-import { INFLUENCES, extendedInfluences, influenceById, influenceName, influenceSource, influencesFor, missingAliases, registryProblems, searchInfluences } from '../src/dynasty/influences';
+import { FALLBACK_COUNT, INFLUENCES, extendedInfluences, influenceById, influenceName, influenceSource, influencesFor, missingAliases, registerWiderRegistry, registryProblems, searchInfluences, widerRegistryKind } from '../src/dynasty/influences';
 
 const ROOT = join(__dirname, '..');
 const skater = (over: Partial<DnaInput> = {}): DnaInput => ({ seed: 1, position: 'forward', background: 'youth', primary: 'F01', secondaries: [], ...over });
@@ -60,16 +63,15 @@ describe('Hockey Influences registry', () => {
     }
   });
 
-  it('takes every fact from the supplied reference file', () => {
-    const rows = readFileSync(join(ROOT, 'data', 'reference', 'nhl_players.csv'), 'utf8').split(/\r?\n/).map((l) => l.split(','));
-    const byId = new Map(rows.map((r) => [r[0], r]));
+  it('carries nothing from any outside dataset: only what the curated file holds', () => {
     for (const i of INFLUENCES) {
-      const row = byId.get(i.referenceId);
-      expect(row, i.id).toBeDefined();
-      expect(row?.[1]).toBe(i.name);
-      expect(row?.[4]?.startsWith(String(i.born))).toBe(true);
-      expect({ F: 'forward', D: 'defense', G: 'goalie' }[row?.[2] ?? '']).toBe(i.position);
+      expect(i.referenceId).toBe('');
+      expect(i.country).toBe('');
+      expect([i.shoots, i.heightIn, i.weightLb]).toEqual([null, null, null]);
+      expect(i.born).toBeGreaterThan(1900);
+      expect({ F: 'forward', D: 'defense', G: 'goalie' }[i.id[0] ?? '']).toBe(i.position);
     }
+    expect(existsSync(join(ROOT, 'data', 'reference', 'nhl_players.csv'))).toBe(false);
   });
 
   it('can hide every real name: ids are neutral, blurbs name nobody, and fictional mode never shows a real name', () => {
@@ -236,20 +238,21 @@ describe('Player DNA generation', () => {
 describe('play styles (Decision 48)', () => {
   const sum = (r: Record<string, number | undefined>) => Object.values(r).reduce<number>((a, b) => a + (b ?? 0), 0);
 
-  it('registers 17 styles, each for real positions and real attributes, none leaning both ways', () => {
-    expect(PLAY_STYLES.length).toBe(17);
-    expect(new Set(PLAY_STYLES.map((s) => s.id)).size).toBe(17);
+  it('registers 18 styles, each for real positions and real attributes, none leaning both ways', () => {
+    expect(PLAY_STYLES.length).toBe(18);
+    expect(new Set(PLAY_STYLES.map((s) => s.id)).size).toBe(18);
     for (const style of PLAY_STYLES) {
       for (const position of style.positions) {
         const keys = position === 'goalie' ? GOALIE_ATTRIBUTES : SKATER_ATTRIBUTES;
         for (const key of [...style.toward, ...style.away]) expect(keys, `${style.id} ${key}`).toContain(key);
       }
       expect(style.toward.filter((k) => style.away.includes(k))).toEqual([]);
-      expect(developsFaster(style, style.toward[0]!)).toBe(true);
+      expect(developmentFocus(style).length).toBeGreaterThan(0);
+      expect(developsFaster(style, developmentFocus(style)[0]!)).toBe(true);
     }
     expect(playStylesFor('forward').length).toBe(9);
     expect(playStylesFor('defense').length).toBe(7);
-    expect(playStylesFor('goalie').length).toBe(4);
+    expect(playStylesFor('goalie').length).toBe(5);
   });
 
   it('is a quarter of the starting spread and faster development by a fifth, as settings', () => {
@@ -267,7 +270,7 @@ describe('play styles (Decision 48)', () => {
   });
 
   it('reshapes the starting player inside the same budget and never moves a ceiling', () => {
-    for (const style of PLAY_STYLES) {
+    for (const style of PLAY_STYLES.filter((st) => st.toward.length > 0)) {
       const position = style.positions[0]!;
       const primary = position === 'goalie' ? 'G01' : position === 'defense' ? 'D01' : 'F01';
       let plainTotal = 0, styledTotal = 0, toward = 0, away = 0;
@@ -316,44 +319,72 @@ describe('play styles (Decision 48)', () => {
   });
 });
 
-describe('the wider influence registry (Decision 53)', () => {
-  it('leaves the 64 curated profiles as the featured set and adds everyone else behind neutral ids', () => {
-    expect(INFLUENCES.length).toBe(64);
+describe('the wider influence registry (Decisions 53, 61)', () => {
+  const SAMPLE = ['9000001|Testy McFinisher|F|1970|CAN|f', '9000002|Passy McPlaymaker|D|1980|SWE|p', '9000003|Nobody Special|F|1990|USA|', '9000004|Stoppy Goalie|G|1985|FIN|f', 'broken line'].join('\n');
+  afterEach(() => {
+    registerWiderRegistry(null);
+  });
+
+  it('works with no outside data: a fictional fallback behind stable ids, built the same way every time', () => {
+    expect(widerRegistryKind()).toBe('fictional fallback');
     const wider = extendedInfluences();
-    expect(wider.length).toBeGreaterThan(8000);
-    const curatedRefs = new Set(INFLUENCES.map((i) => i.referenceId));
-    const ids = new Set<string>();
-    for (const i of wider) {
-      expect(i.id).toBe(`N${i.referenceId}`);
-      expect(curatedRefs.has(i.referenceId)).toBe(false);
-      ids.add(i.id);
-    }
-    expect(ids.size).toBe(wider.length);
-    expect(influenceById('F01')?.name).toBe('Wayne Gretzky');
+    expect(wider.length).toBe(FALLBACK_COUNT.forward + FALLBACK_COUNT.defense + FALLBACK_COUNT.goalie);
+    expect(new Set(wider.map((i) => i.id)).size).toBe(wider.length);
+    expect(new Set(wider.map((i) => i.name)).size).toBe(wider.length);
+    for (const i of wider) expect(i.id).toMatch(/^X\d{3}$/);
+    const curated = new Set(INFLUENCES.map((i) => i.name));
+    expect(wider.some((i) => curated.has(i.name))).toBe(false);
+    expect(influenceById('X001')?.position).toBe('forward');
+    expect(influenceById('X200')?.position).toBe('defense');
+    expect(influenceById('X240')?.position).toBe('goalie');
+    expect(INFLUENCES.length).toBe(64);
     expect(influenceSource(influenceById('F01')!)).toBe('curated');
   });
 
-  it('gives a derived skater exactly one mild leaning, and nothing else to anyone', () => {
-    const counts = { derived: 0, limited: 0 };
-    for (const i of extendedInfluences()) {
-      const entries = Object.entries(i.weights);
-      const source = influenceSource(i);
-      if (source === 'derived') {
-        counts.derived++;
-        expect(i.position).not.toBe('goalie');
-        expect(entries.length).toBe(1);
-        expect(entries[0]![1]).toBe(1);
-        expect(['offensiveAwareness', 'passing']).toContain(entries[0]![0]);
-        expect(i.tags).toEqual([entries[0]![0] === 'passing' ? 'playmaker' : 'finisher']);
-      } else {
-        counts.limited++;
-        expect(source).toBe('limited');
-        expect(entries).toEqual([]);
-        expect(i.tags).toEqual([]);
+  it('gives a derived skater exactly one mild leaning, and nothing else to anyone, in the fallback and in a supplied registry', () => {
+    const check = (list: readonly InfluenceRecord[]): number => {
+      let derived = 0;
+      for (const i of list) {
+        const entries = Object.entries(i.weights);
+        if (influenceSource(i) === 'derived') {
+          derived++;
+          expect(i.position).not.toBe('goalie');
+          expect(entries.length).toBe(1);
+          expect(entries[0]![1]).toBe(1);
+          expect(['offensiveAwareness', 'passing']).toContain(entries[0]![0]);
+          expect(i.tags).toEqual([entries[0]![0] === 'passing' ? 'playmaker' : 'finisher']);
+        } else {
+          expect(influenceSource(i)).toBe('limited');
+          expect(entries).toEqual([]);
+          expect(i.tags).toEqual([]);
+        }
       }
+      return derived;
+    };
+    const fallbackDerived = check(extendedInfluences());
+    expect(fallbackDerived).toBeGreaterThan(25);
+    expect(fallbackDerived).toBeLessThan(80);
+    expect(registerWiderRegistry(SAMPLE)).toBe(4);
+    expect(widerRegistryKind()).toBe('supplied');
+    expect(check(extendedInfluences())).toBe(2);
+    expect(influenceById('N9000004')?.weights).toEqual({}); // goalies are always neutral
+    expect(influenceById('N9000001')?.weights).toEqual({ offensiveAwareness: 1 });
+    // Fallback ids keep resolving while a supplied registry is loaded.
+    expect(influenceById('X001')).toBeDefined();
+  });
+
+  it('keeps a stable id valid when its record is not in this build, without inventing anything', () => {
+    const missing = influenceById('N8446105');
+    expect(missing?.unlisted).toBe(true);
+    expect(missing?.weights).toEqual({});
+    expect(missing?.name).toBe('Unlisted professional');
+    expect(influenceById('N-oops')).toBeUndefined();
+    expect(influenceById('Q1')).toBeUndefined();
+    // A player saved with such an id, as primary or secondary, at any position, still loads exactly.
+    for (const position of ['forward', 'goalie'] as const) {
+      const dna = generateDNA({ seed: 9, position, background: 'youth', primary: position === 'goalie' ? 'G01' : 'F01', secondaries: ['N8446105'] });
+      expect(parseDNA(serializeDNA(dna))).toEqual(dna);
     }
-    expect(counts.derived).toBeGreaterThan(700);
-    expect(counts.derived).toBeLessThan(900);
   });
 
   it('a limited-data influence shapes nothing; a derived one leans mildly; both stay inside the budget', () => {
@@ -365,20 +396,87 @@ describe('the wider influence registry (Decision 53)', () => {
     const lean = influenceBias(skater({ primary: finisher.id }));
     expect(lean.offensiveAwareness!).toBeGreaterThan(0.9);
     expect(SKATER_ATTRIBUTES.reduce((a, k) => a + (lean[k] ?? 0), 0)).toBeCloseTo(0, 9);
-    // As a 15% secondary beside a curated primary it barely moves anything, and the curated profile still dominates.
     const mixed = influenceBias(skater({ primary: 'F33', secondaries: ['F08', finisher.id] }));
     expect(mixed.strength!).toBeGreaterThan(mixed.offensiveAwareness!);
-    expect(generateDNA(skater({ primary: neutral.id, playStyle: 'PS01' })).playStyle).toBe('PS01');
     expect(dnaInputProblems(skater({ position: 'goalie', primary: neutral.id })).length).toBeGreaterThan(0);
   });
 
   it('searches by any part of a name, ignoring accents, curated first, goalies only for goalies', () => {
-    const hits = searchInfluences('forward', 'lidstrom');
-    expect(hits[0]?.id).toBe('D02');
+    expect(searchInfluences('forward', 'lidstrom')[0]?.id).toBe('D02');
     expect(searchInfluences('forward', 'gretz').map((i) => i.id)).toContain('F01');
     expect(searchInfluences('goalie', '').slice(0, 10).every((i) => i.position === 'goalie')).toBe(true);
     expect(searchInfluences('forward', '', 70).slice(0, 54).every((i) => influenceSource(i) === 'curated')).toBe(true);
     expect(searchInfluences('forward', 'zzzzqq')).toEqual([]);
     expect(searchInfluences('forward', '', 25).length).toBe(25);
+    registerWiderRegistry(SAMPLE);
+    expect(searchInfluences('forward', 'mcp').map((i) => i.id)).toEqual(['N9000002']);
+    expect(searchInfluences('goalie', 'stoppy').map((i) => i.id)).toEqual(['N9000004']);
+  });
+});
+
+describe('fictional names (Decision 64)', () => {
+  it('has a pool per nationality with no repeats, and nothing that needs cleaning', () => {
+    expect(NAME_POOLS.length).toBeGreaterThanOrEqual(10);
+    for (const pool of NAME_POOLS) {
+      expect(new Set(pool.first).size).toBe(pool.first.length);
+      expect(new Set(pool.last).size).toBe(pool.last.length);
+      for (const n of [...pool.first, ...pool.last]) {
+        expect(n).toMatch(/^[A-Za-z' -]{2,12}$/);
+      }
+    }
+  });
+
+  it('draws from the right pool for a nationality, is repeatable for a seed, and never produces a curated real name', () => {
+    const swede = randomName(new Rng(5), 'SWE');
+    expect(namePoolFor('SWE')!.first).toContain(swede.first);
+    expect(namePoolFor('SWE')!.last).toContain(swede.last);
+    expect(randomName(new Rng(5), 'SWE')).toEqual(swede);
+    expect(randomName(new Rng(7), 'ZZZ').code).toMatch(/^[A-Z]{3}$/);
+    const real = new Set(INFLUENCES.map((i) => i.name));
+    for (const pool of NAME_POOLS) for (const f of pool.first) for (const l of pool.last) expect(real.has(`${f} ${l}`), `${f} ${l}`).toBe(false);
+  });
+});
+
+describe('PS18 Hybrid Goalie (Decision 62)', () => {
+  const hybrid = playStyleById('PS18')!;
+  const goalie = (over: Partial<DnaInput> = {}): DnaInput => ({ seed: 1, position: 'goalie', background: 'youth', primary: 'G01', secondaries: [], ...over });
+
+  it('is goalies only, with no toward or away attributes', () => {
+    expect(hybrid.name).toBe('Hybrid Goalie');
+    expect(hybrid.positions).toEqual(['goalie']);
+    expect(hybrid.toward).toEqual([]);
+    expect(hybrid.away).toEqual([]);
+    expect(dnaInputProblems(skater({ playStyle: 'PS18' })).join()).toMatch(/not a play style/);
+  });
+
+  it('keeps its quarter of the starting spread flat: the influences are evened out by a quarter, nothing is added', () => {
+    const plain = influenceBias(goalie());
+    const styled = startingBias(goalie({ playStyle: 'PS18' }));
+    for (const key of GOALIE_ATTRIBUTES) expect(styled[key]).toBeCloseTo(0.75 * (plain[key] ?? 0), 9);
+    let plainTotal = 0, styledTotal = 0;
+    for (let seed = 1; seed <= 150; seed++) {
+      const a = generateDNA(goalie({ seed }));
+      const b = generateDNA(goalie({ seed, playStyle: 'PS18' }));
+      expect(b.potential).toEqual(a.potential);
+      for (const key of GOALIE_ATTRIBUTES) {
+        plainTotal += a.start[key]!;
+        styledTotal += b.start[key]!;
+      }
+    }
+    expect(Math.abs(styledTotal - plainTotal) / 150 / GOALIE_ATTRIBUTES.length).toBeLessThan(0.5);
+  });
+
+  it('develops six technique attributes 7% faster and slows nothing', () => {
+    expect(developmentFocus(hybrid)).toEqual(['reflexes', 'positioning', 'gloveHand', 'blocker', 'padSaves', 'recovery']);
+    for (const key of GOALIE_ATTRIBUTES) {
+      const bonus = developmentBonus(hybrid, key, DNA_CONFIG.playStyleDevelopment);
+      expect(bonus).toBe(developmentFocus(hybrid).includes(key) ? 0.07 : 0);
+    }
+    // Every other style keeps the standard rate on its own attributes and zero elsewhere: never negative.
+    for (const style of PLAY_STYLES.filter((st) => st.id !== 'PS18')) {
+      for (const key of style.positions[0] === 'goalie' ? GOALIE_ATTRIBUTES : SKATER_ATTRIBUTES) {
+        expect(developmentBonus(style, key, 0.2)).toBe(style.toward.includes(key) ? 0.2 : 0);
+      }
+    }
   });
 });

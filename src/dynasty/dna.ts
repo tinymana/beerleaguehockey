@@ -97,7 +97,7 @@ export function dnaInputProblems(input: DnaInput): string[] {
   for (const id of all) {
     const influence = influenceById(id);
     if (!influence) problems.push(`unknown influence ${id}`);
-    else if ((influence.position === 'goalie') !== (input.position === 'goalie')) problems.push(`${id} is not an influence for a ${input.position}`);
+    else if (!influence.unlisted && (influence.position === 'goalie') !== (input.position === 'goalie')) problems.push(`${id} is not an influence for a ${input.position}`);
   }
   if (input.playStyle != null) {
     const style = playStyleById(input.playStyle);

@@ -147,3 +147,34 @@ One `manifest.json` with, for each file: id, file, size, and for templates the z
 3. Featured influences: 12 initially.
 
 If PS18 Hybrid Goalie is approved (`REGISTRIES.md` section 2a), add `style_PS18` to section 5b: 18 Play Style illustrations.
+
+## 9. Batch 16.10 as delivered: audit (Nov 25)
+
+259 files: 85 images at each of the three sizes, a badge, a manifest. Stored in `art/character_packages/BLH_Batch_16_10.zip`. The 144x96 illustration crops are in the game (v0.4.1), packed unchanged into one atlas by `scripts/art/ingest_cards.py`.
+
+**In use:** 17 Play Style illustrations, 18 archetype illustrations (the seven starting ones are visible in Create a Player), and the three silhouettes for influences.
+
+**Mapping.** The package numbers archetypes AR01 to AR18 in registry order. I checked each picture against the registry: AR08 to AR18 are the evolved archetypes and are filed under their stable ids AR20 to AR30 (trophy: Hall of Famer; the C: Captain; grey beard: Old Timer; patched bag: Journeyman; children: Hockey Parent; empty stall: No-Show, and so on). Play styles map one to one.
+
+**Findings.**
+
+| Finding | Detail | Effect |
+| --- | --- | --- |
+| Not truly opaque | Every illustration crop has alpha between 244 and 253 instead of 255 | Slightly see-through. Not altered (supplied art is never recoloured). Needs a clean export |
+| Frame bleed | Crops carry a few frame-coloured pixels in the corners | Visible as small corner triangles. Needs re-cropping at the source |
+| Not on a pixel grid | 20,000 to 32,000 colours per card; soft edges | Reads as painted, not as the batch 16.11 pixel kit beside it. Your call whether that is the intended card look |
+| Smaller sizes are reductions | Medium and Small are resampled, not optimized by hand | Not used yet; Decision 56 asks for optimization where clarity requires it |
+| Template zones differ | The blank templates' title, picture and text areas do not match section 2, and the package manifest gives no zone rectangles | The game keeps drawing card frames with the batch 16.11 nine-slice, and uses only the illustration crops |
+| Generic influence portraits | Three painted portraits with jersey markings ("4", a captain's C) in a recognisable club's colours | Not used: they could be read as a real team or player. The silhouettes are used instead, as the package itself suggests |
+| Card back | Blank placeholder | See missing art |
+
+**Missing art, exact.**
+
+| Batch | Asset id | Size | Intended use |
+| --- | --- | --- | --- |
+| 16.10 | `style_PS18_art` (Hybrid Goalie; you note an alternate illustration exists) | 144x96, plus 72x48 and 34x50 | Play Style card picture for PS18 |
+| 16.10 | `card_back` with the official crest | 160x224, 80x112, 40x56 | Card reveals. The official crest has not been supplied to development as its own asset (the title art contains a logo, but it is not a separable crest) |
+| - | Official Beer League Hockey crest | Source size of your choice, plus 64x64 and 32x32 | All game branding (Decision 50) |
+| 16.10 | Template zone rectangles in `manifest.json` | - | So the supplied blank templates can replace the nine-slice frames |
+
+Not requested again: anything already in the package.

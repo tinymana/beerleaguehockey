@@ -44,4 +44,4 @@ See `BACKLOG.md` for where later systems are proposed to land.
 
 ## Creator V1 progress (Decisions 39, 58)
 
-Done in v0.4.0: off-ice rendering profile; interface kit; profile, background, influence, play style and archetype steps; review, confirmation, stored players; no re-roll. Next: appearance record and compositor, character art category and lab, appearance, equipment and nationality steps, attribute icons, randomize and presets. Create a Team V1 waits for batch 17.
+Done in v0.4.1: Hybrid Goalie, delete and Pick-Up choice, on-screen keyboard and random names, batch 16.10 card pictures. Authorized next (Decision 66): appearance record, compositor, faces, hair, facial hair, skin tones, body types, equipment, nationality, preview. Done in v0.4.0: off-ice rendering profile; interface kit; profile, background, influence, play style and archetype steps; review, confirmation, stored players; no re-roll. Next: appearance record and compositor, character art category and lab, appearance, equipment and nationality steps, attribute icons, randomize and presets. Create a Team V1 waits for batch 17.
