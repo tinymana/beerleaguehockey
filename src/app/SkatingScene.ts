@@ -36,6 +36,8 @@ const DEPTH_HUD = layerDepth('ui');
 const WEAR_DISTANCE = 900;
 /** Temporary team colours for the 5-on-5 test: the away side is the same art shown through a gold tint. Not uniforms. */
 const AWAY_TINT = 0xffc94d;
+/** Seconds the GOAL! splash stays up. */
+const SPLASH_TIME = 1.3;
 /** Seconds a goalie holds a save pose. */
 const SAVE_POSE_TIME = 0.45;
 
@@ -343,7 +345,8 @@ export class SkatingScene extends Phaser.Scene {
           this.tweens.add({ targets: this.goalSplash, scale: 1, duration: 160, ease: 'Back.Out' });
           // In a game the card under the splash says who; in a shootout a line of text is enough.
           this.goalSub.setText(fontText(who)).setVisible(inShootout || !this.sim.match);
-          this.splashTimer = inShootout ? 1.2 : 4;
+          // The splash is a pop, not a fixture: it goes after a moment and leaves the card to be read.
+          this.splashTimer = SPLASH_TIME;
           this.banner.setVisible(false);
           this.bannerTimer = 0;
         } else {
@@ -545,9 +548,13 @@ export class SkatingScene extends Phaser.Scene {
     for (const line of this.goalLines) line.setVisible(card !== null);
     if (card) {
       this.goalLines.forEach((line, i) => line.setText(fontText(card[i] ?? '')));
-    } else if (m.phase !== 'shootout' && this.splashTimer > 0 && this.goalSplash.visible) {
-      // Skipped ahead: the splash goes with the card.
-      this.splashTimer = 0.01;
+    }
+    // The splash never outlives the stoppage it belongs to: once play is on again it is gone, whatever its timer says.
+    const goalStop = (stopped && m.reason === 'goal') || m.phase === 'shootout';
+    if (!goalStop && (this.goalSplash.visible || this.goalSub.visible)) {
+      this.splashTimer = 0;
+      this.goalSplash.setVisible(false);
+      this.goalSub.setVisible(false);
     }
     // Faceoff tag while the teams line up; power play tag while one side is a skater up (never both at once).
     const short = [0, 1].map((t) => m.penalties.filter((p) => p.team === t).length);

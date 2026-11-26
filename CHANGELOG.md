@@ -2,6 +2,20 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.13.3 - 2026-11-26 - The GOAL! splash goes away
+
+240 tests. Creative director report: "when a goal is scored the goal image doesn't disappear".
+
+### Changed
+- **The GOAL! splash is a pop, not a fixture.** It shows for 1.3 seconds and goes, leaving the goal card to be read for the rest of the stoppage (it used to stay up for the whole 4 seconds, covering the middle of the ice).
+- **It can no longer outlive the stoppage.** Its visibility is now tied to the game: the moment play is on again, or the card is skipped, it is gone whatever its timer says.
+
+### Investigated
+- A splash that never disappears could not be reproduced in v0.13.2: in desktop Chrome and an emulated phone both ways up, with the computer playing and with real key presses (no skip, a skip, mashing Shoot, holding Shoot), it went every time, as did shootout goals. The change above removes the only way it could stay, a timer running on after the stoppage, and shortens it regardless. If it still sticks after a reload, the device and what the game is doing behind it are needed.
+
+### Fixed
+- **Automated checks on GitHub failed on v0.13.2:** the whole-game test ran past the 5-second limit on GitHub's slower machine (the 4-second goal stoppage made simulated games longer). The limit for tests is now 60 seconds. No game code was wrong.
+
 ## 0.13.2 - 2026-11-26 - Faces and names
 
 240 tests. The creative director's answers on the goal card (Decision 91).

@@ -252,7 +252,7 @@ describe('5-on-5 test game', () => {
     }
   });
 
-  it('plays a whole game by itself: both teams have the puck, pass, shoot and score, and it never stalls', () => {
+  it('plays a whole game by itself: both teams have the puck, pass, shoot and score, and it never stalls', { timeout: 60000 }, () => {
     const sim = teams(true);
     const count: Record<string, number> = {};
     let longestStall = 0;

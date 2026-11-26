@@ -366,7 +366,7 @@ describe('referees and whole games', () => {
     expect(seen.size).toBeGreaterThan(1);
   });
 
-  it('plays whole games by itself to a result: goals, whistles of every kind but icing, a few penalties, never stuck', () => {
+  it('plays whole games by itself to a result: goals, whistles of every kind but icing, a few penalties, never stuck', { timeout: 60000 }, () => {
     const reasons = new Set<string>();
     for (const seed of [21, 22, 23]) {
       const sim = game({ demo: true, seed });
