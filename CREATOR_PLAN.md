@@ -212,3 +212,24 @@ How re-roll exploitation is prevented: nothing is rolled before confirmation. Th
 Not built: steps 3, 4, 6, 7, 8, 11 (icons), 14, 15. Bars are drawn in code; the kit's bar tiles are not used yet. The export and import of stored players in step 13 is not built.
 
 Questions: 1. Is 8 stored players the right limit, and should deleting one be allowed? 2. Which created player may enter a career, and how many careers, is what finally closes "make several and keep the best". 3. Gamepad name entry: an on-screen keyboard, or a random-name button?
+
+## 12. Appearance in v0.5.0, and missing artwork by exact asset (Decision 72)
+
+**Built:** the appearance record (version 1) and compositor in `src/dynasty/appearance.ts`; Nationality (249 flags, searchable) and Appearance steps; a generic picker; the look stored with the draft and the confirmed player, repaired rather than refused on load, and changeable after confirmation without touching the roll (the screen for editing a confirmed player's look is not built).
+
+**What is drawn today:** the preset portrait (batches 16.02 and 16.02B, 56 faces) and the grey body model for the position (16.01), plus the flag (16.08). **What is stored but not drawn:** hair, facial hair, skin tone, body type and five gear slots. Each is picked from the supplied reference art, labelled as such. Helmets and gloves are left out (real brand marks, Decision 49).
+
+**Missing artwork.** Nothing below duplicates what exists: each is a layer the compositor needs and no batch supplies. All on the 64x96 body frame of batch 16.01 (anchor 32,95) or its 64x64 portrait frame, transparent background, fully opaque or fully clear pixels, no text or brands.
+
+| Batch | Asset id | Size | Intended use |
+| --- | --- | --- | --- |
+| 16.02 | `head_base_01` to `head_base_NN` (bare heads: no hair, beard, jersey or background) | 64x64 | The layer every face is built on; replaces flattened presets |
+| 16.02 | `head_mask_skin_01` to `_NN` (one per head) | 64x64 | Lets the 24 skin tone ramps of 16.05 be applied |
+| 16.03 | `hair_01` to `hair_47` re-cut as clean overlays, each with a tint mask | 64x72, anchor 32,32 | Hair layer over a bare head. The current cut-outs have holes and mannequin outline |
+| 16.04 | `beard_01` to `beard_35` as overlays (hair only, no skin, mouth or collar), each with a tint mask | 64x64 | Facial hair layer |
+| 16.06 | `body_<type>_<view>` for the 12 types and 4 views, skater and goalie | 64x96 | Body type on the model. Today one grey body exists and the 12 types are concept references |
+| 16.01 | `skater_<view>_mask_skin`, `goalie_<view>_mask_skin` | 64x96 | Skin tone on the body |
+| 16.07 | Unbranded `helmet_01` to `_08` and `glove_01` to `_08` | 64x64 thumbnails | Replaces the excluded branded items |
+| 16.07 | Wearable overlays for each kept item (`protection`, `stick`, `skate`, `sock`, `accessory`, and the new helmets and gloves) per body view | 64x96 | Equipment drawn on the model. Today thumbnails only |
+| 16.10 | `style_PS18_art` | 144x96 (plus 72x48, 34x50) | Hybrid Goalie card (already with the art team) |
+| - | Official crest, standalone transparent PNG | Source size, plus 64x64 and 32x32 | All branding (already with the art team) |

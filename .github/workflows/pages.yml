@@ -1,0 +1,53 @@
+# GitHub Pages deployment for the Beer League Hockey website and playable build.
+#
+# PREPARED, NOT ACTIVE (Decision 71). It runs only when someone starts it by hand from the Actions tab,
+# and it cannot publish anything until Pages is switched on in Settings -> Pages -> Source: GitHub Actions.
+# Do not add a push trigger until the creative director confirms: history rewrite verified, licensing
+# review complete, clean build verified, and fictional names switched on for a public site.
+name: Deploy website to GitHub Pages
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build:site
+      # Belt and braces: a checkout never contains private data (it is git-ignored), and the site build
+      # removes any private folder, but the deployment is refused outright if anything of the kind is found.
+      - name: Refuse to deploy private or dataset-derived files
+        run: |
+          set -e
+          if find dist-site \( -path '*/private/*' -o -iname '*.bundle' -o -iname 'nhl_players*' -o -iname 'SKATERS*' -o -iname 'GOALIES*' -o -iname '*reconciliation*' -o -iname '*derived_tendencies*' -o -iname 'influences_wider*' -o -iname 'stat_matches*' \) | grep -q .; then
+            echo "Private or dataset-derived files found in the site build"; exit 1
+          fi
+          if grep -rIl "PlayerID,Player,Position" dist-site; then echo "Dataset content found in the site build"; exit 1; fi
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist-site
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

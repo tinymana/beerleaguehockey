@@ -2,6 +2,33 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.5.0 - 2026-11-25 - Appearance and nationality; fictional professionals and aliases; history rewritten
+
+162 tests.
+
+### Added
+- **Nationality step:** 249 flags, searchable. Random names use the nationality when there is a name pool for it.
+- **Appearance step (Decisions 66, 72):** 56 preset faces, hair, facial hair, 24 skin tones, 12 body types and five unbranded gear slots, each chosen in a picker with its picture. The face and the body model are drawn; the rest are stored picks shown as reference art until layer art exists.
+- **Appearance record and compositor:** versioned, stored with the draft and the confirmed player, repaired on load, changeable after confirmation without touching the roll.
+- **Fictional professional registry (Decision 68):** the 240 invented professionals now have a handedness (25% right, a setting), a career accomplishment (flavour) and a balanced style profile from one of the 18 play styles.
+- **64 fictional aliases** for the curated influences, as distinct identities.
+- `POPULATION_PLAN.md`: architecture for procedural player generation. Not built.
+- `.github/workflows/pages.yml`: prepared, manual-only, with a guard that refuses private or dataset-derived files.
+- Batch 19 (career rewards and collectibles) filed as reference art. Not integrated: collectibles are not authorized, and the package describes itself as reference crops.
+
+### Changed
+- **Repository history rewritten (Decision 67):** licence-unverified data removed from every commit; all commit ids changed. See `REPO_HISTORY_REWRITE.md`.
+- `src/dynasty/data/influences.ts` is now `curatedInfluences.ts`.
+- 172 high-confidence reconciliation matches accepted (private).
+
+### Known issues
+- Hair, facial hair, skin tone, body type and gear are not drawn on the player: no layer art exists. Exact missing assets: `CREATOR_PLAN.md` section 12.
+- Helmets and gloves cannot be chosen (branded art excluded).
+- A confirmed player's look cannot be edited on screen yet.
+- Fictional professionals now shape a player as strongly as curated ones. See the checkpoint question on this.
+- GitHub still serves the pre-rewrite commits by id until GitHub Support purges them.
+- The real names of the 64 curated influences are still shown; the fictional switch is one setting.
+
 ## 0.4.1 - 2026-11-25 - Data precautions; Hybrid Goalie; delete, Pick-Up choice, name entry; card pictures
 
 155 tests.

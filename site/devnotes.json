@@ -2,6 +2,25 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.5.0",
+      "date": "2026-11-25",
+      "title": "Put a face to the name",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Pick a face for your player, and a country: 249 flags, from Canada to places that have never seen ice."
+        },
+        {
+          "tag": "new",
+          "text": "Choose hair, a beard, a build and your gear. They are remembered now and will show on your player as the art arrives."
+        },
+        {
+          "tag": "improved",
+          "text": "Random names now match your country when we have names for it."
+        }
+      ]
+    },
+    {
       "version": "0.4.1",
       "date": "2026-11-25",
       "title": "Name that skater",

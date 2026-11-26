@@ -1,6 +1,19 @@
 # Removing licence-unverified data from repository history: plan for review
 
-Beer League Hockey - Tiny Mana Studios. Requested by the creative director (Decision 61). **Nothing in this document has been executed.** The force push happens only after you approve it.
+Beer League Hockey - Tiny Mana Studios. Requested by the creative director (Decision 61). **Executed on Nov 25 with the creative director's approval (Decision 67).** Result first; the plan as reviewed follows.
+
+## 0. Result
+
+- **Paths removed from every commit:** the seven in section 4 plus `src/dynasty/data/influences.ts` (the clean file was first renamed `curatedInfluences.ts`).
+- **Verified in the rewritten history:** no commit touches any targeted path; no commit's tree contains a file matching the raw or derived data names; the biographical file's header line appears only inside this document's own commands.
+- **Unrelated history preserved:** 36 commits before, 36 after, with identical messages in identical order. No commit became empty. The trees of the 12 commits that predate the data are identical, and the tip's tree is identical to the pre-rewrite tip.
+- **Every commit id changed,** including the early ones. The commits carried signatures, which a rewrite cannot keep, so their ids changed even where their content did not. Old ids quoted in earlier reports (`0c2a775`, `5affd00`, `232e101`, `fa4ebd1`) no longer exist on the branch.
+- **Force push:** `git push --force-with-lease=claude/milestone-0-skating-prototype:2a947228... origin <rewritten>:refs/heads/claude/milestone-0-skating-prototype`, accepted. The branch tip is now `034c3ac`, followed by normal commits.
+- **Clean build and tests** run on the rewritten tip: all tests pass; the site build contains no private folder and no dataset content.
+- **Backup:** the verified bundle of the pre-rewrite history and its checksum were delivered to the creative director.
+- **Still true:** GitHub continues to serve the old commits by their ids (checked: `0c2a775`, `5affd00` and `232e101` still resolve) until GitHub Support purges them. Forks or clones made earlier are unaffected. The local `main` and the tag were re-pointed to the rewritten history; neither is on GitHub.
+
+The force push happened only after approval.
 
 ## 1. Where things stand today
 

@@ -3,6 +3,9 @@ import { startingArchetypesFor, STARTING_ARCHETYPES } from '../src/dynasty/arche
 import { CREATED_PLAYER_CONFIG, CREATED_PLAYER_STORE_VERSION, MAX_CREATED_PLAYERS, choosePickUpPlayer, cleanName, confirmDraft, deletePlayer, draftProblems, emptyDraft, emptyStore, parseStore, reconcileDraft, serializeStore } from '../src/dynasty/createdPlayer';
 import type { CreatedPlayerStore, PlayerDraft } from '../src/dynasty/createdPlayer';
 import { PROFILES, profileFit } from '../src/app/stage';
+import { APPEARANCE_VERSION, EQUIPMENT_SLOTS, NATIONALITIES, appearanceProblems, composeAppearance, defaultAppearance, equipmentOptions, nationalityByCode, optionsFor, repairAppearance, skinToneColors } from '../src/dynasty/appearance';
+import { setPlayerAppearance } from '../src/dynasty/createdPlayer';
+import { APPEARANCE_CATALOG } from '../src/dynasty/data/appearanceCatalog';
 
 const ready = (over: Partial<PlayerDraft> = {}): PlayerDraft => ({ ...emptyDraft(), firstName: 'Dusty', lastName: 'Bottoms', primary: 'F01', secondaries: ['F08'], playStyle: 'PS02', archetype: 'AR04', ...over });
 const withDraft = (draft: PlayerDraft, store: CreatedPlayerStore = emptyStore()): CreatedPlayerStore => ({ ...store, draft });
@@ -59,7 +62,7 @@ describe('creating a player', () => {
   it('holds no seed or ratings before confirmation, so reopening the creator cannot roll again', () => {
     const text = serializeStore(withDraft(ready()));
     expect(text).not.toMatch(/seed|potential|talent|start"/);
-    expect(Object.keys(ready()).sort()).toEqual(['archetype', 'background', 'firstName', 'lastName', 'playStyle', 'position', 'primary', 'secondaries']);
+    expect(Object.keys(ready()).sort()).toEqual(['appearance', 'archetype', 'background', 'firstName', 'lastName', 'playStyle', 'position', 'primary', 'secondaries']);
   });
 
   it('stops at the limit', () => {
@@ -150,5 +153,77 @@ describe('rendering profiles (Decision 38)', () => {
     expect(profileFit('offIce', 800, 600).shrink).toBeCloseTo(800 / 960, 9);
     expect(profileFit('ice', 1920, 1080)).toEqual({ zoom: 3, shrink: 1 });
     expect(profileFit('ice', 400, 300).shrink).toBeCloseTo(400 / 480, 9);
+  });
+});
+
+describe('appearance (Decision 66)', () => {
+  it('offers what batch 16 supplies: 56 preset faces, hair, beards, 24 skin tones, 12 body types, 249 flags', () => {
+    expect(optionsFor('face').length).toBe(56);
+    expect(optionsFor('hair').length).toBeGreaterThanOrEqual(40);
+    expect(optionsFor('facialHair').length).toBe(35);
+    expect(optionsFor('skinTone').length).toBe(24);
+    expect(optionsFor('bodyType').length).toBe(12);
+    expect(NATIONALITIES.length).toBe(249);
+    expect(nationalityByCode('CAN')?.name).toBe('Canada');
+    expect(Object.keys(skinToneColors('skin_01') ?? {})).toContain('midtone');
+    for (const part of ['face', 'hair', 'facialHair', 'skinTone', 'bodyType'] as const) {
+      const ids = optionsFor(part).map((o) => o.id);
+      expect(new Set(ids).size).toBe(ids.length);
+    }
+  });
+
+  it('leaves branded equipment out: no helmets or gloves, five slots of eight', () => {
+    expect([...EQUIPMENT_SLOTS]).toEqual(['protection', 'stick', 'skate', 'sock', 'accessory']);
+    for (const slot of EQUIPMENT_SLOTS) expect(equipmentOptions(slot).length).toBe(8);
+    const categories = new Set<string>(APPEARANCE_CATALOG.equipment.items.map((i) => i.category));
+    expect(categories.has('helmet')).toBe(false);
+    expect(categories.has('glove')).toBe(false);
+  });
+
+  it('starts valid, and says exactly what is wrong with a bad record', () => {
+    expect(appearanceProblems(defaultAppearance())).toEqual([]);
+    expect(defaultAppearance().version).toBe(APPEARANCE_VERSION);
+    const bad = { ...defaultAppearance(), face: 'face:nope', hair: 'hair_999', nationality: 'ZZZ', equipment: { stick: 'helmet_01' } };
+    expect(appearanceProblems(bad).length).toBe(4);
+  });
+
+  it('repairs rather than refuses: an id the art no longer has falls back, everything valid is kept', () => {
+    const good = { ...defaultAppearance(), face: 'bald:bald_12', hair: 'hair_05', facialHair: 'beard_reference_03', skinTone: 'skin_20', bodyType: 'large', nationality: 'FIN', equipment: { stick: 'stick_02', sock: 'sock_08' } };
+    expect(appearanceProblems(good)).toEqual([]);
+    expect(repairAppearance(good)).toEqual(good);
+    const repaired = repairAppearance({ ...good, face: 'face:gone', hair: 'hair_999', equipment: { stick: 'helmet_01', sock: 'sock_08' }, nationality: 'ZZZ' });
+    expect(repaired.face).toBe(defaultAppearance().face);
+    expect(repaired.hair).toBeNull();
+    expect(repaired.equipment).toEqual({ sock: 'sock_08' });
+    expect(repaired.nationality).toBeNull();
+    expect(repaired.skinTone).toBe('skin_20');
+    expect(repairAppearance(null)).toEqual(defaultAppearance());
+    expect(repairAppearance('nonsense')).toEqual(defaultAppearance());
+  });
+
+  it('composes what can be drawn and reports what is only stored', () => {
+    const record = { ...defaultAppearance(), face: 'face:face_07', hair: 'hair_05', nationality: 'SWE', equipment: { stick: 'stick_02' } };
+    const skater = composeAppearance(record, 'defense');
+    expect(skater.portrait).toEqual([{ part: 'face', frame: 'face:face_07' }]);
+    expect(skater.body).toEqual([{ part: 'body', frame: 'model:skater_front' }]);
+    expect(skater.flag?.frame).toBe('flag:SWE');
+    expect(skater.stored.map((x) => x.part)).toEqual(['hair', 'skinTone', 'bodyType', 'equipment.stick']);
+    expect(composeAppearance(record, 'goalie', 'rear').body[0]?.frame).toBe('model:goalie_rear');
+    expect(composeAppearance(defaultAppearance(), 'forward').flag).toBeNull();
+  });
+
+  it('is kept with the draft and the confirmed player, survives a save, and can be changed after confirmation without touching the roll', () => {
+    const look = { ...defaultAppearance(), face: 'bald:bald_03', nationality: 'CAN' };
+    const confirmed = confirmDraft(withDraft(ready({ appearance: look })), 31337);
+    expect(confirmed.player?.appearance).toEqual(look);
+    const back = parseStore(serializeStore(confirmed.store));
+    expect(back.players[0]?.appearance).toEqual(look);
+    const changed = setPlayerAppearance(back, 1, { ...look, face: 'face:face_02' });
+    expect(changed.players[0]?.appearance.face).toBe('face:face_02');
+    expect(changed.players[0]?.dna).toEqual(back.players[0]?.dna);
+    // A player saved before appearance existed gets the default look, not an error.
+    const old = JSON.parse(serializeStore(confirmed.store)) as { players: Record<string, unknown>[] };
+    delete old.players[0]!.appearance;
+    expect(parseStore(JSON.stringify(old)).players[0]?.appearance).toEqual(defaultAppearance());
   });
 });

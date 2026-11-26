@@ -8,6 +8,8 @@
  * Pure data and checks: where it is kept (the browser, for now) is the app's business.
  */
 import type { Position } from './attributes';
+import type { AppearanceRecord } from './appearance';
+import { defaultAppearance, repairAppearance } from './appearance';
 import { startingArchetypeById, startingArchetypesFor } from './archetypes';
 import { backgroundsForAge, CREATED_PLAYER_AGE } from './backgrounds';
 import type { DnaInput, PlayerDNA } from './dna';
@@ -30,6 +32,8 @@ export interface PlayerDraft {
   secondaries: string[];
   playStyle: string | null;
   archetype: string | null;
+  /** How the player looks. Holds no rolled values and stays editable after confirmation. */
+  appearance: AppearanceRecord;
 }
 
 export interface CreatedPlayer {
@@ -41,6 +45,7 @@ export interface CreatedPlayer {
   /** The starting archetype chosen in the creator. */
   archetype: string;
   dna: PlayerDNA;
+  appearance: AppearanceRecord;
 }
 
 export interface CreatedPlayerStore {
@@ -54,7 +59,7 @@ export interface CreatedPlayerStore {
 }
 
 export function emptyDraft(): PlayerDraft {
-  return { firstName: '', lastName: '', position: 'forward', background: 'youth', primary: null, secondaries: [], playStyle: null, archetype: null };
+  return { firstName: '', lastName: '', position: 'forward', background: 'youth', primary: null, secondaries: [], playStyle: null, archetype: null, appearance: defaultAppearance() };
 }
 
 export function emptyStore(): CreatedPlayerStore {
@@ -67,7 +72,7 @@ export function cleanName(text: string): string {
 
 /** Drop choices that no longer make sense after the position or background changed. */
 export function reconcileDraft(draft: PlayerDraft): PlayerDraft {
-  const next = { ...draft, secondaries: [...draft.secondaries] };
+  const next = { ...draft, secondaries: [...draft.secondaries], appearance: repairAppearance(draft.appearance) };
   if (!backgroundsForAge(CREATED_PLAYER_AGE).some((b) => b.id === next.background)) next.background = 'youth';
   const style = next.playStyle ? playStyleById(next.playStyle) : undefined;
   if (!style || !style.positions.includes(next.position)) next.playStyle = null;
@@ -117,6 +122,7 @@ export function confirmDraft(store: CreatedPlayerStore, seed: number): { store: 
     age: CREATED_PLAYER_AGE,
     archetype: draft.archetype,
     dna: generateDNA(input),
+    appearance: repairAppearance(draft.appearance),
   };
   return { store: { ...store, nextId: store.nextId + 1, players: [...store.players, player], draft: null, pickUpId: store.pickUpId ?? null }, player, problems: [] };
 }
@@ -137,6 +143,11 @@ export function choosePickUpPlayer(store: CreatedPlayerStore, id: number | null)
   return { ...store, pickUpId: id !== null && store.players.some((p) => p.id === id) ? id : null };
 }
 
+/** Change how a confirmed player looks. Nothing else about them can be changed. */
+export function setPlayerAppearance(store: CreatedPlayerStore, id: number, appearance: AppearanceRecord): CreatedPlayerStore {
+  return { ...store, players: store.players.map((p) => (p.id === id ? { ...p, appearance: repairAppearance(appearance) } : p)) };
+}
+
 export function serializeStore(store: CreatedPlayerStore): string {
   return JSON.stringify({ ...store, players: store.players.map((p) => ({ ...p, dna: serializeDNA(p.dna) })) });
 }
@@ -150,9 +161,9 @@ export function parseStore(text: string): CreatedPlayerStore {
   if (raw.version !== CREATED_PLAYER_STORE_VERSION) throw new Error(`Created-player store version ${String(raw.version)} is not supported`);
   const players: CreatedPlayer[] = [];
   for (const entry of raw.players ?? []) {
-    const p = entry as { id?: number; firstName?: string; lastName?: string; age?: number; archetype?: string; dna?: string };
+    const p = entry as { id?: number; firstName?: string; lastName?: string; age?: number; archetype?: string; dna?: string; appearance?: unknown };
     if (typeof p.id !== 'number' || typeof p.dna !== 'string' || !p.archetype || !startingArchetypeById(p.archetype)) throw new Error('A created player record is damaged');
-    players.push({ id: p.id, firstName: cleanName(p.firstName ?? ''), lastName: cleanName(p.lastName ?? ''), age: p.age ?? CREATED_PLAYER_AGE, archetype: p.archetype, dna: parseDNA(p.dna) });
+    players.push({ id: p.id, firstName: cleanName(p.firstName ?? ''), lastName: cleanName(p.lastName ?? ''), age: p.age ?? CREATED_PLAYER_AGE, archetype: p.archetype, dna: parseDNA(p.dna), appearance: repairAppearance(p.appearance) });
   }
   if (new Set(players.map((p) => p.id)).size !== players.length) throw new Error('Two created players share an id');
   const nextId = Math.max(raw.nextId ?? 1, ...players.map((p) => p.id + 1), 1);
@@ -171,6 +182,7 @@ export function parseStore(text: string): CreatedPlayerStore {
       secondaries: Array.isArray(d.secondaries) ? d.secondaries.filter((s): s is string => typeof s === 'string') : [],
       playStyle: typeof d.playStyle === 'string' ? d.playStyle : null,
       archetype: typeof d.archetype === 'string' ? d.archetype : null,
+      appearance: repairAppearance((d as { appearance?: unknown }).appearance),
     });
   }
   const pickUpId = typeof raw.pickUpId === 'number' && players.some((p) => p.id === raw.pickUpId) ? raw.pickUpId : null;

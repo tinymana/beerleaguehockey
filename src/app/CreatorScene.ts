@@ -2,6 +2,8 @@ import Phaser from 'phaser';
 import { Rng } from '../core/rng';
 import { ATTRIBUTE_LABELS, attributesFor, overall } from '../dynasty/attributes';
 import type { AttributeKey, Position } from '../dynasty/attributes';
+import type { AppearancePart, AppearanceRecord, CatalogOption, EquipmentSlot } from '../dynasty/appearance';
+import { EQUIPMENT_SLOTS, NATIONALITIES, composeAppearance, equipmentOptions, nationalityByCode, optionsFor, skinToneColors } from '../dynasty/appearance';
 import { startingArchetypeById, startingArchetypesFor } from '../dynasty/archetypes';
 import { CREATED_PLAYER_AGE, backgroundById, backgroundsForAge } from '../dynasty/backgrounds';
 import type { CreatedPlayer, CreatedPlayerStore, PlayerDraft } from '../dynasty/createdPlayer';
@@ -26,14 +28,34 @@ const KEY_COLS = 7;
 export const UI_KIT = { key: 'ui-16-11', url: './assets/ui/16_11/ui_atlas.png', manifestKey: 'ui-16-11-manifest', manifestUrl: './assets/ui/16_11/manifest.json' };
 
 const W = PROFILES.offIce.width;
-const STEPS = ['Profile', 'Background', 'Influences', 'Play Style', 'Archetype', 'Review', 'Saved Players'] as const;
+const STEPS = ['Profile', 'Nationality', 'Appearance', 'Background', 'Influences', 'Play Style', 'Archetype', 'Review', 'Saved Players'] as const;
+type StepName = (typeof STEPS)[number];
+const stepAt = (name: StepName): number => STEPS.indexOf(name);
+const CHARACTER = { frames: 'character-frames', framesUrl: './assets/character/frames.json', atlases: ['model', 'face', 'bald', 'hair', 'beard', 'body', 'equipment', 'flag'] };
+const PARTS: readonly { part: AppearancePart; label: string; none: boolean; note: string }[] = [
+  { part: 'face', label: 'Face', none: false, note: 'Preset portrait' },
+  { part: 'hair', label: 'Hair', none: true, note: 'Reference: stored, not drawn yet' },
+  { part: 'facialHair', label: 'Facial hair', none: true, note: 'Reference: stored, not drawn yet' },
+  { part: 'skinTone', label: 'Skin tone', none: false, note: 'Stored: no skin masks yet' },
+  { part: 'bodyType', label: 'Body type', none: false, note: 'Reference: one body model exists' },
+];
+interface Picker {
+  title: string;
+  items: CatalogOption[];
+  current: string | null;
+  none: boolean;
+  note: string;
+  search: boolean;
+  swatch?: boolean;
+  pick: (id: string | null) => void;
+}
 const POSITIONS: readonly { id: Position; label: string }[] = [
   { id: 'forward', label: 'Forward' },
   { id: 'defense', label: 'Defense' },
   { id: 'goalie', label: 'Goalie' },
 ];
 const SLOTS = ['Primary 60%', '2nd 25%', '3rd 15%'] as const;
-const NAV = { x: 16, y: 72, w: 192, h: 32, gap: 38 };
+const NAV = { x: 16, y: 70, w: 192, h: 30, gap: 34 };
 const OPT = { x: 232, y: 100, w: 288, h: 28, gap: 30, rows: 12 };
 const CARD = { x: 536, y: 60, w: 160, h: 224 };
 const ATTR = { x: 712, y: 92, row: 14, bar: 84 };
@@ -47,6 +69,9 @@ interface CardInfo {
   tag: string;
   /** Frame name in the batch 16.10 card art atlas, when there is a picture for this card. */
   art?: string;
+  /** Character art to show instead: frame keys from the character manifest, drawn at whole-number scale. */
+  images?: { frame: string; x: number; y: number; scale?: number }[];
+  swatch?: string;
   badge?: string;
   body: string;
   footer?: string[];
@@ -100,6 +125,9 @@ export class CreatorScene extends Phaser.Scene {
   private scroll = 0;
   private typing: TextField | null = null;
   private keyIndex = KEYS.length - 1;
+  private picker: Picker | null = null;
+  private pickerReturn = 0;
+  private frames: Record<string, [string, number, number, number, number]> = {};
   private slot = 0;
   private query = '';
   private mode: Mode = 'edit';
@@ -119,6 +147,8 @@ export class CreatorScene extends Phaser.Scene {
     if (!this.textures.exists(UI_KIT.key)) this.load.image(UI_KIT.key, UI_KIT.url);
     if (!this.cache.json.exists(UI_KIT.manifestKey)) this.load.json(UI_KIT.manifestKey, UI_KIT.manifestUrl);
     if (!this.textures.exists(CARD_ART.key)) this.load.image(CARD_ART.key, CARD_ART.url);
+    for (const atlas of CHARACTER.atlases) if (!this.textures.exists(`character-${atlas}`)) this.load.image(`character-${atlas}`, `./assets/character/${atlas}.png`);
+    if (!this.cache.json.exists(CHARACTER.frames)) this.load.json(CHARACTER.frames, CHARACTER.framesUrl);
     if (!this.cache.json.exists(CARD_ART.manifestKey)) this.load.json(CARD_ART.manifestKey, CARD_ART.manifestUrl);
   }
 
@@ -141,6 +171,13 @@ export class CreatorScene extends Phaser.Scene {
     const cards = this.cache.json.get(CARD_ART.manifestKey) as { frames: Record<string, [number, number, number, number]> } | undefined;
     const cardTexture = this.textures.get(CARD_ART.key);
     if (cards) for (const [id, [x, y, w, h]] of Object.entries(cards.frames)) if (!cardTexture.has(id)) cardTexture.add(id, 0, x, y, w, h);
+
+    this.frames = (this.cache.json.get(CHARACTER.frames) as { frames: Record<string, [string, number, number, number, number]> } | undefined)?.frames ?? {};
+    for (const [id, [atlas, x, y, w, h]] of Object.entries(this.frames)) {
+      const t = this.textures.get(`character-${atlas}`);
+      if (!t.has(id)) t.add(id, 0, x, y, w, h);
+    }
+    this.picker = null;
 
     // Development only: a wider registry kept outside the repository (licence unverified). Builds never look for it.
     if ((import.meta as unknown as { env?: { DEV?: boolean } }).env?.DEV) {
@@ -231,7 +268,56 @@ export class CreatorScene extends Phaser.Scene {
         { label: 'Yes, lock this player in', frame: 'confirm', activate: () => this.confirm() },
       ];
     }
+    if (this.picker) return this.pickerOptions(this.picker);
     switch (STEPS[this.step]) {
+      case 'Nationality': {
+        const q = this.query.trim().toLowerCase();
+        const current = d.appearance.nationality;
+        const out: Option[] = [
+          { label: 'Search', right: this.fieldText('search', this.query), activate: () => this.startTyping('search') },
+          { label: 'Unspecified', chosen: current === null, activate: () => this.setAppearance({ nationality: null }) },
+        ];
+        for (const n of NATIONALITIES) {
+          if (q && !n.name.toLowerCase().includes(q)) continue;
+          out.push({ label: clip(n.name, 20), chosen: current === n.code, card: { colour: 'panel', title: n.name, tag: 'NATIONALITY', body: 'Shown on your profile. Random names use it when there is a name pool for it.', images: [{ frame: `flag:${n.code}`, x: 40, y: 16, scale: 2 }] }, activate: () => this.setAppearance({ nationality: n.code }) });
+        }
+        return out;
+      }
+      case 'Appearance': {
+        const a = d.appearance;
+        const labelOf = (options: CatalogOption[], id: string | null | undefined): string => (id ? clip(options.find((o) => o.id === id)?.label ?? '?', 9) : 'None');
+        const rows: Option[] = PARTS.map(({ part, label, none, note }) => ({
+          label,
+          right: labelOf(optionsFor(part), a[part]),
+          card: this.lookCard(),
+          activate: () => this.openPicker({ title: label, items: optionsFor(part), current: a[part], none, note, search: false, swatch: part === 'skinTone', pick: (id) => this.setAppearance({ [part]: none ? id : (id ?? a[part]) }) }),
+        }));
+        for (const slot of EQUIPMENT_SLOTS) {
+          const options = equipmentOptions(slot as EquipmentSlot);
+          const name = slot[0]!.toUpperCase() + slot.slice(1);
+          rows.push({
+            label: `Gear: ${name}`,
+            right: labelOf(options, a.equipment[slot]),
+            card: this.lookCard(),
+            activate: () =>
+              this.openPicker({
+                title: name,
+                items: options,
+                current: a.equipment[slot] ?? null,
+                none: true,
+                note: 'Reference thumbnail: stored, not drawn on the model. Branded items are left out.',
+                search: false,
+                pick: (id) => {
+                  const equipment = { ...a.equipment };
+                  if (id) equipment[slot] = id;
+                  else delete equipment[slot];
+                  this.setAppearance({ equipment });
+                },
+              }),
+          });
+        }
+        return rows;
+      }
       case 'Profile':
         return [
           { label: 'First name', right: this.fieldText('firstName', d.firstName), activate: () => this.startTyping('firstName') },
@@ -298,7 +384,7 @@ export class CreatorScene extends Phaser.Scene {
     const a = startingArchetypeById(p.archetype);
     const primary = influenceById(p.dna.primary);
     const style = p.dna.playStyle ? playStyleById(p.dna.playStyle) : undefined;
-    return { colour: 'green', title: `${p.firstName} ${p.lastName}`, tag: a?.name.toUpperCase() ?? 'PLAYER', art: p.archetype, badge: p.dna.position === 'goalie' ? 'G' : p.dna.position === 'defense' ? 'D' : 'F', body: `Age ${p.age}. ${backgroundById(p.dna.background)?.label ?? ''}. Grew up watching ${primary ? influenceName(primary) : '?'}. ${style ? style.name : 'No style'}.`, footer: [`Overall ${ovr(p)}`, 'Locked in'] };
+    return { colour: 'green', title: `${p.firstName} ${p.lastName}`, tag: a?.name.toUpperCase() ?? 'PLAYER', images: [{ frame: p.appearance.face, x: 4, y: 32 }, { frame: `model:${p.dna.position === 'goalie' ? 'goalie' : 'skater'}_front`, x: 76, y: 0 }, ...(p.appearance.nationality ? [{ frame: `flag:${p.appearance.nationality}`, x: 20, y: 0 }] : [])], badge: p.dna.position === 'goalie' ? 'G' : p.dna.position === 'defense' ? 'D' : 'F', body: `Age ${p.age}. ${backgroundById(p.dna.background)?.label ?? ''}. Grew up watching ${primary ? influenceName(primary) : '?'}. ${style ? style.name : 'No style'}.`, footer: [`Overall ${ovr(p)}`, 'Locked in'] };
   }
 
   private fieldText(field: TextField, value: string): string {
@@ -335,7 +421,7 @@ export class CreatorScene extends Phaser.Scene {
   }
 
   private goToProblem(problem: string): void {
-    const step = problem.includes('name') ? 0 : problem.includes('influence') ? 2 : problem.includes('style') ? 3 : problem.includes('Archetype') ? 4 : this.step;
+    const step = problem.includes('name') ? stepAt('Profile') : problem.includes('influence') ? stepAt('Influences') : problem.includes('style') ? stepAt('Play Style') : problem.includes('Archetype') ? stepAt('Archetype') : this.step;
     this.goToStep(step);
     this.column = 'options';
   }
@@ -345,6 +431,8 @@ export class CreatorScene extends Phaser.Scene {
     this.index = 0;
     this.scroll = 0;
     this.typing = null;
+    this.picker = null;
+    this.query = '';
     this.dirty = true;
   }
 
@@ -393,7 +481,7 @@ export class CreatorScene extends Phaser.Scene {
 
   private rollName(): void {
     // The clock only picks which fictional name comes up; the result can be edited like any typed name.
-    const name = randomName(new Rng((Date.now() ^ Math.floor(performance.now() * 1000)) >>> 0));
+    const name = randomName(new Rng((Date.now() ^ Math.floor(performance.now() * 1000)) >>> 0), this.draft.appearance.nationality);
     this.setDraft({ firstName: name.first.slice(0, NAME_MAX), lastName: name.last.slice(0, NAME_MAX) });
   }
 
@@ -418,7 +506,7 @@ export class CreatorScene extends Phaser.Scene {
 
   private reveal(player: CreatedPlayer): void {
     this.shown = player;
-    this.step = 6;
+    this.step = stepAt('Saved Players');
     this.setMode('reveal');
   }
 
@@ -426,7 +514,7 @@ export class CreatorScene extends Phaser.Scene {
     this.shown = null;
     this.mode = 'edit';
     this.column = 'nav';
-    this.goToStep(6);
+    this.goToStep(stepAt('Saved Players'));
   }
 
   // ---------- input ----------
@@ -481,7 +569,7 @@ export class CreatorScene extends Phaser.Scene {
   }
 
   private move(delta: number): void {
-    if (this.column === 'nav' && this.mode === 'edit') {
+    if (this.column === 'nav' && this.mode === 'edit' && !this.picker) {
       this.goToStep(this.step + delta);
     } else if (this.options.length) {
       this.index = (this.index + delta + this.options.length) % this.options.length;
@@ -492,7 +580,7 @@ export class CreatorScene extends Phaser.Scene {
   }
 
   private side(delta: number): void {
-    if (this.mode !== 'edit') return;
+    if (this.mode !== 'edit' || this.picker) return;
     if (delta > 0 && this.options.length) this.column = 'options';
     if (delta < 0) this.column = 'nav';
     this.dirty = true;
@@ -509,7 +597,13 @@ export class CreatorScene extends Phaser.Scene {
   }
 
   private back(): void {
-    if (this.mode === 'confirm') this.setMode('edit');
+    if (this.picker) {
+      this.picker = null;
+      this.query = '';
+      this.index = this.pickerReturn;
+      this.scroll = 0;
+      this.dirty = true;
+    } else if (this.mode === 'confirm') this.setMode('edit');
     else if (this.mode === 'delete') this.setMode('reveal');
     else if (this.mode === 'reveal') this.leaveReveal();
     else if (this.column === 'options') {
@@ -582,15 +676,14 @@ export class CreatorScene extends Phaser.Scene {
         this.column = 'nav';
       });
       const done = this.stepDone(i);
-      this.text(NAV.x + 10, y + 9, i === 6 ? `7 Saved: ${this.store.players.length}` : `${i + 1} ${label}`, focused ? UI.navy : UI.white);
-      if (done) this.text(NAV.x + NAV.w - 20, y + 9, '+', GREEN);
+      this.text(NAV.x + 10, y + 8, label === 'Saved Players' ? `${i + 1} Saved: ${this.store.players.length}` : `${i + 1} ${label}`, focused ? UI.navy : UI.white);
+      if (done) this.text(NAV.x + NAV.w - 20, y + 8, '+', GREEN);
     });
-    this.text(20, 348, 'TEMPORARY IN V1:', UI.dim, 1);
-    ['The font. Hybrid Goalie', 'card picture. Appearance,', 'gear and nationality', 'come next.', 'CUR = curated profile'].forEach((line, i) => this.text(20, 360 + i * 10, line, UI.dim, 1));
+    ['Temporary: the font. Reference', 'art for hair, beards, bodies', 'and gear. CUR = curated.'].forEach((line, k) => this.text(20, 388 + k * 10, line, UI.dim, 1));
 
     // Options
     this.slice(224, 60, 304, 424, 'panel');
-    const heading = this.typing ? (this.typing === 'search' ? 'SEARCH' : this.typing === 'firstName' ? 'FIRST NAME' : 'LAST NAME') : this.mode === 'confirm' ? 'LOCK IN?' : this.mode === 'delete' ? 'DELETE?' : this.mode === 'reveal' ? 'YOUR PLAYER' : (STEPS[this.step] ?? '').toUpperCase();
+    const heading = this.picker && !this.typing ? this.picker.title.toUpperCase() : this.typing ? (this.typing === 'search' ? 'SEARCH' : this.typing === 'firstName' ? 'FIRST NAME' : 'LAST NAME') : this.mode === 'confirm' ? 'LOCK IN?' : this.mode === 'delete' ? 'DELETE?' : this.mode === 'reveal' ? 'YOUR PLAYER' : (STEPS[this.step] ?? '').toUpperCase();
     this.text(236, 72, heading, UI.gold);
     if (this.options.length > OPT.rows) this.text(440, 76, `${this.index + 1} / ${this.options.length}${this.options.length >= RESULT_LIMIT ? '+' : ''}`, UI.dim, 1);
     if (this.typing) this.drawKeyboard();
@@ -659,19 +752,83 @@ export class CreatorScene extends Phaser.Scene {
       const shown = label === 'SPACE' ? 'SPACE' : label;
       this.text(lx + Math.floor((lw - shown.length * 12) / 2) + 1, y + 10, shown, focused ? UI.navy : UI.white);
     });
-    if (field === 'search') this.text(OPT.x, OPT.y + 44 + 5 * 40 + 8, `${searchInfluences(this.draft.position, this.query, RESULT_LIMIT).length} MATCHES`, UI.dim, 1);
+    if (field === 'search') this.text(OPT.x, OPT.y + 44 + 5 * 40 + 8, `${Math.max(0, this.buildOptions().length - 2)} MATCHES`, UI.dim, 1);
     else wrap('Letters, spaces, apostrophes and hyphens. Up to 12.', 44).forEach((line, i) => this.text(OPT.x, OPT.y + 44 + 5 * 40 + 8 + i * 10, line, UI.dim, 1));
   }
 
   private stepDone(i: number): boolean {
     const d = this.draft;
-    if (i === 0) return Boolean(d.firstName.trim() && d.lastName.trim());
-    if (i === 1) return true;
-    if (i === 2) return d.primary !== null;
-    if (i === 3) return d.playStyle !== null;
-    if (i === 4) return d.archetype !== null;
-    if (i === 5) return draftProblems(d).length === 0;
-    return false;
+    switch (STEPS[i]) {
+      case 'Profile':
+        return Boolean(d.firstName.trim() && d.lastName.trim());
+      case 'Nationality':
+        return d.appearance.nationality !== null;
+      case 'Appearance':
+      case 'Background':
+        return true;
+      case 'Influences':
+        return d.primary !== null;
+      case 'Play Style':
+        return d.playStyle !== null;
+      case 'Archetype':
+        return d.archetype !== null;
+      case 'Review':
+        return draftProblems(d).length === 0;
+      default:
+        return false;
+    }
+  }
+
+  private setAppearance(change: Partial<AppearanceRecord>): void {
+    this.setDraft({ appearance: { ...this.draft.appearance, ...change } });
+  }
+
+  private openPicker(picker: Picker): void {
+    this.pickerReturn = this.index;
+    this.picker = picker;
+    this.query = '';
+    const at = picker.items.findIndex((o) => o.id === picker.current);
+    this.index = at >= 0 ? at + 1 + (picker.none ? 1 : 0) + (picker.search ? 1 : 0) : 0;
+    this.scroll = Math.max(0, this.index - 5);
+    this.dirty = true;
+  }
+
+  private pickerOptions(picker: Picker): Option[] {
+    const close = (): void => {
+      this.picker = null;
+      this.query = '';
+      this.index = this.pickerReturn;
+      this.scroll = 0;
+      this.dirty = true;
+    };
+    const q = this.query.trim().toLowerCase();
+    const card = (o: CatalogOption): CardInfo => ({
+      colour: 'panel',
+      title: o.label,
+      tag: picker.title.toUpperCase(),
+      body: picker.note,
+      images: o.frame && this.frames[o.frame] ? [{ frame: o.frame, x: o.frame.startsWith('flag:') ? 40 : 40, y: o.frame.startsWith('flag:') ? 16 : (96 - (this.frames[o.frame] as [string, number, number, number, number])[4]) / 2, scale: o.frame.startsWith('flag:') ? 2 : 1 }] : undefined,
+      swatch: picker.swatch ? o.id : undefined,
+    });
+    const out: Option[] = [{ label: 'Back', activate: close }];
+    if (picker.search) out.push({ label: 'Search', right: this.fieldText('search', this.query), activate: () => this.startTyping('search') });
+    if (picker.none) out.push({ label: 'None', chosen: picker.current === null, activate: () => { picker.pick(null); close(); } });
+    for (const o of picker.items) {
+      if (q && !o.label.toLowerCase().includes(q)) continue;
+      out.push({ label: clip(o.label, 20), chosen: picker.current === o.id, card: card(o), activate: () => { picker.pick(o.id); close(); } });
+    }
+    return out;
+  }
+
+  private lookCard(): CardInfo {
+    const d = this.draft;
+    const look = composeAppearance(d.appearance, d.position);
+    const images = [
+      { frame: look.portrait[0]?.frame ?? '', x: 4, y: 32 },
+      { frame: look.body[0]?.frame ?? '', x: 76, y: 0 },
+    ];
+    if (look.flag) images.push({ frame: look.flag.frame, x: 20, y: 0 });
+    return { colour: 'panel', title: `${d.firstName} ${d.lastName}`.trim() || 'New player', tag: nationalityByCode(d.appearance.nationality)?.name.toUpperCase().slice(0, 22) ?? 'NO NATIONALITY', badge: d.position === 'goalie' ? 'G' : d.position === 'defense' ? 'D' : 'F', body: 'Face and body are drawn. Hair, beard, skin tone, body type and gear are stored for when layer art arrives.', images, footer: [`${look.stored.length} choices stored`, 'Changes no ratings'] };
   }
 
   private stepCard(): CardInfo {
@@ -689,6 +846,9 @@ export class CreatorScene extends Phaser.Scene {
         const a = d.archetype ? startingArchetypeById(d.archetype) : undefined;
         return { colour: 'green', title: a?.name ?? 'Who are you?', tag: 'ARCHETYPE', art: a?.id, body: a?.description ?? 'Your identity in the room. It changes over a career. It never changes a rating.' };
       }
+      case 'Appearance':
+      case 'Nationality':
+        return this.lookCard();
       case 'Saved Players':
         return { colour: 'green', title: 'Saved players', tag: 'LOCKED IN', body: `${this.store.players.length} of ${CREATED_PLAYER_CONFIG.maxPlayers}. Kept in this browser. A confirmed player is never rolled again.` };
       default:
@@ -710,7 +870,16 @@ export class CreatorScene extends Phaser.Scene {
     this.text(CARD.x + 10, CARD.y + 29, card.tag, UI.dim, 1);
     if (card.badge) this.text(CARD.x + CARD.w - 12 - card.badge.length * 6, CARD.y + 29, card.badge, UI.white, 1);
     const hasArt = card.art !== undefined && this.textures.get(CARD_ART.key).has(card.art);
-    if (hasArt) {
+    const images = (card.images ?? []).filter((im) => this.frames[im.frame]);
+    if (images.length || card.swatch) {
+      this.layer.add(this.add.rectangle(CARD.x + 8, CARD.y + 42, 144, 96, UI.navy, 0.85).setOrigin(0, 0).setStrokeStyle(1, UI.dim));
+      for (const im of images) {
+        const [atlas] = this.frames[im.frame] as [string, number, number, number, number];
+        this.layer.add(this.add.image(CARD.x + 8 + im.x, CARD.y + 42 + im.y, `character-${atlas}`, im.frame).setOrigin(0, 0).setScale(im.scale ?? 1));
+      }
+      const tones = card.swatch ? skinToneColors(card.swatch) : undefined;
+      if (tones) Object.values(tones).forEach((hex, k) => this.layer.add(this.add.rectangle(CARD.x + 20 + k * 20, CARD.y + 66, 20, 48, Number.parseInt(hex.slice(1), 16)).setOrigin(0, 0)));
+    } else if (hasArt) {
       // Batch 16.10 illustration, shown at its native 144x96.
       this.layer.add(this.add.image(CARD.x + 8, CARD.y + 42, CARD_ART.key, card.art).setOrigin(0, 0));
     } else {

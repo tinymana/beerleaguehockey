@@ -178,3 +178,40 @@ If PS18 Hybrid Goalie is approved (`REGISTRIES.md` section 2a), add `style_PS18`
 | 16.10 | Template zone rectangles in `manifest.json` | - | So the supplied blank templates can replace the nine-slice frames |
 
 Not requested again: anything already in the package.
+
+## 10. Zone rectangle schema for the batch 16.10 manifest (requested in Decision 69)
+
+**Coordinate conventions.** Pixels, whole numbers. Origin at the top-left corner of the card image; x grows right, y grows down. A rectangle is `[x, y, width, height]`, where x and y are the first pixel inside the zone and width and height count pixels (so a zone at `[8, 42, 144, 96]` covers x 8 to 151 and y 42 to 137). Zones are given per size, measured on that size's own image, never scaled from another. A zone is the area the game may draw into: it must be flat and free of ornament.
+
+```json
+{
+  "batch": "16.10",
+  "coordinates": "pixels, origin top-left, [x, y, width, height]",
+  "templates": {
+    "card_gold_blank": {
+      "files": { "L": "L/card_gold_blank.png", "M": "M/card_gold_blank.png", "S": "S/card_gold_blank.png" },
+      "size": { "L": [160, 224], "M": [80, 112], "S": [40, 56] },
+      "zones": {
+        "L": {
+          "title": [8, 8, 144, 18],
+          "typeTag": [8, 28, 72, 10],
+          "badge": [124, 28, 28, 10],
+          "art": [8, 42, 144, 96],
+          "description": [8, 142, 144, 40],
+          "footer": [8, 186, 144, 30]
+        },
+        "M": { "title": [4, 4, 72, 10], "art": [4, 16, 72, 48], "footer": [4, 68, 72, 40] },
+        "S": { "art": [3, 3, 34, 50] }
+      },
+      "textColor": { "title": "#2a1a00", "body": "#2a1a00" }
+    }
+  },
+  "illustrations": {
+    "style_PS18": { "files": { "L": "L/style_PS18_art.png", "M": "M/style_PS18_art.png", "S": "S/style_PS18_art.png" }, "fits": "art" }
+  }
+}
+```
+
+Rules the renderer relies on: every zone lies wholly inside the card; zones do not overlap; the `art` zone of each size has exactly the pixel size of that size's illustration files (144x96, 72x48, 34x50); the same zone names are used for `card_gold_blank`, `card_blue_blank` and `card_green_blank` (the rectangles may differ per colour); `textColor` is optional and says which colour reads on that template. The numbers above are the specification's targets: replace them with the rectangles as actually drawn. Illustrations are fully opaque (alpha 255) inside their rectangle; templates are fully transparent outside the card outline.
+
+**Clean re-export (approved):** alpha 255 for every illustration pixel, and crops taken inside the frame so no frame-coloured corner pixels remain. The pictures themselves are not regenerated.
