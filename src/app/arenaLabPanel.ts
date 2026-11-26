@@ -187,7 +187,7 @@ export class ArenaLabPanel {
     this.goalFit = el('div', 'lab-readout');
     tests.append(
       goalRow,
-      el('p', 'lab-note', 'Choose the Goal art fit test arena first: the standard arena shows stand-in nets until redrawn goals arrive. Goal states play on both nets. They are pictures only: none of them changes scoring or collision, and bottle knock-off and dislodged goals are not game mechanics yet.'),
+      el('p', 'lab-note', 'The standard arena shows the goals delivered at the 32 px scale, which have a rest frame and a net ripple; the other states need the Goal art fit test arena (batch 11 goals). Goal states play on both nets. They are pictures only: none of them changes scoring or collision, and bottle knock-off and dislodged goals are not game mechanics yet.'),
       this.goalFit,
     );
     this.root.append(tests);

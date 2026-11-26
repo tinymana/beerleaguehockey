@@ -12,12 +12,13 @@ import { goalLineY, netBox } from '../../sim/rink';
 import { projectY, worldScreenHeight } from '../projection';
 import { TEX, buildTemporaryTextures, netLayout, netScreenAnchor } from '../textures';
 import type { ArenaConfig, BenchMood, BoardSide, CrowdPose, CrowdReaction, GlassState, GoalEnd, GoalState, GoalStrip } from './config';
+import { ARENA_CONFIGS, scaleGoalFiles } from './config';
 import { CrowdView } from './CrowdView';
 import { IceWear, trafficPrior } from './iceWear';
 import { assetFrame, cellFrame } from './phaserTextures';
 import { Rng, hashString } from '../../../core/rng';
-import { ARENA_LAYERS, faceoffSpots, iceOutline, layerDepth, layoutArena, layoutGoals, resurfacerLanes } from './layout';
-import type { ArenaLayerId, ArenaLayout, BenchSpot, GoalPlacement } from './layout';
+import { ARENA_LAYERS, faceoffSpots, iceOutline, layerDepth, layoutArena, layoutGoals, layoutScaleGoals, resurfacerLanes } from './layout';
+import type { ArenaLayerId, ArenaLayout, BenchSpot, GoalPlacement, ScaleGoalPlacement } from './layout';
 import { TILE, assetById, assetUrl, loadableAssets, textureKey, textureSource } from './registry';
 import type { ArenaRegistry } from './registry';
 
@@ -35,6 +36,11 @@ const TEST_LOGO_KEY = 'arena-lab-test-logo';
  * into 8x8 frames, so whole images always ask for the full frame by name.
  */
 const WHOLE = '__BASE';
+
+/** Texture key of one scale goal frame. */
+function scaleGoalKey(folder: string, file: string): string {
+  return `${folder}${file}`;
+}
 
 export class ArenaRenderer {
   readonly layout: ArenaLayout;
@@ -55,6 +61,7 @@ export class ArenaRenderer {
   private readonly iceMask: Phaser.Display.Masks.GeometryMask;
   private readonly maskShape: Phaser.GameObjects.Graphics;
   private readonly maps: Phaser.Tilemaps.Tilemap[] = [];
+  private readonly scaleGoals = new Map<GoalEnd, { image: Phaser.GameObjects.Image; place: ScaleGoalPlacement; state: GoalState; timer: Phaser.Time.TimerEvent | null }>();
   private readonly goals = new Map<GoalEnd, { image: Phaser.GameObjects.Image; place: GoalPlacement; state: GoalState; timer: Phaser.Time.TimerEvent | null }>();
   private readonly doors = new Map<string, { image: Phaser.GameObjects.Image; row: number; frame: number }>();
   private doorTimer: Phaser.Time.TimerEvent | null = null;
@@ -71,6 +78,17 @@ export class ArenaRenderer {
 
   /** Queue every registry texture on a scene's loader. Call from preload. */
   static queueAssets(loader: Phaser.Loader.LoaderPlugin, registry: ArenaRegistry): void {
+    // Scale goals are loaded by name: they are not part of the batch registry.
+    const queued = new Set<string>();
+    for (const config of ARENA_CONFIGS) {
+      if (!config.scaleGoals) continue;
+      for (const file of scaleGoalFiles(config.scaleGoals)) {
+        const key = scaleGoalKey(config.scaleGoals.folder, file);
+        if (queued.has(key)) continue;
+        queued.add(key);
+        loader.image(key, `assets/${config.scaleGoals.folder}${file}.png`);
+      }
+    }
     for (const asset of loadableAssets(registry)) {
       if (asset.role === 'atlas') {
         loader.spritesheet(asset.id, assetUrl(asset), { frameWidth: TILE, frameHeight: TILE });
@@ -296,9 +314,18 @@ export class ArenaRenderer {
       this.add(image, 'nets', false, place.depth);
       this.goals.set(place.end, { image, place, state: 'rest', timer: null });
     }
+    // Goals drawn at the gameplay scale, when every frame of both is loaded.
+    const scale = this.config.scaleGoals;
+    if (scale && scaleGoalFiles(scale).every((file) => this.scene.textures.exists(scaleGoalKey(scale.folder, file)))) {
+      for (const place of layoutScaleGoals(this.rink, this.tilt, this.config)) {
+        const image = this.scene.add.image(place.x, place.y, scaleGoalKey(scale.folder, place.art.rest)).setOrigin(0, 0);
+        this.add(image, 'nets', false, place.depth);
+        this.scaleGoals.set(place.end, { image, place, state: 'rest', timer: null });
+      }
+    }
     // Stand-in nets, sized to the physics net, wherever a supplied goal is not drawn.
     for (const end of ['top', 'bottom'] as const) {
-      if (this.goals.has(end === 'top' ? 'north' : 'south')) continue;
+      if (this.hasGoalArt(end === 'top' ? 'north' : 'south')) continue;
       const anchor = netScreenAnchor(this.rink, end, this.tilt);
       const layout = netLayout(this.rink, end, this.tilt);
       const top = anchor.y - layout.goalLineRow;
@@ -594,11 +621,11 @@ export class ArenaRenderer {
 
   /** True when the supplied goal art (not a stand-in) is drawn at this end. */
   hasGoalArt(end: GoalEnd): boolean {
-    return this.goals.has(end);
+    return this.goals.has(end) || this.scaleGoals.has(end);
   }
 
   goalState(end: GoalEnd): GoalState | null {
-    return this.goals.get(end)?.state ?? null;
+    return this.goals.get(end)?.state ?? this.scaleGoals.get(end)?.state ?? null;
   }
 
   /**
@@ -606,6 +633,27 @@ export class ArenaRenderer {
    * `ripple` plays once and returns to rest; `knockoff` and `dislodged` play once and hold their last frame.
    */
   setGoalState(end: GoalEnd, state: GoalState): void {
+    const sized = this.scaleGoals.get(end);
+    if (sized && this.config.scaleGoals) {
+      // The scale goals have a rest frame and a ripple so far; any other state shows rest.
+      const { folder, rippleMs } = this.config.scaleGoals;
+      const { art } = sized.place;
+      sized.timer?.remove();
+      sized.timer = null;
+      sized.state = state === 'ripple' ? 'ripple' : 'rest';
+      const show = (index: number): void => {
+        const file = art.ripple[index];
+        if (sized.state !== 'ripple' || file === undefined) {
+          sized.state = 'rest';
+          sized.image.setTexture(scaleGoalKey(folder, art.rest));
+          return;
+        }
+        sized.image.setTexture(scaleGoalKey(folder, file));
+        sized.timer = this.scene.time.delayedCall(rippleMs, () => show(index + 1));
+      };
+      show(0);
+      return;
+    }
     const goal = this.goals.get(end);
     if (!goal) return;
     goal.timer?.remove();
@@ -819,6 +867,8 @@ export class ArenaRenderer {
     this.centerDot = null;
     this.scratchLayer = null;
     for (const goal of this.goals.values()) goal.timer?.remove();
+    for (const goal of this.scaleGoals.values()) goal.timer?.remove();
+    this.scaleGoals.clear();
     this.benchTimer?.remove();
     this.doorTimer?.remove();
     this.crowd?.destroy();

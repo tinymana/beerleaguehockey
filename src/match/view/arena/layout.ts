@@ -8,7 +8,7 @@ import type { RinkGeometry } from '../../sim/rink';
 import { projectY } from '../projection';
 import { Rng, hashString } from '../../../core/rng';
 import { worldScreenHeight } from '../projection';
-import type { ArenaConfig, BenchSide, BenchTeam, BoardSide, GoalArt, GoalEnd, SideStructure } from './config';
+import type { ArenaConfig, BenchSide, BenchTeam, BoardSide, GoalArt, GoalEnd, ScaleGoalArt, SideStructure } from './config';
 import { TILE, visibleCentre } from './registry';
 import type { ArenaAsset } from './registry';
 
@@ -684,6 +684,27 @@ export function layoutGoals(rink: RinkGeometry, tilt: number, config: ArenaConfi
     result.push({ end, art, x: rink.centerX - art.mouth[0], y, depth: end === 'north' ? lineY : back });
   }
   return result;
+}
+
+export interface ScaleGoalPlacement {
+  end: GoalEnd;
+  art: ScaleGoalArt;
+  /** Top-left of the sprite on screen. */
+  x: number;
+  y: number;
+  depth: number;
+}
+
+/** Where the scale goals go: the anchor on the centre of the goal line, sorted like the supplied goals. */
+export function layoutScaleGoals(rink: RinkGeometry, tilt: number, config: ArenaConfig): ScaleGoalPlacement[] {
+  const goals = config.scaleGoals;
+  if (!goals || config.goals) return [];
+  return (['north', 'south'] as const).map((end) => {
+    const art = goals[end];
+    const lineY = screenY(rink, tilt, goalLineY(rink, end === 'north' ? 'top' : 'bottom'));
+    const y = lineY - art.anchor[1];
+    return { end, art, x: rink.centerX - art.anchor[0], y, depth: end === 'north' ? lineY : y + art.lastRow + 1 };
+  });
 }
 
 export interface GoalFit {

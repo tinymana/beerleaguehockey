@@ -101,7 +101,6 @@ export class SkatingScene extends Phaser.Scene {
     hud.fillRect(0, 0, GAME_WIDTH, 12);
     hud.fillRect(0, GAME_HEIGHT - 12, GAME_WIDTH, 12);
     this.fixed(addText(this, 4, 3, 'Skating prototype', UI.gold));
-    this.fixed(addText(this, GAME_WIDTH / 2, 3, 'Temp art - 32 px scale test', UI.dim).setOrigin(0.5, 0));
     this.hudGoals = this.fixed(addText(this, GAME_WIDTH - 4, 3, 'Goals 0', UI.white).setOrigin(1, 0));
     this.hudSpeed = this.fixed(addText(this, 4, GAME_HEIGHT - 9, '', UI.ice));
     this.hudLast = this.fixed(addText(this, GAME_WIDTH / 2, 14, '', UI.gold).setOrigin(0.5, 0));

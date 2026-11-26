@@ -1,10 +1,10 @@
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { RINK, goalLineY } from '../src/match/sim/rink';
-import { ARENA_CONFIGS, arenaConfig } from '../src/match/view/arena/config';
+import { RINK, goalLineY, netBox } from '../src/match/sim/rink';
+import { ARENA_CONFIGS, arenaConfig, scaleGoalFiles } from '../src/match/view/arena/config';
 import { IceWear, trafficPrior } from '../src/match/view/arena/iceWear';
-import { ARENA_LAYERS, benchReport, resurfacerLanes, layoutStadium, sequenceFrame, faceoffSpots, goalAlignment, goalFit, iceGrid, iceOutline, layoutArena, layoutGoals, screenY } from '../src/match/view/arena/layout';
+import { ARENA_LAYERS, benchReport, resurfacerLanes, layoutStadium, sequenceFrame, faceoffSpots, goalAlignment, goalFit, iceGrid, iceOutline, layoutArena, layoutGoals, layoutScaleGoals, screenY } from '../src/match/view/arena/layout';
 import { TILE, assetById, loadableAssets, textureSource } from '../src/match/view/arena/registry';
 import type { ArenaRegistry } from '../src/match/view/arena/registry';
 import { CABINET_SLOTS, LOCKER_MODES, LOCKER_SEQUENCES, SAMPLE_TROPHIES, actorIsIdle, layoutLockerRoom, sequenceFrameId } from '../src/match/view/locker/lockerRoom';
@@ -344,10 +344,42 @@ describe('goal nets', () => {
     expect([RINK.netHalfWidth, RINK.netDepth, RINK.goalLineInset]).toEqual([18, 19, 49]);
   });
 
-  it('keeps stand-in nets, at the size the puck hits, in the standard arena until redrawn goals arrive', () => {
+  it('leaves the batch 11 goals out of the standard arena', () => {
     expect(arenaConfig('standard').goals).toBeNull();
     expect(layoutGoals(RINK, TILT, arenaConfig('standard'), lookup)).toEqual([]);
     expect(layoutGoals(RINK, TILT, arenaConfig('practice-sheet'), lookup)).toEqual([]);
+  });
+
+  it('places the 32 px scale goals with their posts on the posts the puck hits', () => {
+    const config = arenaConfig('standard');
+    if (!config.scaleGoals) throw new Error('no scale goals');
+    for (const tilt of [0.6, TILT, 1]) {
+      const [north, south] = layoutScaleGoals(RINK, tilt, config);
+      if (!north || !south) throw new Error('scale goals not placed');
+      for (const [goal, end] of [[north, 'top'], [south, 'bottom']] as const) {
+        const box = netBox(RINK, end);
+        // Red posts are 2 px wide: their outer edges are the outside of the physics net.
+        expect(goal.x + goal.art.posts[0]).toBe(box.left);
+        expect(goal.x + goal.art.posts[1] + RINK.postWidth).toBe(box.right);
+        expect(goal.x + goal.art.anchor[0]).toBe(RINK.centerX);
+        expect(goal.y + goal.art.anchor[1]).toBe(screenY(RINK, tilt, goalLineY(RINK, end)));
+      }
+      expect(north.depth).toBe(screenY(RINK, tilt, goalLineY(RINK, 'top')));
+      expect(south.depth).toBeGreaterThan(screenY(RINK, tilt, goalLineY(RINK, 'bottom')));
+    }
+    // The fit test arena still shows the batch 11 goals, never both.
+    expect(layoutScaleGoals(RINK, TILT, arenaConfig('goal-fit-test'))).toEqual([]);
+  });
+
+  it('has every scale goal frame on disk at the specified size', () => {
+    const goals = arenaConfig('standard').scaleGoals;
+    if (!goals) throw new Error('no scale goals');
+    const files = scaleGoalFiles(goals);
+    expect(files.length).toBe(10);
+    for (const file of files) {
+      const png = readFileSync(join(__dirname, '..', 'public', 'assets', `${goals.folder}${file}.png`));
+      expect([png.readUInt32BE(16), png.readUInt32BE(20)], file).toEqual([...goals.size]);
+    }
   });
 
   it('files every single animation frame against a strip that holds the same pixels', () => {

@@ -2,6 +2,22 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.9.2 - 2026-11-26 - Goals at the 32 px scale
+
+190 tests. The first goal art delivered at the true size is in the game, in place of the stand-in nets.
+
+### Added
+- **Goals drawn at the gameplay scale** (package `BLH_goals_40x32.zip`, received Nov 26): north and south goals, 40x32, placed by the anchors of `ART_BRIEF.md` section 11, with the four-frame net ripple played on a goal. Shown unchanged. `scripts/art/ingest_goals.py` copies them from the external art folder and stops if a file is not the specified size.
+- Stand-in nets remain as the fallback if any frame is missing. The Goal art fit test arena still shows the batch 11 goals.
+
+### Changed
+- Removed the "Temp art - 32 px scale test" label, which overlapped the shot counters.
+
+### Known issues
+- **The goal art differs from the specification** (measured; base art, in for evaluation, Decision 82): a 1 px dark outline on each side of the posts makes the net read 38 px wide with a 30 px opening, while the puck scores across the full 32; the north crossbar is two rows thick; the back of both nets tapers to 28 px; the south posts are 1 px wide on rows 3 to 6 and the south back netting is solid, so a puck in the back of that net is hidden; the back bar opens in the south ripple and the red base bar moves in the north ripple; ripple frames 1 and 4 are identical.
+- Not in the package: water bottle (8x8), bottle knock (24x24), dislodged goal (56x40). Peg marks (40x8) were delivered and checked but are not in the game: dislodged goals are not a mechanic.
+- The skater and goalie are still the old art shown at two-thirds; crease, circles and ice colour await new art.
+
 ## 0.9.1 - 2026-11-26 - Attribute icons; 112,000 names; the 32 px scale locked
 
 188 tests (three need private files and are skipped without them).

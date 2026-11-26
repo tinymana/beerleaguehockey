@@ -147,6 +147,32 @@ export interface GoalArt {
   dislodged: GoalStrip;
 }
 
+/**
+ * One goal drawn at the gameplay scale (`ART_BRIEF.md` section 11): a 40x32 sprite per frame,
+ * placed by a fixed anchor. Not part of the batch registry: these files are loaded by name.
+ */
+export interface ScaleGoalArt {
+  rest: string;
+  /** The sprite's local pixel that sits on the centre of the goal line. */
+  anchor: readonly [number, number];
+  /** Local x of the first column of each red post. */
+  posts: readonly [number, number];
+  /** Last drawn row, for sorting the near goal over players behind it. */
+  lastRow: number;
+  /** Ripple frames in playing order; the goal returns to `rest` afterwards. */
+  ripple: readonly string[];
+}
+
+export interface ScaleGoals {
+  /** Folder under the public assets, with a trailing slash. */
+  folder: string;
+  /** Sprite size, checked at ingest. */
+  size: readonly [number, number];
+  rippleMs: number;
+  north: ScaleGoalArt;
+  south: ScaleGoalArt;
+}
+
 export interface ScaledAsset {
   asset: string;
   /** Whole-number scale. 1 is the art's native size. */
@@ -193,6 +219,8 @@ export interface ArenaConfig {
   equipment: EquipmentArt | null;
   /** Supplied goal nets. Null keeps the code-drawn stand-in nets, which are the size of the physics net. */
   goals: Record<GoalEnd, GoalArt> | null;
+  /** Goals drawn at the gameplay scale. Used wherever `goals` is null; null here too keeps the stand-in nets. */
+  scaleGoals: ScaleGoals | null;
   /** Sponsor panels on the end boards. `x` is a gameplay x position for the panel's centre. */
   boardAds: { asset: string; side: 'north' | 'south'; x: number }[];
   // Extension points: carried, not yet drawn.
@@ -228,6 +256,35 @@ const GOALS: Record<GoalEnd, GoalArt> = {
     dislodged: { atlas: '11.10/goal_atlas', frameWidth: 64, frameHeight: 48, offset: [8, 8], durations: DISLODGED_MS, hold: true },
   },
 };
+
+/**
+ * The first goals delivered at the 32 px scale (received Nov 26). Base art, in the game for evaluation:
+ * a dark outline makes them read 38 px wide with a 30 px opening while the puck still scores across 32.
+ */
+export const SCALE_GOALS: ScaleGoals = {
+  folder: 'goals/32/',
+  size: [40, 32],
+  rippleMs: 65,
+  north: {
+    rest: 'goal_north',
+    anchor: [20, 30],
+    posts: [2, 36],
+    lastRow: 30,
+    ripple: ['goal_north_ripple_01', 'goal_north_ripple_02', 'goal_north_ripple_03', 'goal_north_ripple_04'],
+  },
+  south: {
+    rest: 'goal_south',
+    anchor: [20, 16],
+    posts: [2, 36],
+    lastRow: 30,
+    ripple: ['goal_south_ripple_01', 'goal_south_ripple_02', 'goal_south_ripple_03', 'goal_south_ripple_04'],
+  },
+};
+
+/** Every file a set of scale goals needs, without the extension. */
+export function scaleGoalFiles(goals: ScaleGoals): string[] {
+  return [goals.north.rest, ...goals.north.ripple, goals.south.rest, ...goals.south.ripple];
+}
 
 const SIX = [14, 26, 38, 50, 62, 74] as const;
 const at = (x: number, ys: readonly number[]): [number, number][] => ys.map((y) => [x, y]);
@@ -337,8 +394,9 @@ const STANDARD: ArenaConfig = {
   stadium: STADIUM,
   equipment: EQUIPMENT,
   // Decision 34: the gameplay net keeps its size and the goal art is being redrawn to fit it.
-  // Until that art arrives the standard arena shows stand-in nets at the size the puck actually hits.
+  // The batch 11 goals stay out; the goals delivered at the 32 px scale are drawn instead (stand-in nets if a file is missing).
   goals: null,
+  scaleGoals: SCALE_GOALS,
   // Both names are approved Puck Falls locations.
   boardAds: [
     { asset: '10.13/ad_penalty_box', side: 'north', x: 240 },
@@ -377,6 +435,7 @@ export const ARENA_CONFIGS: readonly ArenaConfig[] = [
     name: 'Goal art fit test',
     description: 'Places the supplied batch 11 goals, which are larger than the gameplay net and are being redrawn. Turn on Collision geometry to compare. Goal state buttons work here. Not a playable arena.',
     goals: GOALS,
+    scaleGoals: null,
   },
   {
     ...STANDARD,
