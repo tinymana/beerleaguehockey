@@ -25,6 +25,8 @@ export const MATCH = {
   /** Seconds play stops after a goal, long enough to read who scored; the shoot button cuts it to `goalSkip`. */
   goalPause: 4,
   goalSkip: 0.3,
+  /** Seconds play stops for a penalty at the least, so the call can be read (the walk to the box can make it longer). */
+  penaltyPause: 2.6,
   /** A beat between the foul and the whistle: the referee's arm goes up, play carries on, then he blows it down. */
   callBeat: 0.7,
   /** The longest the faceoff waits for a penalized skater to reach the box. */

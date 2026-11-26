@@ -2,6 +2,21 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.13.2",
+      "date": "2026-11-26",
+      "title": "Faces and names",
+      "items": [
+        {
+          "tag": "improved",
+          "text": "Goal scorers get their face on the card. So do the guys heading to the penalty box, which is less of an honour."
+        },
+        {
+          "tag": "new",
+          "text": "The period summaries list every goal: who, when, and who set it up."
+        }
+      ]
+    },
+    {
       "version": "0.13.1",
       "date": "2026-11-26",
       "title": "Who scored",

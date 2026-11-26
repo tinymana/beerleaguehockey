@@ -10,6 +10,8 @@ export interface RosterPlayer {
   number: number;
   first: string;
   last: string;
+  /** Which of the preset faces is his portrait. */
+  face: number;
 }
 
 export const PICKUP_ROSTER = {
@@ -17,6 +19,8 @@ export const PICKUP_ROSTER = {
   size: 5,
   /** Sweater numbers are drawn from this range; no two on a team share one. */
   numbers: [2, 98] as const,
+  /** Preset faces to draw portraits from (batch 16.02). */
+  faces: 24,
 };
 
 /** Two teams of skaters, in the order the game holds them: home's five, then away's five. */
@@ -24,6 +28,7 @@ export function makePickupRoster(seed: number): RosterPlayer[] {
   const rng = new Rng(seed).fork('pickup-roster');
   const players: RosterPlayer[] = [];
   const names = new Set<string>();
+  const faces = new Set<number>();
   for (let team = 0; team < 2; team++) {
     const taken = new Set<number>();
     for (let i = 0; i < PICKUP_ROSTER.size; i++) {
@@ -34,7 +39,11 @@ export function makePickupRoster(seed: number): RosterPlayer[] {
       let name = randomName(rng);
       while (names.has(`${name.first} ${name.last}`)) name = randomName(rng);
       names.add(`${name.first} ${name.last}`);
-      players.push({ number, first: name.first, last: name.last });
+      // No two of the ten share a face.
+      let face = rng.int(PICKUP_ROSTER.faces);
+      while (faces.has(face)) face = rng.int(PICKUP_ROSTER.faces);
+      faces.add(face);
+      players.push({ number, first: name.first, last: name.last, face });
     }
   }
   return players;

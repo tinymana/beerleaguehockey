@@ -2,6 +2,25 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.13.2 - 2026-11-26 - Faces and names
+
+240 tests. The creative director's answers on the goal card (Decision 91).
+
+### Added
+- **A portrait on the card.** The 24 preset faces (batch 16.02) at half size, 32x32, in a gold window on the left of the card ("64 can be 32": `scripts/art/process_faces32.py` halves each face exactly and brings it to a small palette). Each pick-up player gets his own face; no two of the ten share one.
+- **A penalty card.** When a penalty is whistled the same card names the player going to the box, with his face, the foul, "2 minutes" and the time. Play stops for at least 2.6 s so it can be read.
+- **Names on the penalty clocks** under the scorebug: "#67 Hagdahl tripping 0:14".
+- **A scoring summary on the intermission and final panels:** one line a goal with period, time, side, scorer and the assisting numbers, "PP" for a power-play goal. With more than five goals the oldest fold into "3 earlier goals". The final panel's title now says who won.
+- The words on the cards and panels are built in `src/app/matchText.ts` and tested, including that the longest names fit.
+
+### Changed
+- The goal card is wider (348 px) to make room for the portrait; assists on it show number and surname.
+- Approved: the card stays up 4 seconds and can be skipped (Decision 91).
+
+### Known issues
+- The half-size faces are painted portraits reduced, not drawn as pixel art, and keep their grey studio background.
+- Goalies and the referee have no names. No names over the players on the ice. No three stars yet.
+
 ## 0.13.1 - 2026-11-26 - Who scored
 
 236 tests. Creative director request (Decision 90): after a goal, a screen showing who scored and who assisted, as in the NHL games.

@@ -973,7 +973,7 @@ export class SkatingSim {
     m.phase = 'whistle';
     m.reason = reason;
     m.dot = dot;
-    m.timer = reason === 'goal' ? MATCH.goalPause : MATCH.whistlePause;
+    m.timer = reason === 'goal' ? MATCH.goalPause : reason === 'penalty' ? MATCH.penaltyPause : MATCH.whistlePause;
     for (const s of this.skaters) {
       s.hasPuck = false;
       s.charge = 0;

@@ -19,6 +19,8 @@ export class BootScene extends Phaser.Scene {
     this.load.spritesheet(GOALIE_SHEET.key, GOALIE_SHEET.url, { frameWidth: GOALIE_SHEET.cell, frameHeight: GOALIE_SHEET.cell });
     // Broadcast graphics: three of the supplied batch 01 overlays reduced to game size (temporary, until the re-issue).
     for (const name of ['goal_splash', 'tag_power_play', 'tag_faceoff']) this.load.image(`ui/${name}`, `assets/ui/broadcast/${name}.png`);
+    // Portraits for the goal and penalty cards: the preset faces at half size.
+    this.load.spritesheet('face32', 'assets/character/face32.png', { frameWidth: 32, frameHeight: 32 });
     // The referee, drawn at the 32 px scale: one file a frame, shown unchanged.
     for (const frame of REFEREE_FRAMES) this.load.image(`ref/${frame}`, `assets/referee/32/${frame}.png`);
     // The registry lists every arena asset; queue them as soon as it arrives.

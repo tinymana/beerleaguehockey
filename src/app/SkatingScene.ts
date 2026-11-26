@@ -11,7 +11,8 @@ import { quantize8 } from '../match/sim/input';
 import type { SimInput } from '../match/sim/input';
 import { SIM_DT, SkatingSim } from '../match/sim/skatingSim';
 import { clockText, periodText } from '../match/sim/match';
-import { fullLine, makePickupRoster, shortLine } from '../dynasty/pickupRoster';
+import { makePickupRoster } from '../dynasty/pickupRoster';
+import { goalCardLines, penaltyCardLines, penaltyClockLine, scoringLines } from './matchText';
 import type { RosterPlayer } from '../dynasty/pickupRoster';
 import { refereeFrame } from '../match/sim/referee';
 import type { MatchState } from '../match/sim/match';
@@ -66,6 +67,7 @@ export class SkatingScene extends Phaser.Scene {
   private roster: RosterPlayer[] = [];
   private goalCard!: Phaser.GameObjects.Graphics;
   private goalLines: Phaser.GameObjects.BitmapText[] = [];
+  private cardFace!: Phaser.GameObjects.Image;
   private lastInput: SimInput = { moveX: 0, moveY: 0, shoot: false };
   private goaliePoses: { pose: GoaliePose; time: number }[] = [];
   private puck!: Phaser.GameObjects.Image;
@@ -173,21 +175,24 @@ export class SkatingScene extends Phaser.Scene {
     this.goalSplash = overlay('ui/goal_splash', GAME_WIDTH / 2, 92);
     // After a goal: who scored, who helped, when, and the score (plain text in a box until the scorer graphic is re-issued).
     this.goalCard = this.add.graphics().setScrollFactor(0).setDepth(DEPTH_HUD).setVisible(false);
-    this.goalCard.fillStyle(UI.navy, 0.94).fillRect(100, 138, 280, 62);
-    this.goalCard.fillStyle(UI.red, 1).fillRect(100, 138, 280, 2);
-    this.goalCard.lineStyle(1, UI.gold, 1).strokeRect(100.5, 138.5, 279, 61);
-    this.goalLines = [0, 1, 2, 3].map((i) => this.fixed(addText(this, GAME_WIDTH / 2, 144 + i * 13, '', i === 0 ? UI.gold : i === 3 ? UI.ice : UI.white).setOrigin(0.5, 0)).setVisible(false));
+    this.goalCard.fillStyle(UI.navy, 0.94).fillRect(66, 138, 348, 62);
+    this.goalCard.fillStyle(UI.red, 1).fillRect(66, 138, 348, 2);
+    this.goalCard.lineStyle(1, UI.gold, 1).strokeRect(66.5, 138.5, 347, 61);
+    // A portrait window on the left: his face at 32 px, in a gold frame.
+    this.goalCard.lineStyle(1, UI.gold, 1).strokeRect(76.5, 152.5, 33, 33);
+    this.cardFace = this.add.image(77, 153, 'face32', 0).setOrigin(0, 0).setScrollFactor(0).setDepth(DEPTH_HUD + 1).setVisible(false);
+    this.goalLines = [0, 1, 2, 3].map((i) => this.fixed(addText(this, 282, 144 + i * 13, '', i === 0 ? UI.gold : i === 3 ? UI.ice : UI.white).setOrigin(0.5, 0)).setVisible(false));
     this.goalSub = this.fixed(addText(this, GAME_WIDTH / 2, 160, '', UI.gold, 2).setOrigin(0.5, 0.5)).setVisible(false);
     this.tagFaceoff = overlay('ui/tag_faceoff', GAME_WIDTH / 2, 40);
     this.tagPowerPlay = overlay('ui/tag_power_play', 46, 28);
     this.splashTimer = 0;
     // Intermission and final panel: plain text in the game's font until the broadcast graphics are re-issued at game size.
     this.panel = this.add.graphics().setScrollFactor(0).setDepth(DEPTH_HUD + 2).setVisible(false);
-    this.panel.fillStyle(UI.navy, 0.94).fillRect(110, 70, 260, 176);
-    this.panel.lineStyle(1, UI.gold, 1).strokeRect(110.5, 70.5, 259, 175);
+    this.panel.fillStyle(UI.navy, 0.95).fillRect(84, 46, 312, 222);
+    this.panel.lineStyle(1, UI.gold, 1).strokeRect(84.5, 46.5, 311, 221);
     this.panelLines = [];
-    for (let i = 0; i < 13; i++) {
-      this.panelLines.push(addText(this, GAME_WIDTH / 2, 78 + i * 12, '', UI.white).setOrigin(0.5, 0).setScrollFactor(0).setDepth(DEPTH_HUD + 3).setVisible(false));
+    for (let i = 0; i < 17; i++) {
+      this.panelLines.push(addText(this, GAME_WIDTH / 2, 53 + i * 12.5, '', UI.white).setOrigin(0.5, 0).setScrollFactor(0).setDepth(DEPTH_HUD + 3).setVisible(false));
     }
     this.chargeBar = this.add.graphics().setDepth(DEPTH_FRONT_BOARDS + 1);
 
@@ -365,7 +370,7 @@ export class SkatingScene extends Phaser.Scene {
         const text = e.reason === 'icing' ? 'Icing' : e.reason === 'offside' ? 'Offside' : e.reason === 'freeze' ? 'Whistle' : '';
         if (text) this.flash(text, 1);
       } else if (e.type === 'penalty') {
-        this.flash(`${e.team === 0 ? 'Home' : 'Away'} ${e.foul}`, 1.8);
+        // The penalty card says who and what for; nothing to flash.
       } else if (e.type === 'hit') {
         this.cameras.main.shake(90, 0.004);
       } else if (e.type === 'draw' && e.team !== -1 && this.sim.match?.reason !== 'start') {
@@ -522,30 +527,25 @@ export class SkatingScene extends Phaser.Scene {
       this.hudGoals.setText(fontText(`Home ${home}   ${periodText(m.period)} ${clockText(m.clock)}   Away ${away}`));
     }
     if (m.penalties.length) {
-      this.hudLast.setText(fontText(m.penalties.map((p) => `${p.team === 0 ? 'Home' : 'Away'} ${p.foul} ${clockText(p.left)}`).join('   ')));
+      this.hudLast.setText(fontText(penaltyClockLine(m, this.roster)));
     } else if (m.phase === 'faceoff' || m.phase === 'draw') {
       this.hudLast.setText(fontText(m.reason === 'start' || m.reason === 'period' ? `Referee: ${m.referee.label}` : ''));
     } else {
       this.hudLast.setText(fontText(this.drawNote.time > 0 && m.phase === 'play' ? this.drawNote.text : ''));
     }
-    // The goal card: up for as long as play is stopped for the goal.
-    const scored = m.phase === 'whistle' && m.reason === 'goal' ? m.goals[m.goals.length - 1] : undefined;
-    this.goalCard.setVisible(scored !== undefined);
-    for (const line of this.goalLines) line.setVisible(scored !== undefined);
-    if (scored) {
-      const side = scored.team === 0 ? 'Home' : 'Away';
-      const who = this.roster[scored.scorer];
-      // His goals tonight, counting this one.
-      const tally = m.goals.filter((g) => g.scorer === scored.scorer && scored.scorer >= 0).length;
-      const helpers = scored.assists.map((i) => this.roster[i]).filter((p): p is RosterPlayer => p !== undefined);
-      const lines = [
-        `${side} goal${scored.powerPlay ? '  -  power play' : ''}`,
-        who ? `${fullLine(who)} (${tally})` : 'Off a defender',
-        helpers.length ? `Assists: ${helpers.map(shortLine).join(', ')}` : who ? 'Unassisted' : '',
-        `${periodText(scored.period)} ${clockText(scored.time)}     Home ${home}  Away ${away}`,
-      ];
-      this.goalLines.forEach((line, i) => line.setText(fontText(lines[i] ?? '')));
-    } else if (m.phase !== 'shootout' && this.splashTimer > 0 && this.goalSplash.visible && !(m.phase === 'whistle' && m.reason === 'goal')) {
+    // The card: who scored, or who is going to the box, for as long as play is stopped for it.
+    const stopped = m.phase === 'whistle';
+    const scored = stopped && m.reason === 'goal' ? m.goals[m.goals.length - 1] : undefined;
+    const called = stopped && m.reason === 'penalty' ? m.penalties[m.penalties.length - 1] : undefined;
+    const card = scored ? goalCardLines(m, scored, this.roster, [home, away]) : called ? penaltyCardLines(m, called, this.roster) : null;
+    const face = this.roster[scored ? scored.scorer : called ? called.skater : -1];
+    this.goalCard.setVisible(card !== null);
+    this.cardFace.setVisible(card !== null && face !== undefined);
+    if (face) this.cardFace.setFrame(face.face);
+    for (const line of this.goalLines) line.setVisible(card !== null);
+    if (card) {
+      this.goalLines.forEach((line, i) => line.setText(fontText(card[i] ?? '')));
+    } else if (m.phase !== 'shootout' && this.splashTimer > 0 && this.goalSplash.visible) {
       // Skipped ahead: the splash goes with the card.
       this.splashTimer = 0.01;
     }
@@ -561,10 +561,10 @@ export class SkatingScene extends Phaser.Scene {
     if (!show) return;
     const [a, b] = m.stats;
     const row = (label: string, x: number, y: number): string => `${String(x).padStart(3)}   ${label.padEnd(12)}${String(y).padStart(3)}`;
-    const winner = m.winner === null ? '' : m.winner === 0 ? 'Home wins' : 'Away wins';
+    const winner = m.winner === null ? '' : m.winner === 0 ? ': Home wins' : ': Away wins';
+    const goals = scoringLines(m, this.roster, 5);
     const lines = [
-      m.phase === 'final' ? `Final${so ? ' (shootout)' : ''}` : `End of the ${periodText(m.period)} period`,
-      '',
+      m.phase === 'final' ? `Final${winner}${so ? ' (shootout)' : ''}` : `End of the ${periodText(m.period)} period`,
       'Home               Away',
       row('Goals', home, away),
       row('Shots', a.shots, b.shots),
@@ -573,11 +573,13 @@ export class SkatingScene extends Phaser.Scene {
       row('Takeaways', a.takeaways, b.takeaways),
       row('Penalty min', a.pim, b.pim),
       row('PP goals', a.powerPlayGoals, b.powerPlayGoals),
-      m.phase === 'final' ? winner : '',
-      `Referee: ${m.referee.label}`,
-      m.phase === 'final' ? (isTouch() ? 'Shoot: play again' : 'Space: play again   Esc: menu') : isTouch() ? 'Shoot: next period' : 'Space: next period',
+      'Scoring',
+      ...goals,
     ];
-    this.panelLines.forEach((line, i) => line.setText(fontText(lines[i] ?? '')).setTint(i === 0 || i === 10 ? UI.gold : i === 12 ? UI.ice : UI.white));
+    while (lines.length < 15) lines.push('');
+    lines.push(`Referee: ${m.referee.label}`);
+    lines.push(m.phase === 'final' ? (isTouch() ? 'Shoot: play again' : 'Space: play again   Esc: menu') : isTouch() ? 'Shoot: next period' : 'Space: next period');
+    this.panelLines.forEach((line, i) => line.setText(fontText(lines[i] ?? '')).setTint(i === 0 || i === 9 ? UI.gold : i === 16 ? UI.ice : i >= 10 && i < 15 ? UI.ice : UI.white));
   }
 
   private exitToMenu(): void {
