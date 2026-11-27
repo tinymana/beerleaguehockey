@@ -309,12 +309,14 @@ describe('5-on-5 test game', () => {
 });
 
 describe('pick-up roster: names and numbers so a goal can say who scored', () => {
-  it('gives ten different fictional players, no shared number on a team, the same for the same seed', async () => {
+  it('gives ten different fictional skaters and two goalies, no shared number on a team, the same for the same seed', async () => {
     const { makePickupRoster, fullLine, shortLine } = await import('../src/dynasty/pickupRoster');
     const a = makePickupRoster(42);
-    expect(a.length).toBe(10);
-    expect(new Set(a.map((p) => `${p.first} ${p.last}`)).size).toBe(10);
-    for (const team of [a.slice(0, 5), a.slice(5)]) {
+    expect(a.length).toBe(12);
+    expect(new Set(a.map((p) => `${p.first} ${p.last}`)).size).toBe(12);
+    // The goalies come after the skaters and take a number nobody on their side wears.
+    for (const t of [0, 1]) expect(a.slice(t * 5, t * 5 + 5).map((p) => p.number)).not.toContain(a[10 + t]?.number);
+    for (const team of [a.slice(0, 5), a.slice(5, 10)]) {
       expect(new Set(team.map((p) => p.number)).size).toBe(5);
       for (const p of team) expect(p.number >= 2 && p.number <= 98).toBe(true);
     }

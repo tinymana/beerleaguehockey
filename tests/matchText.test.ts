@@ -63,8 +63,8 @@ describe('the words on the cards and the summary (Decision 91)', () => {
       const g = goal({ assists: [1, 2], powerPlay: true, period: 3, time: 179 });
       for (const line of goalCardLines(state([g]), g, roster, [10, 10])) expect(line.length * 6, line).toBeLessThanOrEqual(260);
       expect(scoringLine(g, roster).length * 6).toBeLessThanOrEqual(300);
-      // Ten players, ten faces.
-      expect(new Set(roster.map((p) => p.face)).size).toBe(10);
+      // Twelve players, twelve faces.
+      expect(new Set(roster.map((p) => p.face)).size).toBe(12);
       for (const p of roster) expect(p.face >= 0 && p.face < 24).toBe(true);
     }
   });

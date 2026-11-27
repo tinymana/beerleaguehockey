@@ -2,6 +2,21 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.14.0 - 2026-11-27 - Three stars
+
+245 tests. Creative director: "ok next is 3 stars" (Decision 92).
+
+### Added
+- **Three stars of the game.** When the game ends the first thing shown is a Three stars panel: three 32 px portraits, each with his rank and side, number and name, and his night ("2 goals, 1 assist", "21 saves, shutout"). Shoot or Space goes on to the final summary, and again to a new game.
+- **How they are picked** (`src/app/stars.ts`, tested; `STARS` holds the numbers): 3 points a goal, 2 an assist; a goalie gets 0.3 a save, loses 1.5 a goal against and gets 4 for a shutout. Ties go to the winning side, then to goals. Shootout goals do not count. **Starting values, not approved balance.**
+- **The goalies have names.** Each pick-up side's goalie gets a fictional name, a face and a goalie's number (1, 30, 31, 35 or 33, whichever no skater on his side wears). They are added after the ten skaters, so the skaters each seed produces are the same as before.
+
+### Known issues
+- The panel is plain text and boxes; the supplied three-stars graphic waits for the re-issue at game sizes (Decision 86).
+- Saves are the only goalie statistic: a goalie is not credited for the shootout.
+- A skater who scored nothing can be third star in a game with little scoring; his line reads "Steady game".
+- No names over the players on the ice, no overtime, no line changes, no sound.
+
 ## 0.13.3 - 2026-11-26 - The GOAL! splash goes away
 
 240 tests. Creative director report: "when a goal is scored the goal image doesn't disappear".

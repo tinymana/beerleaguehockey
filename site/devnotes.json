@@ -2,6 +2,21 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.14.0",
+      "date": "2026-11-27",
+      "title": "Three stars",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Three stars of the game. When the final horn goes, the best three get their faces up with what they did. Yes, a goalie can steal it."
+        },
+        {
+          "tag": "new",
+          "text": "The goalies finally have names. They have always had opinions."
+        }
+      ]
+    },
+    {
       "version": "0.13.3",
       "date": "2026-11-26",
       "title": "Shorter celebration",
