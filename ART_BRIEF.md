@@ -377,3 +377,23 @@ D. CROWD (fans in proportion to the 32 px skaters)
 
 Deliver a zip with one folder per section (skater, goals, ice, crowd) and a manifest.json listing each file name and its pixel size.
 ```
+
+## 13. Stands and crowd at game size (after the Nov 27 concept sheet)
+
+A concept sheet for better stands was supplied on Nov 27 (image-generator JPEG, 2400x1792, magenta background: A an empty seating module, B sixteen seated fans in sitting, cheering, clapping and back-view poses, C three filled stand mock-ups). It is the style target for the crowd. It cannot go in the game as it is:
+
+- **Size.** One art pixel is about 4 image pixels, so a fan is about 45x70 art pixels. A seat row in the game is 16 px deep and the player on the ice is 32 px: the fans would be more than twice the height of the players. Bringing them down needs a redraw, not a reduction.
+- **Format.** JPEG, so edges are smeared and the magenta bleeds into the outlines; the letters A, B, C and the mock-up backgrounds are painted in.
+- **Layout.** The fans are not on a grid and each is a single picture, not a set of frames.
+
+**What to ask the art tool for, at game size (PNG, transparent, hard pixels, no anti-aliasing):**
+
+| Piece | Size | Notes |
+| --- | --- | --- |
+| Seating module, side stands | 16 px a row; module 32 px along the boards, three rows (48 px) deep | Viewed from the ice side as in sheet part A; west and east are mirrors; must tile along the boards |
+| Stairs module | Same size as a seating module | Replaces every few modules |
+| End and corner seating | 16 px a row, three rows | Not supplied in any batch yet |
+| Fan, seated | 16x24 frame, seat anchor at the frame's bottom centre | Poses from sheet part B: sitting (2 frames), cheering arms up (2), clapping (2), back view for the near side (2). At least 12 different fans (coat, hat and hair varied) |
+| Empty seat | Part of the seating module | The house is not full |
+
+Team colours on fans wait for the team identities.
