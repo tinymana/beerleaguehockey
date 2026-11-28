@@ -12,7 +12,7 @@ import type { SimInput } from '../match/sim/input';
 import { SIM_DT, SkatingSim } from '../match/sim/skatingSim';
 import { clockText, periodText } from '../match/sim/match';
 import { makePickupRoster } from '../dynasty/pickupRoster';
-import { goalCardLines, penaltyCardLines, penaltyClockLine, scoringLines } from './matchText';
+import { goalCardLines, nameTag, numberTag, penaltyCardLines, penaltyClockLine, scoringLines } from './matchText';
 import { threeStars } from './stars';
 import type { Star } from './stars';
 import { fullLine } from '../dynasty/pickupRoster';
@@ -63,6 +63,11 @@ export class SkatingScene extends Phaser.Scene {
   private marker!: Phaser.GameObjects.Ellipse;
   private arrow!: Phaser.GameObjects.Image;
   private passRing!: Phaser.GameObjects.Ellipse;
+  /** Names on the ice: the controlled skater's number and surname, the pass target's number. Each on a dark plate. */
+  private nameText!: Phaser.GameObjects.BitmapText;
+  private namePlate!: Phaser.GameObjects.Rectangle;
+  private mateText!: Phaser.GameObjects.BitmapText;
+  private matePlate!: Phaser.GameObjects.Rectangle;
   private refSprite!: Phaser.GameObjects.Image;
   private goalSplash!: Phaser.GameObjects.Image;
   private goalSub!: Phaser.GameObjects.BitmapText;
@@ -162,6 +167,11 @@ export class SkatingScene extends Phaser.Scene {
     this.refSprite = this.add.image(0, 0, 'ref/referee_front_idle_01').setOrigin(0.5, 28 / 32).setVisible(false);
     // The teammate a pass would go to: a thin white ring at his skates.
     this.passRing = this.add.ellipse(0, 0, 18, 9).setStrokeStyle(1, UI.white, 0.9).setVisible(false);
+    // Name tags under the skates (plain text on a plate: temporary until name plates are supplied).
+    this.namePlate = this.add.rectangle(0, 0, 10, 9, UI.navy, 0.7).setOrigin(0.5, 0).setVisible(false);
+    this.nameText = addText(this, 0, 0, '', UI.gold).setOrigin(0.5, 0).setVisible(false);
+    this.matePlate = this.add.rectangle(0, 0, 10, 9, UI.navy, 0.7).setOrigin(0.5, 0).setVisible(false);
+    this.mateText = addText(this, 0, 0, '', UI.white).setOrigin(0.5, 0).setVisible(false);
 
     this.cameras.main.setBounds(0, 0, rink.worldWidth, this.worldHeight);
     this.camY = projectY(this.sim.skater.y, this.tilt);
@@ -449,6 +459,10 @@ export class SkatingScene extends Phaser.Scene {
       const my = Math.round(projectY(mate.y, k));
       this.passRing.setPosition(Math.round(mate.x), my).setDepth(my - 0.7);
     }
+    // Tags only while play is on or lining up, never over a card or a panel.
+    const named = mine && this.sim.match !== null && this.sim.match.phase !== 'intermission' && this.sim.match.phase !== 'final';
+    this.placeTag(this.nameText, this.namePlate, named ? nameTag(this.roster, this.sim.controlled) : '', skaterX, skaterY + 7);
+    this.placeTag(this.mateText, this.matePlate, named && mate ? numberTag(this.roster, mate.index) : '', mate ? Math.round(mate.x) : 0, mate ? Math.round(projectY(mate.y, k)) + 6 : 0);
     const carrier = this.sim.carrier();
     const carrierY = carrier ? Math.round(projectY(carrier.y, k)) : skaterY;
     // A carried puck sits on the blade; draw it just in front of or behind the body as the stick points.
@@ -516,6 +530,20 @@ export class SkatingScene extends Phaser.Scene {
       this.banner.setVisible(Math.floor(this.bannerTimer * 8) % 2 === 0);
       if (this.bannerTimer <= 0) this.banner.setVisible(false);
     }
+  }
+
+  /** Put a tag and its plate under a skater, kept on the ice picture; an empty tag hides both. */
+  private placeTag(text: Phaser.GameObjects.BitmapText, plate: Phaser.GameObjects.Rectangle, words: string, x: number, y: number): void {
+    const show = words !== '';
+    text.setVisible(show);
+    plate.setVisible(show);
+    if (!show) return;
+    const letters = fontText(words);
+    if (text.text !== letters) text.setText(letters);
+    const w = Math.ceil(text.width) + 4;
+    const cx = Math.max(w / 2 + 1, Math.min(this.sim.rink.worldWidth - w / 2 - 1, x));
+    plate.setSize(w, 9).setPosition(cx, y).setDepth(y + 399);
+    text.setPosition(cx, y + 1).setDepth(y + 400);
   }
 
   private drawSkater(sk: Skater, i: number, alpha: number): void {

@@ -2,6 +2,21 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.14.1",
+      "date": "2026-11-27",
+      "title": "Names on the ice",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Your skater wears his name: number and surname follow him around the ice, and switch when you do."
+        },
+        {
+          "tag": "new",
+          "text": "The teammate your pass is headed to shows his number, so you know who to blame."
+        }
+      ]
+    },
+    {
       "version": "0.14.0",
       "date": "2026-11-27",
       "title": "Three stars",

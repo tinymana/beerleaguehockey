@@ -11,6 +11,18 @@ const side = (team: 0 | 1): string => (team === 0 ? 'Home' : 'Away');
 const cap = (word: string): string => word.charAt(0).toUpperCase() + word.slice(1);
 
 /** Four lines: who scored, who helped, when, and the score. */
+/** The tag under a skater on the ice: "19 Kowalski". Short, because it moves with him. */
+export function nameTag(roster: readonly RosterPlayer[], index: number): string {
+  const p = roster[index];
+  return p ? `${p.number} ${p.last}` : '';
+}
+
+/** The tag under the teammate a pass would go to: his number only. */
+export function numberTag(roster: readonly RosterPlayer[], index: number): string {
+  const p = roster[index];
+  return p ? `${p.number}` : '';
+}
+
 export function goalCardLines(m: MatchState, goal: GoalRecord, roster: readonly RosterPlayer[], score: readonly [number, number]): string[] {
   const who = roster[goal.scorer];
   // His goals tonight, counting this one.

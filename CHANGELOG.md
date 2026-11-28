@@ -2,6 +2,19 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.14.1 - 2026-11-27 - Names on the ice
+
+246 tests. Creative director: "go for it", to the recommended next step of v0.14.0 (Decision 93).
+
+### Added
+- **Your skater's name follows him.** Under the gold ring: his number and surname in gold on a dark plate ("19 Kowalski"). It changes the moment you switch players.
+- **The pass target shows his number** in white under his ring, so you know who the puck is going to and who will be on the goal card.
+- Tags are hidden on the intermission and final panels and when your skater is in the box. Words built in `src/app/matchText.ts` (`nameTag`, `numberTag`), tested for length against the name pools.
+
+### Known issues
+- Plain text on a plate, code-drawn and temporary. Only your skater and the pass target are named: opponents, other teammates and goalies are not.
+- A tag can cover the puck or a skater just below yours.
+
 ## 0.14.0 - 2026-11-27 - Three stars
 
 245 tests. Creative director: "ok next is 3 stars" (Decision 92).

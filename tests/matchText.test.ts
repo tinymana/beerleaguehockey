@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { goalCardLines, penaltyCardLines, penaltyClockLine, scoringLine, scoringLines } from '../src/app/matchText';
+import { goalCardLines, nameTag, numberTag, penaltyCardLines, penaltyClockLine, scoringLine, scoringLines } from '../src/app/matchText';
 import { makePickupRoster } from '../src/dynasty/pickupRoster';
 import type { RosterPlayer } from '../src/dynasty/pickupRoster';
 import { REFEREES, emptyStats } from '../src/match/sim/match';
@@ -55,6 +55,17 @@ describe('the words on the cards and the summary (Decision 91)', () => {
     expect(lines[0]).toBe('3 earlier goals');
     expect(lines[4]).toBe(scoringLine(seven[6]!, ROSTER));
     expect(scoringLines(state(seven.slice(0, 5)), ROSTER, 5).length).toBe(5);
+  });
+
+  it('name tags on the ice: number and surname for your skater, a number for the pass target, short enough to follow him', () => {
+    expect(nameTag(ROSTER, 0)).toBe('19 Kowalski');
+    expect(numberTag(ROSTER, 1)).toBe('7');
+    expect(nameTag(ROSTER, 99)).toBe('');
+    expect(numberTag(ROSTER, 99)).toBe('');
+    for (const seed of [1, 2, 3, 4, 5, 6, 7, 8]) {
+      const roster = makePickupRoster(seed);
+      roster.forEach((_, i) => expect(nameTag(roster, i).length * 6, nameTag(roster, i)).toBeLessThanOrEqual(110));
+    }
   });
 
   it('every line fits the card and the panel in the game font (6 px a letter)', () => {
