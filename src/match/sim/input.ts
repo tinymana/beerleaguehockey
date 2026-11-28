@@ -7,6 +7,11 @@ export interface SimInput {
   pass?: boolean;
   /** The contact button, in a full game: tap to stick check, hold to bump, hold too long and it is a check. */
   check?: boolean;
+  /**
+   * Shot aim help for this input. Left out, it is on. The game switches it off when the direction comes from
+   * a stick (gamepad or touch): the help is for keyboards (Decision 98).
+   */
+  aimHelp?: boolean;
 }
 
 export const NO_INPUT: Readonly<SimInput> = Object.freeze({ moveX: 0, moveY: 0, shoot: false });

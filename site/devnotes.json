@@ -2,6 +2,21 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.17.1",
+      "date": "2026-11-27",
+      "title": "Tighter games",
+      "items": [
+        {
+          "tag": "improved",
+          "text": "Far fewer goals. The computer no longer gets help picking corners, so its shots have to earn it."
+        },
+        {
+          "tag": "improved",
+          "text": "Corner aim help is now just for keyboard players. On a gamepad or touch stick, your aim is your own."
+        }
+      ]
+    },
+    {
       "version": "0.17.0",
       "date": "2026-11-27",
       "title": "House rules",

@@ -355,6 +355,8 @@ export class SkatingScene extends Phaser.Scene {
     const k = this.keys;
     let x = (k.right.isDown || k.d.isDown ? 1 : 0) - (k.left.isDown || k.a.isDown ? 1 : 0);
     let y = (k.down.isDown || k.s.isDown ? 1 : 0) - (k.up.isDown || k.w.isDown ? 1 : 0);
+    // Shot aim help is for the keyboard; a gamepad or the touch stick aims for itself (Decision 98).
+    const keyboard = x !== 0 || y !== 0;
     if (x === 0 && y === 0) {
       x = padX;
       y = padY;
@@ -370,6 +372,7 @@ export class SkatingScene extends Phaser.Scene {
       moveY: move.y,
       shoot: k.space.isDown || k.j.isDown || k.x.isDown || padShoot || touchState.shoot,
       pass: k.z.isDown || k.k.isDown || k.shift.isDown || padPass || touchState.pass,
+      aimHelp: keyboard,
     };
   }
 

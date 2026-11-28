@@ -286,6 +286,8 @@ function carry(v: TeamView, s: AiSkater): SimInput {
     // He picks a side without reading the goalie: a coin toss.
     s.aiSide = v.aiRng.next() < 0.5 ? -1 : 1;
     if (v.aiRng.next() >= AI.pickCorner) s.aiSide = 0;
+    // Without aim help a diagonal goes exactly 45 degrees: he only tries it when that line ends between the posts.
+    if (s.aiSide !== 0 && Math.abs(off + s.aiSide * out) > rink.mouthHalfWidth - 2) s.aiSide = 0;
     return { ...toward(s, rink.centerX, line - dir * 30, 0), shoot: true };
   }
 

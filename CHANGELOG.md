@@ -2,6 +2,28 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.17.1 - 2026-11-27 - Fewer goals: aim help is for the keyboard player
+
+256 tests. Creative director: "eek way too many goals"; then option A, "aim help for sure", and "for keyboard player; with joystick I don't think we need it" (Decision 98).
+
+### Changed
+- **Shot aim help is now only for the player, and only on a keyboard.** Computer skaters (opponents and your own teammates) shoot where their sticks point. A gamepad stick or the touch stick gets no help either. The help itself is unchanged for a keyboard, and so is the goalie.
+- **The computer no longer throws diagonal shots wide.** Its "pick a corner" shot relied on the help; without it a diagonal goes at exactly 45 degrees, so the computer now only tries one when that line ends between the posts, and otherwise shoots straight at the net.
+
+### Measured (computer on both sides, regulation only)
+| | Goals a game | Shots | Saves |
+| --- | --- | --- | --- |
+| Before (30 games) | 14.1 | 75 | 38 |
+| Now (40 games) | 8.5 | 75 | 44 |
+
+- Totals now run from 3 to 15, most often 8 to 10. 7 of 40 games were tied after three (it was 4 of 40).
+- The first measurement of this option gave 5.4, but that was with the computer firing half its shots wide of an empty net, which looked wrong and failed a test; fixing that gives 8.5.
+- With a human on a keyboard the home side still has the help, so its scoring depends on the hands; not measurable here.
+
+### Known issues
+- A stick still shoots one of eight ways, like the keyboard, so without the help corners are hard to pick with a gamepad or on a phone. True analogue aim for sticks would be a separate change.
+- If 8.5 is still too many, the next levers are how often the computer shoots (half as often measured about a fifth fewer goals) and the wander on the player's aim help.
+
 ## 0.17.0 - 2026-11-27 - Options: the Pick-Up rules
 
 254 tests. Creative director: "yes to all this for now" (Decision 96).

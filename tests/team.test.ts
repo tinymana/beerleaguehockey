@@ -29,7 +29,7 @@ function give(sim: SkatingSim, index: number): void {
 
 describe('shot aim help (Nov 26 feedback: corner shots are hard to aim on a keyboard)', () => {
   /** Stand in the slot with the puck, let the goalie set, and release a wrist shot with a direction held. */
-  function slotShot(moveX: number, assist: boolean, offset = 0): { sim: SkatingSim; xAtLine: number } {
+  function slotShot(moveX: number, assist: boolean, offset = 0, stick = false): { sim: SkatingSim; xAtLine: number } {
     const sim = new SkatingSim(cloneTuning());
     sim.aimAssist = assist;
     const s = sim.skater;
@@ -41,10 +41,39 @@ describe('shot aim help (Nov 26 feedback: corner shots are hard to aim on a keyb
     sim.step(IDLE);
     expect(s.hasPuck).toBe(true);
     sim.step({ moveX: 0, moveY: 0, shoot: true });
-    sim.step({ moveX: moveX * (moveX ? D : 1), moveY: moveX ? -D : -1, shoot: false });
+    sim.step({ moveX: moveX * (moveX ? D : 1), moveY: moveX ? -D : -1, shoot: false, ...(stick ? { aimHelp: false } : {}) });
     const p = sim.puck;
     return { sim, xAtLine: p.x + (p.vx / p.vy) * (line - p.y) };
   }
+
+  it('is for the keyboard: a shot from a stick (gamepad or touch) goes where it points (Decision 98)', () => {
+    expect(slotShot(-1, true, 0, true).xAtLine).toBeCloseTo(slotShot(-1, false).xAtLine, 6);
+  });
+
+  it('is for the player only: in a game a computer skater, or anyone when the computer plays both sides, gets none', () => {
+    const shot = (index: number, demo: boolean): number => {
+      const sim = new SkatingSim(cloneTuning());
+      sim.demo = demo;
+      sim.setTeams(true);
+      sim.setGoalies(false);
+      for (const s of sim.skaters) if (s.index !== index) [s.x, s.y] = [RINK.centerX + 150, RINK.centerY + 200 + s.index * 12];
+      const s = sim.skaters[index];
+      if (!s) throw new Error('no skater');
+      [s.x, s.y, s.vx, s.vy] = [RINK.centerX, line + 60, 0, 0];
+      give(sim, index);
+      // The player stays on skater 0, whoever has the puck.
+      sim.controlled = 0;
+      // Fire it directly, as the sim does for any skater: a wrist shot with a diagonal held up and to the left.
+      (sim as unknown as { fire(s: unknown, dx: number, dy: number, side: number, power: number, boost: number, one: boolean, e: unknown[]): void }).fire(s, -D, -D, -1, 0.2, 1, false, []);
+      const p = sim.puck;
+      return p.x + (p.vx / p.vy) * (line - p.y);
+    };
+    const corner = RINK.mouthHalfWidth - FEEL.puckRadius - AIM.cornerInset;
+    // The player's skater: at the corner. A teammate the computer is running, or the same skater in a demo: 45 degrees, wide.
+    expect(Math.abs(shot(0, false) - (RINK.centerX - corner))).toBeLessThanOrEqual(AIM.spread + 0.001);
+    expect(Math.abs(shot(1, false) - RINK.centerX)).toBeGreaterThan(40);
+    expect(Math.abs(shot(0, true) - RINK.centerX)).toBeGreaterThan(40);
+  });
 
   it('sends a shot with a diagonal held to that side of the net, inside the spread', () => {
     const corner = RINK.mouthHalfWidth - FEEL.puckRadius - AIM.cornerInset;

@@ -140,6 +140,8 @@ export class SkatingSim {
   drawDelay: [number, number] = [0, 0];
   /** Shots with a diagonal held toward a net are aimed at that corner. Off for tests of the raw puck physics. */
   aimAssist = true;
+  /** Whether the player's input on this step asked for the aim help (a keyboard does, a stick does not). */
+  private aimHelpNow = true;
   /** The computer plays every skater, the player's included. For tests and measurements. */
   demo = false;
   aiRng = new Rng(7).fork('team-ai');
@@ -325,6 +327,7 @@ export class SkatingSim {
     const events: SimEvent[] = [];
     const dt = SIM_DT;
     this.tick++;
+    this.aimHelpNow = input.aimHelp !== false;
 
     const m = this.match;
     if (m && this.referee) {
@@ -563,9 +566,14 @@ export class SkatingSim {
    * Shot aim help. A shot is sent where the stick or the held direction points, one of eight ways, which rarely
    * lines up with a corner of the net. With a diagonal held toward a net, the shot is aimed at the corner on that
    * side instead, as long as that is not a big change of direction. Straight shots are left exactly as they are.
+   * Only the skater the player controls gets it, and only when he is on a keyboard.
    */
   private aimAtCorner(s: Skater, dirX: number, dirY: number, sideways: number): { x: number; y: number } | null {
     if (!this.aimAssist || sideways === 0 || dirY === 0) return null;
+    // The help is for the player's hands on a keyboard or stick; a computer skater shoots where his stick points (Decision 98).
+    if (this.teams && (this.demo || s.index !== this.controlled)) return null;
+    // And only for a keyboard: a stick aims for itself.
+    if (!this.aimHelpNow) return null;
     const end: RinkEnd = dirY < 0 ? 'top' : 'bottom';
     const line = goalLineY(this.rink, end);
     const bx = this.bladeX(s);
