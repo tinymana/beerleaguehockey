@@ -12,6 +12,20 @@ export interface SimInput {
    * a stick (gamepad or touch): the help is for keyboards (Decision 98).
    */
   aimHelp?: boolean;
+  /**
+   * The exact direction a stick is pushed, as a unit vector, when the input comes from a gamepad or touch stick.
+   * Skating still goes one of eight ways (moveX, moveY); a shot goes exactly this way (Decision 99). Left out for a keyboard.
+   */
+  aimX?: number;
+  aimY?: number;
+}
+
+/** The exact stick direction of an input, or null when it has none (a keyboard, or the stick at rest). */
+export function stickAim(input: SimInput): { x: number; y: number } | null {
+  const x = input.aimX ?? 0;
+  const y = input.aimY ?? 0;
+  const len = Math.hypot(x, y);
+  return len > 0.001 ? { x: x / len, y: y / len } : null;
 }
 
 export const NO_INPUT: Readonly<SimInput> = Object.freeze({ moveX: 0, moveY: 0, shoot: false });

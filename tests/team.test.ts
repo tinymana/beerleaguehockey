@@ -50,6 +50,31 @@ describe('shot aim help (Nov 26 feedback: corner shots are hard to aim on a keyb
     expect(slotShot(-1, true, 0, true).xAtLine).toBeCloseTo(slotShot(-1, false).xAtLine, 6);
   });
 
+  it('a stick aims for itself: the shot goes exactly where it is pushed, between the eight ways (Decision 99)', () => {
+    const shot = (aimX: number, aimY: number): { angle: number; x: number } => {
+      const sim = new SkatingSim(cloneTuning());
+      const s = sim.skater;
+      [s.x, s.y, s.facing] = [RINK.centerX, line + 60, -Math.PI / 2];
+      sim.puck.x = sim.bladeX();
+      sim.puck.y = sim.bladeY();
+      sim.step(IDLE);
+      sim.step({ moveX: 0, moveY: 0, shoot: true });
+      // The stick is pushed up and a little left: skating reads it as straight up, the shot takes the exact line.
+      sim.step({ moveX: 0, moveY: -1, shoot: false, aimHelp: false, aimX, aimY });
+      const p = sim.puck;
+      return { angle: Math.atan2(p.vy, p.vx), x: p.x + (p.vx / p.vy) * (line - p.y) };
+    };
+    const tilt = -Math.PI / 2 - 0.2;
+    const left = shot(Math.cos(tilt), Math.sin(tilt));
+    expect(left.angle).toBeCloseTo(tilt, 2);
+    // About 12 px left of where a straight shot goes: inside the post, which no eight-way shot from here can do.
+    const straight = shot(0, -1);
+    expect(straight.x - left.x).toBeGreaterThan(8);
+    expect(Math.abs(left.x - RINK.centerX)).toBeLessThan(RINK.mouthHalfWidth);
+    // A longer push is the same direction: only the direction counts.
+    expect(shot(Math.cos(tilt) * 0.6, Math.sin(tilt) * 0.6).angle).toBeCloseTo(tilt, 2);
+  });
+
   it('is for the player only: in a game a computer skater, or anyone when the computer plays both sides, gets none', () => {
     const shot = (index: number, demo: boolean): number => {
       const sim = new SkatingSim(cloneTuning());

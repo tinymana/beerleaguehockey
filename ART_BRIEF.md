@@ -397,3 +397,5 @@ A concept sheet for better stands was supplied on Nov 27 (image-generator JPEG, 
 | Empty seat | Part of the seating module | The house is not full |
 
 Team colours on fans wait for the team identities.
+
+**Fan size approved at 16x24 (Decision 99).** A mock-up made from the concept sheet by rough reduction showed the size beside the ice; it is not production art.

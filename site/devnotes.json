@@ -2,6 +2,21 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.18.0",
+      "date": "2026-11-27",
+      "title": "Stick aim",
+      "items": [
+        {
+          "tag": "new",
+          "text": "On a gamepad or the touch stick, shots go exactly where you push. Pick your corner."
+        },
+        {
+          "tag": "improved",
+          "text": "Keyboard players keep their corner aim help."
+        }
+      ]
+    },
+    {
       "version": "0.17.1",
       "date": "2026-11-27",
       "title": "Tighter games",

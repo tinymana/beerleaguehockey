@@ -18,7 +18,7 @@ import { AI, faceoffSpot, teamInputs } from './teamAi';
 import type { Role } from './teamAi';
 import { attackDir, attackEnd } from './teamAi';
 import { CONTACT, MATCH, REFEREES, boxDoor, emptyStats, endZoneDot, faceoffDots, lineupSpot, neutralDot, penaltySeconds } from './match';
-import { quantize8 } from './input';
+import { quantize8, stickAim } from './input';
 import type { Foul, MatchState, StopReason } from './match';
 import { NO_INPUT } from './input';
 import { dropSpot, makeReferee, signalReferee, stepReferee } from './referee';
@@ -596,8 +596,10 @@ export class SkatingSim {
       s.charge = 0;
       // Holding shoot without the puck is winding up: a pass that arrives is hit first time.
       s.windup = input.shoot ? Math.min(s.windup + dt, FEEL.maxChargeTime) : 0;
-      s.aimX = input.moveX;
-      s.aimY = input.moveY;
+      // A stick's exact direction if there is one, else the held direction, one of eight ways.
+      const waiting = stickAim(input);
+      s.aimX = waiting ? waiting.x : input.moveX;
+      s.aimY = waiting ? waiting.y : input.moveY;
       return;
     }
     s.windup = 0;
@@ -618,6 +620,9 @@ export class SkatingSim {
       dirX = input.moveX;
       dirY = input.moveY;
     }
+    // A gamepad or touch stick aims for itself: the shot goes exactly where it is pushed.
+    const stick = stickAim(input);
+    if (stick) [dirX, dirY] = [stick.x, stick.y];
     this.fire(s, dirX, dirY, input.moveX, Math.min(s.charge / FEEL.maxChargeTime, 1), 1, false, events);
   }
 

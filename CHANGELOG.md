@@ -2,6 +2,21 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.18.0 - 2026-11-27 - A stick aims for itself
+
+257 tests. Creative director: 8 to 9 goals a game "seems more normal"; "yes" to analogue aim for sticks; fans at 16x24, "let's see it" (Decision 99).
+
+### Added
+- **Analogue shot aim for gamepad and touch sticks.** A shot now goes exactly where the stick is pushed, not to the nearest of eight directions, so a stick can pick a corner on its own. Skating is unchanged (eight ways). One-timers take the stick's line too. The keyboard keeps its eight directions and its aim help. `SimInput.aimX`, `aimY`.
+
+### Recorded (no change)
+- Scoring at about 8.5 goals a game between computer teams is accepted as normal.
+- Fans for the new stands will be 16x24. A size mock-up was made outside the game from the concept sheet (a rough reduction, for judging size only; not production art and not in the repository).
+
+### Known issues
+- Not tried on a real gamepad or phone: how easy corners are with a stick is unknown. A d-pad still gives eight directions.
+- Analogue aim has no wander: the shot goes exactly where the stick points.
+
 ## 0.17.1 - 2026-11-27 - Fewer goals: aim help is for the keyboard player
 
 256 tests. Creative director: "eek way too many goals"; then option A, "aim help for sure", and "for keyboard player; with joystick I don't think we need it" (Decision 98).

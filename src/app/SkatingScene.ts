@@ -367,7 +367,11 @@ export class SkatingScene extends Phaser.Scene {
       y = touchState.y;
     }
     const move = quantize8(x, y);
+    // A stick's exact direction goes along for shots (Decision 99); skating stays eight-way.
+    const len = Math.hypot(x, y);
+    const stick = !keyboard && (move.x !== 0 || move.y !== 0) && len > 0;
     return {
+      ...(stick ? { aimX: x / len, aimY: y / len } : {}),
       moveX: move.x,
       moveY: move.y,
       shoot: k.space.isDown || k.j.isDown || k.x.isDown || padShoot || touchState.shoot,
