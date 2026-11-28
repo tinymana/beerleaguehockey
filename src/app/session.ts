@@ -1,5 +1,7 @@
 /** App-wide singletons for the prototype: the live tuning values and their panel. */
 import { cloneTuning } from '../match/sim/tuning';
+import { loadRules } from './gameRules';
+import type { GameRules } from './gameRules';
 import { TuningPanel, loadSavedTuning } from './tuningPanel';
 
 export const tuning = cloneTuning();
@@ -10,6 +12,9 @@ export const arenaChoice = { id: 'standard' };
 
 /** What Pick-Up opens: the 5-on-5 test game, or one skater for skating and shooting practice. T switches. */
 export const matchMode = { teams: true, games: 0 };
+
+/** The rules Pick-Up is played under, set on the Options screen and kept in the browser. */
+export const gameRules: { current: GameRules } = { current: loadRules() };
 
 let panel: TuningPanel | null = null;
 

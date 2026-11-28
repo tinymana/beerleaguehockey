@@ -3,7 +3,8 @@ import { GAME_HEIGHT, GAME_WIDTH, SCENES, UI } from './config';
 import { Edge, readPad } from './padInput';
 import { addText, fontText } from './pixelFont';
 import { PLAY_SCALE } from '../match/sim/rink';
-import { arenaChoice, matchMode, tuning, tuningPanel } from './session';
+import { arenaChoice, matchMode, tuning, tuningPanel, gameRules } from './session';
+import { applyRules } from './gameRules';
 import { isTouch, showTouchControls, touchState } from './touchControls';
 import { setTitleArtVisible } from './stage';
 import { directionIndex8, lerp } from '../core/math';
@@ -130,6 +131,8 @@ export class SkatingScene extends Phaser.Scene {
     // The 5-on-5 test game: two teams of five, the computer playing everyone the player does not control.
     // Pick-Up is a full game: clock, whistles, the contact button, penalties (Decision 86). Each game draws its own referee.
     matchMode.games++;
+    // The rules chosen on the Options screen: lengths go into the match data before the game is set up.
+    this.sim.rules = applyRules(gameRules.current);
     this.sim.setTeams(matchMode.teams, matchMode.teams, 11 + matchMode.games * 7919);
     // Fictional names and numbers for tonight's two sides, so a goal can say who scored.
     this.roster = makePickupRoster(11 + matchMode.games * 7919);

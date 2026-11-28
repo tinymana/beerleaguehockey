@@ -2,6 +2,21 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.17.0",
+      "date": "2026-11-27",
+      "title": "House rules",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Options on the main menu: set period length, turn icing, offside and penalties on or off, and pick how overtime works."
+        },
+        {
+          "tag": "improved",
+          "text": "Your rules are remembered for next time. One button puts the standard rules back."
+        }
+      ]
+    },
+    {
       "version": "0.16.0",
       "date": "2026-11-27",
       "title": "Three on three",

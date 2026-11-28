@@ -2,6 +2,27 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.17.0 - 2026-11-27 - Options: the Pick-Up rules
+
+254 tests. Creative director: "yes to all this for now" (Decision 96).
+
+### Added
+- **An Options screen** on the main menu (it used to hold only the credits). Six Pick-Up rules, each changed with Left and Right, Enter, a click or a tap:
+  - Period length: 1:00, 2:00, **3:00**, 5:00 (a penalty stays a tenth of a period)
+  - Icing, Offside, Penalties: **On** or Off
+  - Overtime: Off, 1:00, **2:00**, 3:00 (Off sends a tie straight to the shootout)
+  - Overtime skaters: **3 on 3**, 4 on 4, 5 on 5
+- "Back to the standard rules" puts the bold values back; a changed value shows in white. The choices are kept in the browser (`blh.rules.v1`) and apply to the next Pick-Up game. Credits moved inside Options.
+- Rules and their words are in `src/app/gameRules.ts`, tested, including damaged saved values.
+
+### Recorded (no change)
+- The shootout being rare, the three-stars formula and the name tag under the skates are accepted for now.
+
+### Known issues
+- The screen is plain text in a box, code-drawn; no options art exists.
+- The choices offered are for trying things out. None is approved balance, and only the standard set matches the rulings.
+- Changing rules during a game is not possible; they are read when a game starts.
+
 ## 0.16.0 - 2026-11-27 - Three on three, and the stars one at a time
 
 249 tests. Creative director: "2 min ot 3 on 3 reveal 1 at a time" (Decision 95).

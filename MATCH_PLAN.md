@@ -155,3 +155,5 @@ Steps 1 and 2 give a game that can be finished and played like pick-up. Sound ca
 **Overtime (Decision 94, v0.15.0):** a tie after three periods plays one 1:00 sudden-death period, five on five, before the shootout. The length is a starting value.
 
 **Decision 95 (v0.16.0):** overtime is 2:00, three on three; the three stars are revealed one at a time, third star first.
+
+**Options (Decision 96, v0.17.0):** the rule switches of section 14 now have a screen: period length, icing, offside, penalties, overtime length and skaters.
