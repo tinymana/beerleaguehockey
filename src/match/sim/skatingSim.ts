@@ -23,6 +23,8 @@ import type { Foul, MatchState, StopReason } from './match';
 import { NO_INPUT } from './input';
 import { dropSpot, makeReferee, signalReferee, stepReferee } from './referee';
 import type { RefereeState } from './referee';
+import { NO_MODS } from './skaterMods';
+import type { SkaterMods } from './skaterMods';
 import type { Tuning } from './tuning';
 
 export const SIM_DT = 1 / 60;
@@ -76,6 +78,8 @@ export interface Skater extends Body {
   aimY: number;
   /** Penalized and skating to the box. */
   toBox: boolean;
+  /** What his ratings do to his skating, shooting, passing and stick (skaterMods.ts). `NO_MODS` plays as the tuning says. */
+  mods: SkaterMods;
 }
 
 export interface Puck extends Body {
@@ -146,6 +150,8 @@ export class SkatingSim {
   demo = false;
   aiRng = new Rng(7).fork('team-ai');
   private aimRng = new Rng(3).fork('aim');
+  /** Stray on shots and passes from the skaters' accuracy ratings. Its own stream: a skater with no ratings never draws from it. */
+  private modRng = new Rng(5).fork('ratings');
   puck!: Puck;
   tick = 0;
   goals = 0;
@@ -185,6 +191,12 @@ export class SkatingSim {
     this.reset();
   }
 
+  /** Give a skater ratings to play by (see skaterMods.ts), or take them away. They hold until the teams are set again. */
+  setSkaterMods(index: number, mods: SkaterMods | null): void {
+    const s = this.skaters[index];
+    if (s) s.mods = mods ?? NO_MODS;
+  }
+
   /** The skater the player controls. */
   get skater(): Skater {
     return this.skaters[this.controlled] as Skater;
@@ -197,7 +209,7 @@ export class SkatingSim {
       hasPuck: false, charge: 0, pickupCooldown: 0, stride: 0,
       index, team, role, pushing: false, shootHeld: false, passHeld: false, pokeCooldown: 0,
       possessTick: -1000, shotTick: -1000, aiHold: 0, aiSide: 1, aiWait: 0, aiStill: 0, aiDodge: 0, aiCheck: 0,
-      out: false, down: 0, lock: 0, checkHeld: false, checkTime: 0, checked: false, checkCooldown: 0, windup: 0, aimX: 0, aimY: 0, toBox: false,
+      out: false, down: 0, lock: 0, checkHeld: false, checkTime: 0, checked: false, checkCooldown: 0, windup: 0, aimX: 0, aimY: 0, toBox: false, mods: NO_MODS,
     };
   }
 
@@ -248,6 +260,7 @@ export class SkatingSim {
     this.score = [0, 0];
     this.aiRng = new Rng(7).fork('team-ai');
     this.aimRng = new Rng(3).fork('aim');
+    this.modRng = new Rng(5).fork('ratings');
     this.puck = { x: centerX, y: centerY, vx: 0, vy: 0, state: 'free', z: 0, vz: 0 };
     this.stats = { shots: 0, goals: 0, saves: 0, posts: 0, crossbars: 0, over: 0, fiveHole: 0, last: '' };
     this.rng = new Rng(1).fork('rebounds');
@@ -438,6 +451,7 @@ export class SkatingSim {
 
   private stepSkater(s: Skater, input: SimInput, dt: number): void {
     const t = this.tuning;
+    const mods = s.mods;
     if (s.out) return;
     if (s.checkCooldown > 0) s.checkCooldown = Math.max(0, s.checkCooldown - dt);
     // Knocked down or flat-footed: he cannot push, he only slides.
@@ -456,11 +470,11 @@ export class SkatingSim {
       let along = s.vx * ix + s.vy * iy;
       let slideX = s.vx - along * ix;
       let slideY = s.vy - along * iy;
-      const shed = Math.exp(-t.turnResponse * dt);
+      const shed = Math.exp(-t.turnResponse * mods.turn * dt);
       slideX *= shed;
       slideY *= shed;
       // Pushing against travel brakes harder than a normal stride accelerates.
-      along += (along < 0 ? t.deceleration : t.acceleration) * dt;
+      along += (along < 0 ? t.deceleration : t.acceleration * mods.accel) * dt;
       s.vx = along * ix + slideX;
       s.vy = along * iy + slideY;
       s.facing = rotateToward(s.facing, Math.atan2(iy, ix), FEEL.facingTurnRate * dt);
@@ -476,8 +490,9 @@ export class SkatingSim {
     }
 
     const speed = Math.hypot(s.vx, s.vy);
-    if (speed > t.maxSpeed) {
-      const k = t.maxSpeed / speed;
+    const top = t.maxSpeed * mods.speed;
+    if (speed > top) {
+      const k = top / speed;
       s.vx *= k;
       s.vy *= k;
     }
@@ -535,7 +550,7 @@ export class SkatingSim {
     const by = this.bladeY(s);
     if (mate) {
       // Lead him: aim where he will be when the puck gets there.
-      const lead = Math.min(TEAM.passLead, Math.hypot(mate.x - bx, mate.y - by) / TEAM.passSpeed);
+      const lead = Math.min(TEAM.passLead, Math.hypot(mate.x - bx, mate.y - by) / (TEAM.passSpeed * s.mods.passSpeed));
       const tx = mate.x + mate.vx * lead - bx;
       const ty = mate.y + mate.vy * lead - by;
       const len = Math.hypot(tx, ty) || 1;
@@ -546,8 +561,12 @@ export class SkatingSim {
     p.state = 'free';
     p.x = bx;
     p.y = by;
-    p.vx = dirX * TEAM.passSpeed;
-    p.vy = dirY * TEAM.passSpeed;
+    if (s.mods.passError > 0) {
+      const turn = (this.modRng.next() * 2 - 1) * s.mods.passError;
+      [dirX, dirY] = [dirX * Math.cos(turn) - dirY * Math.sin(turn), dirX * Math.sin(turn) + dirY * Math.cos(turn)];
+    }
+    p.vx = dirX * TEAM.passSpeed * s.mods.passSpeed;
+    p.vy = dirY * TEAM.passSpeed * s.mods.passSpeed;
     p.z = 0;
     p.vz = 0;
     s.hasPuck = false;
@@ -634,7 +653,14 @@ export class SkatingSim {
     p.state = 'free';
     p.x = this.bladeX(s);
     p.y = this.bladeY(s);
-    const speed = t.shotVelocity * factor * boost;
+    // His shot: harder or softer with his power rating, and it strays a little from his aim with his accuracy.
+    const slap = power >= SHOOT.slapThreshold;
+    const speed = t.shotVelocity * factor * boost * (slap ? s.mods.slapPower : s.mods.wristPower);
+    const error = slap ? s.mods.slapError : s.mods.wristError;
+    if (error > 0) {
+      const turn = (this.modRng.next() * 2 - 1) * error;
+      [dirX, dirY] = [dirX * Math.cos(turn) - dirY * Math.sin(turn), dirX * Math.sin(turn) + dirY * Math.cos(turn)];
+    }
     const inheritX = s.vx * FEEL.shotInherit;
     const inheritY = s.vy * FEEL.shotInherit;
     p.vx = dirX * speed + inheritX;
@@ -1370,7 +1396,7 @@ export class SkatingSim {
     const p = this.puck;
     const from = (x: number, y: number): number => Math.min(Math.hypot(x - this.bladeX(s), y - this.bladeY(s)), Math.hypot(x - s.x, y - s.y));
     const c = this.carrier();
-    const onPuck = c !== null && c.team !== s.team && from(p.x, p.y) <= CONTACT.reach;
+    const onPuck = c !== null && c.team !== s.team && from(p.x, p.y) <= CONTACT.reach * s.mods.checkReach;
     // He has only just got it: the stick finds nothing, and nothing is called.
     if (onPuck && c && this.tick - c.possessTick < TEAM.pokeGrace / SIM_DT) return;
     if (onPuck && c) {

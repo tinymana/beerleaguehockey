@@ -12,7 +12,9 @@ import { quantize8 } from '../match/sim/input';
 import type { SimInput } from '../match/sim/input';
 import { SIM_DT, SkatingSim } from '../match/sim/skatingSim';
 import { clockText, periodText } from '../match/sim/match';
-import { makePickupRoster } from '../dynasty/pickupRoster';
+import { makePickupRoster, withCreatedPlayer } from '../dynasty/pickupRoster';
+import { modsFromRatings } from '../match/sim/skaterMods';
+import { loadCreatedPlayers } from './createdPlayerStore';
 import { goalCardLines, nameTag, numberTag, penaltyCardLines, penaltyClockLine, scoringLines } from './matchText';
 import { pressOnStars, starUp, starsShown, threeStars } from './stars';
 import type { Star } from './stars';
@@ -76,6 +78,8 @@ export class SkatingScene extends Phaser.Scene {
   private tagPowerPlay!: Phaser.GameObjects.Image;
   private splashTimer = 0;
   private roster: RosterPlayer[] = [];
+  /** The roster place of the created player in this game, or -1. */
+  private created = -1;
   private goalCard!: Phaser.GameObjects.Graphics;
   private goalLines: Phaser.GameObjects.BitmapText[] = [];
   private cardFace!: Phaser.GameObjects.Image;
@@ -136,6 +140,20 @@ export class SkatingScene extends Phaser.Scene {
     this.sim.setTeams(matchMode.teams, matchMode.teams, 11 + matchMode.games * 7919);
     // Fictional names and numbers for tonight's two sides, so a goal can say who scored.
     this.roster = makePickupRoster(11 + matchMode.games * 7919);
+    // The created player chosen for Pick-Up takes a place on the home side, and every skater plays by his ratings (Decision 101).
+    const store = loadCreatedPlayers().store;
+    const mine = store.players.find((p) => p.id === store.pickUpId) ?? null;
+    if (mine) this.roster = withCreatedPlayer(this.roster, mine);
+    this.created = mine ? this.roster.findIndex((p) => p.createdId === mine.id) : -1;
+    if (matchMode.teams) {
+      this.roster.slice(0, 10).forEach((p, i) => this.sim.setSkaterMods(i, modsFromRatings(p.ratings)));
+    } else if (mine && mine.dna.position !== 'goalie') {
+      // Practice: the one skater on the ice is him.
+      this.sim.setSkaterMods(0, modsFromRatings(this.roster[this.created]?.ratings ?? {}));
+    }
+    // Say so, once the screen is up.
+    const me = this.roster[this.created];
+    if (me) this.time.delayedCall(400, () => this.flash(`${me.number} ${me.last} is in the line-up`, 1.6));
     this.goalieSprites = [];
     this.goaliePoses = [];
     for (const g of this.sim.goalies) {

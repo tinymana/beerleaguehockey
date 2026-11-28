@@ -6,12 +6,12 @@ import { REFEREES, emptyStats } from '../src/match/sim/match';
 import type { GoalRecord, MatchState } from '../src/match/sim/match';
 
 const ROSTER: RosterPlayer[] = [
-  { number: 19, first: 'Marty', last: 'Kowalski', face: 0 },
-  { number: 7, first: 'Dale', last: 'Brandt', face: 1 },
-  { number: 22, first: 'Olli', last: 'Virtanen', face: 2 },
-  { number: 4, first: 'Sam', last: 'Hurst', face: 3 },
-  { number: 55, first: 'Pavel', last: 'Novy', face: 4 },
-  { number: 9, first: 'Lars', last: 'Holm', face: 5 },
+  { number: 19, first: 'Marty', last: 'Kowalski', face: 0, ratings: {} },
+  { number: 7, first: 'Dale', last: 'Brandt', face: 1, ratings: {} },
+  { number: 22, first: 'Olli', last: 'Virtanen', face: 2, ratings: {} },
+  { number: 4, first: 'Sam', last: 'Hurst', face: 3, ratings: {} },
+  { number: 55, first: 'Pavel', last: 'Novy', face: 4, ratings: {} },
+  { number: 9, first: 'Lars', last: 'Holm', face: 5, ratings: {} },
 ];
 const goal = (over: Partial<GoalRecord>): GoalRecord => ({ team: 0, scorer: 0, assists: [], period: 1, time: 101, powerPlay: false, ...over });
 function state(goals: GoalRecord[]): MatchState {

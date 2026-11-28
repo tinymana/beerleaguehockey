@@ -2,6 +2,36 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.20.0 - 2026-11-28 - Your player on the ice, and ratings that matter
+
+266 tests. Creative director: next features, "1 then 2": the created player on the ice with attributes, then season mode (Decision 101).
+
+### Added
+- **Your created player plays in Pick-Up.** The player marked "Use in Pick-Up" in Create a Player takes a place on the home side: a forward at centre, a defenseman at left defense, with his name, number and face on the name tag, goal cards, penalty clocks and three stars. A teammate wearing his number takes another. A line at the start says he is in the line-up.
+- **Ratings change how skaters play** (`src/match/sim/skaterMods.ts`, `sim.setSkaterMods`). Nine of the 21 skater attributes are used so far:
+
+  | Attribute | What it changes | At 99 / at 1 |
+  | --- | --- | --- |
+  | Skating speed | Top speed | +12% / -12% |
+  | Acceleration | How fast speed builds | +20% / -20% |
+  | Agility | How quickly he turns | +20% / -20% |
+  | Wrist shot power, Slap shot power | Shot speed | +10% / -10% |
+  | Wrist shot accuracy, Slap shot accuracy | How far a shot strays from his aim | about a third / twice the stray |
+  | Passing | Pass speed and how far a pass strays | +10% / -10% |
+  | Checking | Stick-check reach | +15% / -15% |
+
+- **A rating of 30 plays exactly as the game played before** (an ordinary beer-league skater). A newly created forward's ratings average about 28 (measured over 30: 23 to 32), so he starts as an ordinary player, with his strengths and weaknesses showing.
+- **Every pick-up skater has throwaway ratings** between 20 and 40, different each game, so no two play quite alike. The names, numbers and faces each game gives are unchanged.
+
+### Measured (computer on both sides, 40 games, regulation)
+- 7.9 goals a game with ratings on (8.5 without): shots now stray a little.
+
+### Not yet
+- **A created goalie** is in the net by name, number and face only: goalie ratings do nothing yet, and you cannot play as the goalie.
+- The other twelve skater attributes (balance, strength, faceoffs, puck control, endurance, awareness and the rest) change nothing yet.
+- Ratings never change: there is no progression, and a created player uses the ratings he was created with.
+- All the numbers above are starting values, not approved balance.
+
 ## 0.19.0 - 2026-11-28 - New fans in the stands
 
 259 tests. Creative director: a second stands sheet, then "yes to all" to using its fans as a stopgap (Decision 100).

@@ -2,6 +2,21 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.20.0",
+      "date": "2026-11-28",
+      "title": "You're in the line-up",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Your created player now plays in Pick-Up. Pick him in Create a Player and he takes a spot on the home side, name on the goal cards and all."
+        },
+        {
+          "tag": "new",
+          "text": "Ratings matter. Fast skaters are faster, heavy shots are heavier, and some guys just can't hit the net."
+        }
+      ]
+    },
+    {
       "version": "0.19.0",
       "date": "2026-11-28",
       "title": "A real crowd",
