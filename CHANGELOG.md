@@ -2,6 +2,23 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.16.0 - 2026-11-27 - Three on three, and the stars one at a time
+
+249 tests. Creative director: "2 min ot 3 on 3 reveal 1 at a time" (Decision 95).
+
+### Changed
+- **Overtime is 2:00** (was 1:00), still sudden death.
+- **Overtime is three on three.** Each side keeps its centre, left wing and right defenceman; the other two sit. A penalty carried into overtime, or taken in it, leaves that side a man down until it ends (three on two). `MATCH.overtimeSkaters`.
+- **The three stars come up one at a time, third star first**, a beat apart (1.6 s). Shoot or Space brings the next one straight away; with all three up it goes on to the summary. A press in the first half second after the horn is ignored, so a held button no longer skips the panel.
+
+### Measured
+- 40 overtimes with the computer on both sides: every one ended with a goal, half of them inside 16 seconds, the longest at 1:25; none reached the shootout. Three computer skaters a side leave a lot of open ice. 12 penalties were called in those 40 overtimes.
+
+### Known issues
+- With the computer teams the shootout is now close to unreachable; a human game will be slower, but probably not by enough. Not changed: the length and the numbers are the creative director's.
+- The two skaters who sit simply leave the ice; nobody is drawn on the bench for them.
+- No names for the other skaters, no line changes, no sound.
+
 ## 0.15.0 - 2026-11-27 - Overtime
 
 247 tests. Creative director: "ok" to overtime before the shootout (Decision 94).

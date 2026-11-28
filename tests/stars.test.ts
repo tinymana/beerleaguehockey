@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { rankPlayers, threeStars } from '../src/app/stars';
+import { REVEAL, pressOnStars, rankPlayers, starUp, starsShown, threeStars } from '../src/app/stars';
 import { GOALIE_INDEX, fullLine, makePickupRoster } from '../src/dynasty/pickupRoster';
 import { REFEREES, emptyStats } from '../src/match/sim/match';
 import type { GoalRecord, MatchState } from '../src/match/sim/match';
@@ -53,6 +53,21 @@ describe('three stars (Decision 92)', () => {
     // Nothing happened: the two goalies with shutouts, the winner's first, then a winning skater.
     expect(none.map((s) => s.index)).toEqual([GOALIE_INDEX[1], GOALIE_INDEX[0], 5]);
     expect(rankPlayers(final([], [0, 0], 0), [0, 0]).length).toBe(12);
+  });
+
+  it('the stars come up one at a time, third star first; Shoot brings the next, then leaves', () => {
+    expect([0, 1, 2].map((i) => starUp(i, starsShown(0)))).toEqual([false, false, true]);
+    expect([0, 1, 2].map((i) => starUp(i, starsShown(REVEAL.every + 0.01)))).toEqual([false, true, true]);
+    expect([0, 1, 2].map((i) => starUp(i, starsShown(REVEAL.every * 2 + 0.01)))).toEqual([true, true, true]);
+    expect(starsShown(999)).toBe(3);
+    // A press at the horn is ignored, so the panel is not skipped by a held button.
+    expect(pressOnStars(0.1)).toBe(0.1);
+    // A press brings up the second star, another the first, another leaves.
+    const second = pressOnStars(0.8);
+    expect(second).toBe(REVEAL.every);
+    const first = pressOnStars(second as number);
+    expect(starsShown(first as number)).toBe(3);
+    expect(pressOnStars(first as number)).toBe(null);
   });
 
   it('after a whole game every star has a name, a face and a line that fits the panel', () => {

@@ -153,3 +153,5 @@ Steps 1 and 2 give a game that can be finished and played like pick-up. Sound ca
 **Three stars (Decision 92, v0.14.0):** shown after the final horn, before the final summary; picked in `src/app/stars.ts` by a starting formula. The pick-up goalies have names so they can be stars. The supplied three-stars graphic still waits for the re-issue.
 
 **Overtime (Decision 94, v0.15.0):** a tie after three periods plays one 1:00 sudden-death period, five on five, before the shootout. The length is a starting value.
+
+**Decision 95 (v0.16.0):** overtime is 2:00, three on three; the three stars are revealed one at a time, third star first.

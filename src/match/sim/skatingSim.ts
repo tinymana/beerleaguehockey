@@ -1104,9 +1104,29 @@ export class SkatingSim {
     if (!m || m.phase !== 'intermission') return;
     m.period++;
     m.clock = m.period > MATCH.periods ? MATCH.overtimeSeconds : MATCH.periodSeconds;
+    if (m.period > MATCH.periods) this.thinForOvertime(m);
     m.reason = 'period';
     m.dot = faceoffDots(this.rink).centre;
     this.lineUpAt(m);
+  }
+
+  /**
+   * Overtime is played short-handed on both sides: the centre, a winger and a defenceman stay, the rest sit.
+   * A skater serving a penalty counts as one of his side's places, so his side is a man down until he is back.
+   */
+  private thinForOvertime(m: MatchState): void {
+    const order: Role[] = ['C', 'LW', 'RD', 'RW', 'LD'];
+    for (const team of [0, 1] as const) {
+      const boxed = new Set(m.penalties.filter((p) => p.team === team).map((p) => p.skater));
+      const free = this.skaters.filter((s) => s.team === team && !boxed.has(s.index)).sort((a, b) => order.indexOf(a.role) - order.indexOf(b.role));
+      const places = Math.max(1, MATCH.overtimeSkaters - boxed.size);
+      free.slice(places).forEach((s) => {
+        s.out = true;
+        s.hasPuck = false;
+        s.x = -200;
+        [s.vx, s.vy] = [0, 0];
+      });
+    }
   }
 
   /** One step while play is stopped. */

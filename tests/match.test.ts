@@ -148,6 +148,9 @@ describe('a full game: clock, periods and faceoffs (Decision 86)', () => {
     sim.advance();
     expect([m.period, m.clock]).toEqual([MATCH.periods + 1, MATCH.overtimeSeconds]);
     expect(periodText(m.period)).toBe('OT');
+    // Three on three: the centre, the left wing and the right defenceman of each side.
+    for (const team of [0, 1]) expect(sim.skaters.filter((s) => s.team === team && !s.out).map((s) => s.role).sort()).toEqual(['C', 'LW', 'RD']);
+    expect(MATCH.overtimeSeconds).toBe(120);
     until(sim, 'play');
     // Home puts one in the top net.
     sim.puck.state = 'free';
@@ -162,6 +165,27 @@ describe('a full game: clock, periods and faceoffs (Decision 86)', () => {
     expect(sim.score).toEqual([3, 2]);
     expect(m.goals[m.goals.length - 1]?.period).toBe(MATCH.periods + 1);
     expect(m.shootout).toBe(null);
+  });
+
+  it('a penalty carried into overtime leaves that side a man down until it ends', () => {
+    const sim = game({ demo: true, seed: 4 });
+    const m = match(sim);
+    until(sim, 'play');
+    const centre = sim.skaters.find((s) => s.team === 1 && s.role === 'C');
+    if (!centre) throw new Error('no centre');
+    centre.out = true;
+    centre.x = -200;
+    m.penalties.push({ skater: centre.index, team: 1, foul: 'hooking', left: 6 });
+    m.period = MATCH.periods;
+    sim.score = [1, 1];
+    m.clock = 0.05;
+    until(sim, 'intermission');
+    sim.advance();
+    const on = (team: number): number => sim.skaters.filter((s) => s.team === team && !s.out).length;
+    expect([on(0), on(1)]).toEqual([3, 2]);
+    // His penalty runs out: three a side again, unless the game has ended first.
+    for (let i = 0; i < 60 * 30 && m.penalties.length > 0 && m.phase !== 'final'; i++) sim.step(IDLE);
+    if (m.phase !== 'final' && m.penalties.length === 0) expect(on(1)).toBe(3);
   });
 
   it('settles a tie with a shootout, three shots each then sudden death, and keeps shootout goals off the score', () => {

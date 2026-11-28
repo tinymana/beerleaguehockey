@@ -15,7 +15,9 @@ export const MATCH = {
   /** Seconds in a period, on a running clock. */
   periodSeconds: 180,
   /** Sudden-death overtime when the game is tied after the last period, before the shootout. 0 switches it off. */
-  overtimeSeconds: 60,
+  overtimeSeconds: 120,
+  /** Skaters a side in overtime (a penalty takes one off). */
+  overtimeSkaters: 3,
   /** A minor penalty lasts this share of a period. */
   penaltyShare: 0.1,
   /** At most this many skaters of one team in the box at once; further fouls by that team go uncalled. */

@@ -53,6 +53,26 @@ export function rankPlayers(m: MatchState, score: readonly [number, number]): St
   return out.sort((a, b) => b.points - a.points || Number(b.team === m.winner) - Number(a.team === m.winner) || b.goals - a.goals || a.index - b.index);
 }
 
+/** The stars are revealed one at a time, third star first. Seconds between them, and how long the panel ignores Shoot at the horn. */
+export const REVEAL = { every: 1.6, deaf: 0.5 };
+
+/** How many stars are up after this many seconds on the panel: one straight away, then one more each beat. */
+export function starsShown(seconds: number): number {
+  return Math.max(1, Math.min(3, 1 + Math.floor(seconds / REVEAL.every)));
+}
+
+/** Is this star (0 first star, 2 third) up yet? The third star comes first. */
+export function starUp(star: number, shown: number): boolean {
+  return star >= 3 - shown;
+}
+
+/** What a press of Shoot does to the panel's clock: nothing at the horn, else on to the next star; null when all three are up (leave the panel). */
+export function pressOnStars(seconds: number): number | null {
+  if (seconds < REVEAL.deaf) return seconds;
+  const shown = starsShown(seconds);
+  return shown >= 3 ? null : shown * REVEAL.every;
+}
+
 /** The three stars, first star first. */
 export function threeStars(m: MatchState, score: readonly [number, number]): Star[] {
   return rankPlayers(m, score).slice(0, 3);

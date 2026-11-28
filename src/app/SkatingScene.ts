@@ -13,7 +13,7 @@ import { SIM_DT, SkatingSim } from '../match/sim/skatingSim';
 import { clockText, periodText } from '../match/sim/match';
 import { makePickupRoster } from '../dynasty/pickupRoster';
 import { goalCardLines, nameTag, numberTag, penaltyCardLines, penaltyClockLine, scoringLines } from './matchText';
-import { threeStars } from './stars';
+import { pressOnStars, starUp, starsShown, threeStars } from './stars';
 import type { Star } from './stars';
 import { fullLine } from '../dynasty/pickupRoster';
 import type { RosterPlayer } from '../dynasty/pickupRoster';
@@ -82,7 +82,9 @@ export class SkatingScene extends Phaser.Scene {
   private finalPage: 'stars' | 'summary' = 'stars';
   private stars: Star[] | null = null;
   private starFaces: Phaser.GameObjects.Image[] = [];
-  private starFrames!: Phaser.GameObjects.Graphics;
+  private starFrames: Phaser.GameObjects.Graphics[] = [];
+  /** Seconds the three stars panel has been up: they are revealed one at a time. */
+  private starTime = 0;
   private starLines: Phaser.GameObjects.BitmapText[] = [];
   private lastInput: SimInput = { moveX: 0, moveY: 0, shoot: false };
   private goaliePoses: { pose: GoaliePose; time: number }[] = [];
@@ -215,12 +217,15 @@ export class SkatingScene extends Phaser.Scene {
     // Three stars: a face, a title, a name and his night, three times over.
     this.finalPage = 'stars';
     this.stars = null;
-    this.starFrames = this.add.graphics().setScrollFactor(0).setDepth(DEPTH_HUD + 3).setVisible(false);
+    this.starFrames = [];
+    this.starTime = 0;
     this.starFaces = [];
     this.starLines = [];
     for (let i = 0; i < 3; i++) {
       const y = 84 + i * 54;
-      this.starFrames.lineStyle(1, UI.gold, 1).strokeRect(111.5, y - 0.5, 33, 33);
+      const frame = this.add.graphics().setScrollFactor(0).setDepth(DEPTH_HUD + 3).setVisible(false);
+      frame.lineStyle(1, UI.gold, 1).strokeRect(111.5, y - 0.5, 33, 33);
+      this.starFrames.push(frame);
       this.starFaces.push(this.add.image(112, y, 'face32', 0).setOrigin(0, 0).setScrollFactor(0).setDepth(DEPTH_HUD + 4).setVisible(false));
       for (let line = 0; line < 3; line++) {
         this.starLines.push(addText(this, 156, y + 1 + line * 11, '', line === 0 ? UI.gold : line === 1 ? UI.white : UI.ice).setScrollFactor(0).setDepth(DEPTH_HUD + 4).setVisible(false));
@@ -296,13 +301,16 @@ export class SkatingScene extends Phaser.Scene {
     this.lastInput = input;
     // Between periods and after the final horn the shoot button carries on.
     const phase = this.sim.match?.phase;
+    if (phase === 'final' && this.finalPage === 'stars') this.starTime += deltaMs / 1000;
     const go = this.padGo.pressed(input.shoot);
     // Shoot gets past the goal card once it has been read.
     if (go) this.sim.skipGoalPause();
     if (go && (phase === 'intermission' || phase === 'final')) {
       if (phase === 'final' && this.finalPage === 'stars') {
-        // The three stars have been read: on to the summary.
-        this.finalPage = 'summary';
+        // Shoot brings up the next star; once all three are up it goes on to the summary.
+        const next = pressOnStars(this.starTime);
+        if (next === null) this.finalPage = 'summary';
+        else this.starTime = next;
       } else if (phase === 'final') {
         this.scene.restart();
         return;
@@ -620,16 +628,17 @@ export class SkatingScene extends Phaser.Scene {
     const show = m.phase === 'intermission' || m.phase === 'final';
     const starPage = m.phase === 'final' && this.finalPage === 'stars';
     this.panel.setVisible(show);
-    this.starFrames.setVisible(starPage);
-    for (const face of this.starFaces) face.setVisible(starPage);
-    for (const line of this.starLines) line.setVisible(starPage);
+    const shown = starsShown(this.starTime);
+    this.starFrames.forEach((frame, i) => frame.setVisible(starPage && starUp(i, shown)));
+    this.starFaces.forEach((face, i) => face.setVisible(starPage && starUp(i, shown)));
+    this.starLines.forEach((line, i) => line.setVisible(starPage && starUp(Math.floor(i / 3), shown)));
     for (const line of this.panelLines) line.setVisible(show);
     if (!show) return;
     if (starPage) {
       // Picked once, when the game ends.
       this.stars ??= threeStars(m, [home, away]);
       const result = `Final: Home ${home}  Away ${away}${so ? ' (shootout)' : m.period > 3 ? ' (overtime)' : ''}`;
-      const prompt = isTouch() ? 'Shoot: game summary' : 'Space: game summary';
+      const prompt = shown < 3 ? (isTouch() ? 'Shoot: next star' : 'Space: next star') : isTouch() ? 'Shoot: game summary' : 'Space: game summary';
       this.panelLines.forEach((line, i) => line.setText(fontText(i === 0 ? 'Three stars' : i === 1 ? result : i === 16 ? prompt : '')).setTint(i === 0 ? UI.gold : i === 16 ? UI.ice : UI.white));
       this.stars.forEach((star, i) => {
         const who = this.roster[star.index];
