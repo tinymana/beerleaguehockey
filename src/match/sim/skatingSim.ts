@@ -1079,9 +1079,11 @@ export class SkatingSim {
     if (this.puck.state !== 'inNet') this.puck.state = 'held';
     [this.puck.vx, this.puck.vy, this.puck.z, this.puck.vz] = [0, 0, 0, 0];
     for (const g of this.goalies) g.holding = 0;
-    if (m.period < MATCH.periods) {
+    const tied = this.score[0] === this.score[1];
+    if (m.period < MATCH.periods || (tied && m.period === MATCH.periods && MATCH.overtimeSeconds > 0)) {
+      // A break; after the last period of a tied game, the break before sudden-death overtime.
       m.phase = 'intermission';
-    } else if (this.score[0] === this.score[1]) {
+    } else if (tied) {
       this.beginShootout(m);
     } else {
       m.winner = this.score[0] > this.score[1] ? 0 : 1;
@@ -1101,7 +1103,7 @@ export class SkatingSim {
     const m = this.match;
     if (!m || m.phase !== 'intermission') return;
     m.period++;
-    m.clock = MATCH.periodSeconds;
+    m.clock = m.period > MATCH.periods ? MATCH.overtimeSeconds : MATCH.periodSeconds;
     m.reason = 'period';
     m.dot = faceoffDots(this.rink).centre;
     this.lineUpAt(m);
@@ -1138,7 +1140,16 @@ export class SkatingSim {
       this.separate();
       if (running && this.runClock(m, dt, events)) return;
       m.timer -= dt;
-      if (m.timer <= 0 && !walking) this.lineUpAt(m);
+      if (m.timer <= 0 && !walking) {
+        if (m.reason === 'goal' && m.period === MATCH.periods + 1 && this.score[0] !== this.score[1]) {
+          // Sudden death: an overtime goal ends the game once its card has been read.
+          m.winner = this.score[0] > this.score[1] ? 0 : 1;
+          m.phase = 'final';
+          events.push({ type: 'final', winner: m.winner });
+        } else {
+          this.lineUpAt(m);
+        }
+      }
     } else if (m.phase === 'faceoff') {
       if (running && this.runClock(m, dt, events)) return;
       // Jumping the drop costs the draw.
@@ -1433,7 +1444,7 @@ export class SkatingSim {
 
   private beginShootout(m: MatchState): void {
     m.phase = 'shootout';
-    m.period = MATCH.periods + 1;
+    m.period = MATCH.periods + 2;
     for (const pen of m.penalties) {
       const s = this.skaters[pen.skater];
       if (s) s.out = false;

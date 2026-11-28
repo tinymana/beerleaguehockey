@@ -2,6 +2,22 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.15.0 - 2026-11-27 - Overtime
+
+247 tests. Creative director: "ok" to overtime before the shootout (Decision 94).
+
+### Added
+- **Sudden-death overtime.** A game tied after three periods goes to a break ("Tied after three: overtime"), then one overtime period of 1:00 on the running clock. The next goal wins: its goal card is shown, then the three stars and the final summary, marked "(overtime)". No goal and it goes to the shootout as before.
+- Overtime is five on five with the normal rules; penalties carry over and can be called. The scorebug and the goal lines read "OT". Overtime goals count on the score and for the three stars (shootout goals still do not).
+- `MATCH.overtimeSeconds` (60; 0 switches overtime off). **A starting value, not approved.**
+
+### Measured
+- 40 games with the computer playing both sides: 4 were tied after three, and all 4 were settled in overtime; none reached the shootout. The computer teams score a lot (about 16 goals a game), so one minute is usually enough for them; a human game may differ.
+
+### Known issues
+- With overtime this long the shootout will be rare. Shorter overtime, or fewer skaters, are the levers; neither is decided.
+- No names for the other skaters, no line changes, no sound.
+
 ## 0.14.1 - 2026-11-27 - Names on the ice
 
 246 tests. Creative director: "go for it", to the recommended next step of v0.14.0 (Decision 93).

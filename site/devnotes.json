@@ -2,6 +2,21 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.15.0",
+      "date": "2026-11-27",
+      "title": "Overtime",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Tied after three? One minute of sudden-death overtime. Next goal wins and everybody goes home."
+        },
+        {
+          "tag": "improved",
+          "text": "The shootout is still there if nobody can finish in overtime."
+        }
+      ]
+    },
+    {
       "version": "0.14.1",
       "date": "2026-11-27",
       "title": "Names on the ice",

@@ -415,7 +415,8 @@ export class SkatingScene extends Phaser.Scene {
       } else if (e.type === 'draw' && e.team !== -1 && this.sim.match?.reason !== 'start') {
         this.drawNote = { text: e.team === 0 ? 'Draw won' : 'Draw lost', time: 1.2 };
       } else if (e.type === 'period') {
-        this.flash(e.period >= 3 ? 'Final horn' : `End of the ${periodText(e.period)}`, 1.2);
+        const next = this.sim.match?.phase;
+        this.flash(e.period < 3 ? `End of the ${periodText(e.period)}` : next === 'intermission' ? 'Tied: overtime' : next === 'shootout' ? 'Shootout' : 'Final horn', 1.2);
       } else if (e.type === 'attempt' && !e.goal) {
         this.flash('No goal', 0.9);
       } else if (e.type === 'shot') {
@@ -627,7 +628,7 @@ export class SkatingScene extends Phaser.Scene {
     if (starPage) {
       // Picked once, when the game ends.
       this.stars ??= threeStars(m, [home, away]);
-      const result = `Final: Home ${home}  Away ${away}${so ? ' (shootout)' : ''}`;
+      const result = `Final: Home ${home}  Away ${away}${so ? ' (shootout)' : m.period > 3 ? ' (overtime)' : ''}`;
       const prompt = isTouch() ? 'Shoot: game summary' : 'Space: game summary';
       this.panelLines.forEach((line, i) => line.setText(fontText(i === 0 ? 'Three stars' : i === 1 ? result : i === 16 ? prompt : '')).setTint(i === 0 ? UI.gold : i === 16 ? UI.ice : UI.white));
       this.stars.forEach((star, i) => {
@@ -643,7 +644,7 @@ export class SkatingScene extends Phaser.Scene {
     const winner = m.winner === null ? '' : m.winner === 0 ? ': Home wins' : ': Away wins';
     const goals = scoringLines(m, this.roster, 5);
     const lines = [
-      m.phase === 'final' ? `Final${winner}${so ? ' (shootout)' : ''}` : `End of the ${periodText(m.period)} period`,
+      m.phase === 'final' ? `Final${winner}${so ? ' (shootout)' : m.period > 3 ? ' (overtime)' : ''}` : m.period >= 3 ? 'Tied after three: overtime' : `End of the ${periodText(m.period)} period`,
       'Home               Away',
       row('Goals', home, away),
       row('Shots', a.shots, b.shots),
@@ -657,7 +658,7 @@ export class SkatingScene extends Phaser.Scene {
     ];
     while (lines.length < 15) lines.push('');
     lines.push(`Referee: ${m.referee.label}`);
-    lines.push(m.phase === 'final' ? (isTouch() ? 'Shoot: play again' : 'Space: play again   Esc: menu') : isTouch() ? 'Shoot: next period' : 'Space: next period');
+    lines.push(m.phase === 'final' ? (isTouch() ? 'Shoot: play again' : 'Space: play again   Esc: menu') : m.period >= 3 ? (isTouch() ? 'Shoot: sudden death' : 'Space: sudden death, next goal wins') : isTouch() ? 'Shoot: next period' : 'Space: next period');
     this.panelLines.forEach((line, i) => line.setText(fontText(lines[i] ?? '')).setTint(i === 0 || i === 9 ? UI.gold : i === 16 ? UI.ice : i >= 10 && i < 15 ? UI.ice : UI.white));
   }
 

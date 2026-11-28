@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest';
-import { CONTACT, MATCH, REFEREES, clockText, faceoffDots, lineupSpot, penaltySeconds } from '../src/match/sim/match';
+import { CONTACT, MATCH, REFEREES, clockText, faceoffDots, lineupSpot, penaltySeconds, periodText } from '../src/match/sim/match';
 import type { Referee } from '../src/match/sim/match';
 import { RINK, goalLineY } from '../src/match/sim/rink';
 import { SIM_DT, SkatingSim } from '../src/match/sim/skatingSim';
@@ -136,14 +136,44 @@ describe('a full game: clock, periods and faceoffs (Decision 86)', () => {
     expect(clockText(m.clock)).toBe('0:00');
   });
 
-  it('settles a tie with a shootout, three shots each then sudden death, and keeps shootout goals off the score', () => {
+  it('a tie after three goes to sudden-death overtime, and the first goal ends the game after its card', () => {
     const sim = game({ demo: true, seed: 9 });
     const m = match(sim);
     until(sim, 'play');
     m.period = MATCH.periods;
     sim.score = [2, 2];
     m.clock = 0.05;
+    until(sim, 'intermission');
+    expect(m.winner).toBe(null);
+    sim.advance();
+    expect([m.period, m.clock]).toEqual([MATCH.periods + 1, MATCH.overtimeSeconds]);
+    expect(periodText(m.period)).toBe('OT');
+    until(sim, 'play');
+    // Home puts one in the top net.
+    sim.puck.state = 'free';
+    for (const s of sim.skaters) s.hasPuck = false;
+    const top = goalLineY(RINK, 'top');
+    [sim.puck.x, sim.puck.y, sim.puck.vx, sim.puck.vy, sim.puck.z, sim.puck.vz] = [RINK.centerX + 13, top + 6, 0, -400, 1, 0];
+    const g = sim.goalies.find((x) => x.end === 'top');
+    if (g) g.x = RINK.centerX - 14;
+    const events = until(sim, 'final', IDLE, 60 * 8);
+    expect(events.some((e) => e.type === 'goal')).toBe(true);
+    expect(events).toContainEqual({ type: 'final', winner: 0 });
+    expect(sim.score).toEqual([3, 2]);
+    expect(m.goals[m.goals.length - 1]?.period).toBe(MATCH.periods + 1);
+    expect(m.shootout).toBe(null);
+  });
+
+  it('settles a tie with a shootout, three shots each then sudden death, and keeps shootout goals off the score', () => {
+    const sim = game({ demo: true, seed: 9 });
+    const m = match(sim);
+    until(sim, 'play');
+    // Overtime came and went without a goal.
+    m.period = MATCH.periods + 1;
+    sim.score = [2, 2];
+    m.clock = 0.05;
     until(sim, 'shootout');
+    expect(periodText(m.period)).toBe('SO');
     expect(sim.skaters.filter((s) => !s.out).length).toBe(1);
     const events = until(sim, 'final', IDLE, 60 * 240);
     const attempts = events.filter((e) => e.type === 'attempt');

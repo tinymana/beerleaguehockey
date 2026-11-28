@@ -151,3 +151,5 @@ Steps 1 and 2 give a game that can be finished and played like pick-up. Sound ca
 **Knowing the referee (idea from the creative director, not designed):** in rec hockey you learn each referee, what he lets go, and you have a relationship with him. The first step is in: each game draws a referee who calls each foul with his own likelihood. Where it could go is in `BACKLOG.md`.
 
 **Three stars (Decision 92, v0.14.0):** shown after the final horn, before the final summary; picked in `src/app/stars.ts` by a starting formula. The pick-up goalies have names so they can be stars. The supplied three-stars graphic still waits for the re-issue.
+
+**Overtime (Decision 94, v0.15.0):** a tie after three periods plays one 1:00 sudden-death period, five on five, before the shootout. The length is a starting value.
