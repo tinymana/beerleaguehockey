@@ -59,6 +59,7 @@ Gameplay first. Dynasty second. Lifestyle third. The first objective is addictiv
 | `ASSET_MANIFEST.md` | Supplied art, temporary assets, what is needed |
 | `ARENA.md` | Modular rink renderer, arena asset pipeline, Arena Asset Lab, open arena questions |
 | `ART_BRIEF.md` | Art request for image generation: specs, prompts, templates in `art/templates/` |
+| `GEMINI_ASSET_LIST.md` | The short list of art still needed, in priority order, with game sizes and the canvas to generate; made for the creative director to take to the image tool |
 | `CHANGELOG.md` | What shipped, known issues |
 | `site/devnotes.json` | Player-facing release notes shown on the website |
 
