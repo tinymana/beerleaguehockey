@@ -3,19 +3,20 @@ import { GAME_HEIGHT, GAME_WIDTH, SCENES, UI, VERSION } from './config';
 import { Edge, readPad } from './padInput';
 import { addText, fontText } from './pixelFont';
 import { DEFAULT_RULES, RULE_ROWS, cycleRule, isDefault, ruleText, saveRules } from './gameRules';
-import { gameRules, tuningPanel } from './session';
+import { gameRules, seasonPlay, tuningPanel } from './session';
 import { setTitleArtVisible } from './stage';
 
 interface MenuItem {
   label: string;
   /** Scene or overlay to open; absent means the mode is not built yet. */
-  action?: 'skating' | 'creator' | 'options';
+  action?: 'skating' | 'creator' | 'options' | 'season';
   note: string;
 }
 
 const MENU: readonly MenuItem[] = [
   { label: 'Pick-Up', action: 'skating', note: '5 on 5 test game' },
-  { label: 'League Dynasty', note: 'Coming soon' },
+  // The first piece of League Dynasty: one short season (Decision 102).
+  { label: 'Season', action: 'season', note: 'League season' },
   { label: 'Create', action: 'creator', note: 'Create a player' },
   { label: 'Leaderboard', note: 'Coming soon' },
   { label: 'Options', action: 'options', note: 'Rules and credits' },
@@ -174,7 +175,11 @@ export class TitleScene extends Phaser.Scene {
       return;
     }
     if (item.action === 'skating') {
+      // Pick-Up, not a season game.
+      seasonPlay.gameId = null;
       this.scene.start(SCENES.skating);
+    } else if (item.action === 'season') {
+      this.scene.start(SCENES.season);
     } else if (item.action === 'creator') {
       this.scene.start(SCENES.creator);
     } else {

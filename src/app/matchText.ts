@@ -7,7 +7,10 @@ import type { RosterPlayer } from '../dynasty/pickupRoster';
 import { clockText, periodText } from '../match/sim/match';
 import type { GoalRecord, MatchState, Penalty } from '../match/sim/match';
 
-const side = (team: 0 | 1): string => (team === 0 ? 'Home' : 'Away');
+/** What the two sides are called on the cards and panels. Pick-Up is Home and Away; a season game uses the teams' names. */
+export const SIDES: { names: [string, string] } = { names: ['Home', 'Away'] };
+
+const side = (team: 0 | 1): string => SIDES.names[team];
 const cap = (word: string): string => word.charAt(0).toUpperCase() + word.slice(1);
 
 /** Four lines: who scored, who helped, when, and the score. */
@@ -32,7 +35,7 @@ export function goalCardLines(m: MatchState, goal: GoalRecord, roster: readonly 
     `${side(goal.team)} goal${goal.powerPlay ? '  -  power play' : ''}`,
     who ? `${fullLine(who)} (${tally})` : 'Off a defender',
     helpers.length ? `Assists: ${helpers.map((p) => `#${p.number} ${p.last}`).join(', ')}` : who ? 'Unassisted' : '',
-    `${periodText(goal.period)} ${clockText(goal.time)}     Home ${score[0]}  Away ${score[1]}`,
+    `${periodText(goal.period)} ${clockText(goal.time)}     ${SIDES.names[0]} ${score[0]}  ${SIDES.names[1]} ${score[1]}`,
   ];
 }
 

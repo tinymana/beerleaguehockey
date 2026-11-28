@@ -3,8 +3,13 @@ import { GAME_HEIGHT, GAME_WIDTH, SCENES, UI } from './config';
 import { Edge, readPad } from './padInput';
 import { addText, fontText } from './pixelFont';
 import { PLAY_SCALE } from '../match/sim/rink';
-import { arenaChoice, matchMode, tuning, tuningPanel, gameRules } from './session';
-import { applyRules } from './gameRules';
+import { arenaChoice, matchMode, seasonPlay, tuning, tuningPanel, gameRules } from './session';
+import { DEFAULT_RULES, applyRules } from './gameRules';
+import { gameSeed, gameSides, resultFromMatch } from './seasonGame';
+import type { GameSides } from './seasonGame';
+import { loadSeason, saveSeason } from './seasonStore';
+import { recordResult } from '../dynasty/season';
+import type { SeasonGame, SeasonState } from '../dynasty/season';
 import { isTouch, showTouchControls, touchState } from './touchControls';
 import { setTitleArtVisible } from './stage';
 import { directionIndex8, lerp } from '../core/math';
@@ -15,7 +20,7 @@ import { clockText, periodText } from '../match/sim/match';
 import { makePickupRoster, withCreatedPlayer } from '../dynasty/pickupRoster';
 import { modsFromRatings } from '../match/sim/skaterMods';
 import { loadCreatedPlayers } from './createdPlayerStore';
-import { goalCardLines, nameTag, numberTag, penaltyCardLines, penaltyClockLine, scoringLines } from './matchText';
+import { SIDES, goalCardLines, nameTag, numberTag, penaltyCardLines, penaltyClockLine, scoringLines } from './matchText';
 import { pressOnStars, starUp, starsShown, threeStars } from './stars';
 import type { Star } from './stars';
 import { fullLine } from '../dynasty/pickupRoster';
@@ -80,6 +85,8 @@ export class SkatingScene extends Phaser.Scene {
   private roster: RosterPlayer[] = [];
   /** The roster place of the created player in this game, or -1. */
   private created = -1;
+  /** The season game this is, when it was started from the season screen; its result is recorded at the final horn. */
+  private season: { state: SeasonState; game: SeasonGame; sides: GameSides; recorded: boolean } | null = null;
   private goalCard!: Phaser.GameObjects.Graphics;
   private goalLines: Phaser.GameObjects.BitmapText[] = [];
   private cardFace!: Phaser.GameObjects.Image;
@@ -135,16 +142,25 @@ export class SkatingScene extends Phaser.Scene {
     // The 5-on-5 test game: two teams of five, the computer playing everyone the player does not control.
     // Pick-Up is a full game: clock, whistles, the contact button, penalties (Decision 86). Each game draws its own referee.
     matchMode.games++;
-    // The rules chosen on the Options screen: lengths go into the match data before the game is set up.
-    this.sim.rules = applyRules(gameRules.current);
-    this.sim.setTeams(matchMode.teams, matchMode.teams, 11 + matchMode.games * 7919);
+    // A season game (Decision 102): the two teams from the schedule, the standard rules, its own seed.
+    const saved = seasonPlay.gameId !== null ? loadSeason().state : null;
+    const fixture = saved?.games.find((g) => g.id === seasonPlay.gameId && !g.result) ?? null;
+    this.season = saved && fixture ? { state: saved, game: fixture, sides: gameSides(saved, fixture), recorded: false } : null;
+    if (!this.season) seasonPlay.gameId = null;
+    else matchMode.teams = true;
+    SIDES.names = this.season ? [this.season.sides.teams[0].name, this.season.sides.teams[1].name] : ['Home', 'Away'];
+    const seed = this.season ? gameSeed(this.season.state, this.season.game) : 11 + matchMode.games * 7919;
+    // The rules chosen on the Options screen (Pick-Up only): lengths go into the match data before the game is set up.
+    this.sim.rules = applyRules(this.season ? { ...DEFAULT_RULES } : gameRules.current);
+    this.sim.setTeams(matchMode.teams, matchMode.teams, seed);
     // Fictional names and numbers for tonight's two sides, so a goal can say who scored.
-    this.roster = makePickupRoster(11 + matchMode.games * 7919);
+    this.roster = this.season ? this.season.sides.roster : makePickupRoster(seed);
     // The created player chosen for Pick-Up takes a place on the home side, and every skater plays by his ratings (Decision 101).
     const store = loadCreatedPlayers().store;
-    const mine = store.players.find((p) => p.id === store.pickUpId) ?? null;
+    // In a season he is already on his team.
+    const mine = this.season ? null : (store.players.find((p) => p.id === store.pickUpId) ?? null);
     if (mine) this.roster = withCreatedPlayer(this.roster, mine);
-    this.created = mine ? this.roster.findIndex((p) => p.createdId === mine.id) : -1;
+    this.created = this.roster.findIndex((p) => p.createdId !== undefined);
     if (matchMode.teams) {
       this.roster.slice(0, 10).forEach((p, i) => this.sim.setSkaterMods(i, modsFromRatings(p.ratings)));
     } else if (mine && mine.dna.position !== 'goalie') {
@@ -322,6 +338,7 @@ export class SkatingScene extends Phaser.Scene {
     this.lastInput = input;
     // Between periods and after the final horn the shoot button carries on.
     const phase = this.sim.match?.phase;
+    if (phase === 'final') this.recordSeasonResult();
     if (phase === 'final' && this.finalPage === 'stars') this.starTime += deltaMs / 1000;
     const go = this.padGo.pressed(input.shoot);
     // Shoot gets past the goal card once it has been read.
@@ -333,7 +350,8 @@ export class SkatingScene extends Phaser.Scene {
         if (next === null) this.finalPage = 'summary';
         else this.starTime = next;
       } else if (phase === 'final') {
-        this.scene.restart();
+        if (this.season) this.exitToMenu();
+        else this.scene.restart();
         return;
       }
       this.sim.advance();
@@ -365,6 +383,8 @@ export class SkatingScene extends Phaser.Scene {
   }
 
   private toggleMode(): void {
+    // Practice is for Pick-Up; a season game is a game.
+    if (this.season) return;
     matchMode.teams = !matchMode.teams;
     this.scene.restart();
   }
@@ -410,7 +430,7 @@ export class SkatingScene extends Phaser.Scene {
     for (const e of events) {
       if (e.type === 'goal') {
         const inShootout = this.sim.match?.phase === 'shootout';
-        const who = inShootout ? 'Scores!' : matchMode.teams ? (e.end === 'top' ? 'Home scores!' : 'Away scores!') : 'Goal!';
+        const who = inShootout ? 'Scores!' : matchMode.teams ? (e.end === 'top' ? `${SIDES.names[0]} scores!` : `${SIDES.names[1]} scores!`) : 'Goal!';
         if (matchMode.teams) {
           // The supplied GOAL! splash pops in, with who scored under it.
           this.goalSplash.setVisible(true).setScale(0.4);
@@ -616,9 +636,9 @@ export class SkatingScene extends Phaser.Scene {
     const so = m.shootout;
     if (so && m.phase === 'shootout') {
       const marks = (r: boolean[]): string => r.map((g) => (g ? 'O' : 'X')).join('') || '-';
-      this.hudGoals.setText(fontText(`Shootout  Home ${marks(so.results[0])}  Away ${marks(so.results[1])}`));
+      this.hudGoals.setText(fontText(`Shootout  ${SIDES.names[0]} ${marks(so.results[0])}  ${SIDES.names[1]} ${marks(so.results[1])}`));
     } else {
-      this.hudGoals.setText(fontText(`Home ${home}   ${periodText(m.period)} ${clockText(m.clock)}   Away ${away}`));
+      this.hudGoals.setText(fontText(`${SIDES.names[0]} ${home}   ${periodText(m.period)} ${clockText(m.clock)}   ${SIDES.names[1]} ${away}`));
     }
     if (m.penalties.length) {
       this.hudLast.setText(fontText(penaltyClockLine(m, this.roster)));
@@ -665,24 +685,24 @@ export class SkatingScene extends Phaser.Scene {
     if (starPage) {
       // Picked once, when the game ends.
       this.stars ??= threeStars(m, [home, away]);
-      const result = `Final: Home ${home}  Away ${away}${so ? ' (shootout)' : m.period > 3 ? ' (overtime)' : ''}`;
+      const result = `Final: ${SIDES.names[0]} ${home}  ${SIDES.names[1]} ${away}${so ? ' (shootout)' : m.period > 3 ? ' (overtime)' : ''}`;
       const prompt = shown < 3 ? (isTouch() ? 'Shoot: next star' : 'Space: next star') : isTouch() ? 'Shoot: game summary' : 'Space: game summary';
       this.panelLines.forEach((line, i) => line.setText(fontText(i === 0 ? 'Three stars' : i === 1 ? result : i === 16 ? prompt : '')).setTint(i === 0 ? UI.gold : i === 16 ? UI.ice : UI.white));
       this.stars.forEach((star, i) => {
         const who = this.roster[star.index];
         this.starFaces[i]?.setFrame(who ? who.face : 0);
-        const title = `${['1st', '2nd', '3rd'][i]} star  -  ${star.team === 0 ? 'Home' : 'Away'}${star.goalie ? ' goalie' : ''}`;
+        const title = `${['1st', '2nd', '3rd'][i]} star  -  ${SIDES.names[star.team]}${star.goalie ? ' goalie' : ''}`;
         [title, who ? fullLine(who) : '', star.line].forEach((text, line) => this.starLines[i * 3 + line]?.setText(fontText(text)));
       });
       return;
     }
     const [a, b] = m.stats;
     const row = (label: string, x: number, y: number): string => `${String(x).padStart(3)}   ${label.padEnd(12)}${String(y).padStart(3)}`;
-    const winner = m.winner === null ? '' : m.winner === 0 ? ': Home wins' : ': Away wins';
+    const winner = m.winner === null ? '' : `: ${SIDES.names[m.winner]} win${this.season ? '' : 's'}`;
     const goals = scoringLines(m, this.roster, 5);
     const lines = [
       m.phase === 'final' ? `Final${winner}${so ? ' (shootout)' : m.period > 3 ? ' (overtime)' : ''}` : m.period >= 3 ? 'Tied after three: overtime' : `End of the ${periodText(m.period)} period`,
-      'Home               Away',
+      `${SIDES.names[0].padEnd(19)}${SIDES.names[1]}`,
       row('Goals', home, away),
       row('Shots', a.shots, b.shots),
       row('Saves', a.saves, b.saves),
@@ -695,11 +715,27 @@ export class SkatingScene extends Phaser.Scene {
     ];
     while (lines.length < 15) lines.push('');
     lines.push(`Referee: ${m.referee.label}`);
-    lines.push(m.phase === 'final' ? (isTouch() ? 'Shoot: play again' : 'Space: play again   Esc: menu') : m.period >= 3 ? (isTouch() ? 'Shoot: sudden death' : 'Space: sudden death, next goal wins') : isTouch() ? 'Shoot: next period' : 'Space: next period');
+    lines.push(m.phase === 'final' ? (this.season ? (isTouch() ? 'Shoot: back to the season' : 'Space: back to the season') : isTouch() ? 'Shoot: play again' : 'Space: play again   Esc: menu') : m.period >= 3 ? (isTouch() ? 'Shoot: sudden death' : 'Space: sudden death, next goal wins') : isTouch() ? 'Shoot: next period' : 'Space: next period');
     this.panelLines.forEach((line, i) => line.setText(fontText(lines[i] ?? '')).setTint(i === 0 || i === 9 ? UI.gold : i === 16 ? UI.ice : i >= 10 && i < 15 ? UI.ice : UI.white));
   }
 
+  /** Esc: out of a Pick-Up game to the menu; out of a season game back to the season (an unfinished game is not recorded). */
   private exitToMenu(): void {
-    this.scene.start(SCENES.title);
+    const season = this.season !== null;
+    seasonPlay.gameId = null;
+    this.scene.start(season ? SCENES.season : SCENES.title);
+  }
+
+  /** The final horn of a season game: write the result down straight away, so closing the page cannot lose it. */
+  private recordSeasonResult(): void {
+    const s = this.season;
+    const m = this.sim.match;
+    if (!s || !m || s.recorded || m.phase !== 'final') return;
+    s.recorded = true;
+    // Read the save again: it is the truth, and recording a game that already has a result changes nothing.
+    const latest = loadSeason().state ?? s.state;
+    const outcome = recordResult(latest, s.game.id, resultFromMatch(s.sides.userSide, [this.sim.score[0], this.sim.score[1]], m));
+    if (outcome.problems.length === 0) saveSeason(outcome.state);
+    else this.flash('The result could not be saved', 2);
   }
 }

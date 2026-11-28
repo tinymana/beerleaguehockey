@@ -16,6 +16,9 @@ export const matchMode = { teams: true, games: 0 };
 /** The rules Pick-Up is played under, set on the Options screen and kept in the browser. */
 export const gameRules: { current: GameRules } = { current: loadRules() };
 
+/** The season game being played on the ice, if the game was started from the season screen. */
+export const seasonPlay: { gameId: number | null } = { gameId: null };
+
 let panel: TuningPanel | null = null;
 
 export function tuningPanel(): TuningPanel {

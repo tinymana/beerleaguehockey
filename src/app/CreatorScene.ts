@@ -19,6 +19,8 @@ import { loadCreatedPlayers, saveCreatedPlayers } from './createdPlayerStore';
 import { Edge, readPad } from './padInput';
 import { addText, fontText } from './pixelFont';
 import { createdPlayer } from './session';
+import { loadSeason } from './seasonStore';
+import { inSeason } from '../dynasty/season';
 import { PROFILES, setProfile, setTitleArtVisible } from './stage';
 
 export const CARD_ART = { key: 'cards-16-10', url: './assets/cards/16_10/card_art.png', manifestKey: 'cards-16-10-manifest', manifestUrl: './assets/cards/16_10/manifest.json' };
@@ -472,8 +474,8 @@ export class CreatorScene extends Phaser.Scene {
 
   private deleteShown(): void {
     if (!this.shown) return;
-    // No dynasty careers exist yet. When they do, a character in an active career is protected here.
-    const result = deletePlayer(this.store, this.shown.id, () => false);
+    // A player on a team in the season in progress cannot be deleted (Decision 63).
+    const result = deletePlayer(this.store, this.shown.id, (id) => inSeason(loadSeason().state, id));
     if (result.problems.length) {
       this.warning = result.problems[0] ?? null;
       this.setMode('reveal');

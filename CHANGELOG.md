@@ -2,6 +2,33 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.21.0 - 2026-11-28 - Season mode
+
+278 tests. Creative director: "1 then 2", then "next" (Decision 102). Built to the defaults proposed in the v0.20.0 report.
+
+### Added
+- **Season on the main menu** (in the place of "League Dynasty: coming soon"). Six teams play each other home and away, ten games each; the top four go to one-game semifinals (1 v 4, 2 v 3) and a final.
+- **You play your team's games on the ice**; the rest of each round is simulated the moment your game ends. You can also simulate your own game. Your team is always the side you control, at home or away.
+- **Your created player joins the Reds** if one is chosen with "Use in Pick-Up" when the season starts; without one you play a team of regulars. Every player in the league has a name, number, face and ratings, and each team has its own level.
+- **The season screen:** standings (GP, W, L, OTL, PTS, GF, GA; two points a win, one for an overtime or shootout loss), the six scoring leaders, the latest round's results, the next game, and the champions at the end.
+- **Team names on the ice:** the scorebug, goal cards, penalty cards, summary and three stars say "Reds" and "Whites" in a season game.
+- **Saved in the browser** as soon as a game ends, so closing the page cannot lose a result. Leaving a game before the final horn records nothing. A save that cannot be read is set aside, not overwritten.
+- A created player on a team in a season in progress cannot be deleted.
+
+### How it is built
+- `src/dynasty/season.ts` is pure and tested: schedule, simulated games, results, standings, scorers, playoffs, save and load. **Standings and statistics are worked out from the results every time**, so recording a game twice changes nothing and nothing can be counted twice.
+- Season games always use the standard rules, not the Options screen.
+
+### Not approved, not final
+- **Team names and colours are placeholders** (Reds, Blues, Greens, Golds, Blacks, Whites), and on the ice the two sides still look like Home and Away: no team uniforms.
+- Simulated scores come from a simple formula (about four goals a team, moved by the teams' ratings). All numbers are starting values.
+
+### Known issues
+- One season at a time; starting a new one throws the old one away (it asks once).
+- No progression: ratings do not change during or after a season. No trades, injuries, schedule dates, awards or history of past seasons.
+- Statistics kept: goals and assists only. Goalies have none.
+- The season screen is plain text in a box.
+
 ## 0.20.0 - 2026-11-28 - Your player on the ice, and ratings that matter
 
 266 tests. Creative director: next features, "1 then 2": the created player on the ice with attributes, then season mode (Decision 101).

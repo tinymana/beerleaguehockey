@@ -2,6 +2,25 @@
   "_howto": "Newest first. Add an entry at the top each time you push an update; the website reads this file. tag: new | improved | fixed.",
   "notes": [
     {
+      "version": "0.21.0",
+      "date": "2026-11-28",
+      "title": "Season mode",
+      "items": [
+        {
+          "tag": "new",
+          "text": "Season mode: six teams, ten games each, then playoffs. You play your team's games and the rest of the league plays on without you."
+        },
+        {
+          "tag": "new",
+          "text": "Standings, scoring leaders and results after every round. Your created player suits up for the Reds."
+        },
+        {
+          "tag": "improved",
+          "text": "Team names are stand-ins for now. Real clubs are coming."
+        }
+      ]
+    },
+    {
       "version": "0.20.0",
       "date": "2026-11-28",
       "title": "You're in the line-up",

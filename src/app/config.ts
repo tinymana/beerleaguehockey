@@ -1,7 +1,7 @@
 /** Gameplay grid. Resolution is an open creative decision (DECISIONS.md #9). */
 export const GAME_WIDTH = 480;
 export const GAME_HEIGHT = 320;
-export const VERSION = '0.20.0';
+export const VERSION = '0.21.0';
 
 export const SCENES = {
   boot: 'Boot',
@@ -10,6 +10,7 @@ export const SCENES = {
   arenaLab: 'ArenaLab',
   creator: 'Creator',
   lockerRoom: 'LockerRoomTest',
+  season: 'Season',
 } as const;
 
 /** UI palette taken from the supplied title art. */
