@@ -131,3 +131,9 @@ These are generated at boot by code and are **not** final art. Each is labeled t
 | `public/assets/character/hair.png`, `beard.png`, `body.png`, `equipment.png` | 640x576, 448x320, 384x192, 512x448 | Batches 16.03, 16.04, 16.06, 16.07 atlases, unchanged | 1 | Reference thumbnails in pickers. **Reference art, to be replaced by the layer package.** The equipment atlas still contains the excluded branded helmets and gloves as pixels, though the game never shows them: it should be re-cut without them |
 
 Not deployed: any zip, any full-resolution reference sheet, anything under `art/`.
+
+## Stopgap crowd (Decision 100, v0.19.0)
+
+| Source | Production file | Size | Notes |
+| --- | --- | --- | --- |
+| Nov 28 fans sheet (image generator, `BLH_fans_sheet_nov28.jpg`, 2400x1792 JPEG, kept outside the repository) | `public/assets/crowd/fans_16x24.png` (8x8 cells of 16x24) | 128x192 | v0.19.0. **Stopgap:** 64 fans reduced from about 26x46 by `scripts/art/process_fans.py` (Decision 100). The sheet's stand pieces are not used |

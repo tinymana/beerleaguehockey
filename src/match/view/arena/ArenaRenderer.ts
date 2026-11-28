@@ -12,12 +12,13 @@ import { goalLineY, netBox } from '../../sim/rink';
 import { projectY, worldScreenHeight } from '../projection';
 import { TEX, buildTemporaryTextures, netLayout, netScreenAnchor } from '../textures';
 import type { ArenaConfig, BenchMood, BoardSide, CrowdPose, CrowdReaction, GlassState, GoalEnd, GoalState, GoalStrip } from './config';
-import { ARENA_CONFIGS, scaleGoalFiles } from './config';
+import { ARENA_CONFIGS, FAN_SHEET, scaleGoalFiles } from './config';
 import { CrowdView } from './CrowdView';
+import { FanStandsView } from './FanStandsView';
 import { IceWear, trafficPrior } from './iceWear';
 import { assetFrame, cellFrame } from './phaserTextures';
 import { Rng, hashString } from '../../../core/rng';
-import { ARENA_LAYERS, faceoffSpots, iceOutline, layerDepth, layoutArena, layoutGoals, layoutScaleGoals, resurfacerLanes } from './layout';
+import { ARENA_LAYERS, faceoffSpots, iceOutline, layerDepth, layoutArena, layoutFanStands, layoutGoals, layoutScaleGoals, resurfacerLanes } from './layout';
 import type { ArenaLayerId, ArenaLayout, BenchSpot, GoalPlacement, ScaleGoalPlacement } from './layout';
 import { TILE, assetById, assetUrl, loadableAssets, textureKey, textureSource } from './registry';
 import type { ArenaRegistry } from './registry';
@@ -68,7 +69,7 @@ export class ArenaRenderer {
   private readonly benchPlayers: { image: Phaser.GameObjects.Image; spot: BenchSpot; index: number }[] = [];
   private benchTimer: Phaser.Time.TimerEvent | null = null;
   private mood: BenchMood = 'empty';
-  private crowd: CrowdView | null = null;
+  private crowd: CrowdView | FanStandsView | null = null;
   private readonly testObjects = new Map<'debris' | 'pools', Phaser.GameObjects.Image[]>();
   private resurfacer: { objects: Phaser.GameObjects.GameObject[]; timer: Phaser.Time.TimerEvent } | null = null;
   private readonly lamps = new Map<GoalEnd, { image: Phaser.GameObjects.Image; timer: Phaser.Time.TimerEvent | null }>();
@@ -261,13 +262,20 @@ export class ArenaRenderer {
     if (!art) return;
     const stadium = this.layout.stadium;
     const base = layerDepth('stadium') + 0.5;
-    for (const m of stadium.modules) {
+    // Stopgap fans (Decision 100): code-drawn seat rows and the 16x24 sheet fans, in place of the batch 13 seating and crowd.
+    const sheetFans = this.config.fanSheet === true && this.scene.textures.exists(FAN_SHEET.key);
+    if (sheetFans) {
+      const stands = new FanStandsView(this.scene, layoutFanStands(this.rink, this.config, stadium), `fans:${this.config.id}`);
+      this.crowd = stands;
+      stands.objects.forEach((object, i) => this.add(object, 'stadium', i === 0, base + (i === 0 ? 0 : 0.1 + i * 0.0001)));
+    }
+    for (const m of sheetFans ? [] : stadium.modules) {
       if (!this.has(m.asset)) continue;
       this.add(this.scene.add.image(m.x, m.y, ...this.tex(m.asset)).setOrigin(0, 0), 'stadium', false, base);
     }
     const sample = stadium.fans[0];
     const crowdArt = [art.crowd.seated, art.crowd.standing].map((p) => `${p}_west_01`).concat(Object.values(art.crowd.reactions).map((r) => `${r.batch}/${r.name}_west_01_00`));
-    if (sample && crowdArt.map((id) => this.has(id)).every(Boolean)) {
+    if (!sheetFans && sample && crowdArt.map((id) => this.has(id)).every(Boolean)) {
       this.crowd = new CrowdView(this.scene, art, stadium.fans, (id) => this.tex(id), `crowd:${this.config.id}`);
       for (const image of this.crowd.images) this.add(image, 'stadium', false, base + 0.1);
     }

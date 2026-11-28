@@ -2,6 +2,25 @@
 
 Newest first. Player-facing notes for the website live in `site/devnotes.json`.
 
+## 0.19.0 - 2026-11-28 - New fans in the stands
+
+259 tests. Creative director: a second stands sheet, then "yes to all" to using its fans as a stopgap (Decision 100).
+
+### Added
+- **The side stands are filled with the new fans.** 64 fans cut from the Nov 28 concept sheet and reduced to 16x24 (`scripts/art/process_fans.py` -> `public/assets/crowd/fans_16x24.png`). 23 seated fans fill the seats; the same seats, gaps and aisles as before, the same crowd every time, about 55% full.
+- **They cheer a goal:** everyone throws their arms up for a moment, each a beat apart, bouncing.
+- **Seat rows and aisle steps are drawn in code** under them (temporary): the sheet's stand pieces could not be used.
+
+### Stopgap, not final
+- The fans are **reduced from larger art** (about 26x46 down to 16x24) with the creative director's approval; this is the same kind of exception as the goalie and the card faces. They are replaced when fans arrive drawn at 16x24.
+- The batch 13 seating and spectators are no longer drawn in arenas that use the sheet (they remain in the repository).
+
+### Known issues
+- A cheering fan is a different person for that moment: the sheet has no sitting and cheering picture of the same fan.
+- The fans face the camera on both sides, not the ice. The 16 back-view fans and the standing ones are not used yet; they would suit stands behind the near net, which do not exist.
+- Only goals get a reaction. The Arena Lab's stand, bang, drink and heckle buttons do nothing with these fans.
+- The sheet's stand pieces (part B) were drawn from mixed camera angles and are not in the game.
+
 ## 0.18.0 - 2026-11-27 - A stick aims for itself
 
 257 tests. Creative director: 8 to 9 goals a game "seems more normal"; "yes" to analogue aim for sticks; fans at 16x24, "let's see it" (Decision 99).

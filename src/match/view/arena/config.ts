@@ -78,6 +78,28 @@ export type CrowdReaction = 'cheer' | 'goal' | 'bang' | 'drink' | 'heckle';
 export type CrowdPose = 'seated' | 'standing';
 
 /**
+ * The stopgap fan sheet (Decision 100): 8 columns x 8 rows of 16x24 fans, reduced from the Nov 28 concept sheet by
+ * `scripts/art/process_fans.py`. Rows 0-1 sit, rows 2-3 mostly cheer, row 4 claps, row 5 stands, rows 6-7 are seen from behind.
+ */
+export const FAN_SHEET = {
+  key: 'fans16',
+  url: 'assets/crowd/fans_16x24.png',
+  cell: [16, 24] as const,
+  /** Seated, facing us: who fills the seats. */
+  idle: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 32, 33, 34, 35, 37, 38, 39] as readonly number[],
+  /** Arms up. Shown for a moment when a goal goes in (a different person for that moment: the sheet has no matching pairs). */
+  cheer: [18, 20, 21, 23, 25, 26, 27, 28, 29, 30, 31] as readonly number[],
+  /** A seat row is this deep; a fan is taller and overlaps the row behind. */
+  rowDepth: 16,
+  /** How far above the bottom of his seat row a fan's feet are. */
+  feetUp: 1,
+  /** A goal cheer: each fan starts within `stagger` ms and stays up for `hold` ms, bobbing every `bob` ms. */
+  stagger: 450,
+  hold: 1700,
+  bob: 160,
+};
+
+/**
  * One crowd animation. Frames are separate registry assets named
  * `${batch}/${name}_${side}_${variant}_${frame}` (two digits each), drawn from the batch atlas.
  */
@@ -227,6 +249,11 @@ export interface ArenaConfig {
   banners: { kind: 'championship' | 'retired-jersey' | 'tournament'; label: string }[];
   /** Share of the visible seats that are taken, 0 to 1. Drawn when the arena has a `stadium`. */
   crowdDensity: number;
+  /**
+   * Draw the side stands with the 16x24 fans of the Nov 28 sheet on code-drawn seat rows (stopgap, Decision 100)
+   * instead of the batch 13 seating and spectators. Needs the fan sheet to be loaded; without it the batch 13 crowd stays.
+   */
+  fanSheet?: boolean;
   palette: string | null;
   divisionTier: number | null;
   prestigeTier: number | null;
@@ -408,6 +435,7 @@ const STANDARD: ArenaConfig = {
   banners: [],
   // Proposal: a bit over half full, like a decent Tuesday night.
   crowdDensity: 0.55,
+  fanSheet: true,
   palette: null,
   divisionTier: null,
   prestigeTier: null,

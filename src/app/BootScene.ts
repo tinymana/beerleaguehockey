@@ -1,3 +1,4 @@
+import { FAN_SHEET } from '../match/view/arena/config';
 import Phaser from 'phaser';
 import { ArenaRenderer } from '../match/view/arena/ArenaRenderer';
 import { REGISTRY_KEY, REGISTRY_URL } from '../match/view/arena/registry';
@@ -21,6 +22,8 @@ export class BootScene extends Phaser.Scene {
     for (const name of ['goal_splash', 'tag_power_play', 'tag_faceoff']) this.load.image(`ui/${name}`, `assets/ui/broadcast/${name}.png`);
     // Portraits for the goal and penalty cards: the preset faces at half size.
     this.load.spritesheet('face32', 'assets/character/face32.png', { frameWidth: 32, frameHeight: 32 });
+    // The crowd: 64 fans at 16x24, reduced from the Nov 28 concept sheet (stopgap, Decision 100).
+    this.load.spritesheet(FAN_SHEET.key, FAN_SHEET.url, { frameWidth: FAN_SHEET.cell[0], frameHeight: FAN_SHEET.cell[1] });
     // The referee, drawn at the 32 px scale: one file a frame, shown unchanged.
     for (const frame of REFEREE_FRAMES) this.load.image(`ref/${frame}`, `assets/referee/32/${frame}.png`);
     // The registry lists every arena asset; queue them as soon as it arrives.

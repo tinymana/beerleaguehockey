@@ -9,6 +9,7 @@ import { projectY } from '../projection';
 import { Rng, hashString } from '../../../core/rng';
 import { worldScreenHeight } from '../projection';
 import type { ArenaConfig, BenchSide, BenchTeam, BoardSide, GoalArt, GoalEnd, ScaleGoalArt, SideStructure } from './config';
+import { FAN_SHEET } from './config';
 import { TILE, visibleCentre } from './registry';
 import type { ArenaAsset } from './registry';
 
@@ -588,6 +589,73 @@ export function layoutStadium(rink: RinkGeometry, tilt: number, config: ArenaCon
   const iceBottom = screenY(rink, tilt, rink.bottom);
   result.lamps.push({ end: 'north', x: rink.centerX - ax, y: Math.max(north ? north.y + 1 : iceTop - 8, ay - 3) - ay });
   result.lamps.push({ end: 'south', x: rink.centerX - ax, y: Math.min(Math.floor(worldH), south ? south.y + south.height + 10 : iceBottom + 18) - ay });
+  return result;
+}
+
+/** A fan from the stopgap sheet in his seat: bottom-centre position, the frame he sits in and the one he cheers in. */
+export interface SheetFan {
+  side: 'west' | 'east';
+  x: number;
+  y: number;
+  frame: number;
+  cheer: number;
+}
+
+/** A block of the side stands drawn in code under the sheet fans: seat rows, or an aisle of steps. */
+export interface StandBand {
+  side: 'west' | 'east';
+  kind: 'seating' | 'stairs';
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  /** Left edge of the first whole seat in the block, and how many whole seats fit across it. */
+  seatX: number;
+  seats: number;
+}
+
+export interface FanStandsLayout {
+  bands: StandBand[];
+  fans: SheetFan[];
+  seatsVisible: number;
+}
+
+/**
+ * The side stands for the stopgap fan sheet (Decision 100): the same blocks, gaps and aisles as `layoutStadium`,
+ * with each seating block split into seat rows of `FAN_SHEET.rowDepth` and seats one fan wide. Seeded like the
+ * batch 13 crowd: the same arena always has the same people, and a fuller house only adds to them.
+ */
+export function layoutFanStands(rink: RinkGeometry, config: ArenaConfig, stadium: StadiumLayout): FanStandsLayout {
+  const result: FanStandsLayout = { bands: [], fans: [], seatsVisible: 0 };
+  if (!config.stadium) return result;
+  const [fanW] = FAN_SHEET.cell;
+  const rng = new Rng(hashString(`fans:${config.id}`));
+  for (const side of ['west', 'east'] as const) {
+    const seats = rng.fork(side);
+    for (const m of stadium.modules.filter((b) => b.side === side)) {
+      // Only the part of the block that is inside the world is drawn.
+      const x0 = Math.max(0, m.x);
+      const x1 = Math.min(rink.worldWidth, m.x + STAND.width);
+      if (x1 <= x0) continue;
+      const first = Math.max(0, Math.ceil(-m.x / fanW));
+      const seatX = m.x + first * fanW;
+      const across = Math.max(0, Math.min(STAND.width / fanW - first, Math.floor((rink.worldWidth - seatX) / fanW)));
+      result.bands.push({ side, kind: m.kind, x: x0, y: m.y, width: x1 - x0, height: STAND.height, seatX, seats: across });
+      if (m.kind === 'stairs') continue;
+      for (let row = 0; row < STAND.height / FAN_SHEET.rowDepth; row++) {
+        for (let col = 0; col < STAND.width / fanW; col++) {
+          // Every seat draws from the stream, seen or not, so widening the world does not reshuffle the crowd.
+          const roll = seats.next();
+          const frame = FAN_SHEET.idle[seats.int(FAN_SHEET.idle.length)] ?? 0;
+          const cheer = FAN_SHEET.cheer[seats.int(FAN_SHEET.cheer.length)] ?? frame;
+          const left = m.x + col * fanW;
+          if (left < 0 || left + fanW > rink.worldWidth) continue;
+          result.seatsVisible++;
+          if (roll < config.crowdDensity) result.fans.push({ side, x: left + fanW / 2, y: m.y + (row + 1) * FAN_SHEET.rowDepth - FAN_SHEET.feetUp, frame, cheer });
+        }
+      }
+    }
+  }
   return result;
 }
 

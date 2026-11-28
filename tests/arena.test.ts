@@ -2,9 +2,9 @@ import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { RINK, goalLineY, netBox } from '../src/match/sim/rink';
-import { ARENA_CONFIGS, arenaConfig, scaleGoalFiles } from '../src/match/view/arena/config';
+import { ARENA_CONFIGS, FAN_SHEET, arenaConfig, scaleGoalFiles } from '../src/match/view/arena/config';
 import { IceWear, trafficPrior } from '../src/match/view/arena/iceWear';
-import { ARENA_LAYERS, benchReport, resurfacerLanes, layoutStadium, sequenceFrame, faceoffSpots, goalAlignment, goalFit, iceGrid, iceOutline, layoutArena, layoutGoals, layoutScaleGoals, screenY } from '../src/match/view/arena/layout';
+import { ARENA_LAYERS, benchReport, resurfacerLanes, layoutFanStands, layoutStadium, sequenceFrame, faceoffSpots, goalAlignment, goalFit, iceGrid, iceOutline, layoutArena, layoutGoals, layoutScaleGoals, screenY } from '../src/match/view/arena/layout';
 import { TILE, assetById, loadableAssets, textureSource } from '../src/match/view/arena/registry';
 import type { ArenaRegistry } from '../src/match/view/arena/registry';
 import { CABINET_SLOTS, LOCKER_MODES, LOCKER_SEQUENCES, SAMPLE_TROPHIES, actorIsIdle, layoutLockerRoom, sequenceFrameId } from '../src/match/view/locker/lockerRoom';
@@ -595,6 +595,42 @@ describe('stands, crowd and goal lamps', () => {
     expect(full.fans.length).toBe(full.seatsVisible);
     for (const f of l.stadium.fans) expect(full.fans).toContainEqual(f);
     expect(layoutArena(RINK, TILT, { ...standard, crowdDensity: 0 }, lookup).stadium.fans).toEqual([]);
+  });
+
+  it('stopgap fan sheet (Decision 100): seat rows a fan wide in the same blocks, nobody on the stairs or off the screen, the same crowd every time', () => {
+    const stands = layoutFanStands(RINK, standard, l.stadium);
+    expect(standard.fanSheet).toBe(true);
+    expect(stands.bands.length).toBe(l.stadium.modules.length);
+    for (const b of stands.bands) {
+      expect(b.x).toBeGreaterThanOrEqual(0);
+      expect(b.x + b.width).toBeLessThanOrEqual(RINK.worldWidth);
+      // Three of the four seat columns fit in the 480 px world on each side, whole.
+      expect(b.seats).toBe(3);
+      expect(b.seatX).toBeGreaterThanOrEqual(b.x);
+      expect(b.seatX + b.seats * 16).toBeLessThanOrEqual(b.x + b.width);
+    }
+    const seating = stands.bands.filter((b) => b.kind === 'seating');
+    expect(stands.seatsVisible).toBe(seating.length * 2 * 3);
+    for (const f of stands.fans) {
+      expect(f.x - 8).toBeGreaterThanOrEqual(0);
+      expect(f.x + 8).toBeLessThanOrEqual(RINK.worldWidth);
+      expect(seating.some((b) => b.side === f.side && f.y > b.y && f.y <= b.y + b.height && f.x > b.x && f.x < b.x + b.width)).toBe(true);
+      expect(FAN_SHEET.idle).toContain(f.frame);
+      expect(FAN_SHEET.cheer).toContain(f.cheer);
+    }
+    expect(Math.abs(stands.fans.length / stands.seatsVisible - standard.crowdDensity)).toBeLessThan(0.12);
+    expect(layoutFanStands(RINK, standard, l.stadium)).toEqual(stands);
+    const full = layoutFanStands(RINK, { ...standard, crowdDensity: 1 }, l.stadium);
+    expect(full.fans.length).toBe(full.seatsVisible);
+    for (const f of stands.fans) expect(full.fans).toContainEqual(f);
+    // Every frame named is on the 8x8 sheet, and nobody both sits and cheers in the same frame.
+    for (const frame of [...FAN_SHEET.idle, ...FAN_SHEET.cheer]) expect(frame >= 0 && frame < 64).toBe(true);
+    expect(FAN_SHEET.idle.filter((frame) => FAN_SHEET.cheer.includes(frame))).toEqual([]);
+  });
+
+  it('the fan sheet file is 8x8 cells of 16x24', () => {
+    const png = readFileSync(join(process.cwd(), 'public', FAN_SHEET.url));
+    expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([FAN_SHEET.cell[0] * 8, FAN_SHEET.cell[1] * 8]);
   });
 
   it('puts a goal lamp behind each net, on the centre line and inside the world', () => {
